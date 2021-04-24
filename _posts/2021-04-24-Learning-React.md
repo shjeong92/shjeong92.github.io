@@ -89,7 +89,16 @@ function ExpenseItem(props) {
 export default ExpenseItem;
 
 ~~~
+# 2.Custom tag
 
+기본적인 HTML 태그의 경우 className = "name" 지정하면 css파일의 스타일이 적용이 된다. 하지만 custom component의경우는 다르다.
+<br>
+예를 들어서
+## className in customized tags
+~~~jsx
 
+<Custom className="class"/> 
+~~~
+이러한 커스텀 태그가 있을때, 여기서 className 은 일번적인 태그에 들어가는 className이 아니라 props 로 전송되는 객체중의 하나이므로 css의 스타일이 적용 되지 않는것이다.
 
 ---
