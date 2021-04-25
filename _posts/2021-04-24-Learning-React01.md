@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "[ Day - 1 ] Learning React "
+title: "[ #1 ] Learning React "
 tags: React
 ---
  
@@ -8,6 +8,8 @@ tags: React
 오늘은 props 에 대하여 배웠다.
 custom component에 값들을 전송할때 해당 태그안에 객체이름=value식으로 보낼 수 있으며
 해당 컴포넌트에서는 보내어진 모든 객체들을 하나의 객체안에 몽땅 넣어서 전달한다.
+
+Card.js 라는 Wrapper 컴포넌트를 만들면서 자세히 설명하도록 하겠다.
 
 ---
 ## App.js
