@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "[ #2 ] Learning React "
+title: "[ #2 ] Props.children 과 커스텀 컴포넌트(태그)"
 tags: React
 ---
 

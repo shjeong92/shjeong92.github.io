@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "[ #1 ] Learning React "
+title: "[ #1 ] Props란? "
 tags: React
 ---
  
