@@ -74,3 +74,22 @@ export default AddUser;
 ~~~
 
 이런식으로 Wrapper.js를 사용하면 div 없이도 모든 내용을 감쌀 수 있게됩니다! 
+
+## 방법 2. 
+
+~~~jsx
+import React, {Fragment} from "react";
+import Wrapper from './Wrapper'
+const AddUser = () => {
+  return (
+    <Fragment>
+      <div>이것도</div>
+      <div>에러안나요</div>>
+    </Fragment>
+  );
+};
+
+export default AddUser;
+~~~
+커스텀 컴포넌트인 Wrapper를 사용하지 않아도 React에서 기본으로 제공하는 Fragment는
+우리가 만들었던 Wrapper이란 똑같은 기능을 합니다.
