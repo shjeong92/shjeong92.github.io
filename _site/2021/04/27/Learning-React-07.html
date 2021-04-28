@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #6 ] setState & conditional content - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #7 ] 3 ways to fullfill jsx's requirement - Hyuk's devlog</title>
 
-<meta name="description" content="1. useState 를 사용하는 방법.기존코드const[expenses, setExpenses]=useState(initial_expenses)  const addExpenseHandler = (expense) =&gt; {    temp = [{        ...data,  ...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/04/26/Learning-React-06.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="JSX requirementimport React from 'react'const AddUser = () =&gt; {  return (    &lt;div&gt;이건&lt;/div&gt;    &lt;div&gt;에러나요&lt;/div&gt;  )}export default Ad...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/04/27/Learning-React-07.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -279,66 +279,86 @@
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #6 ] setState & conditional content</h1></header></div><meta itemprop="headline" content="[ #6 ] setState & conditional content"><div class="article__info clearfix"><ul class="left-col menu"><li>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #7 ] 3 ways to fullfill jsx's requirement</h1></header></div><meta itemprop="headline" content="[ #7 ] 3 ways to fullfill jsx's requirement"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=React">React</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 04월 26일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-26T00:00:00+09:00">
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 04월 27일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-27T00:00:00+09:00">
     <meta itemprop="keywords" content="React"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h1 id="1-usestate-를-사용하는-방법">1. useState 를 사용하는 방법.</h1>
-<h2 id="기존코드">기존코드</h2>
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<div class="article__content" itemprop="articleBody"><h1 id="jsx-requirement">JSX requirement</h1>
 
-<span class="kd">const</span><span class="p">[</span><span class="nx">expenses</span><span class="p">,</span> <span class="nx">setExpenses</span><span class="p">]</span><span class="o">=</span><span class="nx">useState</span><span class="p">(</span><span class="nx">initial_expenses</span><span class="p">)</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span>
 
-  <span class="kd">const</span> <span class="nx">addExpenseHandler</span> <span class="o">=</span> <span class="p">(</span><span class="nx">expense</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">temp</span> <span class="o">=</span> <span class="p">[{</span>
-        <span class="p">...</span><span class="nx">data</span><span class="p">,</span>
-        <span class="nx">expense</span><span class="p">,</span>
-    <span class="p">}]</span>
-    <span class="nx">setExpenses</span><span class="p">(</span><span class="nx">temp</span><span class="p">);</span>
-  <span class="p">}</span>
+<span class="kd">const</span> <span class="nx">AddUser</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>이건<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>에러나요<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
 
+<span class="k">export</span> <span class="k">default</span> <span class="nx">AddUser</span>
 </code></pre></div></div>
-<p>함수 useState()는 현재값과, setExpenses라는 값을 변경하는 메소드를 반환하는줄 알았고, setExpenses(바꿀값) 을 통하여 
-값을 직접 변경할 수 있는정도로만 알고있엇다. <br /></p>
 
-<p>useState의 두번째 반환값 setExpenses을 활용하는 방법에 대해서 배웠다.<br />
-만약에 currentState의 값이 prev값과 연관이 있을경우 이를 온전히 사용할 수 있다는것을 말이다.<br />
-setExpenses 는 이전 state의 값을 가지고 있다는 것을 알 수 있었고, 값을 그냥 변경하는 경우가아닌 이전 값에 연관이 있을경우
-아래의 코드와 같이 간결하게 표현 할 수 있는 방법을 배웠다.<br /></p>
-<h2 id="수정후">수정후</h2>
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">addExpenseHandler</span> <span class="o">=</span> <span class="p">(</span><span class="nx">expense</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">setExpenses</span><span class="p">(</span><span class="nx">prevExpense</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="p">[</span><span class="nx">expense</span><span class="p">,...</span><span class="nx">prevExpense</span><span class="p">]</span>
-    <span class="p">})</span>
-  <span class="p">}</span>
-</code></pre></div></div>
+<p>리액트 jsx는 오직 하나의 html element만을 return할 수 있습니다. <br /> 
+따라서 위의 코드는 에러를 뿜어냅니다.</p>
 
 <hr />
-<h1 id="2-conditional-content">2. Conditional content</h1>
-<p>무언가 보여줄때 조건문을 통하여 보여줄 수 있는 방법을 배웠다.</p>
-<h2 id="기존코드-1">기존코드</h2>
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="p">&lt;</span><span class="nc">Card</span> <span class="na">className</span><span class="p">=</span><span class="s">"expenses"</span><span class="p">&gt;</span>
-    <span class="si">{</span><span class="nx">expenses</span><span class="si">}</span>
-    <span class="p">&lt;/</span><span class="nc">Card</span><span class="p">&gt;</span>
-    <span class="c1">//만약에 expense에 아무 값이없을경우 아무것도 보이지 않아 허전하다.</span>
+
+<p>이를 수정하기 위해선 이 두태그를 하나의 div로 감싸줘야 합니다.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">AddUser</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>이건<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>에러안나요<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>&gt;
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">AddUser</span><span class="p">;</span>
 </code></pre></div></div>
 
-<h2 id="조건문-적용후">조건문 적용후</h2>
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="p">&lt;</span><span class="nc">Card</span> <span class="na">className</span><span class="p">=</span><span class="s">"expenses"</span><span class="p">&gt;</span>
-    //삼항연산자를 이용하여 아무 값이 없을경우 없다고 출력해주고 존재한다면 해당 리스트 출력해주기.
-    <span class="si">{</span><span class="nx">expenses</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">?</span> <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>No expenses found<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span> <span class="p">:</span> <span class="nx">expenses</span><span class="si">}</span>
-    <span class="p">&lt;/</span><span class="nc">Card</span><span class="p">&gt;</span>
+<p>하지만 여러가지 컴포넌트를 만들고 그것을 모두 <App> 에다가
+떼려 박으면 실제로는 엄청나게 많은 필요없는 nested &lt;div&gt; 가 생기게 됩니다. <br />
+그리고 무수히 많은 nested &lt;div&gt; 는 로딩 속도 저하에 한 몫 한다고 합니다. 따라서 이를 해결할 방법이 필요하겠죠?</App></p>
+
+<h2 id="해결방법-1">해결방법 1.</h2>
+
+<p>Wrapper.js 라는 Helper component를 하나 만들어줍니다.</p>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span>
+<span class="kd">const</span> <span class="nx">Wrapper</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">props</span><span class="p">.</span><span class="nx">children</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">export</span> <span class="k">default</span> <span class="nx">Wrapper</span>
 </code></pre></div></div>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-04-26T00:00:00+09:00"><!-- start custom article footer snippet -->
+<p>Wrapper.js는 props.children 이라는 해당 컴포넌트의 모든 자식을 반환합니다. div로 감싸지 않더라도말이죠.
+—</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">Wrapper</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./Wrapper</span><span class="dl">'</span>
+<span class="kd">const</span> <span class="nx">AddUser</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nc">Wrapper</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>이것도<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>에러안나요<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>&gt;
+    <span class="p">&lt;/</span><span class="nc">Wrapper</span><span class="p">&gt;</span>
+  <span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">AddUser</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>이런식으로 Wrapper.js를 사용하면 div 없이도 모든 내용을 감쌀 수 있게됩니다!</p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-04-27T00:00:00+09:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/04/25/Learning-React-05.html">[ #5 ] state의 역행 childretn -> parent</a></div><div class="next"><span>다음</span><a href="/2021/04/27/Learning-React-07.html">[ #7 ] 3 ways to fullfill jsx's requirement</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/04/26/Learning-React-06.html">[ #6 ] setState & conditional content</a></div></div></div>
 
 </div>
 

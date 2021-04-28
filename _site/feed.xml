@@ -1,5 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-04-26T12:58:29+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
-</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #6 ] setState &amp;amp; conditional content</title><link href="https://shjeong92.github.io/2021/04/26/Learning-React-06.html" rel="alternate" type="text/html" title="[ #6 ] setState &amp;amp; conditional content" /><published>2021-04-26T00:00:00+09:00</published><updated>2021-04-26T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/26/Learning-React-06</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/26/Learning-React-06.html">&lt;h1 id=&quot;1-usestate-를-사용하는-방법&quot;&gt;1. useState 를 사용하는 방법.&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-04-28T13:53:04+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #7 ] 3 ways to fullfill jsx’s requirement</title><link href="https://shjeong92.github.io/2021/04/27/Learning-React-07.html" rel="alternate" type="text/html" title="[ #7 ] 3 ways to fullfill jsx’s requirement" /><published>2021-04-27T00:00:00+09:00</published><updated>2021-04-27T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/27/Learning-React-07</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/27/Learning-React-07.html">&lt;h1 id=&quot;jsx-requirement&quot;&gt;JSX requirement&lt;/h1&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AddUser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;이건&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;에러나요&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AddUser&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;리액트 jsx는 오직 하나의 html element만을 return할 수 있습니다. &lt;br /&gt; 
+따라서 위의 코드는 에러를 뿜어냅니다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;이를 수정하기 위해선 이 두태그를 하나의 div로 감싸줘야 합니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AddUser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;이건&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;에러안나요&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&amp;gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AddUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;하지만 여러가지 컴포넌트를 만들고 그것을 모두 &lt;App&gt; 에다가
+떼려 박으면 실제로는 엄청나게 많은 필요없는 nested &amp;lt;div&amp;gt; 가 생기게 됩니다. &lt;br /&gt;
+그리고 무수히 많은 nested &amp;lt;div&amp;gt; 는 로딩 속도 저하에 한 몫 한다고 합니다. 따라서 이를 해결할 방법이 필요하겠죠?&lt;/App&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;해결방법-1&quot;&gt;해결방법 1.&lt;/h2&gt;
+
+&lt;p&gt;Wrapper.js 라는 Helper component를 하나 만들어줍니다.&lt;/p&gt;
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Wrapper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Wrapper&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Wrapper.js는 props.children 이라는 해당 컴포넌트의 모든 자식을 반환합니다. div로 감싸지 않더라도말이죠.
+—&lt;/p&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Wrapper&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./Wrapper&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AddUser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;이것도&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;에러안나요&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&amp;gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AddUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;이런식으로 Wrapper.js를 사용하면 div 없이도 모든 내용을 감쌀 수 있게됩니다!&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">JSX requirement import React from &apos;react&apos; const AddUser = () =&amp;gt; { return ( &amp;lt;div&amp;gt;이건&amp;lt;/div&amp;gt; &amp;lt;div&amp;gt;에러나요&amp;lt;/div&amp;gt; ) } export default AddUser 리액트 jsx는 오직 하나의 html element만을 return할 수 있습니다. 따라서 위의 코드는 에러를 뿜어냅니다. 이를 수정하기 위해선 이 두태그를 하나의 div로 감싸줘야 합니다. import React from &quot;react&quot;; const AddUser = () =&amp;gt; { return ( &amp;lt;div&amp;gt; &amp;lt;div&amp;gt;이건&amp;lt;/div&amp;gt; &amp;lt;div&amp;gt;에러안나요&amp;lt;/div&amp;gt;&amp;gt; &amp;lt;/div&amp;gt; ); }; export default AddUser; 하지만 여러가지 컴포넌트를 만들고 그것을 모두 에다가 떼려 박으면 실제로는 엄청나게 많은 필요없는 nested &amp;lt;div&amp;gt; 가 생기게 됩니다. 그리고 무수히 많은 nested &amp;lt;div&amp;gt; 는 로딩 속도 저하에 한 몫 한다고 합니다. 따라서 이를 해결할 방법이 필요하겠죠? 해결방법 1. Wrapper.js 라는 Helper component를 하나 만들어줍니다. import React from &apos;react&apos; const Wrapper = (props) =&amp;gt; { return props.children; } export default Wrapper Wrapper.js는 props.children 이라는 해당 컴포넌트의 모든 자식을 반환합니다. div로 감싸지 않더라도말이죠. — import React from &quot;react&quot;; import Wrapper from &apos;./Wrapper&apos; const AddUser = () =&amp;gt; { return ( &amp;lt;Wrapper&amp;gt; &amp;lt;div&amp;gt;이것도&amp;lt;/div&amp;gt; &amp;lt;div&amp;gt;에러안나요&amp;lt;/div&amp;gt;&amp;gt; &amp;lt;/Wrapper&amp;gt; ); }; export default AddUser; 이런식으로 Wrapper.js를 사용하면 div 없이도 모든 내용을 감쌀 수 있게됩니다!</summary></entry><entry><title type="html">[ #6 ] setState &amp;amp; conditional content</title><link href="https://shjeong92.github.io/2021/04/26/Learning-React-06.html" rel="alternate" type="text/html" title="[ #6 ] setState &amp;amp; conditional content" /><published>2021-04-26T00:00:00+09:00</published><updated>2021-04-26T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/26/Learning-React-06</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/26/Learning-React-06.html">&lt;h1 id=&quot;1-usestate-를-사용하는-방법&quot;&gt;1. useState 를 사용하는 방법.&lt;/h1&gt;
 &lt;h2 id=&quot;기존코드&quot;&gt;기존코드&lt;/h2&gt;
 &lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
 
