@@ -56,6 +56,7 @@ const Wrapper = (props) => {
 export default Wrapper
 ~~~
 Wrapper.js는 props.children 이라는 해당 컴포넌트의 모든 자식을 반환합니다. div로 감싸지 않더라도말이죠.
+
 ---
 
 ~~~jsx
@@ -75,7 +76,7 @@ export default AddUser;
 
 이런식으로 Wrapper.js를 사용하면 div 없이도 모든 내용을 감쌀 수 있게됩니다! 
 
-## 방법 2. 
+## 해결방법 2. 
 
 ~~~jsx
 import React, {Fragment} from "react";
