@@ -299,6 +299,42 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/05/14/Github-01.html"><h2 itemprop="headline" class="item__header">깃헙 history를 주물러봅시다</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">서론
+
+때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.
+
+얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Git...</div>
+<p><a href="/2021/05/14/Github-01.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Github">Github</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Commit">Commit</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SVN">SVN</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=history">history</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=modify">modify</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
+    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/04/29/Learning-React-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] useContext hook</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">useContext
@@ -535,40 +571,11 @@ const amountChangeHandler = (event) =&gt; {
 <meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
     <meta itemprop="keywords" content="React">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/25/Learning-React-03.html"><h2 itemprop="headline" class="item__header">[ #3 ] useState 사용해보기</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Title을 바꿔봅시다.
-왜 제목이 안바뀔까요~
-//ExpenseItem.js
-import React, { useState } from "react";
-import ExpenseDate from "./ExpenseDate";
-import Card from "../UI/Card";
-import "./ExpenseItem.css";
-const ExpenseItem = (props) =&gt; {
-  const title = props.title;
-  const clickHandler = () =&gt; {
-    title = "Clicked!"
-    console.log("You definitely clicked!...</div>
-<p><a href="/2021/04/25/Learning-React-03.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 25일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 10개, 2 페이지</p>
+<p>전체 글 11개, 2 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><div class="button button--secondary button--circle disabled">
