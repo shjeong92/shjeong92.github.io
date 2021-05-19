@@ -299,6 +299,46 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/05/19/Learning-Docker-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Docker 기본 익히기 </h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">Image vs Container
+
+도커 이미지
+도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.
+
+도커 컨테이너
+도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
+컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.
+
+기본 명령어
+
+docker pull
+$ docker pull &lt;image&gt;
+
+docker hub로부터 image를 받아옵니다.
+
+
+
+docker run
+$ docker run &lt;image&gt;
+
+
+먼저 해당 이미지가 로컬...</div>
+<p><a href="/2021/05/19/Learning-Docker-01.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
+            </li></ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/05/14/Github-01.html"><h2 itemprop="headline" class="item__header">깃헙 history를 주물러봅시다</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">서론
@@ -543,39 +583,11 @@ co...</div>
 <meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
     <meta itemprop="keywords" content="React">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/25/Learning-React-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] useState 사용하는 방법</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">useState 를 사용하는 방법
-
-방법 1. 여러개의 단일 useState 사용하기.
-const [enteredTitle, setEneteredTitle] = useState("");
-const [enteredAmount, setEnteredAmount] = useState("");
-const [enteredDate, setEnteredDate] = useState("");
-const titleChangeHandler = (event) =&gt; {
-setEneteredTitle(event.target.value);
-};
-const amountChangeHandler = (event) =&gt; {
-    set...</div>
-<p><a href="/2021/04/25/Learning-React-04.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 25일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 11개, 2 페이지</p>
+<p>전체 글 12개, 2 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><div class="button button--secondary button--circle disabled">

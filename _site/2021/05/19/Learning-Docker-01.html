@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>깃헙 history를 주물러봅시다 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #1 ] Docker 기본 익히기  - Hyuk's devlog</title>
 
-<meta name="description" content="서론때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/14/Github-01.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="Image vs Container도커 이미지도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.도커 컨테이너도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/19/Learning-Docker-01.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -254,159 +254,216 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
-      </nav></div>
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
 
               <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
 </aside></div>
 
-              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>깃헙 history를 주물러봅시다</h1></header></div><meta itemprop="headline" content="깃헙 history를 주물러봅시다"><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Github">Github</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Commit">Commit</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SVN">SVN</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=history">history</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=modify">modify</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
-    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #1 ] Docker 기본 익히기 </h1></header></div>
+<meta itemprop="headline" content="[ #1 ] Docker 기본 익히기 ">
+<div class="article__info clearfix">
+<ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
+            </li></ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h2 id="서론">서론</h2>
+<div class="article__content" itemprop="articleBody">
+<h2 id="image-vs-container">Image vs Container</h2>
 
-<p>때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.</p>
+<h3 id="도커-이미지">도커 이미지</h3>
+<p>도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.</p>
 
-<p>얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Gitguardian에 sign한적도 없는데 실수로 민감한 정보를 올릴때마다 Alert 메일을 보내옵니다.</p>
+<h3 id="도커-컨테이너">도커 컨테이너</h3>
+<p>도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
+컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.</p>
 
-<hr />
+<h2 id="기본-명령어">기본 명령어</h2>
 
-<p>과거에 저는 새로운 커밋으로 덮으면 과거 기록은 못 보는줄 알고 얼른 비밀번호를 환경변수로 바꾼후 다시 푸시 했었습니다. 하지만 commits history를 보면 비밀번호에 관한정보는 그대로 담겨있었고 history 수정 방법을 몰라 쌓아왔던 잔디를 포기하며 새로운 repo를 파서 다시 푸시했었습니다. 잔디들을 잃는 고통은 뼈를깎는 고통과 같았지만 어쩔 수 없었습니다.</p>
+<h3 id="docker-pull">docker pull</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker pull &lt;image&gt;
+</code></pre></div></div>
+<p>docker hub로부터 image를 받아옵니다.</p>
 
-<hr />
+<hr>
 
-<p>하지만 이번에는 얘기가 달랐습니다. <br />
-이 2주동안 진행한 개인 프로젝트였는데 14일치의 잔디(총 50+ commits) 들을 통으로 없애기는 정말 싫었고, history를 수정할 방법을 찾고 말겠다고 다짐후 결국 찾았습니다. <br /></p>
-
-<p>이 글을 본 여러분들은 잔디를 잃지않고도 누출된 비밀정보의 history를 마음대로 주무를 수 있을 것입니다.</p>
-
-<h2 id="1-bgf-repo-cleaner-설치">1. BGF Repo-Cleaner 설치</h2>
-
-<p>아래의 링크로 이동하여 해당 파일을 다운로드받으세요
-만약 자바가 설치되어있지않다면 자바 또한 설치해주세요.</p>
-
-<p><a href="https://rtyley.github.io/bfg-repo-cleaner/">BGF Repo-Cleaner</a> 다운로드하기</p>
-
-<p>Download 폴더안에 파일이 있을겁니다</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#.zshrc</span>
-<span class="nb">alias </span><span class="nv">bfg</span><span class="o">=</span><span class="s1">'java -jar ~/Downloads/bfg-1.14.0.jar'</span>
+<h3 id="docker-run">docker run</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run &lt;image&gt;
 </code></pre></div></div>
 
-<p>추후에도 편하게 쓰기위해 alias를 설정해줍니다.</p>
+<p>먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, <br>
+없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다.</p>
 
-<h2 id="2-히스토리를-변경하고자하는-폴더로-들어갑니다">2. 히스토리를 변경하고자하는 폴더로 들어갑니다.</h2>
+<p>default 로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다. <br>
+-d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다. <br>
+–rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다.</p>
 
-<p>git init을 했던 위치로 이동하면되는 겁니다.</p>
-
-<p>터미널에 ls -a 했을때
-.git 이 보이면 모든 준비가 끝이났습니다.</p>
-
-<h2 id="3-여러가지-옵션">3. 여러가지 옵션.</h2>
-
-<h3 id="option-1">option 1.</h3>
-
-<p>만약 HelloWorld.txt에 관한 모든 커밋 히스토리를 없애고싶다면 
-터미널에</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>bfg <span class="nt">--delete-files</span> HelloWorld.txt .git 
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">-p6000</span>:6379 redis
 </code></pre></div></div>
-<p>뭔가 여러줄뜰거에요. 끝나고나면</p>
+<p>-p옵션으로 로컬머신과 컨테이너를 바인딩 할 수 있습니다.</p>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git reflog expire <span class="nt">--expire</span><span class="o">=</span>now <span class="nt">--all</span> <span class="o">&amp;&amp;</span> git gc <span class="nt">--prune</span><span class="o">=</span>now <span class="nt">--aggressive</span>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker ps    
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS                                       NAMES
+14eb691f51ad   redis     <span class="s2">"docker-entrypoint.s…"</span>   About a minute ago   Up About a minute   0.0.0.0:6000-&gt;6379/tcp, :::6000-&gt;6379/tcp   flamboyant_khorana
 </code></pre></div></div>
-<p>입력해서 원하지않는 모든 dirty data를 삭제할거에요
-그 다음,</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git push <span class="nt">-f</span> &lt;remote-repo&gt; &lt;localbranchname&gt;
+<p>docker ps로 실행되고있는 컨테이너를 보면, <br>
+redis컨테이너는 6379포트로 liten중이고 해당 컨테이너의 6379포트는 로컬머신의 6000포트와 바인딩 되어있음을 확인 할 수 있습니다.</p>
+
+<h4 id="rocket-컨테이너에-이름부여하기">
+<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> <strong>컨테이너에 이름부여하기</strong>
+</h4>
+
+<p>컨테이너 생성시 이름을 –name “원하는이름” 을 적어주면 원하는 이름으로 컨테이너 생성이 가능합니다.<br>
+이름을 지정하지 않을경우 랜덤으로 만들어집니다.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">-p</span> 6000:6379 <span class="nt">--name</span> redis-named redis:4.0
+1:C 19 May 10:11:04.418 <span class="c"># oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo</span>
+1:C 19 May 10:11:04.418 <span class="c"># Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started</span>
+1:C 19 May 10:11:04.418 <span class="c"># Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf</span>
+1:M 19 May 10:11:04.420 <span class="k">*</span> Running <span class="nv">mode</span><span class="o">=</span>standalone, <span class="nv">port</span><span class="o">=</span>6379.
+1:M 19 May 10:11:04.420 <span class="c"># Server initialized</span>
+1:M 19 May 10:11:04.420 <span class="c"># WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.</span>
+1:M 19 May 10:11:04.420 <span class="k">*</span> Ready to accept connections
 </code></pre></div></div>
-<p>입력하여 리모트 리포로 하드 푸시해줍니다.</p>
+<p>docker ps로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다.</p>
 
-<p>최신의(오류를 모드 제거했다고 가정함으로)커밋을 제외한 모든 히스토리에서 해당파일정보는 보이지 않을거에요.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker ps
+CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+a5846e3006f2   redis:4.0   <span class="s2">"docker-entrypoint.s…"</span>   3 minutes ago   Up 3 minutes   0.0.0.0:6000-&gt;6379/tcp, :::6000-&gt;6379/tcp   redis-named
+</code></pre></div></div>
+<hr>
 
-<h3 id="option-2">option 2.</h3>
+<h3 id="docker-start">docker start</h3>
 
-<p>파일에관한 히스토리는 모두유지하면서 원하는 정보만 가리고싶을때에는 이 방법을 이용하세요.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker start &lt;idOrNameOfContainer&gt;
+</code></pre></div></div>
+<p>컨테이너를 시작하고 싶을때 쓰입니다.</p>
 
-<hr />
+<h3 id="docker-stop">docker stop</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker stop &lt;idOrNameOfContainer&gt;
+</code></pre></div></div>
+<p>컨테이너를 멈추고 싶을때 쓰입니다.</p>
 
-<p>#settings.py</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="s">'itsmyaccesskeyid'</span>
-<span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="s">'itsmysecretaccesskey'</span>
+<hr>
+
+<h3 id="docker-ps">docker ps</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker ps
 </code></pre></div></div>
 
-<p>이방법을 쓰면 모든 히스토리에 있는 모든 ‘itsmyaccesskeyid’ 나 ‘itsmysecretaccesskey’ 를 아래와 같이 ***REMOVED*** 로 바꾸거나 원하는대로 바꿔줄 수 도있습니다.</p>
+<p>실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다. <br></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="o">***</span><span class="n">REMOVED</span><span class="o">***</span>
-<span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="o">***</span><span class="n">REMOVED</span><span class="o">***</span>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker ps <span class="nt">-a</span>
+</code></pre></div></div>
+<p>-a 옵션을 추가하면 멈춰있는 컨테이너들도 모두 보여줍니다.</p>
+<h3 id="docker-exec--it-idornameofcontainer-binbash">docker exec -it &lt;idOrNameOfContainer&gt; /bin/bash</h3>
+<p>원하는 컨테이너의 쉘에 접속하기 위해 쓰입니다. <br></p>
+
+<p>다른 방법으로는 docker desktop에서 원하는 컨테이너를 클릭해서 해당 컨테이너의 쉘에 접근 가능합니다. <br></p>
+
+<p>다음과 같이 해당 컨테이너에 root권한으로 원으며 원하는 작업을 할 수가 있겠습니다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker <span class="nb">exec</span> <span class="nt">-it</span> a5846e /bin/bash
+root@a5846e3006f2:/data# <span class="nb">ls
+</span>dump.rdb
+root@a5846e3006f2:/data# <span class="nb">cd</span> /
+root@a5846e3006f2:/# <span class="nb">ls
+</span>bin  boot  data  dev  etc  home  lib  media  mnt  opt  proc  root  run	sbin  srv  sys	tmp  usr  var
+root@a5846e3006f2:/# <span class="nb">env
+</span><span class="nv">HOSTNAME</span><span class="o">=</span>a5846e3006f2
+<span class="nv">REDIS_DOWNLOAD_SHA</span><span class="o">=</span>1e1e18420a86cfb285933123b04a82e1ebda20bfb0a289472745a087587e93a7
+<span class="nv">PWD</span><span class="o">=</span>/
+<span class="nv">HOME</span><span class="o">=</span>/root
+<span class="nv">REDIS_VERSION</span><span class="o">=</span>4.0.14
+<span class="nv">GOSU_VERSION</span><span class="o">=</span>1.12
+<span class="nv">TERM</span><span class="o">=</span>xterm
+<span class="nv">REDIS_DOWNLOAD_URL</span><span class="o">=</span>http://download.redis.io/releases/redis-4.0.14.tar.gz
+<span class="nv">SHLVL</span><span class="o">=</span>1
+<span class="nv">PATH</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+<span class="nv">_</span><span class="o">=</span>/usr/bin/env
+<span class="nv">OLDPWD</span><span class="o">=</span>/data
 </code></pre></div></div>
 
-<p>먼저 replacements.txt를 만들어봅시다 (.git 이 위치한 폴더에)
-여기에도 여러가지 옵션이있고, 정규표현식도 이용할 수 도 있지만 간단한 옵션들만 설명하겠습니다.</p>
+<p>쉘접속을 종료하기위해 exit을 입력하거나, ctrl+D로 빠져나올 수 있습니다.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#replacements.txt
-</span><span class="n">itsmyaccesskeyid</span>                           <span class="c1"># itsmyaccesskeyid 를 '***REMOVED***' 로 바꿔줍니다 (default)
-</span><span class="n">itsmysecretaccesskey</span><span class="o">==&gt;</span><span class="n">examplePass</span>         <span class="c1"># itsmysecretaccesskey 를 'examplePass' 로 바꿔줍니다.
-</span><span class="n">PASSWORD3</span><span class="o">==&gt;</span>                               <span class="c1"># PASSWORD 를 '' 로 바꿔줍니다.
-</span></code></pre></div></div>
+<hr>
 
-<p>귀찮다 싶으시면 그냥 txt파일 하나만들고, 민감한정보 모두를 나열해주시면됩니다. (변수명이 아닌 정보 그자체를 나열해야합니다)</p>
+<h3 id="docker-logs">docker logs</h3>
 
-<p>자 이제 모든 정보를 지울 준비가 완료되었습니다.</p>
-
-<p>터미널에</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>bfg <span class="nt">--replace-text</span> replacements.txt .git
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker logs &lt;idOrNameOfConainer&gt;
 </code></pre></div></div>
-<p>입력후 엔터쳐주세요</p>
+<p>원하는 컨테이너의 로그를 보고 싶을때 쓸 수 있습니다.</p>
 
-<p>그다음 option1 과 마찬가지로</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker ps <span class="nt">-a</span>
+CONTAINER ID   IMAGE       COMMAND                  CREATED             STATUS             PORTS                                       NAMES
+95424043babd   redis:4.0   <span class="s2">"docker-entrypoint.s…"</span>   About an hour ago   Up About an hour   0.0.0.0:6001-&gt;6379/tcp, :::6001-&gt;6379/tcp   epic_wiles
+14eb691f51ad   redis       <span class="s2">"docker-entrypoint.s…"</span>   About an hour ago   Up About an hour   0.0.0.0:6000-&gt;6379/tcp, :::6000-&gt;6379/tcp   flamboyant_khorana
+<span class="nv">$ </span>docker logs epic_wiles
+1:C 19 May 08:54:29.491 <span class="c"># oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo</span>
+1:C 19 May 08:54:29.493 <span class="c"># Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started</span>
+1:C 19 May 08:54:29.493 <span class="c"># Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf</span>
+1:M 19 May 08:54:29.494 <span class="k">*</span> Running <span class="nv">mode</span><span class="o">=</span>standalone, <span class="nv">port</span><span class="o">=</span>6379.
+1:M 19 May 08:54:29.494 <span class="c"># Server initialized</span>
+1:M 19 May 08:54:29.494 <span class="c"># WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.</span>
+1:M 19 May 08:54:29.494 <span class="k">*</span> Ready to accept connections
+</code></pre></div></div>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git reflog expire <span class="nt">--expire</span><span class="o">=</span>now <span class="nt">--all</span> <span class="o">&amp;&amp;</span> git gc <span class="nt">--prune</span><span class="o">=</span>now <span class="nt">--aggressive</span>
-</code></pre></div></div>
-<p>입력해서 원하지않는 모든 dirty data를 삭제후</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git push <span class="nt">-f</span> &lt;remote-repo&gt; &lt;localbranchname&gt;
-</code></pre></div></div>
-<p>입력하여 리모트 리포로 하드 푸시해줍니다.</p>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-14T00:00:00+09:00"><!-- start custom article footer snippet -->
+</div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-05-19T00:00:00+09:00">
+<!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/04/29/Learning-React-10.html">[ #10 ] useContext hook</a></div><div class="next"><span>다음</span><a href="/2021/05/19/Learning-Docker-01.html">[ #1 ] Docker 기본 익히기 </a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous">
+<span>이전</span><a href="/2021/05/14/Github-01.html">깃헙 history를 주물러봅시다</a>
+</div></div>
+</div>
 
 </div>
 
@@ -435,30 +492,39 @@
   });
 })();
 </script>
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div>
+<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div></div>
+<div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main"><div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a></ul>
+      </a>
+</li></ul>
 </div>
 </div>
-    </div><div class="site-info mt-2">
+    </div>
+<div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
-        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div></div>
-    </div><script>(function() {
+</div>
+</div>
+    </div>
+<script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -522,7 +588,8 @@
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -614,7 +681,7 @@
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
+        <input type="text">
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -738,7 +805,8 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div></div>
+</div>
+</div>
 
 
 <script>(function() {
