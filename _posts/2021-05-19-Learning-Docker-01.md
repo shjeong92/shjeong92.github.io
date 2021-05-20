@@ -13,43 +13,56 @@ tags: Docker
 도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
 컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.
 
-## 기본 명령어
-
-### docker pull
+## 허브로부터 이미지 받아오기
+<code>docker pull</code> 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다.
 ~~~shell
 $ docker pull <image>
 ~~~
-docker hub로부터 image를 받아옵니다.
+
 
 ---
+## 이미지 실행하기
 
-### docker run
+<code>docker run</code> 커맨드를 사용하여 원하는 이미지를 실행시킬 수 있습니다.
+
 ~~~shell
 $ docker run <image>
 ~~~
 
-먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, <br>
-없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다.
+먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, 없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다.
 
-default 로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다. <br>
--d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다. <br>
---rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다.
++ 디폴트로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다.
++ -d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다.
++ --rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다.
+
+## 현재 실행중인 컨테이너 리스트
+<code>docker ps</code>커맨드를 사용하면 현재 실행중인 컨테이너 목록을 보여줍니다.
+~~~shell
+$ docker ps
+~~~
+
+-a 옵션을 추가하면, 실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다. 
 
 ~~~shell
-$ docker run -p6000:6379 redis
+$ docker ps -a
+~~~
+
+## 로컬머신과 네트워크 바인딩하기
+~~~shell
+$ docker run -p 6000:6379 redis
 ~~~
 -p옵션으로 로컬머신과 컨테이너를 바인딩 할 수 있습니다.
-
 ~~~shell
 $ docker ps    
 CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS                                       NAMES
 14eb691f51ad   redis     "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:6000->6379/tcp, :::6000->6379/tcp   flamboyant_khorana
 ~~~
-docker ps로 실행되고있는 컨테이너를 보면, <br>
+
+<code>docker ps</code> 커맨드를 이용하여 실행되고있는 컨테이너를 보면
 redis컨테이너는 6379포트로 liten중이고 해당 컨테이너의 6379포트는 로컬머신의 6000포트와 바인딩 되어있음을 확인 할 수 있습니다.
 
 
-#### :rocket: <strong>컨테이너에 이름부여하기</strong>
+## 컨테이너에 이름부여하기
 
 컨테이너 생성시 이름을 --name "원하는이름" 을 적어주면 원하는 이름으로 컨테이너 생성이 가능합니다.<br>
 이름을 지정하지 않을경우 랜덤으로 만들어집니다.
@@ -64,7 +77,7 @@ $ docker run -p 6000:6379 --name redis-named redis:4.0
 1:M 19 May 10:11:04.420 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
 1:M 19 May 10:11:04.420 * Ready to accept connections
 ~~~
-docker ps로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다.
+<code>docker ps</code>커맨드로 로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다.
 
 ~~~shell
 $ docker ps
@@ -73,35 +86,28 @@ a5846e3006f2   redis:4.0   "docker-entrypoint.s…"   3 minutes ago   Up 3 minut
 ~~~
 ---
 
-### docker start
-
+## 컨테이너 실행하기
+<code>docker start</code>커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다.
 ~~~shell
 $ docker start <idOrNameOfContainer>
 ~~~
-컨테이너를 시작하고 싶을때 쓰입니다.
 
-### docker stop
+
+## 컨테이너 종료하기
+<code>docker stop</code>커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다.
 ~~~shell
 $ docker stop <idOrNameOfContainer>
 ~~~
-컨테이너를 멈추고 싶을때 쓰입니다.
+
 
 ---
 
-### docker ps
-
-~~~shell
-$ docker ps
-~~~
 
 
-실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다. <br>
 
-~~~shell
-$ docker ps -a
-~~~
--a 옵션을 추가하면 멈춰있는 컨테이너들도 모두 보여줍니다.
-### docker exec -it \<idOrNameOfContainer\> /bin/bash
+
+## 컨테이너의 쉘에 접근하기
+<code> docker exec -it [idOrNameOfContainer] /bin/bash </code>
 원하는 컨테이너의 쉘에 접속하기 위해 쓰입니다. <br>
 
 다른 방법으로는 docker desktop에서 원하는 컨테이너를 클릭해서 해당 컨테이너의 쉘에 접근 가능합니다. <br>
@@ -134,8 +140,9 @@ OLDPWD=/data
 
 ---
 
-### docker logs
+## 컨테이너의 로그 확인하기
 
+<code>docker logs</code>커맨드로 원하는 컨테이너의 로그를 확인할 수 있습니다.
 
 ~~~shell
 $ docker logs <idOrNameOfConainer>

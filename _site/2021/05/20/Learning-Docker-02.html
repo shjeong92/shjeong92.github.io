@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>TIL - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #2 ] Docker 네트워크 사용하기  - Hyuk's devlog</title>
 
-<meta name="description" content="Your Site Description
-">
-<link rel="canonical" href="https://shjeong92.github.io/"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.네트워크 조회...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -255,403 +254,341 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root">
-<div class="page__main js-page-main page__viewport cell cell--auto">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner">
-<div class="page__header d-print-none">
-<header class="header"><div class="main">
+      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
+        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a>
-</div>
-<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
-</div>
-<nav class="navigation">
-        <ul>
-<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
-<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
-</ul>
-      </nav>
-</div>
+" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+      </nav></div>
   </header>
-</div>
-<div class="page__content"><div class="main"><div class="grid grid--reverse">
+</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
-              <div class="col-main cell cell--auto">
-<!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div>
-<meta itemprop="headline" content="TIL">
-<meta itemprop="author" content="Sanghyuk Jeong">
-<div class="js-article-content">
-<div class="layout--articles">
-<div class="article-list items items--divided">
-<article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/20/Learning-Docker-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] Docker 네트워크 사용하기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #2 ] Docker 네트워크 사용하기 </h1></header></div><meta itemprop="headline" content="[ #2 ] Docker 네트워크 사용하기 "><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=network">network</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
-네트워크 조회
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><p>Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.</p>
 
-docker network ls 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다.
-$ docker network ls
-NETWORK ID     NAME             DRIVER    SCOPE
-b1545defe462   bridge           bridge    local
-2ff...</div>
-<p><a href="/2021/05/20/Learning-Docker-02.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=network">network</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li>
+<h2 id="네트워크-조회">네트워크 조회</h2>
+
+<p><code>docker network ls</code> 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network <span class="nb">ls
+</span>NETWORK ID     NAME             DRIVER    SCOPE
+b1545defe462   bridge           bridge    <span class="nb">local
+</span>2fff1f6ef4f0   core_default     bridge    <span class="nb">local
+</span>95295abe6cbb   docker_default   bridge    <span class="nb">local
+</span>a152a103d15b   host             host      <span class="nb">local
+</span>7cf51facc103   mongo-network    bridge    <span class="nb">local
+</span>f984d450d39e   none             null      <span class="nb">local</span>
+</code></pre></div></div>
+
+<p><code>bridge</code>, <code>host</code>, <code>none</code> 은 Docker 데몬이 실행되면서 기본적으로 생성되는 네트워크인데, 사용자가 직접 네트워크를 생성해서 사용하는게 권장된다고 합니다.</p>
+
+<h2 id="네트워크-종류">네트워크 종류</h2>
+<p>Docker 네트워크는 <code>bridge</code>, <code>host</code>, <code>overlay</code>, <code>none</code>, <code>container</code> 가 있습니다.</p>
+<ul>
+  <li>bridge 네트워크는 하나의 호스트 컴퓨터 내에서 여러 컨테이너들이 서로 소통할 수 있도록 해줍니다.</li>
+  <li>host 네트워크는 컨터이너를 호스트 컴퓨터와 동일한 네트워크에서 컨테이너를 돌리기 위해서 사용됩니다.</li>
+  <li>overlay 네트워크는 여러 호스트에 분산되어 돌아가는 컨테이너들 간에 네트워킹을 위해서 사용됩니다.</li>
+  <li>none 네트워크는 네트워크를 사용하지 않는다는 것입니다.</li>
+  <li>container 네트워크는 다른 컨테이너의 네트워크 환경 공유를위해 쓰입니다.
+<code>--net container: (containerIdOrName)  </code></li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
-            </li></ul>
+
+<h2 id="네트워크-생성">네트워크 생성</h2>
+<p><code>docker network create (name)</code> 커맨드를 사용하면 새로운 Docker 네트워크를 생성할 수 있습니다.</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network create new
+56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7
+<span class="nv">$ </span>docker network <span class="nb">ls
+</span>NETWORK ID     NAME             DRIVER    SCOPE
+b1545defe462   bridge           bridge    <span class="nb">local
+</span>95295abe6cbb   docker_default   bridge    <span class="nb">local
+</span>a152a103d15b   host             host      <span class="nb">local
+</span>7cf51facc103   mongo-network    bridge    <span class="nb">local
+</span>56aabbc93d48   new              bridge    <span class="nb">local</span> &lt;<span class="nt">--</span> 새로생긴 네트워크
+f984d450d39e   none             null      <span class="nb">local</span>
+</code></pre></div></div>
+
+<p>-d 옵션을 추가하면 네트워크의 종류를 정의할 수도 있습니다. 기본값은 bridge 입니다.</p>
+
+<h2 id="네트워크-디테일-확인하기">네트워크 디테일 확인하기</h2>
+
+<p><code>docker network inspect</code>커맨드를 사용하면 다음과 같이 네트워크의 상세정보를 확인할 수 있습니다.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>techworld-js-docker-demo-app docker network inspect new
+<span class="o">[</span>
+    <span class="o">{</span>
+        <span class="s2">"Name"</span>: <span class="s2">"new"</span>,
+        <span class="s2">"Id"</span>: <span class="s2">"56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7"</span>,
+        <span class="s2">"Created"</span>: <span class="s2">"2021-05-20T11:38:23.716924633Z"</span>,
+        <span class="s2">"Scope"</span>: <span class="s2">"local"</span>,
+        <span class="s2">"Driver"</span>: <span class="s2">"bridge"</span>,
+        <span class="s2">"EnableIPv6"</span>: <span class="nb">false</span>,
+        <span class="s2">"IPAM"</span>: <span class="o">{</span>
+            <span class="s2">"Driver"</span>: <span class="s2">"default"</span>,
+            <span class="s2">"Options"</span>: <span class="o">{}</span>,
+            <span class="s2">"Config"</span>: <span class="o">[</span>
+                <span class="o">{</span>
+                    <span class="s2">"Subnet"</span>: <span class="s2">"192.168.96.0/20"</span>,
+                    <span class="s2">"Gateway"</span>: <span class="s2">"192.168.96.1"</span>
+                <span class="o">}</span>
+            <span class="o">]</span>
+        <span class="o">}</span>,
+        <span class="s2">"Internal"</span>: <span class="nb">false</span>,
+        <span class="s2">"Attachable"</span>: <span class="nb">false</span>,
+        <span class="s2">"Ingress"</span>: <span class="nb">false</span>,
+        <span class="s2">"ConfigFrom"</span>: <span class="o">{</span>
+            <span class="s2">"Network"</span>: <span class="s2">""</span>
+        <span class="o">}</span>,
+        <span class="s2">"ConfigOnly"</span>: <span class="nb">false</span>,
+        <span class="s2">"Containers"</span>: <span class="o">{}</span>,
+        <span class="s2">"Options"</span>: <span class="o">{}</span>,
+        <span class="s2">"Labels"</span>: <span class="o">{}</span>
+    <span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div></div>
+
+<h2 id="디폴트-네트워크">디폴트 네트워크</h2>
+
+<p>컨테이너 생성시 –net 태그를 사용하여 원하는 네트워크에 연결시킨 상태로 만들 수 있습니다 만약 –net 옵션을 사용하지 않으면 기본적으로 bridge라는 디폴트 네트워크에 붙습니다.</p>
+
+<p>자그럼 <code>sample</code>이라는 컨테이너를 하나 실행해보겠습니다.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-itd</span> <span class="nt">--name</span> sample busybox
+c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473
+</code></pre></div></div>
+
+<p>–net 옵션을 사용하지 않았으니 bridge 네트워크에 붙었겠지요? 한번 확인해봅시다.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network inspect bridge
+
+<span class="o">[</span> 
+  <span class="o">{</span>
+  ...중략
+    <span class="s2">"Containers"</span>: <span class="o">{</span>
+      <span class="s2">"c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473"</span>: <span class="o">{</span>
+          <span class="s2">"Name"</span>: <span class="s2">"sample"</span>,
+          <span class="s2">"EndpointID"</span>: <span class="s2">"8e3585999080257814d644b79484041fd7b517fe467dcd21c55175922cce69cf"</span>,
+          <span class="s2">"MacAddress"</span>: <span class="s2">"02:42:ac:11:00:02"</span>,
+          <span class="s2">"IPv4Address"</span>: <span class="s2">"172.17.0.2/16"</span>,
+          <span class="s2">"IPv6Address"</span>: <span class="s2">""</span>
+      <span class="o">}</span>
+    <span class="o">}</span>,
+  ...중략
+
+  <span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div></div>
+<p>containers 안에 sample이 잘 들어가있는것을 확인할 수 있습니다.</p>
+
+<h2 id="네트워크에-컨테이너-연결">네트워크에 컨테이너 연결</h2>
+<p><code>docker network connect</code>커맨드를 사용하면 원하는 네트워크에 컨테이너를 연결할 수 있습니다.
+sample컨테이너를 new 네트워크에 연결후 확인해 보겠습니다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network connect new sample
+
+<span class="nv">$ </span>docker network inspect new
+<span class="o">[</span>
+    ...중략
+        <span class="s2">"Containers"</span>: <span class="o">{</span>
+            <span class="s2">"c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473"</span>: <span class="o">{</span>
+                <span class="s2">"Name"</span>: <span class="s2">"sample"</span>,
+                <span class="s2">"EndpointID"</span>: <span class="s2">"6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080"</span>,
+                <span class="s2">"MacAddress"</span>: <span class="s2">"02:42:c0:a8:60:02"</span>,
+                <span class="s2">"IPv4Address"</span>: <span class="s2">"192.168.96.2/20"</span>,
+                <span class="s2">"IPv6Address"</span>: <span class="s2">""</span>
+            <span class="o">}</span>
+        <span class="o">}</span>,
+        <span class="s2">"Options"</span>: <span class="o">{}</span>,
+        <span class="s2">"Labels"</span>: <span class="o">{}</span>
+    ...중략
+<span class="o">]</span>
+</code></pre></div></div>
+<p>이와같이 잘 연결된 것을 확인 할 수 있습니다.</p>
+
+<h2 id="네트워크로부터-컨테이너-연결-해제">네트워크로부터 컨테이너 연결 해제</h2>
+<p><code>docker network disconnect</code> 커맨드를 이용하여 디폴트 네트워크인 bridge 과 sample의 연결을 해재 하겠습니다.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network disconnect bridge sample
+</code></pre></div></div>
+
+<p>잘 해제된것을 확인해 봅시다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network inspect bridge
+
+<span class="o">[</span> 
+  <span class="o">{</span>
+  ...중략
+    <span class="s2">"Containers"</span>: <span class="o">{}</span>
+  ...중략
+
+  <span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div></div>
+
+<h2 id="두번째-컨테이너-연결">두번째 컨테이너 연결</h2>
+<p>같은 네트워크에 다른 서로 다른 컨테이너들을 연결시키면 통신 가능하다고 했었죠? 한번 직접 확인해봅시다.
+우선 두번째 sample을 만들어주고,</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-itd</span> <span class="nt">--name</span> sample2 <span class="nt">--net</span> new busybox
+6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c
+</code></pre></div></div>
+<p>네트워크에 잘 붙었는지 확인합니다</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network inspect new
+
+  ...중략
+    <span class="s2">"Containers"</span>: <span class="o">{</span>
+        <span class="s2">"6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c"</span>: <span class="o">{</span>
+            <span class="s2">"Name"</span>: <span class="s2">"sample2"</span>,
+            <span class="s2">"EndpointID"</span>: <span class="s2">"68c44b54a118ab3f54ea29aff5a6bbb1431668d40b4f1cc22807525592ca362b"</span>,
+            <span class="s2">"MacAddress"</span>: <span class="s2">"02:42:c0:a8:60:03"</span>,
+            <span class="s2">"IPv4Address"</span>: <span class="s2">"192.168.96.3/20"</span>,
+            <span class="s2">"IPv6Address"</span>: <span class="s2">""</span>
+        <span class="o">}</span>,
+        <span class="s2">"c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473"</span>: <span class="o">{</span>
+            <span class="s2">"Name"</span>: <span class="s2">"sample"</span>,
+            <span class="s2">"EndpointID"</span>: <span class="s2">"6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080"</span>,
+            <span class="s2">"MacAddress"</span>: <span class="s2">"02:42:c0:a8:60:02"</span>,
+            <span class="s2">"IPv4Address"</span>: <span class="s2">"192.168.96.2/20"</span>,
+            <span class="s2">"IPv6Address"</span>: <span class="s2">""</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+  ...중략
+</code></pre></div></div>
+<p>new라는 네트워크에 sample과 sample2가 잘 연결되었습니다.</p>
+
+<h2 id="컨테이너-간-네트워킹">컨테이너 간 네트워킹</h2>
+
+<p>이제 두 컨테이너가 네트워크를 통해 통신 가능한지 테스트 해보겠습니다.</p>
+
+<p>우선 <code>sample</code> 컨테이너에서 <code>sample2</code> 컨테이너로 <code>ping</code> 을 날려봅니다 컨테이너 이름대신 ip로 입력할 수도 있지만 이름을 넣는게 편하겠지요.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">exec </span>sample ping sample2
+PING sample2 <span class="o">(</span>192.168.96.3<span class="o">)</span>: 56 data bytes
+64 bytes from 192.168.96.3: <span class="nb">seq</span><span class="o">=</span>0 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.109 ms
+64 bytes from 192.168.96.3: <span class="nb">seq</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.232 ms
+64 bytes from 192.168.96.3: <span class="nb">seq</span><span class="o">=</span>2 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.196 ms
+64 bytes from 192.168.96.3: <span class="nb">seq</span><span class="o">=</span>3 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.198 ms
+64 bytes from 192.168.96.3: <span class="nb">seq</span><span class="o">=</span>4 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.164 ms
+64 bytes from 192.168.96.3: <span class="nb">seq</span><span class="o">=</span>5 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.199 ms
+</code></pre></div></div>
+
+<h2 id="네트워크-삭제">네트워크 삭제</h2>
+
+<p>마지막으로 <code>docker network rm</code>커맨드를 사용하여 <code>new</code> 네트워크를 삭제해보겠습니다.
+<br /><br />
+에러가 뜨면서 삭제가 되질 않습니다</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network <span class="nb">rm </span>new
+Error response from daemon: error <span class="k">while </span>removing network: network new <span class="nb">id </span>56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7 has active endpoints
+</code></pre></div></div>
+
+<p>네트워크를 삭제하기위해선 해당 네트워크상에서 실행중인 컨테이너가 있으면 안됩니다.
+따라서 
+<code>docker stop</code>커맨드로 컨테이너들을 멈춰주고 다시 지워보겠습니다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker stop sample sample2
+sample
+sample2
+<span class="nv">$ </span>docker network <span class="nb">rm </span>new
+new
+<span class="nv">$ </span>docker network <span class="nb">ls
+</span>NETWORK ID     NAME             DRIVER    SCOPE
+b1545defe462   bridge           bridge    <span class="nb">local
+</span>95295abe6cbb   docker_default   bridge    <span class="nb">local
+</span>a152a103d15b   host             host      <span class="nb">local
+</span>7cf51facc103   mongo-network    bridge    <span class="nb">local
+</span>f984d450d39e   none             null      <span class="nb">local</span>
+</code></pre></div></div>
+<p>성공적으로 삭제되었습니다.</p>
+
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-20T00:00:00+09:00"><!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+</div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/05/19/Learning-Docker-01.html">[ #1 ] Docker 기본 익히기 </a></div></div></div>
+
 </div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/19/Learning-Docker-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Docker 기본 익히기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Image vs Container
 
-도커 이미지
-도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
 
-도커 컨테이너
-도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
-컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.
-
-허브로부터 이미지 받아오기
-docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다.
-$ docker pull &lt;image&gt;
-
-
-
-이미지 실행하기
-
-docker run 커맨드를 사용하여 원하는 이미지를 실...</div>
-<p><a href="/2021/05/19/Learning-Docker-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/14/Github-01.html"><h2 itemprop="headline" class="item__header">깃헙 history를 주물러봅시다</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">서론
-
-때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.
-
-얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Git...</div>
-<p><a href="/2021/05/14/Github-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Github">Github</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Commit">Commit</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SVN">SVN</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=history">history</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=modify">modify</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
-    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/29/Learning-React-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] useContext hook</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">useContext
-
-useContext란 무엇인가?
-
-이때까지 부모 컴포넌트에서 자식컴포넌트에 정보를 전달할때 props를 통하여 전달 했었습니다.
-
-A(부모) =&gt; B =&gt; C = &gt; D 순으로 nested 되어있을경우 부모로부터 D로 데이터를 전송하려면 B, C, D 순으로 전달했었죠.
-
-나중에 props의 이름을 까먹거나하면 정말 헷갈렸었는데 이번에 useContext 사용하는 법을 배우고 신세계가 열렸습니다.
-
-<img class="emoji" title=":star2:" alt=":star2:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f31f.png" height="20" width="20">useContext를 이용하면 B, C를 거치지 않고 A =&gt; D로 직행으로 원하는 데이터를 전송할 수 있습니다!
-useContext 어떻게 사용할까요? - 1
-
-...</div>
-<p><a href="/2021/04/29/Learning-React-10.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/29/Learning-React-09.html"><h2 itemprop="headline" class="item__header">[ #9 ] useEffect hook</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. useEffect
-
-useEffect란?
-
-useEffect는 기본적으로 몇가지 조건에 의해 작동하게 됩니다. 
-
-조건 1.
-
-페이지가 처음 렌더링 되고난 후 useEffect 내의 함수는 무조건 한번 실행되고 봅니다.
-
-useEffect(() =&gt; {
-    function doSomething(){
-        console.log("something")
-    }
-    doSomething();
-    
-})
-
-조건 2.
-만약에 useEffect의 2번재 파라미터값이 없다면 이는 해당 컴포넌트가 렌더링 될 때마다 실행됩니다.
-두번째 파라미터는 watch 값들의 목록입니다 만약 값이 변경되면 us...</div>
-<p><a href="/2021/04/29/Learning-React-09.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/28/Learning-React-08.html"><h2 itemprop="headline" class="item__header">[ #8 ] Portal, useRef</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. Portal을 사용하기.
-
-//index.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import './index.css';
-import App from './App';
-
-ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
-
-modal, overlayed popup같은 경우는 따로 분리해서 보여주는게 맞다고 합니다. 하지만 어떻게 그렇게 할 수 있을까요?.
-
-//index.html
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-  &lt;he...</div>
-<p><a href="/2021/04/28/Learning-React-08.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 28일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-28T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/27/Learning-React-07.html"><h2 itemprop="headline" class="item__header">[ #7 ] 3 ways to fullfill jsx's requirement</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">JSX requirement
-
-import React from 'react'
-
-const AddUser = () =&gt; {
-  return (
-    &lt;div&gt;이건&lt;/div&gt;
-    &lt;div&gt;에러나요&lt;/div&gt;
-  )
-}
-
-export default AddUser
-
-
-리액트 jsx는 오직 하나의 html element만을 return할 수 있습니다.  
-따라서 위의 코드는 에러를 뿜어냅니다.
-
-
-
-이를 수정하기 위해선 이 두태그를 하나의 div로 감싸줘야 합니다.
-
-import React from "react";
-
-const AddUser = () =&gt; {
-  r...</div>
-<p><a href="/2021/04/27/Learning-React-07.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 27일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-27T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/26/Learning-React-06.html"><h2 itemprop="headline" class="item__header">[ #6 ] setState &amp; conditional content</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. useState 를 사용하는 방법.
-기존코드
-
-
-const[expenses, setExpenses]=useState(initial_expenses)
-
-  const addExpenseHandler = (expense) =&gt; {
-    temp = [{
-        ...data,
-        expense,
-    }]
-    setExpenses(temp);
-  }
-
-
-함수 useState()는 현재값과, setExpenses라는 값을 변경하는 메소드를 반환하는줄 알았고, setExpenses(바꿀값) 을 통하여 
-값을 직접 변경할 수 있는정도로만 알고있엇다. 
-
-useState의 두번째 반환값 s...</div>
-<p><a href="/2021/04/26/Learning-React-06.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 26일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-26T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article>
-</div>
-</div>
-<div class="layout--home"><div class="pagination">
-<p>전체 글 13개, 2 페이지</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap">
-<li><div class="button button--secondary button--circle disabled">
-            <i class="fas fa-angle-left"></i>
-          </div></li>
-<li>
-              <div class="button button--primary button--circle focus"><span>1</span></div>
-            </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page2"><span>2</span></a>
-              </li>
-<li><a class="button button--secondary button--circle" href="/page2">
-            <i class="fas fa-angle-right"></i>
-          </a></li>
-</ul>
-    </div>
-  </div></div>
-<script>/*(function () {
-
-})();*/
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
-</div>
-<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div>
-<div class="page__footer d-print-none">
+            </div></div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main">
-<div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong">
-<meta itemprop="url" content="/">
-<div class="footer__author-links">
-<div class="author-links">
+  <div class="main"><div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a>
-</li></ul>
+      </a></ul>
 </div>
 </div>
-    </div>
-<div class="site-info mt-2">
+    </div><div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div>
-</div>
-    </div>
-<script>(function() {
+</div></div>
+    </div><script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -715,8 +652,7 @@ useState의 두번째 반환값 s...</div>
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
-<script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -808,7 +744,7 @@ useState의 두번째 반환값 s...</div>
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text">
+        <input type="text" />
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -932,8 +868,7 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div>
-</div>
+</div></div>
 
 
 <script>(function() {
@@ -1170,6 +1105,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script>
     </div>
     <script>(function () {

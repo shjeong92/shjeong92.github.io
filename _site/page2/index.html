@@ -280,6 +280,24 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/04/25/Learning-React-05.html"><h2 itemprop="headline" class="item__header">[ #5 ] state의 역행 childretn -> parent</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. props의 역행
+state는 top down 방식으로 이동 할 수 있는 줄 알았지만 아니었다. 부모 컴포넌트에서 함수를 선언한다음 자식 컴포넌트에 함수에대한 포인터를 전속하는 방식으로 자식 -&gt; 부모에게 데이터 전송이 가능하다.
+
+자세한 내용은 코드를통해 알아보도록한다.
+
+import React, { useState } from "react";
+import ExpenseItem from "./ExpenseItem";
+import Card from "../UI/Card";
+import ExpensesFilter from "./ExpensesFilter";
+import "./Expenses.css";
+co...</div><p><a href="/2021/04/25/Learning-React-05.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=React">React</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 04월 25일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
+    <meta itemprop="keywords" content="React"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/04/25/Learning-React-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] useState 사용하는 방법</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">useState 를 사용하는 방법
 
@@ -360,7 +378,7 @@ function App() {
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-24T00:00:00+09:00">
     <meta itemprop="keywords" content="React"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 12개, 2 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 13개, 2 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/">
             <i class="fas fa-angle-left"></i>

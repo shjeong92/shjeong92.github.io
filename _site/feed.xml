@@ -1,5 +1,235 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-19T19:42:01+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
-</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #1 ] Docker 기본 익히기</title><link href="https://shjeong92.github.io/2021/05/19/Learning-Docker-01.html" rel="alternate" type="text/html" title="[ #1 ] Docker 기본 익히기" /><published>2021-05-19T00:00:00+09:00</published><updated>2021-05-19T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/19/Learning-Docker-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/19/Learning-Docker-01.html">&lt;h2 id=&quot;image-vs-container&quot;&gt;Image vs Container&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-20T22:16:09+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #2 ] Docker 네트워크 사용하기</title><link href="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html" rel="alternate" type="text/html" title="[ #2 ] Docker 네트워크 사용하기" /><published>2021-05-20T00:00:00+09:00</published><updated>2021-05-20T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/20/Learning-Docker-02</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html">&lt;p&gt;Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;네트워크-조회&quot;&gt;네트워크 조회&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;docker network ls&lt;/code&gt; 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;ls
+&lt;/span&gt;NETWORK ID     NAME             DRIVER    SCOPE
+b1545defe462   bridge           bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;2fff1f6ef4f0   core_default     bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;95295abe6cbb   docker_default   bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;a152a103d15b   host             host      &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;7cf51facc103   mongo-network    bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;f984d450d39e   none             null      &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;bridge&lt;/code&gt;, &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt; 은 Docker 데몬이 실행되면서 기본적으로 생성되는 네트워크인데, 사용자가 직접 네트워크를 생성해서 사용하는게 권장된다고 합니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;네트워크-종류&quot;&gt;네트워크 종류&lt;/h2&gt;
+&lt;p&gt;Docker 네트워크는 &lt;code&gt;bridge&lt;/code&gt;, &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;overlay&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt;, &lt;code&gt;container&lt;/code&gt; 가 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;bridge 네트워크는 하나의 호스트 컴퓨터 내에서 여러 컨테이너들이 서로 소통할 수 있도록 해줍니다.&lt;/li&gt;
+  &lt;li&gt;host 네트워크는 컨터이너를 호스트 컴퓨터와 동일한 네트워크에서 컨테이너를 돌리기 위해서 사용됩니다.&lt;/li&gt;
+  &lt;li&gt;overlay 네트워크는 여러 호스트에 분산되어 돌아가는 컨테이너들 간에 네트워킹을 위해서 사용됩니다.&lt;/li&gt;
+  &lt;li&gt;none 네트워크는 네트워크를 사용하지 않는다는 것입니다.&lt;/li&gt;
+  &lt;li&gt;container 네트워크는 다른 컨테이너의 네트워크 환경 공유를위해 쓰입니다.
+&lt;code&gt;--net container: (containerIdOrName)  &lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;네트워크-생성&quot;&gt;네트워크 생성&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;docker network create (name)&lt;/code&gt; 커맨드를 사용하면 새로운 Docker 네트워크를 생성할 수 있습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network create new
+56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;ls
+&lt;/span&gt;NETWORK ID     NAME             DRIVER    SCOPE
+b1545defe462   bridge           bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;95295abe6cbb   docker_default   bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;a152a103d15b   host             host      &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;7cf51facc103   mongo-network    bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;56aabbc93d48   new              bridge    &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt; &amp;lt;&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; 새로생긴 네트워크
+f984d450d39e   none             null      &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;-d 옵션을 추가하면 네트워크의 종류를 정의할 수도 있습니다. 기본값은 bridge 입니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;네트워크-디테일-확인하기&quot;&gt;네트워크 디테일 확인하기&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;docker network inspect&lt;/code&gt;커맨드를 사용하면 다음과 같이 네트워크의 상세정보를 확인할 수 있습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;techworld-js-docker-demo-app docker network inspect new
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;new&quot;&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Id&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7&quot;&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Created&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;2021-05-20T11:38:23.716924633Z&quot;&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Scope&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;local&quot;&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Driver&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;bridge&quot;&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;EnableIPv6&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;IPAM&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;Driver&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;Options&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;Config&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;s2&quot;&gt;&quot;Subnet&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.0/20&quot;&lt;/span&gt;,
+                    &lt;span class=&quot;s2&quot;&gt;&quot;Gateway&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.1&quot;&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Internal&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Attachable&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Ingress&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;ConfigFrom&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;Network&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;ConfigOnly&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Options&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Labels&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;디폴트-네트워크&quot;&gt;디폴트 네트워크&lt;/h2&gt;
+
+&lt;p&gt;컨테이너 생성시 –net 태그를 사용하여 원하는 네트워크에 연결시킨 상태로 만들 수 있습니다 만약 –net 옵션을 사용하지 않으면 기본적으로 bridge라는 디폴트 네트워크에 붙습니다.&lt;/p&gt;
+
+&lt;p&gt;자그럼 &lt;code&gt;sample&lt;/code&gt;이라는 컨테이너를 하나 실행해보겠습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-itd&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; sample busybox
+c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;–net 옵션을 사용하지 않았으니 bridge 네트워크에 붙었겠지요? 한번 확인해봅시다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network inspect bridge
+
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 
+  &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  ...중략
+    &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;s2&quot;&gt;&quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;sample&quot;&lt;/span&gt;,
+          &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;8e3585999080257814d644b79484041fd7b517fe467dcd21c55175922cce69cf&quot;&lt;/span&gt;,
+          &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;02:42:ac:11:00:02&quot;&lt;/span&gt;,
+          &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;172.17.0.2/16&quot;&lt;/span&gt;,
+          &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
+  ...중략
+
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;containers 안에 sample이 잘 들어가있는것을 확인할 수 있습니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;네트워크에-컨테이너-연결&quot;&gt;네트워크에 컨테이너 연결&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;docker network connect&lt;/code&gt;커맨드를 사용하면 원하는 네트워크에 컨테이너를 연결할 수 있습니다.
+sample컨테이너를 new 네트워크에 연결후 확인해 보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network connect new sample
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network inspect new
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+    ...중략
+        &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;sample&quot;&lt;/span&gt;,
+                &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080&quot;&lt;/span&gt;,
+                &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;02:42:c0:a8:60:02&quot;&lt;/span&gt;,
+                &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.2/20&quot;&lt;/span&gt;,
+                &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Options&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;Labels&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+    ...중략
+&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;이와같이 잘 연결된 것을 확인 할 수 있습니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;네트워크로부터-컨테이너-연결-해제&quot;&gt;네트워크로부터 컨테이너 연결 해제&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;docker network disconnect&lt;/code&gt; 커맨드를 이용하여 디폴트 네트워크인 bridge 과 sample의 연결을 해재 하겠습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network disconnect bridge sample
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;잘 해제된것을 확인해 봅시다.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network inspect bridge
+
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 
+  &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  ...중략
+    &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+  ...중략
+
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;두번째-컨테이너-연결&quot;&gt;두번째 컨테이너 연결&lt;/h2&gt;
+&lt;p&gt;같은 네트워크에 다른 서로 다른 컨테이너들을 연결시키면 통신 가능하다고 했었죠? 한번 직접 확인해봅시다.
+우선 두번째 sample을 만들어주고,&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-itd&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; sample2 &lt;span class=&quot;nt&quot;&gt;--net&lt;/span&gt; new busybox
+6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;네트워크에 잘 붙었는지 확인합니다&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network inspect new
+
+  ...중략
+    &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;sample2&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;68c44b54a118ab3f54ea29aff5a6bbb1431668d40b4f1cc22807525592ca362b&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;02:42:c0:a8:60:03&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.3/20&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
+        &lt;span class=&quot;s2&quot;&gt;&quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;sample&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;02:42:c0:a8:60:02&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.2/20&quot;&lt;/span&gt;,
+            &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  ...중략
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;new라는 네트워크에 sample과 sample2가 잘 연결되었습니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;컨테이너-간-네트워킹&quot;&gt;컨테이너 간 네트워킹&lt;/h2&gt;
+
+&lt;p&gt;이제 두 컨테이너가 네트워크를 통해 통신 가능한지 테스트 해보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;우선 &lt;code&gt;sample&lt;/code&gt; 컨테이너에서 &lt;code&gt;sample2&lt;/code&gt; 컨테이너로 &lt;code&gt;ping&lt;/code&gt; 을 날려봅니다 컨테이너 이름대신 ip로 입력할 수도 있지만 이름을 넣는게 편하겠지요.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;sample ping sample2
+PING sample2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;192.168.96.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 56 data bytes
+64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.109 ms
+64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.232 ms
+64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.196 ms
+64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.198 ms
+64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.164 ms
+64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;5 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.199 ms
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;네트워크-삭제&quot;&gt;네트워크 삭제&lt;/h2&gt;
+
+&lt;p&gt;마지막으로 &lt;code&gt;docker network rm&lt;/code&gt;커맨드를 사용하여 &lt;code&gt;new&lt;/code&gt; 네트워크를 삭제해보겠습니다.
+&lt;br /&gt;&lt;br /&gt;
+에러가 뜨면서 삭제가 되질 않습니다&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;new
+Error response from daemon: error &lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;removing network: network new &lt;span class=&quot;nb&quot;&gt;id &lt;/span&gt;56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7 has active endpoints
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;네트워크를 삭제하기위해선 해당 네트워크상에서 실행중인 컨테이너가 있으면 안됩니다.
+따라서 
+&lt;code&gt;docker stop&lt;/code&gt;커맨드로 컨테이너들을 멈춰주고 다시 지워보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker stop sample sample2
+sample
+sample2
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;new
+new
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;ls
+&lt;/span&gt;NETWORK ID     NAME             DRIVER    SCOPE
+b1545defe462   bridge           bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;95295abe6cbb   docker_default   bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;a152a103d15b   host             host      &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;7cf51facc103   mongo-network    bridge    &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;f984d450d39e   none             null      &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;성공적으로 삭제되었습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="network" /><category term="도커" /><category term="네트워크" /><category term="컨테이너" /><summary type="html">Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다. 네트워크 조회 docker network ls 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다. $ docker network ls NETWORK ID NAME DRIVER SCOPE b1545defe462 bridge bridge local 2fff1f6ef4f0 core_default bridge local 95295abe6cbb docker_default bridge local a152a103d15b host host local 7cf51facc103 mongo-network bridge local f984d450d39e none null local bridge, host, none 은 Docker 데몬이 실행되면서 기본적으로 생성되는 네트워크인데, 사용자가 직접 네트워크를 생성해서 사용하는게 권장된다고 합니다. 네트워크 종류 Docker 네트워크는 bridge, host, overlay, none, container 가 있습니다. bridge 네트워크는 하나의 호스트 컴퓨터 내에서 여러 컨테이너들이 서로 소통할 수 있도록 해줍니다. host 네트워크는 컨터이너를 호스트 컴퓨터와 동일한 네트워크에서 컨테이너를 돌리기 위해서 사용됩니다. overlay 네트워크는 여러 호스트에 분산되어 돌아가는 컨테이너들 간에 네트워킹을 위해서 사용됩니다. none 네트워크는 네트워크를 사용하지 않는다는 것입니다. container 네트워크는 다른 컨테이너의 네트워크 환경 공유를위해 쓰입니다. --net container: (containerIdOrName) 네트워크 생성 docker network create (name) 커맨드를 사용하면 새로운 Docker 네트워크를 생성할 수 있습니다. $ docker network create new 56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7 $ docker network ls NETWORK ID NAME DRIVER SCOPE b1545defe462 bridge bridge local 95295abe6cbb docker_default bridge local a152a103d15b host host local 7cf51facc103 mongo-network bridge local 56aabbc93d48 new bridge local &amp;lt;-- 새로생긴 네트워크 f984d450d39e none null local -d 옵션을 추가하면 네트워크의 종류를 정의할 수도 있습니다. 기본값은 bridge 입니다. 네트워크 디테일 확인하기 docker network inspect커맨드를 사용하면 다음과 같이 네트워크의 상세정보를 확인할 수 있습니다. $ techworld-js-docker-demo-app docker network inspect new [ { &quot;Name&quot;: &quot;new&quot;, &quot;Id&quot;: &quot;56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7&quot;, &quot;Created&quot;: &quot;2021-05-20T11:38:23.716924633Z&quot;, &quot;Scope&quot;: &quot;local&quot;, &quot;Driver&quot;: &quot;bridge&quot;, &quot;EnableIPv6&quot;: false, &quot;IPAM&quot;: { &quot;Driver&quot;: &quot;default&quot;, &quot;Options&quot;: {}, &quot;Config&quot;: [ { &quot;Subnet&quot;: &quot;192.168.96.0/20&quot;, &quot;Gateway&quot;: &quot;192.168.96.1&quot; } ] }, &quot;Internal&quot;: false, &quot;Attachable&quot;: false, &quot;Ingress&quot;: false, &quot;ConfigFrom&quot;: { &quot;Network&quot;: &quot;&quot; }, &quot;ConfigOnly&quot;: false, &quot;Containers&quot;: {}, &quot;Options&quot;: {}, &quot;Labels&quot;: {} } ] 디폴트 네트워크 컨테이너 생성시 –net 태그를 사용하여 원하는 네트워크에 연결시킨 상태로 만들 수 있습니다 만약 –net 옵션을 사용하지 않으면 기본적으로 bridge라는 디폴트 네트워크에 붙습니다. 자그럼 sample이라는 컨테이너를 하나 실행해보겠습니다. docker run -itd --name sample busybox c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473 –net 옵션을 사용하지 않았으니 bridge 네트워크에 붙었겠지요? 한번 확인해봅시다. $ docker network inspect bridge [ { ...중략 &quot;Containers&quot;: { &quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;: { &quot;Name&quot;: &quot;sample&quot;, &quot;EndpointID&quot;: &quot;8e3585999080257814d644b79484041fd7b517fe467dcd21c55175922cce69cf&quot;, &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;, &quot;IPv4Address&quot;: &quot;172.17.0.2/16&quot;, &quot;IPv6Address&quot;: &quot;&quot; } }, ...중략 } ] containers 안에 sample이 잘 들어가있는것을 확인할 수 있습니다. 네트워크에 컨테이너 연결 docker network connect커맨드를 사용하면 원하는 네트워크에 컨테이너를 연결할 수 있습니다. sample컨테이너를 new 네트워크에 연결후 확인해 보겠습니다. $ docker network connect new sample $ docker network inspect new [ ...중략 &quot;Containers&quot;: { &quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;: { &quot;Name&quot;: &quot;sample&quot;, &quot;EndpointID&quot;: &quot;6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080&quot;, &quot;MacAddress&quot;: &quot;02:42:c0:a8:60:02&quot;, &quot;IPv4Address&quot;: &quot;192.168.96.2/20&quot;, &quot;IPv6Address&quot;: &quot;&quot; } }, &quot;Options&quot;: {}, &quot;Labels&quot;: {} ...중략 ] 이와같이 잘 연결된 것을 확인 할 수 있습니다. 네트워크로부터 컨테이너 연결 해제 docker network disconnect 커맨드를 이용하여 디폴트 네트워크인 bridge 과 sample의 연결을 해재 하겠습니다. $ docker network disconnect bridge sample 잘 해제된것을 확인해 봅시다. $ docker network inspect bridge [ { ...중략 &quot;Containers&quot;: {} ...중략 } ] 두번째 컨테이너 연결 같은 네트워크에 다른 서로 다른 컨테이너들을 연결시키면 통신 가능하다고 했었죠? 한번 직접 확인해봅시다. 우선 두번째 sample을 만들어주고, docker run -itd --name sample2 --net new busybox 6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c 네트워크에 잘 붙었는지 확인합니다 $ docker network inspect new ...중략 &quot;Containers&quot;: { &quot;6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c&quot;: { &quot;Name&quot;: &quot;sample2&quot;, &quot;EndpointID&quot;: &quot;68c44b54a118ab3f54ea29aff5a6bbb1431668d40b4f1cc22807525592ca362b&quot;, &quot;MacAddress&quot;: &quot;02:42:c0:a8:60:03&quot;, &quot;IPv4Address&quot;: &quot;192.168.96.3/20&quot;, &quot;IPv6Address&quot;: &quot;&quot; }, &quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;: { &quot;Name&quot;: &quot;sample&quot;, &quot;EndpointID&quot;: &quot;6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080&quot;, &quot;MacAddress&quot;: &quot;02:42:c0:a8:60:02&quot;, &quot;IPv4Address&quot;: &quot;192.168.96.2/20&quot;, &quot;IPv6Address&quot;: &quot;&quot; } } ...중략 new라는 네트워크에 sample과 sample2가 잘 연결되었습니다. 컨테이너 간 네트워킹 이제 두 컨테이너가 네트워크를 통해 통신 가능한지 테스트 해보겠습니다. 우선 sample 컨테이너에서 sample2 컨테이너로 ping 을 날려봅니다 컨테이너 이름대신 ip로 입력할 수도 있지만 이름을 넣는게 편하겠지요. docker exec sample ping sample2 PING sample2 (192.168.96.3): 56 data bytes 64 bytes from 192.168.96.3: seq=0 ttl=64 time=0.109 ms 64 bytes from 192.168.96.3: seq=1 ttl=64 time=0.232 ms 64 bytes from 192.168.96.3: seq=2 ttl=64 time=0.196 ms 64 bytes from 192.168.96.3: seq=3 ttl=64 time=0.198 ms 64 bytes from 192.168.96.3: seq=4 ttl=64 time=0.164 ms 64 bytes from 192.168.96.3: seq=5 ttl=64 time=0.199 ms 네트워크 삭제 마지막으로 docker network rm커맨드를 사용하여 new 네트워크를 삭제해보겠습니다. 에러가 뜨면서 삭제가 되질 않습니다 $ docker network rm new Error response from daemon: error while removing network: network new id 56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7 has active endpoints 네트워크를 삭제하기위해선 해당 네트워크상에서 실행중인 컨테이너가 있으면 안됩니다. 따라서 docker stop커맨드로 컨테이너들을 멈춰주고 다시 지워보겠습니다. $ docker stop sample sample2 sample sample2 $ docker network rm new new $ docker network ls NETWORK ID NAME DRIVER SCOPE b1545defe462 bridge bridge local 95295abe6cbb docker_default bridge local a152a103d15b host host local 7cf51facc103 mongo-network bridge local f984d450d39e none null local 성공적으로 삭제되었습니다.</summary></entry><entry><title type="html">[ #1 ] Docker 기본 익히기</title><link href="https://shjeong92.github.io/2021/05/19/Learning-Docker-01.html" rel="alternate" type="text/html" title="[ #1 ] Docker 기본 익히기" /><published>2021-05-19T00:00:00+09:00</published><updated>2021-05-19T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/19/Learning-Docker-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/19/Learning-Docker-01.html">&lt;h2 id=&quot;image-vs-container&quot;&gt;Image vs Container&lt;/h2&gt;
 
 &lt;h3 id=&quot;도커-이미지&quot;&gt;도커 이미지&lt;/h3&gt;
 &lt;p&gt;도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.&lt;/p&gt;
@@ -8,38 +238,50 @@
 &lt;p&gt;도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
 컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.&lt;/p&gt;
 
-&lt;h2 id=&quot;기본-명령어&quot;&gt;기본 명령어&lt;/h2&gt;
-
-&lt;h3 id=&quot;docker-pull&quot;&gt;docker pull&lt;/h3&gt;
+&lt;h2 id=&quot;허브로부터-이미지-받아오기&quot;&gt;허브로부터 이미지 받아오기&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;docker pull&lt;/code&gt; 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다.&lt;/p&gt;
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker pull &amp;lt;image&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;docker hub로부터 image를 받아옵니다.&lt;/p&gt;
 
 &lt;hr /&gt;
+&lt;h2 id=&quot;이미지-실행하기&quot;&gt;이미지 실행하기&lt;/h2&gt;
 
-&lt;h3 id=&quot;docker-run&quot;&gt;docker run&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;docker run&lt;/code&gt; 커맨드를 사용하여 원하는 이미지를 실행시킬 수 있습니다.&lt;/p&gt;
+
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker run &amp;lt;image&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, &lt;br /&gt;
-없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다.&lt;/p&gt;
+&lt;p&gt;먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, 없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다.&lt;/p&gt;
 
-&lt;p&gt;default 로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다. &lt;br /&gt;
--d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다. &lt;br /&gt;
-–rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;디폴트로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다.&lt;/li&gt;
+  &lt;li&gt;-d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다.&lt;/li&gt;
+  &lt;li&gt;–rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker run &lt;span class=&quot;nt&quot;&gt;-p6000&lt;/span&gt;:6379 redis
+&lt;h2 id=&quot;현재-실행중인-컨테이너-리스트&quot;&gt;현재 실행중인 컨테이너 리스트&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;docker ps&lt;/code&gt;커맨드를 사용하면 현재 실행중인 컨테이너 목록을 보여줍니다.&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker ps
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;-a 옵션을 추가하면, 실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker ps &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;로컬머신과-네트워크-바인딩하기&quot;&gt;로컬머신과 네트워크 바인딩하기&lt;/h2&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker run &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 6000:6379 redis
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;-p옵션으로 로컬머신과 컨테이너를 바인딩 할 수 있습니다.&lt;/p&gt;
-
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker ps    
 CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS                                       NAMES
 14eb691f51ad   redis     &lt;span class=&quot;s2&quot;&gt;&quot;docker-entrypoint.s…&quot;&lt;/span&gt;   About a minute ago   Up About a minute   0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp   flamboyant_khorana
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;docker ps로 실행되고있는 컨테이너를 보면, &lt;br /&gt;
+
+&lt;p&gt;&lt;code&gt;docker ps&lt;/code&gt; 커맨드를 이용하여 실행되고있는 컨테이너를 보면
 redis컨테이너는 6379포트로 liten중이고 해당 컨테이너의 6379포트는 로컬머신의 6000포트와 바인딩 되어있음을 확인 할 수 있습니다.&lt;/p&gt;
 
-&lt;h4 id=&quot;rocket-컨테이너에-이름부여하기&quot;&gt;:rocket: &lt;strong&gt;컨테이너에 이름부여하기&lt;/strong&gt;&lt;/h4&gt;
+&lt;h2 id=&quot;컨테이너에-이름부여하기&quot;&gt;컨테이너에 이름부여하기&lt;/h2&gt;
 
 &lt;p&gt;컨테이너 생성시 이름을 –name “원하는이름” 을 적어주면 원하는 이름으로 컨테이너 생성이 가능합니다.&lt;br /&gt;
 이름을 지정하지 않을경우 랜덤으로 만들어집니다.&lt;/p&gt;
@@ -53,7 +295,7 @@ redis컨테이너는 6379포트로 liten중이고 해당 컨테이너의 6379포
 1:M 19 May 10:11:04.420 &lt;span class=&quot;c&quot;&gt;# WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.&lt;/span&gt;
 1:M 19 May 10:11:04.420 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Ready to accept connections
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;docker ps로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;docker ps&lt;/code&gt;커맨드로 로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다.&lt;/p&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker ps
 CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                                       NAMES
@@ -61,31 +303,21 @@ a5846e3006f2   redis:4.0   &lt;span class=&quot;s2&quot;&gt;&quot;docker-entrypo
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;hr /&gt;
 
-&lt;h3 id=&quot;docker-start&quot;&gt;docker start&lt;/h3&gt;
-
+&lt;h2 id=&quot;컨테이너-실행하기&quot;&gt;컨테이너 실행하기&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;docker start&lt;/code&gt;커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다.&lt;/p&gt;
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker start &amp;lt;idOrNameOfContainer&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;컨테이너를 시작하고 싶을때 쓰입니다.&lt;/p&gt;
 
-&lt;h3 id=&quot;docker-stop&quot;&gt;docker stop&lt;/h3&gt;
+&lt;h2 id=&quot;컨테이너-종료하기&quot;&gt;컨테이너 종료하기&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;docker stop&lt;/code&gt;커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다.&lt;/p&gt;
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker stop &amp;lt;idOrNameOfContainer&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;컨테이너를 멈추고 싶을때 쓰입니다.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;h3 id=&quot;docker-ps&quot;&gt;docker ps&lt;/h3&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker ps
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다. &lt;br /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker ps &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;-a 옵션을 추가하면 멈춰있는 컨테이너들도 모두 보여줍니다.&lt;/p&gt;
-&lt;h3 id=&quot;docker-exec--it-idornameofcontainer-binbash&quot;&gt;docker exec -it &amp;lt;idOrNameOfContainer&amp;gt; /bin/bash&lt;/h3&gt;
-&lt;p&gt;원하는 컨테이너의 쉘에 접속하기 위해 쓰입니다. &lt;br /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;컨테이너의-쉘에-접근하기&quot;&gt;컨테이너의 쉘에 접근하기&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt; docker exec -it [idOrNameOfContainer] /bin/bash &lt;/code&gt;
+원하는 컨테이너의 쉘에 접속하기 위해 쓰입니다. &lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;다른 방법으로는 docker desktop에서 원하는 컨테이너를 클릭해서 해당 컨테이너의 쉘에 접근 가능합니다. &lt;br /&gt;&lt;/p&gt;
 
@@ -115,7 +347,9 @@ root@a5846e3006f2:/# &lt;span class=&quot;nb&quot;&gt;env
 
 &lt;hr /&gt;
 
-&lt;h3 id=&quot;docker-logs&quot;&gt;docker logs&lt;/h3&gt;
+&lt;h2 id=&quot;컨테이너의-로그-확인하기&quot;&gt;컨테이너의 로그 확인하기&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;docker logs&lt;/code&gt;커맨드로 원하는 컨테이너의 로그를 확인할 수 있습니다.&lt;/p&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker logs &amp;lt;idOrNameOfConainer&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -133,7 +367,7 @@ CONTAINER ID   IMAGE       COMMAND                  CREATED             STATUS  
 1:M 19 May 08:54:29.494 &lt;span class=&quot;c&quot;&gt;# Server initialized&lt;/span&gt;
 1:M 19 May 08:54:29.494 &lt;span class=&quot;c&quot;&gt;# WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.&lt;/span&gt;
 1:M 19 May 08:54:29.494 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Ready to accept connections
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><summary type="html">Image vs Container 도커 이미지 도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다. 도커 컨테이너 도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다. 컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다. 기본 명령어 docker pull $ docker pull &amp;lt;image&amp;gt; docker hub로부터 image를 받아옵니다. docker run $ docker run &amp;lt;image&amp;gt; 먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, 없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다. default 로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다. -d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다. –rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다. $ docker run -p6000:6379 redis -p옵션으로 로컬머신과 컨테이너를 바인딩 할 수 있습니다. $ docker ps CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES 14eb691f51ad redis &quot;docker-entrypoint.s…&quot; About a minute ago Up About a minute 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp flamboyant_khorana docker ps로 실행되고있는 컨테이너를 보면, redis컨테이너는 6379포트로 liten중이고 해당 컨테이너의 6379포트는 로컬머신의 6000포트와 바인딩 되어있음을 확인 할 수 있습니다. :rocket: 컨테이너에 이름부여하기 컨테이너 생성시 이름을 –name “원하는이름” 을 적어주면 원하는 이름으로 컨테이너 생성이 가능합니다. 이름을 지정하지 않을경우 랜덤으로 만들어집니다. $ docker run -p 6000:6379 --name redis-named redis:4.0 1:C 19 May 10:11:04.418 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo 1:C 19 May 10:11:04.418 # Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started 1:C 19 May 10:11:04.418 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf 1:M 19 May 10:11:04.420 * Running mode=standalone, port=6379. 1:M 19 May 10:11:04.420 # Server initialized 1:M 19 May 10:11:04.420 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled. 1:M 19 May 10:11:04.420 * Ready to accept connections docker ps로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다. $ docker ps CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES a5846e3006f2 redis:4.0 &quot;docker-entrypoint.s…&quot; 3 minutes ago Up 3 minutes 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp redis-named docker start $ docker start &amp;lt;idOrNameOfContainer&amp;gt; 컨테이너를 시작하고 싶을때 쓰입니다. docker stop $ docker stop &amp;lt;idOrNameOfContainer&amp;gt; 컨테이너를 멈추고 싶을때 쓰입니다. docker ps $ docker ps 실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다. $ docker ps -a -a 옵션을 추가하면 멈춰있는 컨테이너들도 모두 보여줍니다. docker exec -it &amp;lt;idOrNameOfContainer&amp;gt; /bin/bash 원하는 컨테이너의 쉘에 접속하기 위해 쓰입니다. 다른 방법으로는 docker desktop에서 원하는 컨테이너를 클릭해서 해당 컨테이너의 쉘에 접근 가능합니다. 다음과 같이 해당 컨테이너에 root권한으로 원으며 원하는 작업을 할 수가 있겠습니다. $ docker exec -it a5846e /bin/bash root@a5846e3006f2:/data# ls dump.rdb root@a5846e3006f2:/data# cd / root@a5846e3006f2:/# ls bin boot data dev etc home lib media mnt opt proc root run sbin srv sys tmp usr var root@a5846e3006f2:/# env HOSTNAME=a5846e3006f2 REDIS_DOWNLOAD_SHA=1e1e18420a86cfb285933123b04a82e1ebda20bfb0a289472745a087587e93a7 PWD=/ HOME=/root REDIS_VERSION=4.0.14 GOSU_VERSION=1.12 TERM=xterm REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-4.0.14.tar.gz SHLVL=1 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin _=/usr/bin/env OLDPWD=/data 쉘접속을 종료하기위해 exit을 입력하거나, ctrl+D로 빠져나올 수 있습니다. docker logs $ docker logs &amp;lt;idOrNameOfConainer&amp;gt; 원하는 컨테이너의 로그를 보고 싶을때 쓸 수 있습니다. $ docker ps -a CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES 95424043babd redis:4.0 &quot;docker-entrypoint.s…&quot; About an hour ago Up About an hour 0.0.0.0:6001-&amp;gt;6379/tcp, :::6001-&amp;gt;6379/tcp epic_wiles 14eb691f51ad redis &quot;docker-entrypoint.s…&quot; About an hour ago Up About an hour 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp flamboyant_khorana $ docker logs epic_wiles 1:C 19 May 08:54:29.491 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo 1:C 19 May 08:54:29.493 # Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started 1:C 19 May 08:54:29.493 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf 1:M 19 May 08:54:29.494 * Running mode=standalone, port=6379. 1:M 19 May 08:54:29.494 # Server initialized 1:M 19 May 08:54:29.494 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled. 1:M 19 May 08:54:29.494 * Ready to accept connections</summary></entry><entry><title type="html">깃헙 history를 주물러봅시다</title><link href="https://shjeong92.github.io/2021/05/14/Github-01.html" rel="alternate" type="text/html" title="깃헙 history를 주물러봅시다" /><published>2021-05-14T00:00:00+09:00</published><updated>2021-05-14T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/14/Github-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/14/Github-01.html">&lt;h2 id=&quot;서론&quot;&gt;서론&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><summary type="html">Image vs Container 도커 이미지 도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다. 도커 컨테이너 도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다. 컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다. 허브로부터 이미지 받아오기 docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다. $ docker pull &amp;lt;image&amp;gt; 이미지 실행하기 docker run 커맨드를 사용하여 원하는 이미지를 실행시킬 수 있습니다. $ docker run &amp;lt;image&amp;gt; 먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, 없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다. 디폴트로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다. -d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다. –rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다. 현재 실행중인 컨테이너 리스트 docker ps커맨드를 사용하면 현재 실행중인 컨테이너 목록을 보여줍니다. $ docker ps -a 옵션을 추가하면, 실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다. $ docker ps -a 로컬머신과 네트워크 바인딩하기 $ docker run -p 6000:6379 redis -p옵션으로 로컬머신과 컨테이너를 바인딩 할 수 있습니다. $ docker ps CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES 14eb691f51ad redis &quot;docker-entrypoint.s…&quot; About a minute ago Up About a minute 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp flamboyant_khorana docker ps 커맨드를 이용하여 실행되고있는 컨테이너를 보면 redis컨테이너는 6379포트로 liten중이고 해당 컨테이너의 6379포트는 로컬머신의 6000포트와 바인딩 되어있음을 확인 할 수 있습니다. 컨테이너에 이름부여하기 컨테이너 생성시 이름을 –name “원하는이름” 을 적어주면 원하는 이름으로 컨테이너 생성이 가능합니다. 이름을 지정하지 않을경우 랜덤으로 만들어집니다. $ docker run -p 6000:6379 --name redis-named redis:4.0 1:C 19 May 10:11:04.418 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo 1:C 19 May 10:11:04.418 # Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started 1:C 19 May 10:11:04.418 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf 1:M 19 May 10:11:04.420 * Running mode=standalone, port=6379. 1:M 19 May 10:11:04.420 # Server initialized 1:M 19 May 10:11:04.420 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled. 1:M 19 May 10:11:04.420 * Ready to accept connections docker ps커맨드로 로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다. $ docker ps CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES a5846e3006f2 redis:4.0 &quot;docker-entrypoint.s…&quot; 3 minutes ago Up 3 minutes 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp redis-named 컨테이너 실행하기 docker start커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다. $ docker start &amp;lt;idOrNameOfContainer&amp;gt; 컨테이너 종료하기 docker stop커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다. $ docker stop &amp;lt;idOrNameOfContainer&amp;gt; 컨테이너의 쉘에 접근하기 docker exec -it [idOrNameOfContainer] /bin/bash 원하는 컨테이너의 쉘에 접속하기 위해 쓰입니다. 다른 방법으로는 docker desktop에서 원하는 컨테이너를 클릭해서 해당 컨테이너의 쉘에 접근 가능합니다. 다음과 같이 해당 컨테이너에 root권한으로 원으며 원하는 작업을 할 수가 있겠습니다. $ docker exec -it a5846e /bin/bash root@a5846e3006f2:/data# ls dump.rdb root@a5846e3006f2:/data# cd / root@a5846e3006f2:/# ls bin boot data dev etc home lib media mnt opt proc root run sbin srv sys tmp usr var root@a5846e3006f2:/# env HOSTNAME=a5846e3006f2 REDIS_DOWNLOAD_SHA=1e1e18420a86cfb285933123b04a82e1ebda20bfb0a289472745a087587e93a7 PWD=/ HOME=/root REDIS_VERSION=4.0.14 GOSU_VERSION=1.12 TERM=xterm REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-4.0.14.tar.gz SHLVL=1 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin _=/usr/bin/env OLDPWD=/data 쉘접속을 종료하기위해 exit을 입력하거나, ctrl+D로 빠져나올 수 있습니다. 컨테이너의 로그 확인하기 docker logs커맨드로 원하는 컨테이너의 로그를 확인할 수 있습니다. $ docker logs &amp;lt;idOrNameOfConainer&amp;gt; 원하는 컨테이너의 로그를 보고 싶을때 쓸 수 있습니다. $ docker ps -a CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES 95424043babd redis:4.0 &quot;docker-entrypoint.s…&quot; About an hour ago Up About an hour 0.0.0.0:6001-&amp;gt;6379/tcp, :::6001-&amp;gt;6379/tcp epic_wiles 14eb691f51ad redis &quot;docker-entrypoint.s…&quot; About an hour ago Up About an hour 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp flamboyant_khorana $ docker logs epic_wiles 1:C 19 May 08:54:29.491 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo 1:C 19 May 08:54:29.493 # Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started 1:C 19 May 08:54:29.493 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf 1:M 19 May 08:54:29.494 * Running mode=standalone, port=6379. 1:M 19 May 08:54:29.494 # Server initialized 1:M 19 May 08:54:29.494 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled. 1:M 19 May 08:54:29.494 * Ready to accept connections</summary></entry><entry><title type="html">깃헙 history를 주물러봅시다</title><link href="https://shjeong92.github.io/2021/05/14/Github-01.html" rel="alternate" type="text/html" title="깃헙 history를 주물러봅시다" /><published>2021-05-14T00:00:00+09:00</published><updated>2021-05-14T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/14/Github-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/14/Github-01.html">&lt;h2 id=&quot;서론&quot;&gt;서론&lt;/h2&gt;
 
 &lt;p&gt;때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.&lt;/p&gt;
 
@@ -680,7 +914,72 @@ setExpenses 는 이전 state의 값을 가지고 있다는 것을 알 수 있었
     //삼항연산자를 이용하여 아무 값이 없을경우 없다고 출력해주고 존재한다면 해당 리스트 출력해주기.
     &lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;No expenses found&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">1. useState 를 사용하는 방법. 기존코드 const[expenses, setExpenses]=useState(initial_expenses) const addExpenseHandler = (expense) =&amp;gt; { temp = [{ ...data, expense, }] setExpenses(temp); } 함수 useState()는 현재값과, setExpenses라는 값을 변경하는 메소드를 반환하는줄 알았고, setExpenses(바꿀값) 을 통하여 값을 직접 변경할 수 있는정도로만 알고있엇다. useState의 두번째 반환값 setExpenses을 활용하는 방법에 대해서 배웠다. 만약에 currentState의 값이 prev값과 연관이 있을경우 이를 온전히 사용할 수 있다는것을 말이다. setExpenses 는 이전 state의 값을 가지고 있다는 것을 알 수 있었고, 값을 그냥 변경하는 경우가아닌 이전 값에 연관이 있을경우 아래의 코드와 같이 간결하게 표현 할 수 있는 방법을 배웠다. 수정후 const addExpenseHandler = (expense) =&amp;gt; { setExpenses(prevExpense =&amp;gt; { return [expense,...prevExpense] }) } 2. Conditional content 무언가 보여줄때 조건문을 통하여 보여줄 수 있는 방법을 배웠다. 기존코드 &amp;lt;Card className=&quot;expenses&quot;&amp;gt; {expenses} &amp;lt;/Card&amp;gt; //만약에 expense에 아무 값이없을경우 아무것도 보이지 않아 허전하다. 조건문 적용후 &amp;lt;Card className=&quot;expenses&quot;&amp;gt; //삼항연산자를 이용하여 아무 값이 없을경우 없다고 출력해주고 존재한다면 해당 리스트 출력해주기. {expenses.length === 0 ? &amp;lt;p&amp;gt;No expenses found&amp;lt;/p&amp;gt; : expenses} &amp;lt;/Card&amp;gt;</summary></entry><entry><title type="html">[ #4 ] useState 사용하는 방법</title><link href="https://shjeong92.github.io/2021/04/25/Learning-React-04.html" rel="alternate" type="text/html" title="[ #4 ] useState 사용하는 방법" /><published>2021-04-25T00:00:00+09:00</published><updated>2021-04-25T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/25/Learning-React-04</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/25/Learning-React-04.html">&lt;h1 id=&quot;usestate-를-사용하는-방법&quot;&gt;useState 를 사용하는 방법&lt;/h1&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">1. useState 를 사용하는 방법. 기존코드 const[expenses, setExpenses]=useState(initial_expenses) const addExpenseHandler = (expense) =&amp;gt; { temp = [{ ...data, expense, }] setExpenses(temp); } 함수 useState()는 현재값과, setExpenses라는 값을 변경하는 메소드를 반환하는줄 알았고, setExpenses(바꿀값) 을 통하여 값을 직접 변경할 수 있는정도로만 알고있엇다. useState의 두번째 반환값 setExpenses을 활용하는 방법에 대해서 배웠다. 만약에 currentState의 값이 prev값과 연관이 있을경우 이를 온전히 사용할 수 있다는것을 말이다. setExpenses 는 이전 state의 값을 가지고 있다는 것을 알 수 있었고, 값을 그냥 변경하는 경우가아닌 이전 값에 연관이 있을경우 아래의 코드와 같이 간결하게 표현 할 수 있는 방법을 배웠다. 수정후 const addExpenseHandler = (expense) =&amp;gt; { setExpenses(prevExpense =&amp;gt; { return [expense,...prevExpense] }) } 2. Conditional content 무언가 보여줄때 조건문을 통하여 보여줄 수 있는 방법을 배웠다. 기존코드 &amp;lt;Card className=&quot;expenses&quot;&amp;gt; {expenses} &amp;lt;/Card&amp;gt; //만약에 expense에 아무 값이없을경우 아무것도 보이지 않아 허전하다. 조건문 적용후 &amp;lt;Card className=&quot;expenses&quot;&amp;gt; //삼항연산자를 이용하여 아무 값이 없을경우 없다고 출력해주고 존재한다면 해당 리스트 출력해주기. {expenses.length === 0 ? &amp;lt;p&amp;gt;No expenses found&amp;lt;/p&amp;gt; : expenses} &amp;lt;/Card&amp;gt;</summary></entry><entry><title type="html">[ #5 ] state의 역행 childretn -&amp;gt; parent</title><link href="https://shjeong92.github.io/2021/04/25/Learning-React-05.html" rel="alternate" type="text/html" title="[ #5 ] state의 역행 childretn -&amp;gt; parent" /><published>2021-04-25T00:00:00+09:00</published><updated>2021-04-25T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/25/Learning-React-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/25/Learning-React-05.html">&lt;h1 id=&quot;1-props의-역행&quot;&gt;1. props의 역행&lt;/h1&gt;
+&lt;p&gt;state는 top down 방식으로 이동 할 수 있는 줄 알았지만 아니었다. 부모 컴포넌트에서 함수를 선언한다음 자식 컴포넌트에 함수에대한 포인터를 전속하는 방식으로 자식 -&amp;gt; 부모에게 데이터 전송이 가능하다.&lt;/p&gt;
+
+&lt;p&gt;자세한 내용은 코드를통해 알아보도록한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpenseItem&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;../UI/Card&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpensesFilter&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpensesFilter&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./Expenses.css&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Expenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filteredYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setFilteredYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;2020&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;filterChangeHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;setFilteredYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;/&amp;gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ExpensesFilter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;selected&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filteredYear&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onChangeFilter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filterChangeHandler&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expenses&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Expenses.js 라는 컴포넌트에서 자식컴포넌트인 ExpensesFilter 컴포넌트에게 filterChangeHandler 함수의 포인터를 전송한다. 또한 초깃값으로 ‘2020’인 filteredYear도 전송한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./ExpensesFilter.css&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpensesFilter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;evt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;onChangeFilter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;evt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;expenses-filter&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;expenses-filter__control&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;Filter by year&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selected&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onChange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;2022&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;2022&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;2021&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;2021&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;2020&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;2020&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;2019&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;2019&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpensesFilter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;자식컴포넌트에선 select 태그가 initial value 인 2020을 가지고 있으며 onChange event를 추가하여 년도를 선택할떄마다 selectedYear 함수를 호출하는데, 해당 함수는 부모 컴포넌트의 함수를 가르키는 함수가 있다. &lt;br /&gt;
+이는 부모컴포넌트의 함수에 값을 넣고 실행하는데, 이러한 방식으로 자식-&amp;gt;부모 간의 state정보의 역행이 가능한 것이다..&lt;/p&gt;
+
+&lt;p&gt;이러한 방식의 정보 전달은 가장 가까운 컴포넌트 한칸 한칸 직접이동하는 방법 이외에는 없다!! &lt;br /&gt;
+만약에 A 가 B 와 C의 컴포넌트이고,  B가 C의 정보가 필요하다면  C의정보를 A로 역행시킨후 그정보를 B로 전송 시키는 방식으로 전송하여야 한다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">1. props의 역행 state는 top down 방식으로 이동 할 수 있는 줄 알았지만 아니었다. 부모 컴포넌트에서 함수를 선언한다음 자식 컴포넌트에 함수에대한 포인터를 전속하는 방식으로 자식 -&amp;gt; 부모에게 데이터 전송이 가능하다. 자세한 내용은 코드를통해 알아보도록한다. import React, { useState } from &quot;react&quot;; import ExpenseItem from &quot;./ExpenseItem&quot;; import Card from &quot;../UI/Card&quot;; import ExpensesFilter from &quot;./ExpensesFilter&quot;; import &quot;./Expenses.css&quot;; const Expenses = (props) =&amp;gt; { const [filteredYear, setFilteredYear] = useState(&apos;2020&apos;) const filterChangeHandler = (selectedYear) =&amp;gt; { setFilteredYear(selectedYear); console.log(selectedYear); } const expenses = props.expenses.map(({ title, amount, date }) =&amp;gt; { return &amp;lt;ExpenseItem title={title} amount={amount} date={date} /&amp;gt;; }); return ( &amp;lt;div&amp;gt; &amp;lt;ExpensesFilter selected={filteredYear} onChangeFilter={filterChangeHandler} /&amp;gt; &amp;lt;Card className=&quot;expenses&quot;&amp;gt;{expenses}&amp;lt;/Card&amp;gt; &amp;lt;/div&amp;gt; ); }; export default Expenses; Expenses.js 라는 컴포넌트에서 자식컴포넌트인 ExpensesFilter 컴포넌트에게 filterChangeHandler 함수의 포인터를 전송한다. 또한 초깃값으로 ‘2020’인 filteredYear도 전송한다. import React from &apos;react&apos;; import &apos;./ExpensesFilter.css&apos;; const ExpensesFilter = (props) =&amp;gt; { const selectedYear = (evt) =&amp;gt; { props.onChangeFilter(evt.target.value); } return ( &amp;lt;div className=&apos;expenses-filter&apos;&amp;gt; &amp;lt;div className=&apos;expenses-filter__control&apos;&amp;gt; &amp;lt;label&amp;gt;Filter by year&amp;lt;/label&amp;gt; &amp;lt;select value={props.selected} onChange={selectedYear}&amp;gt; &amp;lt;option value=&apos;2022&apos;&amp;gt;2022&amp;lt;/option&amp;gt; &amp;lt;option value=&apos;2021&apos;&amp;gt;2021&amp;lt;/option&amp;gt; &amp;lt;option value=&apos;2020&apos;&amp;gt;2020&amp;lt;/option&amp;gt; &amp;lt;option value=&apos;2019&apos;&amp;gt;2019&amp;lt;/option&amp;gt; &amp;lt;/select&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; ); }; export default ExpensesFilter; 자식컴포넌트에선 select 태그가 initial value 인 2020을 가지고 있으며 onChange event를 추가하여 년도를 선택할떄마다 selectedYear 함수를 호출하는데, 해당 함수는 부모 컴포넌트의 함수를 가르키는 함수가 있다. 이는 부모컴포넌트의 함수에 값을 넣고 실행하는데, 이러한 방식으로 자식-&amp;gt;부모 간의 state정보의 역행이 가능한 것이다.. 이러한 방식의 정보 전달은 가장 가까운 컴포넌트 한칸 한칸 직접이동하는 방법 이외에는 없다!! 만약에 A 가 B 와 C의 컴포넌트이고, B가 C의 정보가 필요하다면 C의정보를 A로 역행시킨후 그정보를 B로 전송 시키는 방식으로 전송하여야 한다.</summary></entry><entry><title type="html">[ #4 ] useState 사용하는 방법</title><link href="https://shjeong92.github.io/2021/04/25/Learning-React-04.html" rel="alternate" type="text/html" title="[ #4 ] useState 사용하는 방법" /><published>2021-04-25T00:00:00+09:00</published><updated>2021-04-25T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/25/Learning-React-04</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/25/Learning-React-04.html">&lt;h1 id=&quot;usestate-를-사용하는-방법&quot;&gt;useState 를 사용하는 방법&lt;/h1&gt;
 
 &lt;h2 id=&quot;방법-1-여러개의-단일-usestate-사용하기&quot;&gt;방법 1. 여러개의 단일 useState 사용하기.&lt;/h2&gt;
 &lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;enteredTitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setEneteredTitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
@@ -733,140 +1032,4 @@ userInput 또한 객체형태를 가지고 있을겁니다!&lt;/p&gt;
 &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;이번엔 각각의 메서드 부분입니다. 객체를 destructuring 하여 불러올때 원하는값만 불러올 수 있기에 원하는 값만 불러와도 되는줄 알았지만 리액트에서는 만약에 이전 값들을 불러오지 않는다면 그값은 없어지게됩니다. 따라서 ‘…userInput’ 또한 넣어주어서 이전 state 들또한 모두 불러온뒤 필요한값을 수정해줍니다. &lt;br /&gt;
-어떻게 사용해야하는가에 대해서는 각자 원하는대로 하면 된다고 하는데 저는 오히려 따로따로 분리해서 쓰는게 편할거 같아서 필요한 상황이 오지않는다면 객체 형식으로 묶어서 쓰지는 않을 것 같습니다 .&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">useState 를 사용하는 방법 방법 1. 여러개의 단일 useState 사용하기. const [enteredTitle, setEneteredTitle] = useState(&quot;&quot;); const [enteredAmount, setEnteredAmount] = useState(&quot;&quot;); const [enteredDate, setEnteredDate] = useState(&quot;&quot;); const titleChangeHandler = (event) =&amp;gt; { setEneteredTitle(event.target.value); }; const amountChangeHandler = (event) =&amp;gt; { setEnteredAmount(event.target.value) }; const dateChangeHandler = (event) =&amp;gt; { setEnteredDate(event.target.value) }; 방법 2. 여러개의 useState 묶어서 사용하기 const [userInput, setUserInput] = useState({ enteredTitle: &apos;&apos;, enteredAmount: &apos;&apos;, eneteredData: &apos;&apos;, }); 객체 형식으로 모든 정보를 담아줍니다. userInput 또한 객체형태를 가지고 있을겁니다! const titleChangeHandler = (event) =&amp;gt; { //setEneteredTitle(event.target.value); setUserInput({ ...userInput, enteredTitle: event.target.value, }); }; const amountChangeHandler = (event) =&amp;gt; { //setEnteredAmount(event.target.value) setUserInput({ ...userInput, enteredAmount: event.target.value, }); }; const dateChangeHandler = (event) =&amp;gt; { //setEnteredDate(event.target.value) setUserInput({ ...userInput, eneteredDate: event.target.value, }); }; 이번엔 각각의 메서드 부분입니다. 객체를 destructuring 하여 불러올때 원하는값만 불러올 수 있기에 원하는 값만 불러와도 되는줄 알았지만 리액트에서는 만약에 이전 값들을 불러오지 않는다면 그값은 없어지게됩니다. 따라서 ‘…userInput’ 또한 넣어주어서 이전 state 들또한 모두 불러온뒤 필요한값을 수정해줍니다. 어떻게 사용해야하는가에 대해서는 각자 원하는대로 하면 된다고 하는데 저는 오히려 따로따로 분리해서 쓰는게 편할거 같아서 필요한 상황이 오지않는다면 객체 형식으로 묶어서 쓰지는 않을 것 같습니다 .</summary></entry><entry><title type="html">[ #3 ] useState 사용해보기</title><link href="https://shjeong92.github.io/2021/04/25/Learning-React-03.html" rel="alternate" type="text/html" title="[ #3 ] useState 사용해보기" /><published>2021-04-25T00:00:00+09:00</published><updated>2021-04-25T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/25/Learning-React-03</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/25/Learning-React-03.html">&lt;h1 id=&quot;title을-바꿔봅시다&quot;&gt;Title을 바꿔봅시다.&lt;/h1&gt;
-&lt;h2 id=&quot;왜-제목이-안바뀔까요&quot;&gt;왜 제목이 안바뀔까요~&lt;/h2&gt;
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//ExpenseItem.js&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseDate&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpenseDate&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;../UI/Card&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpenseItem.css&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;clickHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Clicked!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;You definitely clicked!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expense-item&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ExpenseDate&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expense-item__description&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expense-item__price&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;$&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onClick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;clickHandler&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;Change Title&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;해당 코드를 보면,&lt;br /&gt;
-button 에 onclick 이벤트에 clickHandler 라는 함수를 가르쳐주었는데, 이 함수는 title 을 분명히 바꾸고있지만 타이틀은 바뀌지 않는다. 처음에는 정말 이해가 되지 않았다.&lt;br /&gt;
-콘솔로그를 보면 “You definitely clicked!” 는 계속 출력이 되지만 해당 Title은 변하지 않았기 때문이다.&lt;br /&gt;
-React에서는 기본적으로, 한번 rendering 되면 변수가 바뀌건 말건간에 그걸로 끝이다. &lt;br /&gt;
-쉽게 설명하면, clickHandler함수가 호출되어도 변수가 바뀌어도 ExpenseItem 컴포넌트는 다시 호출이 되지않는것이고,
-결국 rendering 되지 않기에 Title의 변화가 보이지 않는것이다.&lt;br /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;수정된-코드&quot;&gt;수정된 코드&lt;/h2&gt;
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//ExpenseItem.js (fixed)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseDate&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpenseDate&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;../UI/Card&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpenseItem.css&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setTitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;clickHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;setTitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;Updated!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expense-item&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ExpenseDate&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expense-item__description&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expense-item__price&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;$&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onClick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;clickHandler&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;Change Title&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;해당코드는&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;버튼을&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;클릭하면&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;원하는대로&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;제목을&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;바꿔준다&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;~~~&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;jsx&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setTitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;이를 다시 렌더링 하게하기 위해 사용되는것이 useState 라는것을 사용할수 있다!
-useState메소드는 초기값을 parameter로 받으며, [title(초기값), setTitle(title을 바꾸는 메소드)] 를 반환한다.&lt;br /&gt;
-setTitle 메소드가 불리워지면 값을바꾸고 한번더 렌더링 해줌으로써 우리가 직접 확인할 수 있게 된다!&lt;br /&gt;
-&lt;br /&gt;
-변수명은 무엇으로 하든간에 자유라지만 react 의 naming convention은 이러하다. &lt;br /&gt; 
-“[바꾸고자하는값,set바꾸고자하는값(camelCase)]” &lt;br /&gt;
-만약 바꾸고자하는 값이 name이라면 “[name, setName] = useState(name의초기값)” &lt;br /&gt;&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">Title을 바꿔봅시다. 왜 제목이 안바뀔까요~ //ExpenseItem.js import React, { useState } from &quot;react&quot;; import ExpenseDate from &quot;./ExpenseDate&quot;; import Card from &quot;../UI/Card&quot;; import &quot;./ExpenseItem.css&quot;; const ExpenseItem = (props) =&amp;gt; { const title = props.title; const clickHandler = () =&amp;gt; { title = &quot;Clicked!&quot; console.log(&quot;You definitely clicked!&quot;); }; return ( &amp;lt;Card className=&quot;expense-item&quot;&amp;gt; &amp;lt;ExpenseDate date={props.date} /&amp;gt; &amp;lt;div className=&quot;expense-item__description&quot;&amp;gt; &amp;lt;h2&amp;gt;{title}&amp;lt;/h2&amp;gt; &amp;lt;div className=&quot;expense-item__price&quot;&amp;gt;${props.amount}&amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;button onClick={clickHandler}&amp;gt;Change Title&amp;lt;/button&amp;gt; &amp;lt;/Card&amp;gt; ); } export default ExpenseItem; 해당 코드를 보면, button 에 onclick 이벤트에 clickHandler 라는 함수를 가르쳐주었는데, 이 함수는 title 을 분명히 바꾸고있지만 타이틀은 바뀌지 않는다. 처음에는 정말 이해가 되지 않았다. 콘솔로그를 보면 “You definitely clicked!” 는 계속 출력이 되지만 해당 Title은 변하지 않았기 때문이다. React에서는 기본적으로, 한번 rendering 되면 변수가 바뀌건 말건간에 그걸로 끝이다. 쉽게 설명하면, clickHandler함수가 호출되어도 변수가 바뀌어도 ExpenseItem 컴포넌트는 다시 호출이 되지않는것이고, 결국 rendering 되지 않기에 Title의 변화가 보이지 않는것이다. 수정된 코드 //ExpenseItem.js (fixed) import React, { useState } from &quot;react&quot;; import ExpenseDate from &quot;./ExpenseDate&quot;; import Card from &quot;../UI/Card&quot;; import &quot;./ExpenseItem.css&quot;; const ExpenseItem = (props) =&amp;gt; { const [title, setTitle] = useState(props.title); const clickHandler = () =&amp;gt; { setTitle(&apos;Updated!&apos;) console.log(title); }; return ( &amp;lt;Card className=&quot;expense-item&quot;&amp;gt; &amp;lt;ExpenseDate date={props.date} /&amp;gt; &amp;lt;div className=&quot;expense-item__description&quot;&amp;gt; &amp;lt;h2&amp;gt;{title}&amp;lt;/h2&amp;gt; &amp;lt;div className=&quot;expense-item__price&quot;&amp;gt;${props.amount}&amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;button onClick={clickHandler}&amp;gt;Change Title&amp;lt;/button&amp;gt; &amp;lt;/Card&amp;gt; ); } export default ExpenseItem; 해당코드는 버튼을 클릭하면 원하는대로 제목을 바꿔준다. ~~~jsx const [title, setTitle] = useState(props.title); 이를 다시 렌더링 하게하기 위해 사용되는것이 useState 라는것을 사용할수 있다! useState메소드는 초기값을 parameter로 받으며, [title(초기값), setTitle(title을 바꾸는 메소드)] 를 반환한다. setTitle 메소드가 불리워지면 값을바꾸고 한번더 렌더링 해줌으로써 우리가 직접 확인할 수 있게 된다! 변수명은 무엇으로 하든간에 자유라지만 react 의 naming convention은 이러하다. “[바꾸고자하는값,set바꾸고자하는값(camelCase)]” 만약 바꾸고자하는 값이 name이라면 “[name, setName] = useState(name의초기값)”</summary></entry><entry><title type="html">[ #2 ] Props.children 과 커스텀 컴포넌트(태그)</title><link href="https://shjeong92.github.io/2021/04/25/Learning-React-02.html" rel="alternate" type="text/html" title="[ #2 ] Props.children 과 커스텀 컴포넌트(태그)" /><published>2021-04-25T00:00:00+09:00</published><updated>2021-04-25T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/25/Learning-React-02</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/25/Learning-React-02.html">&lt;h1 id=&quot;1-propschildren--custom-tag&quot;&gt;1. props.children &amp;amp; custom tag&lt;/h1&gt;
-
-&lt;p&gt;컴포넌트를 호출할때 각각의 변수정보또한 같이 보내게 된다. 이는 하나의 객체안에 담겨서 넘어가게되는데
-이때 children 이라는 정보든 따로 넘겨주지 않아도 기본적으로 전달되는 정보이다.&lt;/p&gt;
-
-&lt;p&gt;본글에서는 Card.js 라는 wrapper 컴포넌트를 만들면서 자세히 설명하도록 하겠다.&lt;/p&gt;
-
-&lt;h2 id=&quot;expensesjs&quot;&gt;Expenses.js&lt;/h2&gt;
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpenseItem&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;../UI/Card&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./Expenses.css&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Expenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;//expenses의모든 내용을 각각의 expenseitem으로 만들어준다.&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&amp;gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;//Card컴포넌트로 만들어진 expenseitem들을 감싸주고 className또한 지정해준다&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expenses&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;우선 Card컴포넌트를 사용하는 Expenses.js를 자세히 보자. &lt;br /&gt;
-여기서 Card 컴포넌트는 기본 HTML태그가 아니므로 css의 영향을 받지 않고, className : expenses 라는 객체로 전달된다.&lt;/p&gt;
-
-&lt;h2 id=&quot;cardjs&quot;&gt;Card.js&lt;/h2&gt;
-
-&lt;p&gt;자, 이제 Card 컴포넌트를 살펴보자.&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./Card.css&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;classes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;card &lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;classes&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Card&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;따로 children 이라는 객체에대한 정보를 정해준적이 없지만 이미 가지고있다. children은 부모컴퍼넌트의 
-open tag 와 close tag사이의 모든 태그정보들을 다 가지고 있다. 본 예제 에서는  expenses.js의 모든 expenseItem 즉,&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&amp;gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Card 의 props.children 은 해당 정보를 모드 가지고 있는것이다. 
-커스텀 컴포넌트에 className은 해당 컴포넌트에 바로 스타일적용이 되지 않지만 전송해주는 이유는 전달받은 이름을&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;classes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;card &lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;classes&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;이런식으로 기본 HTML태그인 &amp;lt;div&amp;gt; 의 className에 넣어주어 스타일 적용이 가능하게 해줄 수 있기 때문이다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">1. props.children &amp;amp; custom tag 컴포넌트를 호출할때 각각의 변수정보또한 같이 보내게 된다. 이는 하나의 객체안에 담겨서 넘어가게되는데 이때 children 이라는 정보든 따로 넘겨주지 않아도 기본적으로 전달되는 정보이다. 본글에서는 Card.js 라는 wrapper 컴포넌트를 만들면서 자세히 설명하도록 하겠다. Expenses.js import React from &quot;react&quot;; import ExpenseItem from &quot;./ExpenseItem&quot;; import Card from &quot;../UI/Card&quot; import &quot;./Expenses.css&quot;; const Expenses = (props) =&amp;gt; { //expenses의모든 내용을 각각의 expenseitem으로 만들어준다. const expenses = props.expenses.map(({ title, amount, date }) =&amp;gt; { return &amp;lt;ExpenseItem title={title} amount={amount} date={date}/&amp;gt;; }); //Card컴포넌트로 만들어진 expenseitem들을 감싸주고 className또한 지정해준다 return &amp;lt;Card className=&quot;expenses&quot;&amp;gt;{expenses}&amp;lt;/Card&amp;gt;; } export default Expenses; 우선 Card컴포넌트를 사용하는 Expenses.js를 자세히 보자. 여기서 Card 컴포넌트는 기본 HTML태그가 아니므로 css의 영향을 받지 않고, className : expenses 라는 객체로 전달된다. Card.js 자, 이제 Card 컴포넌트를 살펴보자. import React from &apos;react&apos; import &apos;./Card.css&apos;; const Card = (props) =&amp;gt; { const classes = &apos;card &apos;+ props.className; return ( &amp;lt;div className={classes}&amp;gt; {props.children} &amp;lt;/div&amp;gt; ) } export default Card 따로 children 이라는 객체에대한 정보를 정해준적이 없지만 이미 가지고있다. children은 부모컴퍼넌트의 open tag 와 close tag사이의 모든 태그정보들을 다 가지고 있다. 본 예제 에서는 expenses.js의 모든 expenseItem 즉, const expenses = props.expenses.map(({ title, amount, date }) =&amp;gt; { return &amp;lt;ExpenseItem title={title} amount={amount} date={date}/&amp;gt;; }); Card 의 props.children 은 해당 정보를 모드 가지고 있는것이다. 커스텀 컴포넌트에 className은 해당 컴포넌트에 바로 스타일적용이 되지 않지만 전송해주는 이유는 전달받은 이름을 const classes = &apos;card &apos;+ props.className; return ( &amp;lt;div className={classes}&amp;gt; {props.children} &amp;lt;/div&amp;gt; ) 이런식으로 기본 HTML태그인 &amp;lt;div&amp;gt; 의 className에 넣어주어 스타일 적용이 가능하게 해줄 수 있기 때문이다.</summary></entry></feed>
+어떻게 사용해야하는가에 대해서는 각자 원하는대로 하면 된다고 하는데 저는 오히려 따로따로 분리해서 쓰는게 편할거 같아서 필요한 상황이 오지않는다면 객체 형식으로 묶어서 쓰지는 않을 것 같습니다 .&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">useState 를 사용하는 방법 방법 1. 여러개의 단일 useState 사용하기. const [enteredTitle, setEneteredTitle] = useState(&quot;&quot;); const [enteredAmount, setEnteredAmount] = useState(&quot;&quot;); const [enteredDate, setEnteredDate] = useState(&quot;&quot;); const titleChangeHandler = (event) =&amp;gt; { setEneteredTitle(event.target.value); }; const amountChangeHandler = (event) =&amp;gt; { setEnteredAmount(event.target.value) }; const dateChangeHandler = (event) =&amp;gt; { setEnteredDate(event.target.value) }; 방법 2. 여러개의 useState 묶어서 사용하기 const [userInput, setUserInput] = useState({ enteredTitle: &apos;&apos;, enteredAmount: &apos;&apos;, eneteredData: &apos;&apos;, }); 객체 형식으로 모든 정보를 담아줍니다. userInput 또한 객체형태를 가지고 있을겁니다! const titleChangeHandler = (event) =&amp;gt; { //setEneteredTitle(event.target.value); setUserInput({ ...userInput, enteredTitle: event.target.value, }); }; const amountChangeHandler = (event) =&amp;gt; { //setEnteredAmount(event.target.value) setUserInput({ ...userInput, enteredAmount: event.target.value, }); }; const dateChangeHandler = (event) =&amp;gt; { //setEnteredDate(event.target.value) setUserInput({ ...userInput, eneteredDate: event.target.value, }); }; 이번엔 각각의 메서드 부분입니다. 객체를 destructuring 하여 불러올때 원하는값만 불러올 수 있기에 원하는 값만 불러와도 되는줄 알았지만 리액트에서는 만약에 이전 값들을 불러오지 않는다면 그값은 없어지게됩니다. 따라서 ‘…userInput’ 또한 넣어주어서 이전 state 들또한 모두 불러온뒤 필요한값을 수정해줍니다. 어떻게 사용해야하는가에 대해서는 각자 원하는대로 하면 된다고 하는데 저는 오히려 따로따로 분리해서 쓰는게 편할거 같아서 필요한 상황이 오지않는다면 객체 형식으로 묶어서 쓰지는 않을 것 같습니다 .</summary></entry></feed>
