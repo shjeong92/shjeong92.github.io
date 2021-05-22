@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>TIL - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #3 ] Dockerfiled에서 자주 쓰이는 명령어 - Hyuk's devlog</title>
 
-<meta name="description" content="Your Site Description
-">
-<link rel="canonical" href="https://shjeong92.github.io/"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="Dockerfile 포멧하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.# 주석(Comment)명령어(INSTRUCTION) 인자(arguments)각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -255,418 +254,282 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root">
-<div class="page__main js-page-main page__viewport cell cell--auto">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner">
-<div class="page__header d-print-none">
-<header class="header"><div class="main">
+      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
+        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a>
-</div>
-<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
-</div>
-<nav class="navigation">
-        <ul>
-<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
-<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
-</ul>
-      </nav>
-</div>
+" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+      </nav></div>
   </header>
-</div>
-<div class="page__content"><div class="main"><div class="grid grid--reverse">
+</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
-              <div class="col-main cell cell--auto">
-<!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div>
-<meta itemprop="headline" content="TIL">
-<meta itemprop="author" content="Sanghyuk Jeong">
-<div class="js-article-content">
-<div class="layout--articles">
-<div class="article-list items items--divided">
-<article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/22/Learning-Docker-03.html"><h2 itemprop="headline" class="item__header">[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Dockerfile 포멧
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</h1></header></div><meta itemprop="headline" content="[ #3 ] Dockerfiled에서 자주 쓰이는 명령어"><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=network">network</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%AA%85%EB%A0%B9%EC%96%B4">명령어</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 22일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-22T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너,명령어"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
-하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h2 id="dockerfile-포멧">Dockerfile 포멧</h2>
 
-# 주석(Comment)
+<p>하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.</p>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 주석(Comment)</span>
 명령어(INSTRUCTION) 인자(arguments)
+</code></pre></div></div>
 
+<p>각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다.</p>
 
-각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다.
+<h2 id="from-명령문">FROM 명령문</h2>
 
-FROM 명령문
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> &lt;이미지&gt;</span>
+<span class="k">FROM</span><span class="s"> &lt;이미지&gt;:&lt;태그&gt;</span>
+</code></pre></div></div>
 
-FROM &lt;이미지&gt;
-FROM &lt;이미지&gt;:&lt;태그&gt;
+<p><code>FROM</code>명령문은 base image를 지정해주기 위해서 사용합니다. 하나의 Docker image는 base 이미지로부터 시작해서 새로운 이미지를 중첩해서 여러 단계의 이미지 층을 쌓아가면서 만들어지는 것입니다.</p>
 
-
-FROM명령문은 base image를 지정해주기 위해서 사용합니다. 하나의 Docker image는 base 이미지로부터 시작해서 새로운 이미지를 중첩해서 여러 ...</div>
-<p><a href="/2021/05/22/Learning-Docker-03.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=network">network</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%AA%85%EB%A0%B9%EC%96%B4">명령어</a>
-            </li>
+<ul>
+  <li>python 최신버전을 base 이미지로 사용</li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 22일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-22T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너,명령어">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/20/Learning-Docker-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] Docker 네트워크 사용하기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.
 
-네트워크 조회
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> python:latest</span>
+</code></pre></div></div>
 
-docker network ls 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다.
-$ docker network ls
-NETWORK ID     NAME             DRIVER    SCOPE
-b1545defe462   bridge           bridge    local
-2ff...</div>
-<p><a href="/2021/05/20/Learning-Docker-02.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=network">network</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li>
+<ul>
+  <li>NodeJS 11버전을 base 이미지로 사용</li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/19/Learning-Docker-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Docker 기본 익히기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Image vs Container
 
-도커 이미지
-도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> node:latest</span>
+</code></pre></div></div>
 
-도커 컨테이너
-도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
-컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.
+<h2 id="workdir-명령문">WORKDIR 명령문</h2>
+<p><code>WORKDIR</code> 명령문은 쉘의 <code>cd</code> 와 같습니다.
+<code>WORKDIR</code> 명령문을 사용하여 디렉토리 위치를 이동시키면 그이후에 등장하는 모든 커멘드(<code>RUN</code>, <code>CMD</code>, <code>ENTRYPOINT</code>, <code>COPY</code>, <code>ADD</code>)는 해당 디렉토리 위치 기준으로 실행됩니다</p>
 
-허브로부터 이미지 받아오기
-docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다.
-$ docker pull &lt;image&gt;
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">WORKDIR</span><span class="s"> &lt;이동할경로&gt;</span>
+</code></pre></div></div>
 
-
-
-이미지 실행하기
-
-docker run 커맨드를 사용하여 원하는 이미지를 실...</div>
-<p><a href="/2021/05/19/Learning-Docker-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/14/Github-01.html"><h2 itemprop="headline" class="item__header">깃헙 history를 주물러봅시다</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">서론
-
-때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.
-
-얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Git...</div>
-<p><a href="/2021/05/14/Github-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Github">Github</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Commit">Commit</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SVN">SVN</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=history">history</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=modify">modify</a>
-            </li>
+<ul>
+  <li>/usr/test로 작헙할 디렉토리위치 전환</li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
-    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/29/Learning-React-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] useContext hook</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">useContext
 
-useContext란 무엇인가?
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">WORKDIR</span><span class="s"> /usr/test</span>
+</code></pre></div></div>
 
-이때까지 부모 컴포넌트에서 자식컴포넌트에 정보를 전달할때 props를 통하여 전달 했었습니다.
+<h2 id="run-명령문">RUN 명령문</h2>
 
-A(부모) =&gt; B =&gt; C = &gt; D 순으로 nested 되어있을경우 부모로부터 D로 데이터를 전송하려면 B, C, D 순으로 전달했었죠.
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">RUN </span><span class="o">[</span><span class="s2">"&lt;커맨드&gt;"</span>, <span class="s2">"&lt;파라미터1&gt;"</span>, <span class="s2">"&lt;파라미터2&gt;"</span> ...]
+<span class="k">RUN </span>&lt;전체 커맨드&gt;
+</code></pre></div></div>
 
-나중에 props의 이름을 까먹거나하면 정말 헷갈렸었는데 이번에 useContext 사용하는 법을 배우고 신세계가 열렸습니다.
-
-<img class="emoji" title=":star2:" alt=":star2:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f31f.png" height="20" width="20">useContext를 이용하면 B, C를 거치지 않고 A =&gt; D로 직행으로 원하는 데이터를 전송할 수 있습니다!
-useContext 어떻게 사용할까요? - 1
-
-...</div>
-<p><a href="/2021/04/29/Learning-React-10.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/29/Learning-React-09.html"><h2 itemprop="headline" class="item__header">[ #9 ] useEffect hook</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. useEffect
-
-useEffect란?
-
-useEffect는 기본적으로 몇가지 조건에 의해 작동하게 됩니다. 
-
-조건 1.
-
-페이지가 처음 렌더링 되고난 후 useEffect 내의 함수는 무조건 한번 실행되고 봅니다.
-
-useEffect(() =&gt; {
-    function doSomething(){
-        console.log("something")
-    }
-    doSomething();
-    
-})
-
-조건 2.
-만약에 useEffect의 2번재 파라미터값이 없다면 이는 해당 컴포넌트가 렌더링 될 때마다 실행됩니다.
-두번째 파라미터는 watch 값들의 목록입니다 만약 값이 변경되면 us...</div>
-<p><a href="/2021/04/29/Learning-React-09.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/28/Learning-React-08.html"><h2 itemprop="headline" class="item__header">[ #8 ] Portal, useRef</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. Portal을 사용하기.
-
-//index.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import './index.css';
-import App from './App';
-
-ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
-
-modal, overlayed popup같은 경우는 따로 분리해서 보여주는게 맞다고 합니다. 하지만 어떻게 그렇게 할 수 있을까요?.
-
-//index.html
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-  &lt;he...</div>
-<p><a href="/2021/04/28/Learning-React-08.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 28일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-28T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/27/Learning-React-07.html"><h2 itemprop="headline" class="item__header">[ #7 ] 3 ways to fullfill jsx's requirement</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">JSX requirement
-
-import React from 'react'
-
-const AddUser = () =&gt; {
-  return (
-    &lt;div&gt;이건&lt;/div&gt;
-    &lt;div&gt;에러나요&lt;/div&gt;
-  )
-}
-
-export default AddUser
-
-
-리액트 jsx는 오직 하나의 html element만을 return할 수 있습니다.  
-따라서 위의 코드는 에러를 뿜어냅니다.
-
-
-
-이를 수정하기 위해선 이 두태그를 하나의 div로 감싸줘야 합니다.
-
-import React from "react";
-
-const AddUser = () =&gt; {
-  r...</div>
-<p><a href="/2021/04/27/Learning-React-07.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 27일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-27T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article>
-</div>
-</div>
-<div class="layout--home"><div class="pagination">
-<p>전체 글 14개, 2 페이지</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap">
-<li><div class="button button--secondary button--circle disabled">
-            <i class="fas fa-angle-left"></i>
-          </div></li>
-<li>
-              <div class="button button--primary button--circle focus"><span>1</span></div>
-            </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page2"><span>2</span></a>
-              </li>
-<li><a class="button button--secondary button--circle" href="/page2">
-            <i class="fas fa-angle-right"></i>
-          </a></li>
+<ul>
+  <li>npm 패키지 설치</li>
 </ul>
-    </div>
-  </div></div>
-<script>/*(function () {
 
-})();*/
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">RUN </span>npm <span class="nb">install</span> <span class="nt">--silent</span>
+</code></pre></div></div>
+
+<ul>
+  <li>pip 패키지 설치</li>
+</ul>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">RUN </span>pip <span class="nb">install</span> <span class="nt">-r</span> requirements.txt
+</code></pre></div></div>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#Dockerfile</span>
+<span class="k">FROM</span><span class="s"> ubuntu:latest</span>
+<span class="k">CMD</span><span class="s"> ["echo", "CMD test"]</span>
+</code></pre></div></div>
+<p>위와 같은 도커파일이 있을 때, 이미지를 빌드하고 실행해보도록 하겠습니다.</p>
+
+<p>먼저, 아래 명령어로 이미지를 빌드해줍니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nt">-t</span> cmd_test <span class="nb">.</span>
+</code></pre></div></div>
+
+<h2 id="entrypoint-명령문">ENTRYPOINT 명령문</h2>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENTRYPOINT</span><span class="s"> ["&lt;커맨드&gt;", "&lt;파라미터1&gt;", "&lt;파라미터2&gt;" ...]</span>
+<span class="k">ENTRYPOINT</span><span class="s"> &lt;전체 커맨드&gt;</span>
+</code></pre></div></div>
+<p><code>ENTRYPOINT</code> 명령문은 컨테이너가 실행될때 항상 실행되야하는 커멘드를 지정할 때 사용합니다.</p>
+
+<ul>
+  <li>Django 서버 실행하기</li>
+</ul>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENTRYPOINT</span><span class="s"> ["python", "manage.py", "runserver"]</span>
+</code></pre></div></div>
+
+<h2 id="cmd-명령문">CMD 명령문</h2>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CMD</span><span class="s"> ["&lt;커맨드&gt;","&lt;파라미터1&gt;","&lt;파라미터2&gt;"]</span>
+<span class="k">CMD</span><span class="s"> ["&lt;파라미터1&gt;","&lt;파라미터2&gt;"]</span>
+<span class="k">CMD</span><span class="s"> &lt;전체 커맨드&gt;</span>
+</code></pre></div></div>
+
+<p><code>CMD</code> 명령문은 컨테이너가 시작될때 디폴트로 실행할 커맨드나, 디폴트로 파라미터를 넘길때 사용됩니다.
+<code>CMD</code> 명령문은 Dockerfile의 마지막 라인에 쓰곤하는데요, 이 명령문은 Dockerfile당 한줄만 사용할 수 있습니다. 여러줄을 쓴다면
+가장 마지막 줄만 적용됩니다. 또한, <code>docker run</code>뒤에 인자가 주어진다면 도커파일내의 <code>CMD</code>명령문은 무시됩니다.</p>
+
+<h2 id="expose-명령문">EXPOSE 명령문</h2>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">EXPOSE</span><span class="s"> &lt;포트&gt;</span>
+<span class="k">EXPOSE</span><span class="s"> &lt;포트&gt;/&lt;프로토콜&gt;</span>
+</code></pre></div></div>
+
+<p><code>EXPOSE</code>  명령문은 네트워크 상에서 컨테이너로 들어오는 트래픽(traffic)을 리스닝(listening)하는 포트와 프로토콜를 지정하기 위해서 사용됩니다. 프로토콜은 TCP와 UDP 중 선택할 수 있는데 지정하지 않으면 TCP가 기본값으로 사용됩니다.
+여기서 주의해야할 점은 <code>EXPOSE</code> 명령문으로 지정된 포트는 해당 컨테이너 내부에서만 유효한데요, 호스트 컴퓨터로부터 
+해당 포트로 접근을 허용하려면 <code>docker run</code> 커맨드에 <code>-p</code> 옵션을 추가하여 바인딩 해줘야 합니다.</p>
+
+<ul>
+  <li>80/TCP 포트로 리스닝</li>
+</ul>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">EXPOSE</span><span class="s"> 80</span>
+</code></pre></div></div>
+
+<ul>
+  <li>80/UDP 포트로 리스닝</li>
+</ul>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">EXPOSE</span><span class="s"> 80/udp</span>
+</code></pre></div></div>
+
+<h2 id="copyadd-명령문">COPY/ADD 명령문</h2>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">COPY</span><span class="s"> &lt;src&gt;... &lt;dest&gt;</span>
+<span class="k">COPY</span><span class="s"> ["&lt;src&gt;",... "&lt;dest&gt;"]</span>
+</code></pre></div></div>
+<p><code>COPY</code> 명령문은 호스트 컴퓨터에 있는 디렉터리나 파일을 Docker 이미지의 파일 시스템으로 복사하기 위해서 사용됩니다. 절대 경로와 상대 경로를 모두 지원하며, 상대 경로를 사용할 때는 이 전에 등장하는 
+<code>WORKDIR</code> 명령문으로 작업 디렉토리를 어디로 전환했는지 고려해야 합니다.</p>
+
+<ul>
+  <li>이미지를 빌드한 디렉터리의 모든 파일을 컨테이너의 app/test 디렉터리로 복사</li>
+</ul>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">WORKDIR</span><span class="s"> app/test</span>
+<span class="k">COPY</span><span class="s"> . .</span>
+</code></pre></div></div>
+<p><code>ADD</code> 명령문은 좀 더 파워풀한 <code>COPY</code> 명령어라고 보시면되는데요, <code>ADD</code> 명령문은
+일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 <code>COPY</code> 를 사용하는것이
+권장됩니다.</p>
+
+<h2 id="env-명령문">ENV 명령문</h2>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> &lt;키&gt; &lt;값&gt;</span>
+<span class="k">ENV</span><span class="s"> &lt;키&gt;=&lt;값&gt;</span>
+</code></pre></div></div>
+
+<p><code>ENV</code> 명령문은 환경 변수를 설정하기 위해서 사용합니다.
+<code>ENV</code> 명령문으로 설정된 환경 변수는 이미지 빌드 시에도 사용됨은 물론이고, 해당 컨테이너에서 돌아가는 애플리케이션도 접근할 수 있습니다.</p>
+
+<ul>
+  <li>DB_PASS 환경 변수를 1234로 설정</li>
+</ul>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> DB_PASS 1234</span>
+</code></pre></div></div>
+
+<h2 id="arg-명령문">ARG 명령문</h2>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ARG</span><span class="s"> &lt;이름&gt;</span>
+<span class="k">ARG</span><span class="s"> &lt;이름&gt;=&lt;기본 값&gt;</span>
+</code></pre></div></div>
+
+<p><code>ARG</code> 명령문은 <code>docker build</code> 커맨드로 이미지를 빌드 할때, <code>--build-arg</code> 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다.</p>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ARG</span><span class="s"> port=8080</span>
+</code></pre></div></div>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-22T00:00:00+09:00"><!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+</div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/05/20/Learning-Docker-02.html">[ #2 ] Docker 네트워크 사용하기 </a></div></div></div>
+
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
-</div>
-<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div>
-<div class="page__footer d-print-none">
+            </div></div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main">
-<div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong">
-<meta itemprop="url" content="/">
-<div class="footer__author-links">
-<div class="author-links">
+  <div class="main"><div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a>
-</li></ul>
+      </a></ul>
 </div>
 </div>
-    </div>
-<div class="site-info mt-2">
+    </div><div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div>
-</div>
-    </div>
-<script>(function() {
+</div></div>
+    </div><script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -730,8 +593,7 @@ const AddUser = () =&gt; {
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
-<script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -823,7 +685,7 @@ const AddUser = () =&gt; {
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text">
+        <input type="text" />
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -947,8 +809,7 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div>
-</div>
+</div></div>
 
 
 <script>(function() {
@@ -1185,6 +1046,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script>
     </div>
     <script>(function () {
