@@ -302,7 +302,8 @@
     <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너,명령어"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h2 id="dockerfile-포멧">Dockerfile 포멧</h2>
+<div class="article__content" itemprop="articleBody"><p><br /></p>
+<h2 id="dockerfile-포멧">Dockerfile 포멧</h2>
 
 <p>하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.</p>
 
@@ -311,6 +312,8 @@
 </code></pre></div></div>
 
 <p>각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다.</p>
+
+<hr />
 
 <h2 id="from-명령문">FROM 명령문</h2>
 
@@ -334,6 +337,8 @@
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> node:latest</span>
 </code></pre></div></div>
 
+<hr />
+
 <h2 id="workdir-명령문">WORKDIR 명령문</h2>
 <p><code>WORKDIR</code> 명령문은 쉘의 <code>cd</code> 와 같습니다.
 <code>WORKDIR</code> 명령문을 사용하여 디렉토리 위치를 이동시키면 그이후에 등장하는 모든 커멘드(<code>RUN</code>, <code>CMD</code>, <code>ENTRYPOINT</code>, <code>COPY</code>, <code>ADD</code>)는 해당 디렉토리 위치 기준으로 실행됩니다</p>
@@ -347,6 +352,8 @@
 
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">WORKDIR</span><span class="s"> /usr/test</span>
 </code></pre></div></div>
+
+<hr />
 
 <h2 id="run-명령문">RUN 명령문</h2>
 
@@ -377,6 +384,8 @@
 <p>먼저, 아래 명령어로 이미지를 빌드해줍니다.</p>
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nt">-t</span> cmd_test <span class="nb">.</span>
 </code></pre></div></div>
+
+<hr />
 
 <h2 id="entrypoint-명령문">ENTRYPOINT 명령문</h2>
 
@@ -427,6 +436,8 @@
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">EXPOSE</span><span class="s"> 80/udp</span>
 </code></pre></div></div>
 
+<hr />
+
 <h2 id="copyadd-명령문">COPY/ADD 명령문</h2>
 
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">COPY</span><span class="s"> &lt;src&gt;... &lt;dest&gt;</span>
@@ -446,6 +457,8 @@
 일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 <code>COPY</code> 를 사용하는것이
 권장됩니다.</p>
 
+<hr />
+
 <h2 id="env-명령문">ENV 명령문</h2>
 
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> &lt;키&gt; &lt;값&gt;</span>
@@ -462,16 +475,37 @@
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> DB_PASS 1234</span>
 </code></pre></div></div>
 
+<hr />
+
 <h2 id="arg-명령문">ARG 명령문</h2>
 
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ARG</span><span class="s"> &lt;이름&gt;</span>
 <span class="k">ARG</span><span class="s"> &lt;이름&gt;=&lt;기본 값&gt;</span>
 </code></pre></div></div>
 
-<p><code>ARG</code> 명령문은 <code>docker build</code> 커맨드로 이미지를 빌드 할때, <code>--build-arg</code> 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다.</p>
+<p><code>ARG</code> 명령문은 <code>docker build</code> 커맨드로 이미지를 빌드 할때, <code>--build-arg</code> 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다.
+<br />
+예를 들어, Dockerfile에 다음과 같이 ARG 명령문으로 port를 인자로 선언해주면,</p>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ARG</span><span class="s"> port</span>
+</code></pre></div></div>
+
+<p>다음과 같이 <code>docker build</code> 커맨드에 <code>--build-arg</code> 옵션에 <code>port</code> 값을
+넘길 수가 있습니다.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nt">--build-arg</span> <span class="nv">port</span><span class="o">=</span>8080 <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>인자의 디폴트값을 지정해주면, <code>--build-arg</code> 옵션으로 해당 인자가 넘어오지 않았을 때 사용됩니다.</p>
 
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ARG</span><span class="s"> port=8080</span>
 </code></pre></div></div>
+
+<p>설정된 인자 값은 다음과 같이 <code>${인자명}</code> 형태로 읽어서 사용할 수 있습니다.</p>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CMD</span><span class="s"> start.sh -h 127.0.0.1 -p ${port}</span>
+</code></pre></div></div>
+
 </div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-22T00:00:00+09:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->

@@ -4,6 +4,7 @@ title: "[ #3 ] Dockerfiled에서 자주 쓰이는 명령어"
 tags: Docker network 도커 네트워크 컨테이너 명령어 
 ---
 
+<br>
 ## Dockerfile 포멧
 
 하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.
@@ -14,6 +15,8 @@ tags: Docker network 도커 네트워크 컨테이너 명령어
 ~~~
 
 각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다. 
+
+--- 
 
 ## FROM 명령문
 
@@ -37,6 +40,8 @@ FROM python:latest
 FROM node:latest
 ~~~
 
+---
+
 ## WORKDIR 명령문
 <code>WORKDIR</code> 명령문은 쉘의 <code>cd</code> 와 같습니다.
 <code>WORKDIR</code> 명령문을 사용하여 디렉토리 위치를 이동시키면 그이후에 등장하는 모든 커멘드(<code>RUN</code>, <code>CMD</code>, <code>ENTRYPOINT</code>, <code>COPY</code>, <code>ADD</code>)는 해당 디렉토리 위치 기준으로 실행됩니다
@@ -51,6 +56,8 @@ WORKDIR <이동할경로>
 ~~~docker
 WORKDIR /usr/test
 ~~~
+
+--- 
 
 ## RUN 명령문
 
@@ -85,6 +92,7 @@ CMD ["echo", "CMD test"]
 docker build -t cmd_test .
 ~~~
 
+--- 
 
 ## ENTRYPOINT 명령문
 
@@ -138,6 +146,8 @@ EXPOSE 80
 EXPOSE 80/udp
 ~~~
 
+--- 
+
 ## COPY/ADD 명령문
 
 ~~~docker
@@ -157,6 +167,8 @@ COPY . .
 일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 <code>COPY</code> 를 사용하는것이
 권장됩니다.
 
+--- 
+
 ## ENV 명령문
 
 
@@ -175,6 +187,8 @@ ENV <키>=<값>
 ENV DB_PASS 1234
 ~~~
 
+--- 
+
 ## ARG 명령문
 
 ~~~docker
@@ -183,7 +197,30 @@ ARG <이름>=<기본 값>
 ~~~
 
 <code>ARG</code> 명령문은 <code>docker build</code> 커맨드로 이미지를 빌드 할때, <code>--build-arg</code> 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다.
+<br>
+예를 들어, Dockerfile에 다음과 같이 ARG 명령문으로 port를 인자로 선언해주면,
+
+~~~docker
+ARG port
+~~~
+
+다음과 같이 <code>docker build</code> 커맨드에 <code>--build-arg</code> 옵션에 <code>port</code> 값을
+넘길 수가 있습니다.
+
+~~~shell
+$ docker build --build-arg port=8080 .
+~~~
+
+인자의 디폴트값을 지정해주면, <code>--build-arg</code> 옵션으로 해당 인자가 넘어오지 않았을 때 사용됩니다.
 
 ~~~docker
 ARG port=8080
 ~~~
+
+설정된 인자 값은 다음과 같이 <code>${인자명}</code> 형태로 읽어서 사용할 수 있습니다.
+
+~~~docker
+CMD start.sh -h 127.0.0.1 -p ${port}
+~~~
+
+

@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-22T23:50:44+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
-</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</title><link href="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html" rel="alternate" type="text/html" title="[ #3 ] Dockerfiled에서 자주 쓰이는 명령어" /><published>2021-05-22T00:00:00+09:00</published><updated>2021-05-22T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/22/Learning-Docker-03</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html">&lt;h2 id=&quot;dockerfile-포멧&quot;&gt;Dockerfile 포멧&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-22T23:56:45+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</title><link href="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html" rel="alternate" type="text/html" title="[ #3 ] Dockerfiled에서 자주 쓰이는 명령어" /><published>2021-05-22T00:00:00+09:00</published><updated>2021-05-22T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/22/Learning-Docker-03</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html">&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;dockerfile-포멧&quot;&gt;Dockerfile 포멧&lt;/h2&gt;
 
 &lt;p&gt;하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.&lt;/p&gt;
 
@@ -8,6 +9,8 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다.&lt;/p&gt;
+
+&lt;hr /&gt;
 
 &lt;h2 id=&quot;from-명령문&quot;&gt;FROM 명령문&lt;/h2&gt;
 
@@ -31,6 +34,8 @@
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; node:latest&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;hr /&gt;
+
 &lt;h2 id=&quot;workdir-명령문&quot;&gt;WORKDIR 명령문&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;WORKDIR&lt;/code&gt; 명령문은 쉘의 &lt;code&gt;cd&lt;/code&gt; 와 같습니다.
 &lt;code&gt;WORKDIR&lt;/code&gt; 명령문을 사용하여 디렉토리 위치를 이동시키면 그이후에 등장하는 모든 커멘드(&lt;code&gt;RUN&lt;/code&gt;, &lt;code&gt;CMD&lt;/code&gt;, &lt;code&gt;ENTRYPOINT&lt;/code&gt;, &lt;code&gt;COPY&lt;/code&gt;, &lt;code&gt;ADD&lt;/code&gt;)는 해당 디렉토리 위치 기준으로 실행됩니다&lt;/p&gt;
@@ -44,6 +49,8 @@
 
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;WORKDIR&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; /usr/test&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
 
 &lt;h2 id=&quot;run-명령문&quot;&gt;RUN 명령문&lt;/h2&gt;
 
@@ -74,6 +81,8 @@
 &lt;p&gt;먼저, 아래 명령어로 이미지를 빌드해줍니다.&lt;/p&gt;
 &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; cmd_test &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
 
 &lt;h2 id=&quot;entrypoint-명령문&quot;&gt;ENTRYPOINT 명령문&lt;/h2&gt;
 
@@ -124,6 +133,8 @@
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;EXPOSE&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; 80/udp&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;hr /&gt;
+
 &lt;h2 id=&quot;copyadd-명령문&quot;&gt;COPY/ADD 명령문&lt;/h2&gt;
 
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;COPY&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &amp;lt;src&amp;gt;... &amp;lt;dest&amp;gt;&lt;/span&gt;
@@ -143,6 +154,8 @@
 일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 &lt;code&gt;COPY&lt;/code&gt; 를 사용하는것이
 권장됩니다.&lt;/p&gt;
 
+&lt;hr /&gt;
+
 &lt;h2 id=&quot;env-명령문&quot;&gt;ENV 명령문&lt;/h2&gt;
 
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &amp;lt;키&amp;gt; &amp;lt;값&amp;gt;&lt;/span&gt;
@@ -159,16 +172,36 @@
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; DB_PASS 1234&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;hr /&gt;
+
 &lt;h2 id=&quot;arg-명령문&quot;&gt;ARG 명령문&lt;/h2&gt;
 
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ARG&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &amp;lt;이름&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;ARG&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &amp;lt;이름&amp;gt;=&amp;lt;기본 값&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code&gt;ARG&lt;/code&gt; 명령문은 &lt;code&gt;docker build&lt;/code&gt; 커맨드로 이미지를 빌드 할때, &lt;code&gt;--build-arg&lt;/code&gt; 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ARG&lt;/code&gt; 명령문은 &lt;code&gt;docker build&lt;/code&gt; 커맨드로 이미지를 빌드 할때, &lt;code&gt;--build-arg&lt;/code&gt; 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다.
+&lt;br /&gt;
+예를 들어, Dockerfile에 다음과 같이 ARG 명령문으로 port를 인자로 선언해주면,&lt;/p&gt;
+
+&lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ARG&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; port&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;다음과 같이 &lt;code&gt;docker build&lt;/code&gt; 커맨드에 &lt;code&gt;--build-arg&lt;/code&gt; 옵션에 &lt;code&gt;port&lt;/code&gt; 값을
+넘길 수가 있습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker build &lt;span class=&quot;nt&quot;&gt;--build-arg&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;8080 &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;인자의 디폴트값을 지정해주면, &lt;code&gt;--build-arg&lt;/code&gt; 옵션으로 해당 인자가 넘어오지 않았을 때 사용됩니다.&lt;/p&gt;
 
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ARG&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; port=8080&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="network" /><category term="도커" /><category term="네트워크" /><category term="컨테이너" /><category term="명령어" /><summary type="html">Dockerfile 포멧 하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다. # 주석(Comment) 명령어(INSTRUCTION) 인자(arguments) 각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다. FROM 명령문 FROM &amp;lt;이미지&amp;gt; FROM &amp;lt;이미지&amp;gt;:&amp;lt;태그&amp;gt; FROM명령문은 base image를 지정해주기 위해서 사용합니다. 하나의 Docker image는 base 이미지로부터 시작해서 새로운 이미지를 중첩해서 여러 단계의 이미지 층을 쌓아가면서 만들어지는 것입니다. python 최신버전을 base 이미지로 사용 FROM python:latest NodeJS 11버전을 base 이미지로 사용 FROM node:latest WORKDIR 명령문 WORKDIR 명령문은 쉘의 cd 와 같습니다. WORKDIR 명령문을 사용하여 디렉토리 위치를 이동시키면 그이후에 등장하는 모든 커멘드(RUN, CMD, ENTRYPOINT, COPY, ADD)는 해당 디렉토리 위치 기준으로 실행됩니다 WORKDIR &amp;lt;이동할경로&amp;gt; /usr/test로 작헙할 디렉토리위치 전환 WORKDIR /usr/test RUN 명령문 RUN [&quot;&amp;lt;커맨드&amp;gt;&quot;, &quot;&amp;lt;파라미터1&amp;gt;&quot;, &quot;&amp;lt;파라미터2&amp;gt;&quot; ...] RUN &amp;lt;전체 커맨드&amp;gt; npm 패키지 설치 RUN npm install --silent pip 패키지 설치 RUN pip install -r requirements.txt #Dockerfile FROM ubuntu:latest CMD [&quot;echo&quot;, &quot;CMD test&quot;] 위와 같은 도커파일이 있을 때, 이미지를 빌드하고 실행해보도록 하겠습니다. 먼저, 아래 명령어로 이미지를 빌드해줍니다. docker build -t cmd_test . ENTRYPOINT 명령문 ENTRYPOINT [&quot;&amp;lt;커맨드&amp;gt;&quot;, &quot;&amp;lt;파라미터1&amp;gt;&quot;, &quot;&amp;lt;파라미터2&amp;gt;&quot; ...] ENTRYPOINT &amp;lt;전체 커맨드&amp;gt; ENTRYPOINT 명령문은 컨테이너가 실행될때 항상 실행되야하는 커멘드를 지정할 때 사용합니다. Django 서버 실행하기 ENTRYPOINT [&quot;python&quot;, &quot;manage.py&quot;, &quot;runserver&quot;] CMD 명령문 CMD [&quot;&amp;lt;커맨드&amp;gt;&quot;,&quot;&amp;lt;파라미터1&amp;gt;&quot;,&quot;&amp;lt;파라미터2&amp;gt;&quot;] CMD [&quot;&amp;lt;파라미터1&amp;gt;&quot;,&quot;&amp;lt;파라미터2&amp;gt;&quot;] CMD &amp;lt;전체 커맨드&amp;gt; CMD 명령문은 컨테이너가 시작될때 디폴트로 실행할 커맨드나, 디폴트로 파라미터를 넘길때 사용됩니다. CMD 명령문은 Dockerfile의 마지막 라인에 쓰곤하는데요, 이 명령문은 Dockerfile당 한줄만 사용할 수 있습니다. 여러줄을 쓴다면 가장 마지막 줄만 적용됩니다. 또한, docker run뒤에 인자가 주어진다면 도커파일내의 CMD명령문은 무시됩니다. EXPOSE 명령문 EXPOSE &amp;lt;포트&amp;gt; EXPOSE &amp;lt;포트&amp;gt;/&amp;lt;프로토콜&amp;gt; EXPOSE 명령문은 네트워크 상에서 컨테이너로 들어오는 트래픽(traffic)을 리스닝(listening)하는 포트와 프로토콜를 지정하기 위해서 사용됩니다. 프로토콜은 TCP와 UDP 중 선택할 수 있는데 지정하지 않으면 TCP가 기본값으로 사용됩니다. 여기서 주의해야할 점은 EXPOSE 명령문으로 지정된 포트는 해당 컨테이너 내부에서만 유효한데요, 호스트 컴퓨터로부터 해당 포트로 접근을 허용하려면 docker run 커맨드에 -p 옵션을 추가하여 바인딩 해줘야 합니다. 80/TCP 포트로 리스닝 EXPOSE 80 80/UDP 포트로 리스닝 EXPOSE 80/udp COPY/ADD 명령문 COPY &amp;lt;src&amp;gt;... &amp;lt;dest&amp;gt; COPY [&quot;&amp;lt;src&amp;gt;&quot;,... &quot;&amp;lt;dest&amp;gt;&quot;] COPY 명령문은 호스트 컴퓨터에 있는 디렉터리나 파일을 Docker 이미지의 파일 시스템으로 복사하기 위해서 사용됩니다. 절대 경로와 상대 경로를 모두 지원하며, 상대 경로를 사용할 때는 이 전에 등장하는 WORKDIR 명령문으로 작업 디렉토리를 어디로 전환했는지 고려해야 합니다. 이미지를 빌드한 디렉터리의 모든 파일을 컨테이너의 app/test 디렉터리로 복사 WORKDIR app/test COPY . . ADD 명령문은 좀 더 파워풀한 COPY 명령어라고 보시면되는데요, ADD 명령문은 일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 COPY 를 사용하는것이 권장됩니다. ENV 명령문 ENV &amp;lt;키&amp;gt; &amp;lt;값&amp;gt; ENV &amp;lt;키&amp;gt;=&amp;lt;값&amp;gt; ENV 명령문은 환경 변수를 설정하기 위해서 사용합니다. ENV 명령문으로 설정된 환경 변수는 이미지 빌드 시에도 사용됨은 물론이고, 해당 컨테이너에서 돌아가는 애플리케이션도 접근할 수 있습니다. DB_PASS 환경 변수를 1234로 설정 ENV DB_PASS 1234 ARG 명령문 ARG &amp;lt;이름&amp;gt; ARG &amp;lt;이름&amp;gt;=&amp;lt;기본 값&amp;gt; ARG 명령문은 docker build 커맨드로 이미지를 빌드 할때, --build-arg 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다. ARG port=8080</summary></entry><entry><title type="html">[ #2 ] Docker 네트워크 사용하기</title><link href="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html" rel="alternate" type="text/html" title="[ #2 ] Docker 네트워크 사용하기" /><published>2021-05-20T00:00:00+09:00</published><updated>2021-05-20T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/20/Learning-Docker-02</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html">&lt;p&gt;Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;설정된 인자 값은 다음과 같이 &lt;code&gt;${인자명}&lt;/code&gt; 형태로 읽어서 사용할 수 있습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CMD&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; start.sh -h 127.0.0.1 -p ${port}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="network" /><category term="도커" /><category term="네트워크" /><category term="컨테이너" /><category term="명령어" /><summary type="html">Dockerfile 포멧 하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다. # 주석(Comment) 명령어(INSTRUCTION) 인자(arguments) 각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다. FROM 명령문 FROM &amp;lt;이미지&amp;gt; FROM &amp;lt;이미지&amp;gt;:&amp;lt;태그&amp;gt; FROM명령문은 base image를 지정해주기 위해서 사용합니다. 하나의 Docker image는 base 이미지로부터 시작해서 새로운 이미지를 중첩해서 여러 단계의 이미지 층을 쌓아가면서 만들어지는 것입니다. python 최신버전을 base 이미지로 사용 FROM python:latest NodeJS 11버전을 base 이미지로 사용 FROM node:latest WORKDIR 명령문 WORKDIR 명령문은 쉘의 cd 와 같습니다. WORKDIR 명령문을 사용하여 디렉토리 위치를 이동시키면 그이후에 등장하는 모든 커멘드(RUN, CMD, ENTRYPOINT, COPY, ADD)는 해당 디렉토리 위치 기준으로 실행됩니다 WORKDIR &amp;lt;이동할경로&amp;gt; /usr/test로 작헙할 디렉토리위치 전환 WORKDIR /usr/test RUN 명령문 RUN [&quot;&amp;lt;커맨드&amp;gt;&quot;, &quot;&amp;lt;파라미터1&amp;gt;&quot;, &quot;&amp;lt;파라미터2&amp;gt;&quot; ...] RUN &amp;lt;전체 커맨드&amp;gt; npm 패키지 설치 RUN npm install --silent pip 패키지 설치 RUN pip install -r requirements.txt #Dockerfile FROM ubuntu:latest CMD [&quot;echo&quot;, &quot;CMD test&quot;] 위와 같은 도커파일이 있을 때, 이미지를 빌드하고 실행해보도록 하겠습니다. 먼저, 아래 명령어로 이미지를 빌드해줍니다. docker build -t cmd_test . ENTRYPOINT 명령문 ENTRYPOINT [&quot;&amp;lt;커맨드&amp;gt;&quot;, &quot;&amp;lt;파라미터1&amp;gt;&quot;, &quot;&amp;lt;파라미터2&amp;gt;&quot; ...] ENTRYPOINT &amp;lt;전체 커맨드&amp;gt; ENTRYPOINT 명령문은 컨테이너가 실행될때 항상 실행되야하는 커멘드를 지정할 때 사용합니다. Django 서버 실행하기 ENTRYPOINT [&quot;python&quot;, &quot;manage.py&quot;, &quot;runserver&quot;] CMD 명령문 CMD [&quot;&amp;lt;커맨드&amp;gt;&quot;,&quot;&amp;lt;파라미터1&amp;gt;&quot;,&quot;&amp;lt;파라미터2&amp;gt;&quot;] CMD [&quot;&amp;lt;파라미터1&amp;gt;&quot;,&quot;&amp;lt;파라미터2&amp;gt;&quot;] CMD &amp;lt;전체 커맨드&amp;gt; CMD 명령문은 컨테이너가 시작될때 디폴트로 실행할 커맨드나, 디폴트로 파라미터를 넘길때 사용됩니다. CMD 명령문은 Dockerfile의 마지막 라인에 쓰곤하는데요, 이 명령문은 Dockerfile당 한줄만 사용할 수 있습니다. 여러줄을 쓴다면 가장 마지막 줄만 적용됩니다. 또한, docker run뒤에 인자가 주어진다면 도커파일내의 CMD명령문은 무시됩니다. EXPOSE 명령문 EXPOSE &amp;lt;포트&amp;gt; EXPOSE &amp;lt;포트&amp;gt;/&amp;lt;프로토콜&amp;gt; EXPOSE 명령문은 네트워크 상에서 컨테이너로 들어오는 트래픽(traffic)을 리스닝(listening)하는 포트와 프로토콜를 지정하기 위해서 사용됩니다. 프로토콜은 TCP와 UDP 중 선택할 수 있는데 지정하지 않으면 TCP가 기본값으로 사용됩니다. 여기서 주의해야할 점은 EXPOSE 명령문으로 지정된 포트는 해당 컨테이너 내부에서만 유효한데요, 호스트 컴퓨터로부터 해당 포트로 접근을 허용하려면 docker run 커맨드에 -p 옵션을 추가하여 바인딩 해줘야 합니다. 80/TCP 포트로 리스닝 EXPOSE 80 80/UDP 포트로 리스닝 EXPOSE 80/udp COPY/ADD 명령문 COPY &amp;lt;src&amp;gt;... &amp;lt;dest&amp;gt; COPY [&quot;&amp;lt;src&amp;gt;&quot;,... &quot;&amp;lt;dest&amp;gt;&quot;] COPY 명령문은 호스트 컴퓨터에 있는 디렉터리나 파일을 Docker 이미지의 파일 시스템으로 복사하기 위해서 사용됩니다. 절대 경로와 상대 경로를 모두 지원하며, 상대 경로를 사용할 때는 이 전에 등장하는 WORKDIR 명령문으로 작업 디렉토리를 어디로 전환했는지 고려해야 합니다. 이미지를 빌드한 디렉터리의 모든 파일을 컨테이너의 app/test 디렉터리로 복사 WORKDIR app/test COPY . . ADD 명령문은 좀 더 파워풀한 COPY 명령어라고 보시면되는데요, ADD 명령문은 일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 COPY 를 사용하는것이 권장됩니다. ENV 명령문 ENV &amp;lt;키&amp;gt; &amp;lt;값&amp;gt; ENV &amp;lt;키&amp;gt;=&amp;lt;값&amp;gt; ENV 명령문은 환경 변수를 설정하기 위해서 사용합니다. ENV 명령문으로 설정된 환경 변수는 이미지 빌드 시에도 사용됨은 물론이고, 해당 컨테이너에서 돌아가는 애플리케이션도 접근할 수 있습니다. DB_PASS 환경 변수를 1234로 설정 ENV DB_PASS 1234 ARG 명령문 ARG &amp;lt;이름&amp;gt; ARG &amp;lt;이름&amp;gt;=&amp;lt;기본 값&amp;gt; ARG 명령문은 docker build 커맨드로 이미지를 빌드 할때, --build-arg 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다. 예를 들어, Dockerfile에 다음과 같이 ARG 명령문으로 port를 인자로 선언해주면, ARG port 다음과 같이 docker build 커맨드에 --build-arg 옵션에 port 값을 넘길 수가 있습니다. $ docker build --build-arg port=8080 . 인자의 디폴트값을 지정해주면, --build-arg 옵션으로 해당 인자가 넘어오지 않았을 때 사용됩니다. ARG port=8080 설정된 인자 값은 다음과 같이 ${인자명} 형태로 읽어서 사용할 수 있습니다. CMD start.sh -h 127.0.0.1 -p ${port}</summary></entry><entry><title type="html">[ #2 ] Docker 네트워크 사용하기</title><link href="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html" rel="alternate" type="text/html" title="[ #2 ] Docker 네트워크 사용하기" /><published>2021-05-20T00:00:00+09:00</published><updated>2021-05-20T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/20/Learning-Docker-02</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html">&lt;p&gt;Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.&lt;/p&gt;
 
 &lt;h2 id=&quot;네트워크-조회&quot;&gt;네트워크 조회&lt;/h2&gt;
 
