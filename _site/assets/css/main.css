@@ -1856,7 +1856,7 @@ a > .item__header.disabled, a > .item__header:disabled, a.item__header.disabled,
 
 .article__content img:not(.emoji) { max-width: 100%; vertical-align: middle; }
 
-.article__content .emoji { display: inline-block; width: 1.26rem; height: 1.26rem; vertical-align: text-bottom; }
+.article__content .emoji { display: inline-block; width: 2.34rem; height: 2.34rem; vertical-align: text-bottom; }
 
 .article__content .footnotes { border: 0 solid #dfe3e2; border-top-width: 1px; margin-top: 3rem; }
 

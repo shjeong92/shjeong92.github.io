@@ -1,5 +1,133 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-22T23:56:45+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
-</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</title><link href="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html" rel="alternate" type="text/html" title="[ #3 ] Dockerfiled에서 자주 쓰이는 명령어" /><published>2021-05-22T00:00:00+09:00</published><updated>2021-05-22T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/22/Learning-Docker-03</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html">&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-26T23:40:07+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #1 ] Kubernetes의 구조</title><link href="https://shjeong92.github.io/2021/05/26/Learning-Kubernetes-01.html" rel="alternate" type="text/html" title="[ #1 ] Kubernetes의 구조" /><published>2021-05-26T00:00:00+09:00</published><updated>2021-05-26T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/26/Learning-Kubernetes-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/26/Learning-Kubernetes-01.html">&lt;h2 id=&quot;etcd란-무엇인가&quot;&gt;ETCD란 무엇인가?&lt;/h2&gt;
+
+&lt;h3 id=&quot;distributed-reliable-key-value-store&quot;&gt;Distributed Reliable Key Value Store&lt;/h3&gt;
+&lt;p&gt;분산 시스템의 중요한 데이터를위한 신뢰할 수있는 분산 key/value 저장소이며 다음과 같은 특징이 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;단순함: 잘 정의 된 사용자용 API&lt;/li&gt;
+  &lt;li&gt;보안: 선택적 클라이언트 인증을 사용하는 자동 TLS&lt;/li&gt;
+  &lt;li&gt;속도: 10000 쓰기 / sec&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;mac에-etcd-설치하여-사용해보기&quot;&gt;mac에 etcd 설치하여 사용해보기&lt;/h2&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# brew를 이용하여 간편히 설치&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;etcd
+&lt;span class=&quot;c&quot;&gt;# etcd를 백그라운드 환경으로 실행시키기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew services start etcd
+
+&lt;span class=&quot;c&quot;&gt;# Key value 생성&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;etcdctl put key &lt;span class=&quot;s2&quot;&gt;&quot;I am a value&quot;&lt;/span&gt;
+OK
+
+&lt;span class=&quot;c&quot;&gt;# Key를 통한 value 호출&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;etcdctl get key
+key
+I am a value
+
+&lt;span class=&quot;c&quot;&gt;# Key 삭제하기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;etcdctl del key
+1
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;rocket-마스터&quot;&gt;:rocket: 마스터&lt;/h1&gt;
+
+&lt;h2 id=&quot;kubernetes-안의-etcd-클러스터&quot;&gt;Kubernetes 안의 etcd 클러스터&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Nodes&lt;/li&gt;
+  &lt;li&gt;Pods&lt;/li&gt;
+  &lt;li&gt;Configs&lt;/li&gt;
+  &lt;li&gt;Secrets&lt;/li&gt;
+  &lt;li&gt;Accounts&lt;/li&gt;
+  &lt;li&gt;Roles&lt;/li&gt;
+  &lt;li&gt;Bindings&lt;/li&gt;
+  &lt;li&gt;Others&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;모든 클러스터 데이터를 담는 쿠버네티스 뒷단의 저장소로 사용되는 일관성·고가용성 키-값 저장소입니다..&lt;/p&gt;
+
+&lt;h2 id=&quot;kube-apiserver&quot;&gt;kube-apiserver&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;kubernetes의 API server이며 worker node를 관리하는 Kubelet과 통신합니다.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;kubectl 을 통하여 kube-apiserver과 통신하는것 이외에도 post request를 통해서도 가능합니다.&lt;/p&gt;
+
+    &lt;ol&gt;
+      &lt;li&gt;Authenticate User
+        &lt;ul&gt;
+          &lt;li&gt;사용자가 인장된 사용자인지 확인&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Validate Request
+        &lt;ul&gt;
+          &lt;li&gt;요청이 올바른 요청인지 확인&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Retrieve data
+        &lt;ul&gt;
+          &lt;li&gt;요청에 대한 결과를 응답한다. (ex. Pod 생성 요청 완료)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Updatae ETCD
+        &lt;ul&gt;
+          &lt;li&gt;생성 요청된 POD 정보를 ETCD에 업데이트 한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Scheduler
+        &lt;ul&gt;
+          &lt;li&gt;Scheduler에게 POD이 배치될 Worker Node를 요청한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Kubelet
+        &lt;ul&gt;
+          &lt;li&gt;Schduler에게 받은 Worker Node의 Kubelet에게 POD 생성을 요청한다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;kube-scheduler&quot;&gt;kube-scheduler&lt;/h2&gt;
+
+&lt;p&gt;스케줄러는 생성되었지만 배정되지 못하여 실행되지 않은 컨테이너를 감지하고 실행할 노드를 선택하는 역할을 한다. 스케줄링 결정을 위해서 고려되는 요소는 리소스에 대한 개별 및 총체적 요구 사항, 노드의 상태, 제약 조건등을 포함한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;kube-controller-manager&quot;&gt;Kube Controller Manager&lt;/h2&gt;
+
+&lt;p&gt;컨트롤러를 구동하는 컴포넌트로, 앞에서 설명한 control-loop를 돌면서 current state가 desired state로 되도록 바꾸어주는 역할을 담당한다. 컨트롤러의 종류에도 여러가지가 존재하는데 논리적으로 각 컨트롤러는 개별 프로세스이지만 복잡성을 낮추기 위해 모두 단일 바이너리로 컴파일되고 단일 프로세스 내에서 실행된다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;노드 컨트롤러: 노드 컨트롤러: 노드가 다운되었을 때에 대응한다.&lt;/li&gt;
+  &lt;li&gt;레플리케이션 컨트롤러: 레플리케이션 오브젝트에서 알맞은 수의 Pod를 유지한다.&lt;/li&gt;
+  &lt;li&gt;엔드포인트 컨트롤러: 서비스와 Pod를 연결한다.&lt;/li&gt;
+  &lt;li&gt;서비스 어카운트 &amp;amp; 토큰 컨트롤러: 새로운 네임스페이스에 대한 기본 계정과 API 접근 토큰을 생성한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;cloud-controller-manager&quot;&gt;Cloud-controller-manager&lt;/h2&gt;
+&lt;p&gt;클라우드별 컨트롤 로직을 포함하는 쿠버네티스 컨트롤 플레인 컴포넌트이다. 클라우드 컨트롤러 매니저를 통해 클러스터를 클라우드에 연결하여 클라우드 플랫폼의 리소스를 추가 및 사용할 수 있다. kube-controller-manager와 마찬가지로 cloud-controller-manager도 논리적으로 독립적인 여러 control-loop를 단일 프로세스로 실행하는 단일 바이너리로 결합한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;
+다음 컨트롤러들은 클라우드 플랫폼의 의존성을 가질 수 있다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;노드 컨트롤러: 노드가 응답을 멈춘 후 클라우드 상에서 삭제되었는지 판별하기 위해 클라우드 제공 사업자에게 확인하는 것&lt;/li&gt;
+  &lt;li&gt;라우트 컨트롤러: 기본 클라우드 인프라에 경로를 구성하는 것&lt;/li&gt;
+  &lt;li&gt;서비스 컨트롤러: 클라우드 제공 사업자 로드밸런서를 생성, 업데이트 그리고 삭제하는 것&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;rocket-워커-노드&quot;&gt;:rocket: 워커 노드&lt;/h1&gt;
+&lt;p&gt;워커 노드는 마스터로부터 전달받은 명령에 따라 컨테이너를 실행한다.&lt;/p&gt;
+
+&lt;h2 id=&quot;kubelet노드-관리자&quot;&gt;kubelet(노드 관리자)&lt;/h2&gt;
+&lt;p&gt;클러스터의 각 노드에서 실행되는 핵심 컴포넌트로 다양한 메커니즘을 통해 제공된 명세(Spec)의 집합을 받아서 컨테이너를 실행시킨다. 여기서 끝나는 것이 아니라 정상적으로 동작하는지 지속적으로 모니터링하고 주기적으로 마스터 노드의 api 서버와 통신하여 정보를 주고받는다.&lt;/p&gt;
+
+&lt;h2 id=&quot;kube-proxy&quot;&gt;kube-proxy&lt;/h2&gt;
+&lt;p&gt;클러스터의 각 노드에서 실행되는 네트워크 프록시로, 쿠버네티스의 서비스 오브젝트를 구현한다. 즉 노드의 네트워크 규칙을 관리하여 서비스마다 개별 IP를 가질 수 있게 만들어주고 클러스터 내부나 외부의 트래픽을 Pod로 전달할 수있도록 해준다.&lt;/p&gt;
+
+&lt;h2 id=&quot;container-runtime&quot;&gt;container runtime&lt;/h2&gt;
+&lt;p&gt;실제 컨테이너 실행을 담당하는 소프트웨어이다. 예를 들어 도커, CRI-O, containerd 등이 있다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="CKA" /><category term="도커" /><category term="컨테이너" /><category term="container" /><category term="etcd" /><summary type="html">ETCD란 무엇인가? Distributed Reliable Key Value Store 분산 시스템의 중요한 데이터를위한 신뢰할 수있는 분산 key/value 저장소이며 다음과 같은 특징이 있습니다. 단순함: 잘 정의 된 사용자용 API 보안: 선택적 클라이언트 인증을 사용하는 자동 TLS 속도: 10000 쓰기 / sec mac에 etcd 설치하여 사용해보기 # brew를 이용하여 간편히 설치 $ brew install etcd # etcd를 백그라운드 환경으로 실행시키기 $ brew services start etcd # Key value 생성 $ etcdctl put key &quot;I am a value&quot; OK # Key를 통한 value 호출 $ etcdctl get key key I am a value # Key 삭제하기 $ etcdctl del key 1 :rocket: 마스터 Kubernetes 안의 etcd 클러스터 Nodes Pods Configs Secrets Accounts Roles Bindings Others 모든 클러스터 데이터를 담는 쿠버네티스 뒷단의 저장소로 사용되는 일관성·고가용성 키-값 저장소입니다.. kube-apiserver kubernetes의 API server이며 worker node를 관리하는 Kubelet과 통신합니다. kubectl 을 통하여 kube-apiserver과 통신하는것 이외에도 post request를 통해서도 가능합니다. Authenticate User 사용자가 인장된 사용자인지 확인 Validate Request 요청이 올바른 요청인지 확인 Retrieve data 요청에 대한 결과를 응답한다. (ex. Pod 생성 요청 완료) Updatae ETCD 생성 요청된 POD 정보를 ETCD에 업데이트 한다. Scheduler Scheduler에게 POD이 배치될 Worker Node를 요청한다. Kubelet Schduler에게 받은 Worker Node의 Kubelet에게 POD 생성을 요청한다. kube-scheduler 스케줄러는 생성되었지만 배정되지 못하여 실행되지 않은 컨테이너를 감지하고 실행할 노드를 선택하는 역할을 한다. 스케줄링 결정을 위해서 고려되는 요소는 리소스에 대한 개별 및 총체적 요구 사항, 노드의 상태, 제약 조건등을 포함한다. Kube Controller Manager 컨트롤러를 구동하는 컴포넌트로, 앞에서 설명한 control-loop를 돌면서 current state가 desired state로 되도록 바꾸어주는 역할을 담당한다. 컨트롤러의 종류에도 여러가지가 존재하는데 논리적으로 각 컨트롤러는 개별 프로세스이지만 복잡성을 낮추기 위해 모두 단일 바이너리로 컴파일되고 단일 프로세스 내에서 실행된다. 노드 컨트롤러: 노드 컨트롤러: 노드가 다운되었을 때에 대응한다. 레플리케이션 컨트롤러: 레플리케이션 오브젝트에서 알맞은 수의 Pod를 유지한다. 엔드포인트 컨트롤러: 서비스와 Pod를 연결한다. 서비스 어카운트 &amp;amp; 토큰 컨트롤러: 새로운 네임스페이스에 대한 기본 계정과 API 접근 토큰을 생성한다. Cloud-controller-manager 클라우드별 컨트롤 로직을 포함하는 쿠버네티스 컨트롤 플레인 컴포넌트이다. 클라우드 컨트롤러 매니저를 통해 클러스터를 클라우드에 연결하여 클라우드 플랫폼의 리소스를 추가 및 사용할 수 있다. kube-controller-manager와 마찬가지로 cloud-controller-manager도 논리적으로 독립적인 여러 control-loop를 단일 프로세스로 실행하는 단일 바이너리로 결합한다. 다음 컨트롤러들은 클라우드 플랫폼의 의존성을 가질 수 있다. 노드 컨트롤러: 노드가 응답을 멈춘 후 클라우드 상에서 삭제되었는지 판별하기 위해 클라우드 제공 사업자에게 확인하는 것 라우트 컨트롤러: 기본 클라우드 인프라에 경로를 구성하는 것 서비스 컨트롤러: 클라우드 제공 사업자 로드밸런서를 생성, 업데이트 그리고 삭제하는 것 :rocket: 워커 노드 워커 노드는 마스터로부터 전달받은 명령에 따라 컨테이너를 실행한다. kubelet(노드 관리자) 클러스터의 각 노드에서 실행되는 핵심 컴포넌트로 다양한 메커니즘을 통해 제공된 명세(Spec)의 집합을 받아서 컨테이너를 실행시킨다. 여기서 끝나는 것이 아니라 정상적으로 동작하는지 지속적으로 모니터링하고 주기적으로 마스터 노드의 api 서버와 통신하여 정보를 주고받는다. kube-proxy 클러스터의 각 노드에서 실행되는 네트워크 프록시로, 쿠버네티스의 서비스 오브젝트를 구현한다. 즉 노드의 네트워크 규칙을 관리하여 서비스마다 개별 IP를 가질 수 있게 만들어주고 클러스터 내부나 외부의 트래픽을 Pod로 전달할 수있도록 해준다. container runtime 실제 컨테이너 실행을 담당하는 소프트웨어이다. 예를 들어 도커, CRI-O, containerd 등이 있다.</summary></entry><entry><title type="html">[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</title><link href="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html" rel="alternate" type="text/html" title="[ #3 ] Dockerfiled에서 자주 쓰이는 명령어" /><published>2021-05-22T00:00:00+09:00</published><updated>2021-05-22T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/22/Learning-Docker-03</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html">&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;h2 id=&quot;dockerfile-포멧&quot;&gt;Dockerfile 포멧&lt;/h2&gt;
 
 &lt;p&gt;하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.&lt;/p&gt;
@@ -1116,69 +1244,4 @@ setExpenses 는 이전 state의 값을 가지고 있다는 것을 알 수 있었
     //삼항연산자를 이용하여 아무 값이 없을경우 없다고 출력해주고 존재한다면 해당 리스트 출력해주기.
     &lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;No expenses found&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">1. useState 를 사용하는 방법. 기존코드 const[expenses, setExpenses]=useState(initial_expenses) const addExpenseHandler = (expense) =&amp;gt; { temp = [{ ...data, expense, }] setExpenses(temp); } 함수 useState()는 현재값과, setExpenses라는 값을 변경하는 메소드를 반환하는줄 알았고, setExpenses(바꿀값) 을 통하여 값을 직접 변경할 수 있는정도로만 알고있엇다. useState의 두번째 반환값 setExpenses을 활용하는 방법에 대해서 배웠다. 만약에 currentState의 값이 prev값과 연관이 있을경우 이를 온전히 사용할 수 있다는것을 말이다. setExpenses 는 이전 state의 값을 가지고 있다는 것을 알 수 있었고, 값을 그냥 변경하는 경우가아닌 이전 값에 연관이 있을경우 아래의 코드와 같이 간결하게 표현 할 수 있는 방법을 배웠다. 수정후 const addExpenseHandler = (expense) =&amp;gt; { setExpenses(prevExpense =&amp;gt; { return [expense,...prevExpense] }) } 2. Conditional content 무언가 보여줄때 조건문을 통하여 보여줄 수 있는 방법을 배웠다. 기존코드 &amp;lt;Card className=&quot;expenses&quot;&amp;gt; {expenses} &amp;lt;/Card&amp;gt; //만약에 expense에 아무 값이없을경우 아무것도 보이지 않아 허전하다. 조건문 적용후 &amp;lt;Card className=&quot;expenses&quot;&amp;gt; //삼항연산자를 이용하여 아무 값이 없을경우 없다고 출력해주고 존재한다면 해당 리스트 출력해주기. {expenses.length === 0 ? &amp;lt;p&amp;gt;No expenses found&amp;lt;/p&amp;gt; : expenses} &amp;lt;/Card&amp;gt;</summary></entry><entry><title type="html">[ #5 ] state의 역행 childretn -&amp;gt; parent</title><link href="https://shjeong92.github.io/2021/04/25/Learning-React-05.html" rel="alternate" type="text/html" title="[ #5 ] state의 역행 childretn -&amp;gt; parent" /><published>2021-04-25T00:00:00+09:00</published><updated>2021-04-25T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/25/Learning-React-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/25/Learning-React-05.html">&lt;h1 id=&quot;1-props의-역행&quot;&gt;1. props의 역행&lt;/h1&gt;
-&lt;p&gt;state는 top down 방식으로 이동 할 수 있는 줄 알았지만 아니었다. 부모 컴포넌트에서 함수를 선언한다음 자식 컴포넌트에 함수에대한 포인터를 전속하는 방식으로 자식 -&amp;gt; 부모에게 데이터 전송이 가능하다.&lt;/p&gt;
-
-&lt;p&gt;자세한 내용은 코드를통해 알아보도록한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpenseItem&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Card&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;../UI/Card&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpensesFilter&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./ExpensesFilter&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./Expenses.css&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Expenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filteredYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setFilteredYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;2020&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;filterChangeHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;setFilteredYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ExpenseItem&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;amount&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;/&amp;gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ExpensesFilter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;selected&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filteredYear&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onChangeFilter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filterChangeHandler&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;expenses&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;expenses&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Expenses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Expenses.js 라는 컴포넌트에서 자식컴포넌트인 ExpensesFilter 컴포넌트에게 filterChangeHandler 함수의 포인터를 전송한다. 또한 초깃값으로 ‘2020’인 filteredYear도 전송한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./ExpensesFilter.css&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpensesFilter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;evt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;onChangeFilter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;evt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;expenses-filter&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;className&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;expenses-filter__control&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;Filter by year&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selected&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onChange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectedYear&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-          &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;2022&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;2022&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-          &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;2021&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;2021&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-          &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;2020&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;2020&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-          &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;2019&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;2019&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ExpensesFilter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;자식컴포넌트에선 select 태그가 initial value 인 2020을 가지고 있으며 onChange event를 추가하여 년도를 선택할떄마다 selectedYear 함수를 호출하는데, 해당 함수는 부모 컴포넌트의 함수를 가르키는 함수가 있다. &lt;br /&gt;
-이는 부모컴포넌트의 함수에 값을 넣고 실행하는데, 이러한 방식으로 자식-&amp;gt;부모 간의 state정보의 역행이 가능한 것이다..&lt;/p&gt;
-
-&lt;p&gt;이러한 방식의 정보 전달은 가장 가까운 컴포넌트 한칸 한칸 직접이동하는 방법 이외에는 없다!! &lt;br /&gt;
-만약에 A 가 B 와 C의 컴포넌트이고,  B가 C의 정보가 필요하다면  C의정보를 A로 역행시킨후 그정보를 B로 전송 시키는 방식으로 전송하여야 한다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">1. props의 역행 state는 top down 방식으로 이동 할 수 있는 줄 알았지만 아니었다. 부모 컴포넌트에서 함수를 선언한다음 자식 컴포넌트에 함수에대한 포인터를 전속하는 방식으로 자식 -&amp;gt; 부모에게 데이터 전송이 가능하다. 자세한 내용은 코드를통해 알아보도록한다. import React, { useState } from &quot;react&quot;; import ExpenseItem from &quot;./ExpenseItem&quot;; import Card from &quot;../UI/Card&quot;; import ExpensesFilter from &quot;./ExpensesFilter&quot;; import &quot;./Expenses.css&quot;; const Expenses = (props) =&amp;gt; { const [filteredYear, setFilteredYear] = useState(&apos;2020&apos;) const filterChangeHandler = (selectedYear) =&amp;gt; { setFilteredYear(selectedYear); console.log(selectedYear); } const expenses = props.expenses.map(({ title, amount, date }) =&amp;gt; { return &amp;lt;ExpenseItem title={title} amount={amount} date={date} /&amp;gt;; }); return ( &amp;lt;div&amp;gt; &amp;lt;ExpensesFilter selected={filteredYear} onChangeFilter={filterChangeHandler} /&amp;gt; &amp;lt;Card className=&quot;expenses&quot;&amp;gt;{expenses}&amp;lt;/Card&amp;gt; &amp;lt;/div&amp;gt; ); }; export default Expenses; Expenses.js 라는 컴포넌트에서 자식컴포넌트인 ExpensesFilter 컴포넌트에게 filterChangeHandler 함수의 포인터를 전송한다. 또한 초깃값으로 ‘2020’인 filteredYear도 전송한다. import React from &apos;react&apos;; import &apos;./ExpensesFilter.css&apos;; const ExpensesFilter = (props) =&amp;gt; { const selectedYear = (evt) =&amp;gt; { props.onChangeFilter(evt.target.value); } return ( &amp;lt;div className=&apos;expenses-filter&apos;&amp;gt; &amp;lt;div className=&apos;expenses-filter__control&apos;&amp;gt; &amp;lt;label&amp;gt;Filter by year&amp;lt;/label&amp;gt; &amp;lt;select value={props.selected} onChange={selectedYear}&amp;gt; &amp;lt;option value=&apos;2022&apos;&amp;gt;2022&amp;lt;/option&amp;gt; &amp;lt;option value=&apos;2021&apos;&amp;gt;2021&amp;lt;/option&amp;gt; &amp;lt;option value=&apos;2020&apos;&amp;gt;2020&amp;lt;/option&amp;gt; &amp;lt;option value=&apos;2019&apos;&amp;gt;2019&amp;lt;/option&amp;gt; &amp;lt;/select&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; ); }; export default ExpensesFilter; 자식컴포넌트에선 select 태그가 initial value 인 2020을 가지고 있으며 onChange event를 추가하여 년도를 선택할떄마다 selectedYear 함수를 호출하는데, 해당 함수는 부모 컴포넌트의 함수를 가르키는 함수가 있다. 이는 부모컴포넌트의 함수에 값을 넣고 실행하는데, 이러한 방식으로 자식-&amp;gt;부모 간의 state정보의 역행이 가능한 것이다.. 이러한 방식의 정보 전달은 가장 가까운 컴포넌트 한칸 한칸 직접이동하는 방법 이외에는 없다!! 만약에 A 가 B 와 C의 컴포넌트이고, B가 C의 정보가 필요하다면 C의정보를 A로 역행시킨후 그정보를 B로 전송 시키는 방식으로 전송하여야 한다.</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">1. useState 를 사용하는 방법. 기존코드 const[expenses, setExpenses]=useState(initial_expenses) const addExpenseHandler = (expense) =&amp;gt; { temp = [{ ...data, expense, }] setExpenses(temp); } 함수 useState()는 현재값과, setExpenses라는 값을 변경하는 메소드를 반환하는줄 알았고, setExpenses(바꿀값) 을 통하여 값을 직접 변경할 수 있는정도로만 알고있엇다. useState의 두번째 반환값 setExpenses을 활용하는 방법에 대해서 배웠다. 만약에 currentState의 값이 prev값과 연관이 있을경우 이를 온전히 사용할 수 있다는것을 말이다. setExpenses 는 이전 state의 값을 가지고 있다는 것을 알 수 있었고, 값을 그냥 변경하는 경우가아닌 이전 값에 연관이 있을경우 아래의 코드와 같이 간결하게 표현 할 수 있는 방법을 배웠다. 수정후 const addExpenseHandler = (expense) =&amp;gt; { setExpenses(prevExpense =&amp;gt; { return [expense,...prevExpense] }) } 2. Conditional content 무언가 보여줄때 조건문을 통하여 보여줄 수 있는 방법을 배웠다. 기존코드 &amp;lt;Card className=&quot;expenses&quot;&amp;gt; {expenses} &amp;lt;/Card&amp;gt; //만약에 expense에 아무 값이없을경우 아무것도 보이지 않아 허전하다. 조건문 적용후 &amp;lt;Card className=&quot;expenses&quot;&amp;gt; //삼항연산자를 이용하여 아무 값이 없을경우 없다고 출력해주고 존재한다면 해당 리스트 출력해주기. {expenses.length === 0 ? &amp;lt;p&amp;gt;No expenses found&amp;lt;/p&amp;gt; : expenses} &amp;lt;/Card&amp;gt;</summary></entry></feed>

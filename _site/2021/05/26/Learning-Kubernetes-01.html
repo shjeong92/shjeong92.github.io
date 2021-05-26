@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>아카이브 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #1 ] Kubernetes의 구조 - Hyuk's devlog</title>
 
-<meta name="description" content="Your Site Description
-">
-<link rel="canonical" href="https://shjeong92.github.io/archive.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="ETCD란 무엇인가?Distributed Reliable Key Value Store분산 시스템의 중요한 데이터를위한 신뢰할 수있는 분산 key/value 저장소이며 다음과 같은 특징이 있습니다.  단순함: 잘 정의 된 사용자용 API  보안: 선택적 클라이언트 인증을 사용하는 자...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/26/Learning-Kubernetes-01.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -255,282 +254,290 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport cell cell--auto">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item navigation__item--active"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
-      </nav></div>
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
-              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>아카이브</h1></header></div><meta itemprop="headline" content="아카이브"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--archive js-all"><div class="site-tags js-tags">
-  <ul class="menu">
-    <li>
-      <button type="button" class="button button--secondary button--pill tag-button tag-button--all" data-encode="">
-        Show All<div class="tag-button__count">15</div>
-      </button>
-    </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="CKA">
-          <span>CKA</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="Commit">
-          <span>Commit</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="Docker">
-          <span>Docker</span><div class="tag-button__count">4</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="Github">
-          <span>Github</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="Kubernetes">
-          <span>Kubernetes</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-4" data-encode="React">
-          <span>React</span><div class="tag-button__count">10</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="SVN">
-          <span>SVN</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="container">
-          <span>container</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="etcd">
-          <span>etcd</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="history">
-          <span>history</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="modify">
-          <span>modify</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="network">
-          <span>network</span><div class="tag-button__count">2</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">
-          <span>네트워크</span><div class="tag-button__count">2</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="%EB%8F%84%EC%BB%A4">
-          <span>도커</span><div class="tag-button__count">3</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%AA%85%EB%A0%B9%EC%96%B4">
-          <span>명령어</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">
-          <span>컨테이너</span><div class="tag-button__count">3</div>
-        </button>
-      </li></ul>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #1 ] Kubernetes의 구조</h1></header></div>
+<meta itemprop="headline" content="[ #1 ] Kubernetes의 구조">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=CKA">CKA</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=container">container</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=etcd">etcd</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 05월 26일</span>
+            </li></ul>
 </div>
-<div class="js-result layout--archive__result d-none"><div class="article-list items"><section><h2 class="article-list__group-header">2021</h2><ul class="items"><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,CKA,%EB%8F%84%EC%BB%A4,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88,container,etcd">
-        <div class="item__content"><span class="item__meta">05월 26일</span><a itemprop="headline" class="item__header" href="/2021/05/26/Learning-Kubernetes-01.html">[ #1 ] Kubernetes의 구조</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,network,%EB%8F%84%EC%BB%A4,%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88,%EB%AA%85%EB%A0%B9%EC%96%B4">
-        <div class="item__content"><span class="item__meta">05월 22일</span><a itemprop="headline" class="item__header" href="/2021/05/22/Learning-Docker-03.html">[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,network,%EB%8F%84%EC%BB%A4,%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">
-        <div class="item__content"><span class="item__meta">05월 20일</span><a itemprop="headline" class="item__header" href="/2021/05/20/Learning-Docker-02.html">[ #2 ] Docker 네트워크 사용하기 </a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker">
-        <div class="item__content"><span class="item__meta">05월 19일</span><a itemprop="headline" class="item__header" href="/2021/05/19/Learning-Docker-01.html">[ #1 ] Docker 기본 익히기 </a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Github,Commit,SVN,history,modify">
-        <div class="item__content"><span class="item__meta">05월 14일</span><a itemprop="headline" class="item__header" href="/2021/05/14/Github-01.html">깃헙 history를 주물러봅시다</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 29일</span><a itemprop="headline" class="item__header" href="/2021/04/29/Learning-React-10.html">[ #10 ] useContext hook</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 29일</span><a itemprop="headline" class="item__header" href="/2021/04/29/Learning-React-09.html">[ #9 ] useEffect hook</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 28일</span><a itemprop="headline" class="item__header" href="/2021/04/28/Learning-React-08.html">[ #8 ] Portal, useRef</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 27일</span><a itemprop="headline" class="item__header" href="/2021/04/27/Learning-React-07.html">[ #7 ] 3 ways to fullfill jsx's requirement</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 26일</span><a itemprop="headline" class="item__header" href="/2021/04/26/Learning-React-06.html">[ #6 ] setState & conditional content</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-05.html">[ #5 ] state의 역행 childretn -> parent</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-04.html">[ #4 ] useState 사용하는 방법</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-03.html">[ #3 ] useState 사용해보기</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-02.html">[ #2 ] Props.children 과 커스텀 컴포넌트(태그)</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 24일</span><a itemprop="headline" class="item__header" href="/2021/04/24/Learning-React-01.html">[ #1 ] Props란? </a></div>
-      </li></div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-05-26T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,CKA,도커,컨테이너,container,etcd">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody">
+<h2 id="etcd란-무엇인가">ETCD란 무엇인가?</h2>
+
+<h3 id="distributed-reliable-key-value-store">Distributed Reliable Key Value Store</h3>
+<p>분산 시스템의 중요한 데이터를위한 신뢰할 수있는 분산 key/value 저장소이며 다음과 같은 특징이 있습니다.</p>
+<ul>
+  <li>단순함: 잘 정의 된 사용자용 API</li>
+  <li>보안: 선택적 클라이언트 인증을 사용하는 자동 TLS</li>
+  <li>속도: 10000 쓰기 / sec</li>
+</ul>
+
+<h2 id="mac에-etcd-설치하여-사용해보기">mac에 etcd 설치하여 사용해보기</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># brew를 이용하여 간편히 설치</span>
+<span class="nv">$ </span>brew <span class="nb">install </span>etcd
+<span class="c"># etcd를 백그라운드 환경으로 실행시키기</span>
+<span class="nv">$ </span>brew services start etcd
+
+<span class="c"># Key value 생성</span>
+<span class="nv">$ </span>etcdctl put key <span class="s2">"I am a value"</span>
+OK
+
+<span class="c"># Key를 통한 value 호출</span>
+<span class="nv">$ </span>etcdctl get key
+key
+I am a value
+
+<span class="c"># Key 삭제하기</span>
+<span class="nv">$ </span>etcdctl del key
+1
+
+</code></pre></div></div>
+
+<h1 id="rocket-마스터">
+<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> 마스터</h1>
+
+<h2 id="kubernetes-안의-etcd-클러스터">Kubernetes 안의 etcd 클러스터</h2>
+
+<ul>
+  <li>Nodes</li>
+  <li>Pods</li>
+  <li>Configs</li>
+  <li>Secrets</li>
+  <li>Accounts</li>
+  <li>Roles</li>
+  <li>Bindings</li>
+  <li>Others</li>
+</ul>
+
+<p>모든 클러스터 데이터를 담는 쿠버네티스 뒷단의 저장소로 사용되는 일관성·고가용성 키-값 저장소입니다..</p>
+
+<h2 id="kube-apiserver">kube-apiserver</h2>
+<ul>
+  <li>kubernetes의 API server이며 worker node를 관리하는 Kubelet과 통신합니다.</li>
+  <li>
+    <p>kubectl 을 통하여 kube-apiserver과 통신하는것 이외에도 post request를 통해서도 가능합니다.</p>
+
+    <ol>
+      <li>Authenticate User
+        <ul>
+          <li>사용자가 인장된 사용자인지 확인</li>
+        </ul>
+      </li>
+      <li>Validate Request
+        <ul>
+          <li>요청이 올바른 요청인지 확인</li>
+        </ul>
+      </li>
+      <li>Retrieve data
+        <ul>
+          <li>요청에 대한 결과를 응답한다. (ex. Pod 생성 요청 완료)</li>
+        </ul>
+      </li>
+      <li>Updatae ETCD
+        <ul>
+          <li>생성 요청된 POD 정보를 ETCD에 업데이트 한다.</li>
+        </ul>
+      </li>
+      <li>Scheduler
+        <ul>
+          <li>Scheduler에게 POD이 배치될 Worker Node를 요청한다.</li>
+        </ul>
+      </li>
+      <li>Kubelet
+        <ul>
+          <li>Schduler에게 받은 Worker Node의 Kubelet에게 POD 생성을 요청한다.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="kube-scheduler">kube-scheduler</h2>
+
+<p>스케줄러는 생성되었지만 배정되지 못하여 실행되지 않은 컨테이너를 감지하고 실행할 노드를 선택하는 역할을 한다. 스케줄링 결정을 위해서 고려되는 요소는 리소스에 대한 개별 및 총체적 요구 사항, 노드의 상태, 제약 조건등을 포함한다.</p>
+
+<h2 id="kube-controller-manager">Kube Controller Manager</h2>
+
+<p>컨트롤러를 구동하는 컴포넌트로, 앞에서 설명한 control-loop를 돌면서 current state가 desired state로 되도록 바꾸어주는 역할을 담당한다. 컨트롤러의 종류에도 여러가지가 존재하는데 논리적으로 각 컨트롤러는 개별 프로세스이지만 복잡성을 낮추기 위해 모두 단일 바이너리로 컴파일되고 단일 프로세스 내에서 실행된다.</p>
+
+<ul>
+  <li>노드 컨트롤러: 노드 컨트롤러: 노드가 다운되었을 때에 대응한다.</li>
+  <li>레플리케이션 컨트롤러: 레플리케이션 오브젝트에서 알맞은 수의 Pod를 유지한다.</li>
+  <li>엔드포인트 컨트롤러: 서비스와 Pod를 연결한다.</li>
+  <li>서비스 어카운트 &amp; 토큰 컨트롤러: 새로운 네임스페이스에 대한 기본 계정과 API 접근 토큰을 생성한다.</li>
+</ul>
+
+<h2 id="cloud-controller-manager">Cloud-controller-manager</h2>
+<p>클라우드별 컨트롤 로직을 포함하는 쿠버네티스 컨트롤 플레인 컴포넌트이다. 클라우드 컨트롤러 매니저를 통해 클러스터를 클라우드에 연결하여 클라우드 플랫폼의 리소스를 추가 및 사용할 수 있다. kube-controller-manager와 마찬가지로 cloud-controller-manager도 논리적으로 독립적인 여러 control-loop를 단일 프로세스로 실행하는 단일 바이너리로 결합한다.</p>
+
+<p><br>
+<br>
+다음 컨트롤러들은 클라우드 플랫폼의 의존성을 가질 수 있다.</p>
+
+<ul>
+  <li>노드 컨트롤러: 노드가 응답을 멈춘 후 클라우드 상에서 삭제되었는지 판별하기 위해 클라우드 제공 사업자에게 확인하는 것</li>
+  <li>라우트 컨트롤러: 기본 클라우드 인프라에 경로를 구성하는 것</li>
+  <li>서비스 컨트롤러: 클라우드 제공 사업자 로드밸런서를 생성, 업데이트 그리고 삭제하는 것</li>
+</ul>
+
+<h1 id="rocket-워커-노드">
+<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> 워커 노드</h1>
+<p>워커 노드는 마스터로부터 전달받은 명령에 따라 컨테이너를 실행한다.</p>
+
+<h2 id="kubelet노드-관리자">kubelet(노드 관리자)</h2>
+<p>클러스터의 각 노드에서 실행되는 핵심 컴포넌트로 다양한 메커니즘을 통해 제공된 명세(Spec)의 집합을 받아서 컨테이너를 실행시킨다. 여기서 끝나는 것이 아니라 정상적으로 동작하는지 지속적으로 모니터링하고 주기적으로 마스터 노드의 api 서버와 통신하여 정보를 주고받는다.</p>
+
+<h2 id="kube-proxy">kube-proxy</h2>
+<p>클러스터의 각 노드에서 실행되는 네트워크 프록시로, 쿠버네티스의 서비스 오브젝트를 구현한다. 즉 노드의 네트워크 규칙을 관리하여 서비스마다 개별 IP를 가질 수 있게 만들어주고 클러스터 내부나 외부의 트래픽을 Pod로 전달할 수있도록 해준다.</p>
+
+<h2 id="container-runtime">container runtime</h2>
+<p>실제 컨테이너 실행을 담당하는 소프트웨어이다. 예를 들어 도커, CRI-O, containerd 등이 있다.</p>
 </div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-05-26T00:00:00+09:00">
+<!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
+</div></footer>
+<div class="article__section-navigator clearfix"><div class="previous">
+<span>이전</span><a href="/2021/05/22/Learning-Docker-03.html">[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</a>
+</div></div>
+</div>
+
 </div>
 
 <script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
-  function queryString() {
-    // This function is anonymous, is executed immediately and
-    // the return value is assigned to QueryString!
-    var i = 0, queryObj = {}, pair;
-    var queryStr = window.location.search.substring(1);
-    var queryArr = queryStr.split('&');
-    for (i = 0; i < queryArr.length; i++) {
-      pair = queryArr[i].split('=');
-      // If first entry with this name
-      if (typeof queryObj[pair[0]] === 'undefined') {
-        queryObj[pair[0]] = pair[1];
-        // If second entry with this name
-      } else if (typeof queryObj[pair[0]] === 'string') {
-        queryObj[pair[0]] = [queryObj[pair[0]], pair[1]];
-        // If third or later entry with this name
-      } else {
-        queryObj[pair[0]].push(pair[1]);
-      }
-    }
-    return queryObj;
-  }
-
-  var setUrlQuery = (function() {
-    var baseUrl =  window.location.href.split('?')[0];
-    return function(query) {
-      if (typeof query === 'string') {
-        window.history.replaceState(null, '', baseUrl + query);
-      } else {
-        window.history.replaceState(null, '', baseUrl);
-      }
-    };
-  })();
-
   window.Lazyload.js(SOURCES.jquery, function() {
-    var $tags = $('.js-tags');
-    var $articleTags = $tags.find('button');
-    var $tagShowAll = $tags.find('.tag-button--all');
-    var $result = $('.js-result');
-    var $sections = $result.find('section');
-    var sectionArticles = [];
-    var $lastFocusButton = null;
-    var sectionTopArticleIndex = [];
-    var hasInit = false;
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
 
-    $sections.each(function() {
-      sectionArticles.push($(this).find('.item'));
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
     });
-
-    function init() {
-      var i, index = 0;
-      for (i = 0; i < $sections.length; i++) {
-        sectionTopArticleIndex.push(index);
-        index += $sections.eq(i).find('.item').length;
-      }
-      sectionTopArticleIndex.push(index);
-    }
-
-    function searchButtonsByTag(_tag/*raw tag*/) {
-      if (!_tag) {
-        return $tagShowAll;
-      }
-      var _buttons = $articleTags.filter('[data-encode="' + _tag + '"]');
-      if (_buttons.length === 0) {
-        return $tagShowAll;
-      }
-      return _buttons;
-    }
-    function buttonFocus(target) {
-      if (target) {
-        target.addClass('focus');
-        $lastFocusButton && !$lastFocusButton.is(target) && $lastFocusButton.removeClass('focus');
-        $lastFocusButton = target;
-      }
-    }
-
-    function tagSelect (tag/*raw tag*/, target) {
-      var result = {}, $articles;
-      var i, j, k, _tag;
-
-      for (i = 0; i < sectionArticles.length; i++) {
-        $articles = sectionArticles[i];
-        for (j = 0; j < $articles.length; j++) {
-          if (tag === '' || tag === undefined) {
-            result[i] || (result[i] = {});
-            result[i][j] = true;
-          } else {
-            var tags = $articles.eq(j).data('tags').split(',');
-            for (k = 0; k < tags.length; k++) {
-              if (tags[k] === tag) {
-                result[i] || (result[i] = {});
-                result[i][j] = true; break;
-              }
-            }
-          }
-        }
-      }
-
-      for (i = 0; i < sectionArticles.length; i++) {
-        result[i] && $sections.eq(i).removeClass('d-none');
-        result[i] || $sections.eq(i).addClass('d-none');
-        for (j = 0; j < sectionArticles[i].length; j++) {
-          if (result[i] && result[i][j]) {
-            sectionArticles[i].eq(j).removeClass('d-none');
-          } else {
-            sectionArticles[i].eq(j).addClass('d-none');
-          }
-        }
-      }
-
-      hasInit || ($result.removeClass('d-none'), hasInit = true);
-
-
-      if (target) {
-        buttonFocus(target);
-        _tag = target.attr('data-encode');
-        if (_tag === '' || typeof _tag !== 'string') {
-          setUrlQuery();
-        } else {
-          setUrlQuery('?tag=' + _tag);
-        }
-      } else {
-        buttonFocus(searchButtonsByTag(tag));
-      }
-    }
-
-    var query = queryString(), _tag = query.tag;
-    init(); tagSelect(_tag);
-    $tags.on('click', 'button', function() {
-      tagSelect($(this).data('encode'), $(this));
-    });
-
   });
 })();
 </script>
-
-
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div>
+<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div></div>
+<div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main"><div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a></ul>
+      </a>
+</li></ul>
 </div>
 </div>
-    </div><div class="site-info mt-2">
+    </div>
+<div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
-        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div></div>
-    </div><script>(function() {
+</div>
+</div>
+    </div>
+<script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -594,7 +601,8 @@
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -686,7 +694,7 @@
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
+        <input type="text">
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -810,7 +818,8 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div></div>
+</div>
+</div>
 
 
 <script>(function() {
@@ -1047,6 +1056,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script>
     </div>
     <script>(function () {
