@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #1 ] Kubernetes의 구조 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #2 ] Kubernetes 설치 및 환경 구성하기  - Hyuk's devlog</title>
 
-<meta name="description" content="ETCD란 무엇인가?Distributed Reliable Key Value Store분산 시스템의 중요한 데이터를위한 신뢰할 수있는 분산 key/value 저장소이며 다음과 같은 특징이 있습니다.  단순함: 잘 정의 된 사용자용 API  보안: 선택적 클라이언트 인증을 사용하는 자...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/26/Learning-Kubernetes-01.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="minikube를 이용하면 정말 간단하게 로컬머신에 테스트환경을 구성할 수 있었습니다 또한 kubectl 커맨드에 친숙해지는데 잘 활용했었지요, 하지만 이는 싱글 노드 클러스트이고, 다른 노드를 추가할 수 없습니다. 그 말은 즉 진또배기 쿠버네티스를 체험할 수 없는것이며 모는 기능...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/27/Learning-Kubernetes-02.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -254,234 +254,423 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root">
-<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner">
-<div class="page__header d-print-none">
-<header class="header"><div class="main">
+      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
+        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a>
-</div>
-<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
-</div>
-<nav class="navigation">
-        <ul>
-<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
-<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
-</ul>
-      </nav>
-</div>
+" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+      </nav></div>
   </header>
-</div>
-<div class="page__content"><div class="main"><div class="grid grid--reverse">
+</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
               <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
 </aside></div>
 
-              <div class="col-main cell cell--auto">
-<!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #1 ] Kubernetes의 구조</h1></header></div>
-<meta itemprop="headline" content="[ #1 ] Kubernetes의 구조">
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=CKA">CKA</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=container">container</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=etcd">etcd</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 26일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-26T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,CKA,도커,컨테이너,container,etcd">
-<div class="js-article-content">
-<div class="layout--article">
-<!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #2 ] Kubernetes 설치 및 환경 구성하기 </h1></header></div><meta itemprop="headline" content="[ #2 ] Kubernetes 설치 및 환경 구성하기 "><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=CKA">CKA</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=container">container</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=etcd">etcd</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Google">Google</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=cloud">cloud</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 27일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-27T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,CKA,도커,컨테이너,container,etcd,Google,cloud"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody">
-<h2 id="etcd란-무엇인가">ETCD란 무엇인가?</h2>
+<div class="article__content" itemprop="articleBody"><p>minikube를 이용하면 정말 간단하게 로컬머신에 테스트환경을 구성할 수 있었습니다 또한 <code>kubectl</code> 커맨드에 친숙해지는데 잘 활용했었지요,
+ 하지만 이는 싱글 노드 클러스트이고, 다른 노드를 추가할 수 없습니다. 그 말은 즉 진또배기 쿠버네티스를 체험할 수 없는것이며 모는 기능을 제대로 체험할 수 없다는 것이지요.</p>
 
-<h3 id="distributed-reliable-key-value-store">Distributed Reliable Key Value Store</h3>
-<p>분산 시스템의 중요한 데이터를위한 신뢰할 수있는 분산 key/value 저장소이며 다음과 같은 특징이 있습니다.</p>
+<p><br />
+따라서 kubeadm을 이용하여 마스터노드와 워커노드들을 구성해보기로 했습니다.
+로컬 환경에서 vagrant와 virtualbox를 통해 실험환경을 구축하고싶었지만 m1 맥에 그런것은 없습니다 ㅠㅠ
+어쩌다보니 구글 클라우드를 처음시작하면 무료크레딧으로 300$를 제공하는것을 발견하였고 구글클라우드를 이용하여 쿠버네티스 환경을 구축해보기로 결정했습니다.</p>
+
+<p><br />
+이번 포스트에서는 쿠버네티스 설치부터 기본적인 환경까지 구성할것입니다.</p>
+
+<hr />
+
+<p>쿠버네티스는 기본적으로 <code>마스터 노드</code> 와 <code>워커 노드</code>로 구성됩니다.</p>
+
+<p><code>마스터 노드</code>는 <code>워커 노드</code>에 Pod를 할당하고 Pod 안에 컨테이너를 띄우게 하는 역할을 합니다.
+또한 쿠버네티스의 상태를 관리하고 여러 Pod 들의 스케줄링도 하는 등 쿠버네티스에서 중추적인 역할을 합니다.
+<code>워커 노드</code>는 <code>마스터 노드</code>와 통신하면서 Pod를 할당 받고 그 안에 컨테이너를 띄워 유지 및 관리하는 역할을 합니다. 
+또한 네트워크나 볼륨에 대한 기능도 컨트롤도 합니다.</p>
+
+<p>마스터 노드1개와 와 워커 노드 2개를 생성할 것이며, 
+운영체제는 Ubuntu 18.04 LTS 를 사용하여 구성하도록 하겠습니다.
+<br />
+그리고 마스터 및 모든 워커노드의 스펙은 아래와 같습니다.</p>
+
 <ul>
-  <li>단순함: 잘 정의 된 사용자용 API</li>
-  <li>보안: 선택적 클라이언트 인증을 사용하는 자동 TLS</li>
-  <li>속도: 10000 쓰기 / sec</li>
+  <li>CPU : 2 core</li>
+  <li>RAM : 2 GB</li>
+  <li>Storage : 30 GB</li>
 </ul>
 
-<h2 id="mac에-etcd-설치하여-사용해보기">mac에 etcd 설치하여 사용해보기</h2>
+<h2 id="kubeadm을-활용한-환경구축">kubeadm을 활용한 환경구축</h2>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># brew를 이용하여 간편히 설치</span>
-<span class="nv">$ </span>brew <span class="nb">install </span>etcd
-<span class="c"># etcd를 백그라운드 환경으로 실행시키기</span>
-<span class="nv">$ </span>brew services start etcd
+<p><code>kubeadm</code>이란, kubernetes에서 제공하는 기본적인 도구이며, 
+kubernetes 클러스터를 빨리 구축하기 위한 다양한 기능을 제공합니다.</p>
 
-<span class="c"># Key value 생성</span>
-<span class="nv">$ </span>etcdctl put key <span class="s2">"I am a value"</span>
-OK
-
-<span class="c"># Key를 통한 value 호출</span>
-<span class="nv">$ </span>etcdctl get key
-key
-I am a value
-
-<span class="c"># Key 삭제하기</span>
-<span class="nv">$ </span>etcdctl del key
-1
-
-</code></pre></div></div>
-
-<h1 id="rocket-마스터">
-<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> 마스터</h1>
-
-<h2 id="kubernetes-안의-etcd-클러스터">Kubernetes 안의 etcd 클러스터</h2>
+<p><code>kubeadm</code>은 아래와같이 다양한 커맨드명령어를 사용하여 클러스터를 구축할 수 있습니다.</p>
 
 <ul>
-  <li>Nodes</li>
-  <li>Pods</li>
-  <li>Configs</li>
-  <li>Secrets</li>
-  <li>Accounts</li>
-  <li>Roles</li>
-  <li>Bindings</li>
-  <li>Others</li>
-</ul>
-
-<p>모든 클러스터 데이터를 담는 쿠버네티스 뒷단의 저장소로 사용되는 일관성·고가용성 키-값 저장소입니다.</p>
-
-<h2 id="kube-apiserver">kube-apiserver</h2>
-<ul>
-  <li>kubernetes의 API server이며 worker node를 관리하는 Kubelet과 통신합니다.</li>
-  <li>
-    <p>kubectl 을 통하여 kube-apiserver과 통신하는것 이외에도 post request를 통해서도 가능합니다.</p>
-
-    <ol>
-      <li>Authenticate User
-        <ul>
-          <li>사용자가 인장된 사용자인지 확인</li>
-        </ul>
-      </li>
-      <li>Validate Request
-        <ul>
-          <li>요청이 올바른 요청인지 확인</li>
-        </ul>
-      </li>
-      <li>Retrieve data
-        <ul>
-          <li>요청에 대한 결과를 응답한다. (ex. Pod 생성 요청 완료)</li>
-        </ul>
-      </li>
-      <li>Updatae ETCD
-        <ul>
-          <li>생성 요청된 POD 정보를 ETCD에 업데이트 합니다ㅣ.</li>
-        </ul>
-      </li>
-      <li>Scheduler
-        <ul>
-          <li>Scheduler에게 POD이 배치될 Worker Node를 요청합니다.</li>
-        </ul>
-      </li>
-      <li>Kubelet
-        <ul>
-          <li>Schduler에게 받은 Worker Node의 Kubelet에게 POD 생성을 요청합니다.</li>
-        </ul>
-      </li>
-    </ol>
+  <li><strong>kubeadm init</strong>
+    <ul>
+      <li>Kubernetes 컨트롤 플레인 노드를 초기화합니다.</li>
+      <li>즉, 마스터 노드를 초기화합니다.</li>
+    </ul>
+  </li>
+  <li><strong>kubeadm join</strong>
+    <ul>
+      <li>Kubernetes 워커 노드를 초기화하고 클러스터에 연결합니다.</li>
+    </ul>
+  </li>
+  <li><strong>kubeadm upgrade</strong>
+    <ul>
+      <li>Kubernetes 클러스터를 업그레이드 합니다.</li>
+    </ul>
+  </li>
+  <li><strong>kubeadm token</strong>
+    <ul>
+      <li>부트 스트랩 토큰을 사용한 인증에 설명된대로 부트 스트랩 토큰은 클러스터에 참여하는 노드와 제어 평면 노드 사이에 양방향 신뢰를 설정하는 데 사용됩니다.</li>
+    </ul>
+  </li>
+  <li><strong>kubeadm reset</strong>
+    <ul>
+      <li>kubeadm init 혹은 kubeadm join의 변경사항을 최대한 복구합니다.</li>
+    </ul>
+  </li>
+  <li><strong>kubeadm version</strong>
+    <ul>
+      <li>kubeadm 버젼을 보여줍니다.</li>
+    </ul>
+  </li>
+  <li><strong>kubeadm alpha</strong>
+    <ul>
+      <li>정식으로 배포된 기능은 아니지만 kubernetes측에서 사용자 피드백을 얻기 위해 인증서 갱신, 인증서 만료 확인, 사용자 생성, kubelet 설정 등 다양한 기능을 제공한다고 합니다.</li>
+    </ul>
   </li>
 </ul>
 
-<h2 id="kube-scheduler">kube-scheduler</h2>
-
-<p>스케줄러는 생성되었지만 배정되지 못하여 실행되지 않은 컨테이너를 감지하고 실행할 노드를 선택하는 역할을 합니다. 스케줄링 결정을 위해서 고려되는 요소는 리소스에 대한 개별 및 총체적 요구 사항, 노드의 상태, 제약 조건등을 포함.</p>
-
-<h2 id="kube-controller-manager">Kube Controller Manager</h2>
-
-<p>컨트롤러를 구동하는 컴포넌트로, 앞에서 설명한 control-loop를 돌면서 current state가 desired state로 되도록 바꾸어주는 역할을 담당한다. 컨트롤러의 종류에도 여러가지가 존재하는데 논리적으로 각 컨트롤러는 개별 프로세스이지만 복잡성을 낮추기 위해 모두 단일 바이너리로 컴파일되고 단일 프로세스 내에서 실행된다.</p>
+<h2 id="시작하기전에-확인할-것">시작하기전에 확인할 것</h2>
 
 <ul>
-  <li>노드 컨트롤러: 노드 컨트롤러: 노드가 다운되었을 때에 대응.</li>
-  <li>레플리케이션 컨트롤러: 레플리케이션 오브젝트에서 알맞은 수의 Pod를 유지.</li>
-  <li>엔드포인트 컨트롤러: 서비스와 Pod를 연결.</li>
-  <li>서비스 어카운트 &amp; 토큰 컨트롤러: 새로운 네임스페이스에 대한 기본 계정과 API 접근 토큰을 생성.</li>
+  <li>2GB 또는 그 이상의 메모리(각노드별)</li>
+  <li>2CPUs 또는 그이상의 시피유</li>
+  <li>클러스터의 모든 시스템 간 완벽한 네트워크 연결되었는지 확인</li>
+  <li>모든 노드에 대한 고유한 호스트 이름, 고유한 MAC 주소, 고유한 product_uuid</li>
+  <li>각노드의 컨트롤러인 kubelet이 제대로 동작하기위해선 swap이 disabled 되어야 합니다.</li>
 </ul>
 
-<h2 id="cloud-controller-manager">Cloud-controller-manager</h2>
-<p>클라우드별 컨트롤 로직을 포함하는 쿠버네티스 컨트롤 플레인 컴포넌트. 클라우드 컨트롤러 매니저를 통해 클러스터를 클라우드에 연결하여 클라우드 플랫폼의 리소스를 추가 및 사용할 수 있습니다. kube-controller-manager와 마찬가지로 cloud-controller-manager도 논리적으로 독립적인 여러 control-loop를 단일 프로세스로 실행하는 단일 바이너리로 결합합니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#swap 비활성화하기</span>
+swapoff <span class="nt">-a</span>
+</code></pre></div></div>
 
-<p><br>
-<br>
-다음 컨트롤러들은 클라우드 플랫폼의 의존성을 가질 수 있다.</p>
+<h2 id="모든-노드의-mac-address-및-product_uuid-확인">모든 노드의 Mac address 및 product_uuid 확인</h2>
+
+<p>로컬 머신의경우 하드웨어 기기들은 각각의 유니크한 주소를 가지는 반면에 가상 머신은 같은 id를 가질 수도 있습니다.
+만약에 같은 Mac address 및 product_uuid를 가지고 있으면 설치에 실패 할 수 있기에 확인하여야 합니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#MAC address 확인하기</span>
+ifconfig <span class="nt">-a</span>
+
+<span class="c">#product_uuid 확인하기</span>
+<span class="nb">sudo cat</span> /sys/class/dmi/id/product_uuid
+</code></pre></div></div>
+<p>위 쉘 커맨드를 각각의노드에 적용하여 중복되는 맥주소나 제품아이디가 있는지 확인합니다.</p>
+
+<p>##iptables 설정하기</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#br_netfilter모듈 로드되었는지 확인하기</span>
+<span class="nv">$ </span>lsmod | <span class="nb">grep </span>br_netfilter
+<span class="c"># 아무정보도 뜨지않는다.</span>
+<span class="nv">$ </span>
+
+<span class="c">#명시적으로 br_netfilter 로드하기</span>
+<span class="nv">$ </span><span class="nb">sudo </span>modprobe br_netfilter
+<span class="c">#다시 확인하면 br_netfilter이 로드된걸 볼수 있어요.</span>
+<span class="nv">$ </span>lsmod | <span class="nb">grep </span>br_netfilter
+br_netfilter           28672  0
+bridge                176128  1 br_netfilter
+
+</code></pre></div></div>
+
+<p>리눅스 노드의 iptables가 브리지된 트래픽을 올바르게 보기 위한 요구 사항으로, sysctl 구성에서 net.bridge.bridge-nf-call-iptables 가 1로 설정되어 있는지 확인해야 합니다. 
+다음3개의 스크립트를 실행해주시면,</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/modules-load.d/k8s.conf
+br_netfilter
+</span><span class="no">EOF
+
+</span><span class="nv">$ </span><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+</span><span class="no">EOF
+
+</span><span class="nv">$ </span><span class="nb">sudo </span>sysctl <span class="nt">--system</span>
+</code></pre></div></div>
+
+<p>아래와같이 뜰거에요.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* Applying /etc/sysctl.d/10-console-messages.conf ...
+kernel.printk = 4 4 1 7
+* Applying /etc/sysctl.d/10-ipv6-privacy.conf ...
+net.ipv6.conf.all.use_tempaddr = 2
+net.ipv6.conf.default.use_tempaddr = 2
+* Applying /etc/sysctl.d/10-kernel-hardening.conf ...
+kernel.kptr_restrict = 1
+* Applying /etc/sysctl.d/10-link-restrictions.conf ...
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+* Applying /etc/sysctl.d/10-lxd-inotify.conf ...
+fs.inotify.max_user_instances = 1024
+* Applying /etc/sysctl.d/10-magic-sysrq.conf ...
+kernel.sysrq = 176
+* Applying /etc/sysctl.d/10-network-security.conf ...
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.tcp_syncookies = 1
+* Applying /etc/sysctl.d/10-ptrace.conf ...
+kernel.yama.ptrace_scope = 1
+* Applying /etc/sysctl.d/10-zeropage.conf ...
+vm.mmap_min_addr = 65536
+* Applying /usr/lib/sysctl.d/50-default.conf ...
+net.ipv4.conf.all.promote_secondaries = 1
+net.core.default_qdisc = fq_codel
+* Applying /etc/sysctl.d/60-gce-network-security.conf ...
+net.ipv4.tcp_syncookies = 1
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv4.conf.all.secure_redirects = 1
+net.ipv4.conf.default.secure_redirects = 1
+net.ipv4.ip_forward = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+net.ipv4.conf.all.log_martians = 1
+net.ipv4.conf.default.log_martians = 1
+kernel.randomize_va_space = 2
+kernel.panic = 10
+* Applying /etc/sysctl.d/99-cloudimg-ipv6.conf ...
+net.ipv6.conf.all.use_tempaddr = 0
+net.ipv6.conf.default.use_tempaddr = 0
+* Applying /etc/sysctl.d/99-sysctl.conf ...
+* Applying /etc/sysctl.d/k8s.conf ...
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+* Applying /etc/sysctl.conf ...
+
+</code></pre></div></div>
+
+<h2 id="필수-포트-확인하기">필수 포트 확인하기</h2>
+<p><strong>마스터 노드에서 필요한 필수 노트</strong></p>
+<ul>
+  <li>6443 포트 : Kubernetes API Server / Used By All</li>
+  <li>2379~2380 포트 : etcd server client API / Used By kube-apiserver, etcd</li>
+  <li>10250 포트 : Kubelet API / Used By Self, Control plane</li>
+  <li>10251 포트 : kube-scheduler / Used By Self</li>
+  <li>10252 포트 : kube-controller-manager / Used By Self</li>
+</ul>
+
+<p><strong>워커 노드에서 필요한 필수 포트</strong></p>
+<ul>
+  <li>10250 포트 : Kubelet API / Used By Self, Control plane</li>
+  <li>30000~32767 포트 : NodePort Services / Used By All</li>
+</ul>
+
+<h2 id="컨테이너-런타임-설치하기">컨테이너 런타임 설치하기</h2>
+<p>저는 docker를 설치할 것입니다..</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 구버전의 도커 설치되어있다면 삭제하기.</span>
+<span class="nv">$ </span> <span class="nb">sudo </span>apt-get remove docker docker-engine docker.io containerd runc
+</code></pre></div></div>
+
+<p>도커 공홈에가면 도커 설치하는 방법이 여러가지있는데 저는 그중에서 가장 간단한 방법으로 설치하겠습니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#도커를 설치해주는 스크립트 get-docker.sh 로저장하기</span>
+<span class="nv">$ </span>curl <span class="nt">-fsSL</span> https://get.docker.com <span class="nt">-o</span> get-docker.sh
+<span class="c">#스크립트 실행하기</span>
+<span class="nv">$ </span><span class="nb">sudo </span>sh get-docker.sh
+</code></pre></div></div>
+
+<p>아래와같이 뜨면 성공입니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Executing docker install script, commit: 7cae5f8b0decc17d6571f9f52eb840fbc13b2737</span>
++ sh <span class="nt">-c</span> apt-get update <span class="nt">-qq</span> <span class="o">&gt;</span>/dev/null
++ sh <span class="nt">-c</span> <span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nt">-qq</span> apt-transport-https ca-certificates curl <span class="o">&gt;</span>/dev/null
++ sh <span class="nt">-c</span> curl <span class="nt">-fsSL</span> <span class="s2">"https://download.docker.com/linux/ubuntu/gpg"</span> | apt-key add <span class="nt">-qq</span> - <span class="o">&gt;</span>/dev/null
+Warning: apt-key output should not be parsed <span class="o">(</span>stdout is not a terminal<span class="o">)</span>
++ sh <span class="nt">-c</span> <span class="nb">echo</span> <span class="s2">"deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"</span> <span class="o">&gt;</span> /etc/apt/sources.list.d/docker.list
++ sh <span class="nt">-c</span> apt-get update <span class="nt">-qq</span> <span class="o">&gt;</span>/dev/null
++ <span class="o">[</span> <span class="nt">-n</span>  <span class="o">]</span>
++ sh <span class="nt">-c</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nt">-qq</span> <span class="nt">--no-install-recommends</span> docker-ce <span class="o">&gt;</span>/dev/null
++ <span class="o">[</span> <span class="nt">-n</span> 1 <span class="o">]</span>
++ sh <span class="nt">-c</span> <span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nt">-qq</span> docker-ce-rootless-extras <span class="o">&gt;</span>/dev/null
++ sh <span class="nt">-c</span> docker version
+Client: Docker Engine - Community
+ Version:           20.10.6
+ API version:       1.41
+ Go version:        go1.13.15
+ Git commit:        370c289
+ Built:             Fri Apr  9 22:46:01 2021
+ OS/Arch:           linux/amd64
+ Context:           default
+ Experimental:      <span class="nb">true
+
+</span>Server: Docker Engine - Community
+ Engine:
+  Version:          20.10.6
+  API version:      1.41 <span class="o">(</span>minimum version 1.12<span class="o">)</span>
+  Go version:       go1.13.15
+  Git commit:       8728dd2
+  Built:            Fri Apr  9 22:44:13 2021
+  OS/Arch:          linux/amd64
+  Experimental:     <span class="nb">false
+ </span>containerd:
+  Version:          1.4.4
+  GitCommit:        05f951a3781f4f2c1911b05e61c160e9c30eaa8e
+ runc:
+  Version:          1.0.0-rc93
+  GitCommit:        12644e614e25b05da6fd08a38ffa0cfe1903fdec
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+
+<span class="o">================================================================================</span>
+
+To run Docker as a non-privileged user, consider setting up the
+Docker daemon <span class="k">in </span>rootless mode <span class="k">for </span>your user:
+
+    dockerd-rootless-setuptool.sh <span class="nb">install
+
+</span>Visit https://docs.docker.com/go/rootless/ to learn about rootless mode.
+
+
+To run the Docker daemon as a fully privileged service, but granting non-root
+<span class="nb">users </span>access, refer to https://docs.docker.com/go/daemon-access/
+
+WARNING: Access to the remote API on a privileged Docker daemon is equivalent
+         to root access on the host. Refer to the <span class="s1">'Docker daemon attack surface'</span>
+         documentation <span class="k">for </span>details: https://docs.docker.com/go/attack-surface/
+
+<span class="o">================================================================================</span>
+</code></pre></div></div>
+
+<p>혹시 모르니 도커 커맨드를 써서 설치가 잘되었는지 확인해봅니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+</code></pre></div></div>
+
+<p>Docker 설치가 완료 되었으면, Docker 데몬이 사용하는 드라이버를 cgroupfs 대신 systemd를 사용하도록 설정합니다
+왜냐하면 kubernetes에서 권장하는 Docker 데몬의 드라이버는 systemd 이기 때문이고, systemd를 사용하면 kubernetes가 클러스터 노드에서 사용 가능한 자원을 쉽게 알 수 있도록 해주기 때문이다.
+또한, 시스템에 두개의 cgroup관리자가 있으면 리소스가 부족할 때 불안정해지는 사례가 있다고 하니 무조건적으로 설정해줍시다.
+아래 명령어를 통해 Docker 데몬의 드라이버를 교체합니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo mkdir</span> /etc/docker
+
+<span class="nv">$ </span><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+</span><span class="no">EOF
+
+</span><span class="c">#도커 재시작과 부팅시 실행되게 설정</span>
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl <span class="nb">enable </span>docker
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl restart docker
+</code></pre></div></div>
+
+<h2 id="kubeadm-kubelet-및-kubectl-설치하기">kubeadm, kubelet 및 kubectl 설치하기</h2>
+
+<p><strong>kubeadm은 kubelet 또는 kubectl 을 설치하거나 관리하지 않으므로, kubeadm이 설치하려는 쿠버네티스 컨트롤 플레인의 버전과 일치하는지 확인해야 합니다</strong>
+따라서 kubeadm 및 쿠버네티스를 업그레이드 할 때에는 버전에 신경쓰셔야 합니다.</p>
+
+<p>아래에서는 kubeadm, kubelet, 및 kubectl 설치후에 업데이트를 홀드 시킴으로써 실수로 <code>sudo apt-get update</code>
+실행한 커맨드가 해당 패키지에 영향이 가지 않도록 할것입니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 패키지 색인을 최신으로 업데이트하고, kubeadm, kubelet, 및 kubectl 를 설치하는데 필요한 패키지 설치하기.</span>
+<span class="nv">$ </span><span class="nb">sudo </span>apt-get update
+<span class="nv">$ </span><span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> apt-transport-https ca-certificates curl
+
+<span class="c"># 구글 클라우드의 공개 사이닝 키를 다운로드 하기.</span>
+<span class="nv">$ </span><span class="nb">sudo </span>curl <span class="nt">-fsSLo</span> /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+<span class="c"># 쿠버네티스 apt 리포지터리를 추가하기.</span>
+<span class="c"># *apt리포는 apt 도구로 읽을 수있는 deb 패키지 및 메타 데이터 파일이 포함 된 네트워크 서버 또는 로컬 디렉토리입니다*</span>
+<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"</span> | <span class="nb">sudo tee</span> /etc/apt/sources.list.d/kubernetes.list
+
+<span class="c"># apt 패키지 색인을 업데이트 후 kubeadm, kubelet 및 kubectl다운로드 한다음, 버전 고정시키기.</span>
+<span class="nv">$ </span><span class="nb">sudo </span>apt-get update
+<span class="nv">$ </span><span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> kubelet kubeadm kubectl
+<span class="nv">$ </span><span class="nb">sudo </span>apt-mark hold kubelet kubeadm kubectl
+</code></pre></div></div>
+
+<h1 id="처음부터-이-줄-윗부분까지는-마스터노드와-워커노드-모두에-적용되어야-할-내용입니다">처음부터 이 줄 윗부분까지는 마스터노드와 워커노드 모두에 적용되어야 할 내용입니다.</h1>
+
+<hr />
+
+<hr />
+
+<h2 id="마스터-노드-세팅">마스터 노드 세팅</h2>
+
+<p>마스터 노드를 실행시키려면 <code>kubeadm init</code> 커맨드를 사용해야합니다.
+해당명령어에는 여러가지 옵션이 들어가는데, 여기서 필요한 옵션값은 다음과 같습니다.</p>
 
 <ul>
-  <li>노드 컨트롤러: 노드가 응답을 멈춘 후 클라우드 상에서 삭제되었는지 판별하기 위해 클라우드 제공 사업자에게 확인하는 것</li>
-  <li>라우트 컨트롤러: 기본 클라우드 인프라에 경로를 구성하는 것</li>
-  <li>서비스 컨트롤러: 클라우드 제공 사업자 로드밸런서를 생성, 업데이트 그리고 삭제하는 것</li>
+  <li>–pod-network-cidr : Pod 네트워크를 설정할 때 사용</li>
+  <li>–apiserver-advertise-address : 특정 마스터 노드의 API Server 주소를 설정할 때 사용</li>
 </ul>
-
-<h1 id="rocket-워커-노드">
-<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> 워커 노드</h1>
-<p>워커 노드는 마스터로부터 전달받은 명령에 따라 컨테이너를 실행합니다.</p>
-
-<h2 id="kubelet노드-관리자">kubelet(노드 관리자)</h2>
-<p>클러스터의 각 노드에서 실행되는 핵심 컴포넌트로 다양한 메커니즘을 통해 제공된 명세(Spec)의 집합을 받아서 컨테이너를 실행시킵니다. 여기서 끝나는 것이 아니라 정상적으로 동작하는지 지속적으로 모니터링하고 주기적으로 마스터 노드의 api 서버와 통신하여 정보를 주고받습니다.</p>
-
-<h2 id="kube-proxy">kube-proxy</h2>
-<p>클러스터의 각 노드에서 실행되는 네트워크 프록시로, 쿠버네티스의 서비스 오브젝트를 구현합니다. 즉 노드의 네트워크 규칙을 관리하여 서비스마다 개별 IP를 가질 수 있게 만들어주고 클러스터 내부나 외부의 트래픽을 Pod로 전달할 수있도록 해줍니다.</p>
-
-<h2 id="container-runtime">container runtime</h2>
-<p>실제 컨테이너 실행을 담당하는 소프트웨어이다. 예를 들어 도커, CRI-O, containerd 등이 있습니다.</p>
-</div>
-<section class="article__sharing d-print-none"></section><div class="d-print-none">
-<footer class="article__footer"><meta itemprop="dateModified" content="2021-05-26T00:00:00+09:00">
-<!-- start custom article footer snippet -->
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-27T00:00:00+09:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
-<div class="article__subscribe">
-<div class="subscribe">
-<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
-</div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
 </div></footer>
-<div class="article__section-navigator clearfix">
-<div class="previous">
-<span>이전</span><a href="/2021/05/22/Learning-Docker-03.html">[ #3 ] Dockerfiled에서 자주 쓰이는 명령어</a>
-</div>
-<div class="next">
-<span>다음</span><a href="/2021/05/27/Learning-Kubernetes-02.html">[ #2 ] Kubernetes 설치 및 환경 구성하기 </a>
-</div>
-</div>
-</div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/05/26/Learning-Kubernetes-01.html">[ #1 ] Kubernetes의 구조</a></div></div></div>
 
 </div>
 
@@ -510,39 +699,30 @@ I am a value
   });
 })();
 </script>
-</div>
-<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div>
-<div class="page__footer d-print-none">
+            </div></div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main">
-<div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong">
-<meta itemprop="url" content="/">
-<div class="footer__author-links">
-<div class="author-links">
+  <div class="main"><div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a>
-</li></ul>
+      </a></ul>
 </div>
 </div>
-    </div>
-<div class="site-info mt-2">
+    </div><div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div>
-</div>
-    </div>
-<script>(function() {
+</div></div>
+    </div><script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -606,8 +786,7 @@ I am a value
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
-<script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -699,7 +878,7 @@ I am a value
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text">
+        <input type="text" />
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -823,8 +1002,7 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div>
-</div>
+</div></div>
 
 
 <script>(function() {

@@ -280,6 +280,30 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/04/28/Learning-React-08.html"><h2 itemprop="headline" class="item__header">[ #8 ] Portal, useRef</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. Portal을 사용하기.
+
+//index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import './index.css';
+import App from './App';
+
+ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
+
+modal, overlayed popup같은 경우는 따로 분리해서 보여주는게 맞다고 합니다. 하지만 어떻게 그렇게 할 수 있을까요?.
+
+//index.html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;he...</div><p><a href="/2021/04/28/Learning-React-08.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=React">React</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 04월 28일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-28T00:00:00+09:00">
+    <meta itemprop="keywords" content="React"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/04/27/Learning-React-07.html"><h2 itemprop="headline" class="item__header">[ #7 ] 3 ways to fullfill jsx's requirement</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">JSX requirement
 
@@ -436,7 +460,7 @@ function App() {
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-24T00:00:00+09:00">
     <meta itemprop="keywords" content="React"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 15개, 2 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 16개, 2 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/">
             <i class="fas fa-angle-left"></i>
