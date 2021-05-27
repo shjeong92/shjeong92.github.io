@@ -350,3 +350,235 @@ $ sudo apt-mark hold kubelet kubeadm kubectl
 
 + --pod-network-cidr : Pod 네트워크를 설정할 때 사용
 + --apiserver-advertise-address : 특정 마스터 노드의 API Server 주소를 설정할 때 사용
+
+## Pod 네트워크 설정
+우선 세팅할 클러스터에서 Pod가 서로 통신할 수 있도록 Pod 네트워크 애드온을 설치 해야 합니다.
+kubeadm을 통해 만들어진 클러스터는 CNI(Container Network Interface) 기반의 애드온이 필요합니다.
+
+기본적으로 k8s에서 제공해주는 kubenet이라는 네트워크 플러그인이 있지만, 
+매우 기본적이고 간단한 기능만 제공하는 네트워크 플러그인이기 때문에 이 자체로는 크로스 노드 네트워킹이나 네트워크 정책과 같은 기능들은 구현되어 있지 않습니다.
+따라서 kubeadm은 kubernetes가 기본적으로 지원해주는 네트워크 플러그인인 kubenet을 지원하지 않고, CNI 기반 네트워크만 지원합니다.
+여기서는 Flannel이라는 Pod 네트워크 애드온을 설치하여 사용할 것입니다.
+<br>
+Flannel을 사용하려면 kubeadm init 명령어에 --pod-network-cidr=10.244.0.0/16 이라는 인자를 추가해서 실행해야 하며,
+ 10.244.0.0/16 이라는 네트워크는 Flannel에서 기본적으로 권장하는 네트워크 대역입니다.
+<br>
+Pod 네트워크가 호스트 네트워크와 겹치면 문제가 발생할 수 있기 때문에 일부로 호스트 네트워크로 잘 사용하지 않을 것 같은 네트워크 대역을 권장하는 것입니다.
+
+## API Server 주소 설정
+~~~sh
+#마스터노드입니다.
+$ ifconfig 
+
+cni0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1410
+        inet 10.244.0.1  netmask 255.255.255.0  broadcast 10.244.0.255
+        inet6 fe80::44f7:e3ff:fe0e:7d15  prefixlen 64  scopeid 0x20<link>
+        ether 46:f7:e3:0e:7d:15  txqueuelen 1000  (Ethernet)
+        RX packets 48997  bytes 4021971 (4.0 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 54114  bytes 4910238 (4.9 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+        ether 02:42:29:4d:09:4f  txqueuelen 0  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+ens4: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1460
+        inet 10.178.0.2  netmask 255.255.255.255  broadcast 0.0.0.0
+        inet6 fe80::4001:aff:feb2:2  prefixlen 64  scopeid 0x20<link>
+        ether 42:01:0a:b2:00:02  txqueuelen 1000  (Ethernet)
+        RX packets 456862  bytes 219264003 (219.2 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 291537  bytes 122783503 (122.7 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+~~~
+
+위 <code>ifconfig</code> 커맨드의 출력에서 해당 마스터 노드의 IPv4 주소는 ens4 이더넷의 10.178.0.2 인것을 확인할 수 있고, 
+<br>
+<code>--apiserver-advertise-address</code> 옵션을 통해 해당 주소를 kubeadm 에게 전달할 수 있습니다.
+
+## :rocket:마스터 노드 생성 및 실행
+
+최종적으로 실행할 <code> kubeadm init </code>는 아래와 같습니다.
+
+~~~sh
+$ sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.178.0.2
+~~~
+
+해당 명령어를 실행했을때 뜨는 결과 창인데요 여기서 짚고가야할 두가지가 있습니다
+
+~~~sh
+$ sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.178.0.2
+[init] Using Kubernetes version: v1.21.1
+[preflight] Running pre-flight checks
+[preflight] Pulling images required for setting up a Kubernetes cluster
+[preflight] This might take a minute or two, depending on the speed of your internet connection
+[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'
+[certs] Using certificateDir folder "/etc/kubernetes/pki"
+[certs] Generating "ca" certificate and key
+[certs] Generating "apiserver" certificate and key
+[certs] apiserver serving cert is signed for DNS names [kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local master] and IPs [10.96.0.1 10.178.0.2]
+[certs] Generating "apiserver-kubelet-client" certificate and key
+[certs] Generating "front-proxy-ca" certificate and key
+[certs] Generating "front-proxy-client" certificate and key
+[certs] Generating "etcd/ca" certificate and key
+[certs] Generating "etcd/server" certificate and key
+[certs] etcd/server serving cert is signed for DNS names [localhost master] and IPs [10.178.0.2 127.0.0.1 ::1]
+[certs] Generating "etcd/peer" certificate and key
+[certs] etcd/peer serving cert is signed for DNS names [localhost master] and IPs [10.178.0.2 127.0.0.1 ::1]
+[certs] Generating "etcd/healthcheck-client" certificate and key
+[certs] Generating "apiserver-etcd-client" certificate and key
+[certs] Generating "sa" key and public key
+[kubeconfig] Using kubeconfig folder "/etc/kubernetes"
+[kubeconfig] Writing "admin.conf" kubeconfig file
+[kubeconfig] Writing "kubelet.conf" kubeconfig file
+[kubeconfig] Writing "controller-manager.conf" kubeconfig file
+[kubeconfig] Writing "scheduler.conf" kubeconfig file
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Starting the kubelet
+[control-plane] Using manifest folder "/etc/kubernetes/manifests"
+[control-plane] Creating static Pod manifest for "kube-apiserver"
+[control-plane] Creating static Pod manifest for "kube-controller-manager"
+[control-plane] Creating static Pod manifest for "kube-scheduler"
+[etcd] Creating static Pod manifest for local etcd in "/etc/kubernetes/manifests"
+[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory "/etc/kubernetes/manifests". This can take up to 4m0s
+[apiclient] All control plane components are healthy after 12.003615 seconds
+[upload-config] Storing the configuration used in ConfigMap "kubeadm-config" in the "kube-system" Namespace
+[kubelet] Creating a ConfigMap "kubelet-config-1.21" in namespace kube-system with the configuration for the kubelets in the cluster
+[upload-certs] Skipping phase. Please see --upload-certs
+[mark-control-plane] Marking the node master as control-plane by adding the labels: [node-role.kubernetes.io/master(deprecated) node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers]
+[mark-control-plane] Marking the node master as control-plane by adding the taints [node-role.kubernetes.io/master:NoSchedule]
+[bootstrap-token] Using token: ol9g7l.d1f7klw0uh9kmsm5
+[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to get nodes
+[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstrap-token] configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstrap-token] configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstrap-token] Creating the "cluster-info" ConfigMap in the "kube-public" namespace
+[kubelet-finalize] Updating "/etc/kubernetes/kubelet.conf" to point to a rotatable kubelet client certificate and key
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 10.178.0.2:6443 --token ol9g7l.d1f7klw0uh9kmsm5 \
+	--discovery-token-ca-cert-hash sha256:723e45876b6726f23ff39566d6ae9046423edae440fd76bd328b40ab9b0a8b7d 
+~~~
+
+
+---
+
+~~~sh
+# 첫째로는 마스터노드에서 실행해야할 커맨드에요
+$ mkdir -p $HOME/.kube
+$ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+$ sudo chown $(id -u):$(id -g) $HOME/.kube/config
+~~~
+해당 명령어는 Root 계정이 아닌 다른 사용자 계정에서 kubectl 커맨드 명령어를 사용하여 클러스터를 제어하기 위해 사용하는 명령어입니다.
+기본적으로 kubernetes에서는 /etc/kubernetes/admin.conf 파일을 가지고 kubernetes 관리자 Role의 인증 및 인가 처리를 하며, 
+위 명령어는 사용자 계정의 $HOME/.kube/config 디렉터리에 admin.conf 파일을 복사함으로써 사용자 계정이 kubectl을 사용하면서 관리자 Role의 인증 및 인가 처리를 받을 수 있도록 하는 것입니다.
+여기서 말한 사용자 계정이란, 마스터 노드의 Shell에 접속한 계정입니다.
+
+
+
+
+~~~sh
+#두번째로는 각각의 워커노드에 실행시켜줄 커맨드에요 메모장에 복사붙여놓기 해놓으시길 추천드립니다!
+
+$ kubeadm join 10.178.0.2:6443 --token ol9g7l.d1f7klw0uh9kmsm5 \
+	--discovery-token-ca-cert-hash sha256:723e45876b6726f23ff39566d6ae9046423edae440fd76bd328b40ab9b0a8b7d 
+~~~
+잃어버리면 토큰 다시받아야하고 귀찮아집니다
+물론 24시간지나면 토큰 다시 받아야하긴 하지만요 ㅎㅎ
+
+## Flanner 사용을 위해 Pod 네트워크 배포하기
+
+~~~sh
+$ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+~~~
+이 명령어를 실행하면 아래와 같은 메세지를 확인할 수 있습니다.
+
+~~~sh
+podsecuritypolicy.policy/psp.flannel.unprivileged created
+clusterrole.rbac.authorization.k8s.io/flannel created
+clusterrolebinding.rbac.authorization.k8s.io/flannel created
+serviceaccount/flannel created
+configmap/kube-flannel-cfg created
+daemonset.apps/kube-flannel-ds created
+~~~
+
+이제 마스터 노드가 잘 세팅되었는지 아래 명령어를 통해 확인해볼 수 있습니다.
+
+~~~sh
+노드 확인하기
+$ kubectl get nodes
+NAME         STATUS   ROLES                  AGE   VERSION
+master       Ready    control-plane,master   49m   v1.21.1
+
+마스터 노드 내의 모든 pod 확인하기
+$ kubectl get pods --all-namespaces
+NAMESPACE     NAME                             READY   STATUS    RESTARTS   AGE
+kube-system   coredns-558bd4d5db-8mclv         1/1     Running   0          49m
+kube-system   coredns-558bd4d5db-qbs2t         1/1     Running   0          49m
+kube-system   etcd-master                      1/1     Running   0          50m
+kube-system   kube-apiserver-master            1/1     Running   0          50m
+kube-system   kube-controller-manager-master   1/1     Running   0          50m
+kube-system   kube-flannel-ds-dmbnj            1/1     Running   0          45m
+kube-system   kube-flannel-ds-gmhfd            1/1     Running   0          44m
+kube-system   kube-flannel-ds-h27rp            1/1     Running   0          46m
+kube-system   kube-flannel-ds-smnhd            1/1     Running   0          45m
+kube-system   kube-proxy-2hxsg                 1/1     Running   0          49m
+kube-system   kube-proxy-dhgfh                 1/1     Running   0          44m
+kube-system   kube-proxy-q9kwk                 1/1     Running   0          45m
+kube-system   kube-proxy-x7m4d                 1/1     Running   0          45m
+kube-system   kube-scheduler-master            1/1     Running   0          50m
+
+~~~
+
+## 워커 노드 세팅
+
+마스터 노드 생성후 출력된 메세지 맨아래에서 저장 해놓으라고 했던부분을 쓸 시간이 왔습니다.
+
+
+**연결하고싶은 모든 워커노드에 아래 커맨드를 입력해주세요**
+~~~sh
+
+$ kubeadm join 10.178.0.2:6443 --token ol9g7l.d1f7klw0uh9kmsm5 \
+	--discovery-token-ca-cert-hash sha256:723e45876b6726f23ff39566d6ae9046423edae440fd76bd328b40ab9b0a8b7d 
+~~~
+
+## 마스터노드에서 확인하기
+
+원래 두개 등록되어있었는데 포스트 작성하면서 하나 더만들어졌네요
+두번째 만들때는 그래도 수월하게 진행한것 같습니다.
+~~~sh
+$ kubectl get nodes
+NAME         STATUS   ROLES                  AGE   VERSION
+instance-1   Ready    <none>                 44m   v1.21.1
+master       Ready    control-plane,master   49m   v1.21.1
+worker-1     Ready    <none>                 44m   v1.21.1
+worker-2     Ready    <none>                 44m   v1.21.1
+~~~
+
+긴 글 보시느라 고생많으셨습니다.
