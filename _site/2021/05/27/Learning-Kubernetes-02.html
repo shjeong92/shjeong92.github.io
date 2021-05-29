@@ -337,6 +337,8 @@
 
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody">
+<hr>
+
 <p>minikube를 이용하면 정말 간단하게 로컬머신에 테스트환경을 구성할 수 있었습니다 또한 <code>kubectl</code> 커맨드에 친숙해지는데 잘 활용했었지요,
  하지만 이는 싱글 노드 클러스트이고, 다른 노드를 추가할 수 없습니다. 그 말은 즉 진또배기 쿠버네티스를 체험할 수 없는것이며 모는 기능을 제대로 체험할 수 없다는 것이지요.</p>
 
@@ -367,6 +369,8 @@
   <li>RAM : 2 GB</li>
   <li>Storage : 30 GB</li>
 </ul>
+
+<hr>
 
 <h2 id="kubeadm을-활용한-환경구축">kubeadm을 활용한 환경구축</h2>
 
@@ -421,6 +425,8 @@ kubernetes 클러스터를 빨리 구축하기 위한 다양한 기능을 제공
   </li>
 </ul>
 
+<hr>
+
 <h2 id="시작하기전에-확인할-것">시작하기전에 확인할 것</h2>
 
 <ul>
@@ -435,6 +441,8 @@ kubernetes 클러스터를 빨리 구축하기 위한 다양한 기능을 제공
 swapoff <span class="nt">-a</span>
 </code></pre></div></div>
 
+<hr>
+
 <h2 id="모든-노드의-mac-address-및-product_uuid-확인">모든 노드의 Mac address 및 product_uuid 확인</h2>
 
 <p>로컬 머신의경우 하드웨어 기기들은 각각의 유니크한 주소를 가지는 반면에 가상 머신은 같은 id를 가질 수도 있습니다.
@@ -448,7 +456,9 @@ ifconfig <span class="nt">-a</span>
 </code></pre></div></div>
 <p>위 쉘 커맨드를 각각의노드에 적용하여 중복되는 맥주소나 제품아이디가 있는지 확인합니다.</p>
 
-<p>##iptables 설정하기</p>
+<hr>
+
+<h2 id="iptables-설정하기">iptables 설정하기</h2>
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#br_netfilter모듈 로드되었는지 확인하기</span>
 <span class="nv">$ </span>lsmod | <span class="nb">grep </span>br_netfilter
 <span class="c"># 아무정보도 뜨지않는다.</span>
@@ -535,6 +545,8 @@ net.bridge.bridge-nf-call-iptables = 1
 
 </code></pre></div></div>
 
+<hr>
+
 <h2 id="필수-포트-확인하기">필수 포트 확인하기</h2>
 <p><strong>마스터 노드에서 필요한 필수 노트</strong></p>
 <ul>
@@ -550,6 +562,8 @@ net.bridge.bridge-nf-call-iptables = 1
   <li>10250 포트 : Kubelet API / Used By Self, Control plane</li>
   <li>30000~32767 포트 : NodePort Services / Used By All</li>
 </ul>
+
+<hr>
 
 <h2 id="컨테이너-런타임-설치하기">컨테이너 런타임 설치하기</h2>
 <p>저는 docker를 설치할 것입니다..</p>
@@ -635,7 +649,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 </code></pre></div></div>
 
 <p>Docker 설치가 완료 되었으면, Docker 데몬이 사용하는 드라이버를 cgroupfs 대신 systemd를 사용하도록 설정합니다
-왜냐하면 kubernetes에서 권장하는 Docker 데몬의 드라이버는 systemd 이기 때문이고, systemd를 사용하면 kubernetes가 클러스터 노드에서 사용 가능한 자원을 쉽게 알 수 있도록 해주기 때문이다.
+왜냐하면 kubernetes에서 권장하는 Docker 데몬의 드라이버는 systemd 이기 때문이고, systemd를 사용하면 kubernetes가 클러스터 노드에서 사용 가능한 자원을 쉽게 알 수 있도록 해주기 때문입니다.
 또한, 시스템에 두개의 cgroup관리자가 있으면 리소스가 부족할 때 불안정해지는 사례가 있다고 하니 무조건적으로 설정해줍시다.
 아래 명령어를 통해 Docker 데몬의 드라이버를 교체합니다.</p>
 
@@ -657,6 +671,8 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 <span class="nv">$ </span><span class="nb">sudo </span>systemctl daemon-reload
 <span class="nv">$ </span><span class="nb">sudo </span>systemctl restart docker
 </code></pre></div></div>
+
+<hr>
 
 <h2 id="kubeadm-kubelet-및-kubectl-설치하기">kubeadm, kubelet 및 kubectl 설치하기</h2>
 
@@ -683,9 +699,9 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 <span class="nv">$ </span><span class="nb">sudo </span>apt-mark hold kubelet kubeadm kubectl
 </code></pre></div></div>
 
-<h1 id="처음부터-이-줄-윗부분까지는-마스터노드와-워커노드-모두에-적용되어야-할-내용입니다">처음부터 이 줄 윗부분까지는 마스터노드와 워커노드 모두에 적용되어야 할 내용입니다.</h1>
-
-<hr>
+<h1 id="star처음부터-이-줄-윗부분까지는-마스터노드와-워커노드-모두에-적용되어야-할-내용입니다star">
+<img class="emoji" title=":star:" alt=":star:" src="https://github.githubassets.com/images/icons/emoji/unicode/2b50.png" height="20" width="20">처음부터 이 줄 윗부분까지는 마스터노드와 워커노드 모두에 적용되어야 할 내용입니다<img class="emoji" title=":star:" alt=":star:" src="https://github.githubassets.com/images/icons/emoji/unicode/2b50.png" height="20" width="20">
+</h1>
 
 <hr>
 
@@ -927,9 +943,14 @@ worker-2     Ready    &lt;none&gt;                 44m   v1.21.1
 <i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
 </div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous">
+<div class="article__section-navigator clearfix">
+<div class="previous">
 <span>이전</span><a href="/2021/05/26/Learning-Kubernetes-01.html">[ #1 ] Kubernetes의 구조</a>
-</div></div>
+</div>
+<div class="next">
+<span>다음</span><a href="/2021/05/28/Learning-Kubernetes-03.html">[ #3 ] Replicasets &amp; Deployment </a>
+</div>
+</div>
 </div>
 
 </div>

@@ -4,6 +4,8 @@ title: "[ #2 ] Kubernetes 설치 및 환경 구성하기 "
 tags: Docker Kubernetes CKA 도커 컨테이너 container etcd Google cloud
 ---
 
+---
+
 minikube를 이용하면 정말 간단하게 로컬머신에 테스트환경을 구성할 수 있었습니다 또한 <code>kubectl</code> 커맨드에 친숙해지는데 잘 활용했었지요,
  하지만 이는 싱글 노드 클러스트이고, 다른 노드를 추가할 수 없습니다. 그 말은 즉 진또배기 쿠버네티스를 체험할 수 없는것이며 모는 기능을 제대로 체험할 수 없다는 것이지요.
 
@@ -33,6 +35,8 @@ minikube를 이용하면 정말 간단하게 로컬머신에 테스트환경을 
 + RAM : 2 GB
 + Storage : 30 GB
 
+---
+
 ## kubeadm을 활용한 환경구축
 
 <code>kubeadm</code>이란, kubernetes에서 제공하는 기본적인 도구이며, 
@@ -57,6 +61,7 @@ kubernetes 클러스터를 빨리 구축하기 위한 다양한 기능을 제공
 + **kubeadm alpha**
   - 정식으로 배포된 기능은 아니지만 kubernetes측에서 사용자 피드백을 얻기 위해 인증서 갱신, 인증서 만료 확인, 사용자 생성, kubelet 설정 등 다양한 기능을 제공한다고 합니다.
 
+--- 
 
 ## 시작하기전에 확인할 것
 
@@ -70,6 +75,8 @@ kubernetes 클러스터를 빨리 구축하기 위한 다양한 기능을 제공
 #swap 비활성화하기
 swapoff -a
 ~~~
+
+--- 
 
 ## 모든 노드의 Mac address 및 product_uuid 확인
 
@@ -85,8 +92,9 @@ sudo cat /sys/class/dmi/id/product_uuid
 ~~~
 위 쉘 커맨드를 각각의노드에 적용하여 중복되는 맥주소나 제품아이디가 있는지 확인합니다.
 
+--- 
 
-##iptables 설정하기
+## iptables 설정하기
 ~~~sh
 #br_netfilter모듈 로드되었는지 확인하기
 $ lsmod | grep br_netfilter
@@ -183,6 +191,7 @@ net.bridge.bridge-nf-call-iptables = 1
 ~~~
 
 
+--- 
 
 ## 필수 포트 확인하기
 **마스터 노드에서 필요한 필수 노트**
@@ -197,6 +206,7 @@ net.bridge.bridge-nf-call-iptables = 1
 + 10250 포트 : Kubelet API / Used By Self, Control plane
 + 30000~32767 포트 : NodePort Services / Used By All
 
+--- 
 
 ## 컨테이너 런타임 설치하기
 저는 docker를 설치할 것입니다..
@@ -286,7 +296,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ~~~
 
 Docker 설치가 완료 되었으면, Docker 데몬이 사용하는 드라이버를 cgroupfs 대신 systemd를 사용하도록 설정합니다
-왜냐하면 kubernetes에서 권장하는 Docker 데몬의 드라이버는 systemd 이기 때문이고, systemd를 사용하면 kubernetes가 클러스터 노드에서 사용 가능한 자원을 쉽게 알 수 있도록 해주기 때문이다.
+왜냐하면 kubernetes에서 권장하는 Docker 데몬의 드라이버는 systemd 이기 때문이고, systemd를 사용하면 kubernetes가 클러스터 노드에서 사용 가능한 자원을 쉽게 알 수 있도록 해주기 때문입니다.
 또한, 시스템에 두개의 cgroup관리자가 있으면 리소스가 부족할 때 불안정해지는 사례가 있다고 하니 무조건적으로 설정해줍시다.
 아래 명령어를 통해 Docker 데몬의 드라이버를 교체합니다.
 
@@ -310,6 +320,7 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl restart docker
 ~~~
 
+---
 
 ## kubeadm, kubelet 및 kubectl 설치하기
 
@@ -337,11 +348,10 @@ $ sudo apt-get install -y kubelet kubeadm kubectl
 $ sudo apt-mark hold kubelet kubeadm kubectl
 ~~~
 
-# 처음부터 이 줄 윗부분까지는 마스터노드와 워커노드 모두에 적용되어야 할 내용입니다.
+# :star:처음부터 이 줄 윗부분까지는 마스터노드와 워커노드 모두에 적용되어야 할 내용입니다:star:
 
 --- 
 
----
 
 ## 마스터 노드 세팅
 

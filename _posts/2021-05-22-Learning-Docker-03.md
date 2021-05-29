@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "[ #3 ] Dockerfiled에서 자주 쓰이는 명령어"
+title: "[ #3 ] Dockerfile에서 자주 쓰이는 명령어"
 tags: Docker network 도커 네트워크 컨테이너 명령어 
 ---
 
