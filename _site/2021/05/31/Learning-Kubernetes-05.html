@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #4 ] pod 스케쥴링-1  - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #5 ] pod 스케쥴링-2  - Hyuk's devlog</title>
 
-<meta name="description" content="Taint &amp; Toleration  taint: 노드마다 설정가능  toleration: taint를 무시할 수 있음주로 노드를 지정된 역할만 하게할때 사용합니다.예를들어 gpu잇는 노드에는 다른 pod들은 올라가지않고 gpu쓰는 pod들만 올라가게 하는등의 상황에 사용할 ...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="nodeSelectornodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.1. 노드에 레이블 붙이기노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.kubectl label nodes &lt;노드 이름&...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -254,246 +254,175 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root">
-<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner">
-<div class="page__header d-print-none">
-<header class="header"><div class="main">
+      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
+        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a>
-</div>
-<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
-</div>
-<nav class="navigation">
-        <ul>
-<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
-<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
-</ul>
-      </nav>
-</div>
+" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+      </nav></div>
   </header>
-</div>
-<div class="page__content"><div class="main"><div class="grid grid--reverse">
+</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
               <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
 </aside></div>
 
-              <div class="col-main cell cell--auto">
-<!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #4 ] pod 스케쥴링-1 </h1></header></div>
-<meta itemprop="headline" content="[ #4 ] pod 스케쥴링-1 ">
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Deployment">Deployment</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Google">Google</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=cloud">cloud</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 30일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-30T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
-<div class="js-article-content">
-<div class="layout--article">
-<!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #5 ] pod 스케쥴링-2 </h1></header></div><meta itemprop="headline" content="[ #5 ] pod 스케쥴링-2 "><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Replicasets">Replicasets</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Deployment">Deployment</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Google">Google</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=cloud">cloud</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody">
-<h2 id="taint--toleration">Taint &amp; Toleration</h2>
+<div class="article__content" itemprop="articleBody"><h2 id="nodeselector">nodeSelector</h2>
+<p>nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.</p>
+<h3 id="1-노드에-레이블-붙이기">1. 노드에 레이블 붙이기</h3>
 
-<ul>
-  <li>taint: 노드마다 설정가능</li>
-  <li>toleration: taint를 무시할 수 있음</li>
-</ul>
-
-<p>주로 노드를 지정된 역할만 하게할때 사용합니다.
-예를들어 gpu잇는 노드에는 다른 pod들은 올라가지않고 gpu쓰는 pod들만 올라가게 하는등의 상황에 사용할 수 있습니다.</p>
-
-<p><br>
-taint에는 사용할 수 있는 3가지 옵션이 있습니다.</p>
-
-<ul>
-  <li>NoSchedule : toleration이 없으면 pod이 스케쥴되지 않음, 기존 실행되던 pod에는 적용 안됨</li>
-  <li>PreferNoSchedule : toleration이 없으면 pod을 스케줄링안하려고 하지만 필수는 아님, 클러스터내에 자원이 부족하거나 하면 taint가 걸려있는 노드에서도 pod이 스케줄링될 수 있음</li>
-  <li>NoExecute : toleration이 없으면 pod이 스케줄되지 않으며 기존에 실행되던 pod도 toleration이 없으면 종료시킴.</li>
-</ul>
-
-<p>taint 형식은 다음과 같습니다.</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl taint node <span class="o">{</span>nodename<span class="o">}</span> <span class="o">{</span>key<span class="o">}={</span>value<span class="o">}</span>:<span class="o">{</span>option<span class="o">}</span>
-</code></pre></div></div>
-<p>하나의 노드에 taint 적용하기</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl taint node worker-1 <span class="nv">key</span><span class="o">=</span>value:NoSchedule
-node/worker-1 tainted
+<p>노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl label nodes &lt;노드 이름&gt; &lt;레이블 키&gt;<span class="o">=</span>&lt;레이블 값&gt;
 </code></pre></div></div>
 
-<p>describe로 잘 적용 되었는지 확인해 봅시다.</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl describe node worker-1 | <span class="nb">grep</span> <span class="nt">-i</span> taint
-Taints:             <span class="nv">key</span><span class="o">=</span>value:NoSchedule
-</code></pre></div></div>
-<p>잘 적용이 되었군요.</p>
+<h3 id="2-pod설정에-nodeselector-필드-추가하기">2. pod설정에 nodeSelector 필드 추가하기</h3>
+<p>실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면</p>
 
-<p>taint의 옵션이 <code>NoSchedule</code> 이므로 pod에 toleration 필드에 같은 key, value가 없다면 생성되지 않겠죠?
-확인해봅시다.</p>
-
-<h3 id="rocket테스트해보기">
-<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20">테스트해보기</h3>
-<p>Deployment로 pod을 띄어보겠습니다.</p>
-
-<p><strong>환경</strong>:<br>
-실습에 사용한 클러스터는 마스터노드1개 워커노드3개로 구성되었으며,
-<br>
-이름은 다음과 같고, 워커노드들의 cpu와 ram스팩은 모두 같게 설정하였습니다. <br>
-taint는 worker-1 노드에 설정하였습니다.
-master</p>
-<ul>
-  <li>worker-1</li>
-  <li>worker-2</li>
-  <li>instance-1</li>
-</ul>
-
-<p>우선 pod을 세개 생성하는 test-taint.yaml이라는 deployment를 만들어줍니다</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl create deployment test-taint <span class="nt">--image</span><span class="o">=</span>nginx <span class="nt">--replicas</span><span class="o">=</span>3 <span class="nt">--dry-run</span><span class="o">=</span>client <span class="nt">-o</span> yaml <span class="o">&gt;</span> test-taint.yaml
-</code></pre></div></div>
-
-<p>yaml파일을 열어보면 이렇습니다.</p>
-
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
 <span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="no">null</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">nginx</span>
   <span class="na">labels</span><span class="pi">:</span>
-    <span class="na">app</span><span class="pi">:</span> <span class="s">test-taint</span>
-  <span class="na">name</span><span class="pi">:</span> <span class="s">test-taint</span>
+    <span class="na">env</span><span class="pi">:</span> <span class="s">test</span>
 <span class="na">spec</span><span class="pi">:</span>
-  <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
-  <span class="na">selector</span><span class="pi">:</span>
-    <span class="na">matchLabels</span><span class="pi">:</span>
-      <span class="na">app</span><span class="pi">:</span> <span class="s">test-taint</span>
-  <span class="na">strategy</span><span class="pi">:</span> <span class="pi">{}</span>
-  <span class="na">template</span><span class="pi">:</span>
-    <span class="na">metadata</span><span class="pi">:</span>
-      <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="no">null</span>
-      <span class="na">labels</span><span class="pi">:</span>
-        <span class="na">app</span><span class="pi">:</span> <span class="s">test-taint</span>
-    <span class="na">spec</span><span class="pi">:</span>
-      <span class="na">containers</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">image</span><span class="pi">:</span> <span class="s">nginx</span>
-        <span class="na">name</span><span class="pi">:</span> <span class="s">nginx</span>
-        <span class="na">resources</span><span class="pi">:</span> <span class="pi">{}</span>
-<span class="na">status</span><span class="pi">:</span> <span class="pi">{}</span>
+  <span class="na">containers</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">nginx</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx</span>
 </code></pre></div></div>
 
-<p>만들어진 yaml파일을 apply 해봅시다.</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl apply <span class="nt">-f</span> test-taint.yaml
-deployment.apps/test-taint created
-</code></pre></div></div>
-<p>pod을 확인해보면 taint를 설정한 node에는 pod이 배정되지 않은것을 확인 할 수 있습니다.</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get pods <span class="nt">-o</span> wide
-NAME                          READY   STATUS    RESTARTS   AGE    IP           NODE         NOMINATED NODE   READINESS GATES
-test-taint-6bd4977499-2thmv   1/1     Running   0          106s   10.244.3.7   instance-1   &lt;none&gt;           &lt;none&gt;
-test-taint-6bd4977499-4sccs   1/1     Running   0          106s   10.244.1.6   worker-2     &lt;none&gt;           &lt;none&gt;
-test-taint-6bd4977499-h4rt8   1/1     Running   0          106s   10.244.3.8   instance-1   &lt;none&gt;           &lt;none&gt;
-</code></pre></div></div>
+<p>spec아래에 nodeSelector을 추가해줍니다.</p>
 
-<p>이제 이 deployment를 삭제하고 toleration을 적용시킨후 다시 deployment를 apply 해보겠습니다.</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl delete deployment test-taint
-deployment.apps <span class="s2">"test-taint"</span> deleted
-
-<span class="nv">$ </span>vim test-taint.yaml
-</code></pre></div></div>
-<p>spec.template.spec 밑에 toleration옵션을 추가해줍니다.</p>
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
 <span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="no">null</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">nginx</span>
   <span class="na">labels</span><span class="pi">:</span>
-    <span class="na">app</span><span class="pi">:</span> <span class="s">test-taint</span>
-  <span class="na">name</span><span class="pi">:</span> <span class="s">test-taint</span>
+    <span class="na">env</span><span class="pi">:</span> <span class="s">test</span>
 <span class="na">spec</span><span class="pi">:</span>
-  <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
-  <span class="na">selector</span><span class="pi">:</span>
-    <span class="na">matchLabels</span><span class="pi">:</span>
-      <span class="na">app</span><span class="pi">:</span> <span class="s">test-taint</span>
-  <span class="na">strategy</span><span class="pi">:</span> <span class="pi">{}</span>
-  <span class="na">template</span><span class="pi">:</span>
-    <span class="na">metadata</span><span class="pi">:</span>
-      <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="no">null</span>
-      <span class="na">labels</span><span class="pi">:</span>
-        <span class="na">app</span><span class="pi">:</span> <span class="s">test-taint</span>
-    <span class="na">spec</span><span class="pi">:</span>
-      <span class="na">tolerations</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">key</span><span class="pi">:</span> <span class="s">key</span>
-        <span class="na">operator</span><span class="pi">:</span> <span class="s">Equal</span>
-        <span class="na">value</span><span class="pi">:</span> <span class="s">value</span>
-        <span class="na">effect</span><span class="pi">:</span> <span class="s">NoSchedule</span>
-      <span class="na">containers</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">image</span><span class="pi">:</span> <span class="s">nginx</span>
-        <span class="na">name</span><span class="pi">:</span> <span class="s">nginx</span>
-        <span class="na">resources</span><span class="pi">:</span> <span class="pi">{}</span>
-<span class="na">status</span><span class="pi">:</span> <span class="pi">{}</span>
+  <span class="na">containers</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">nginx</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx</span>
+    <span class="na">imagePullPolicy</span><span class="pi">:</span> <span class="s">IfNotPresent</span>
+  <span class="na">nodeSelector</span><span class="pi">:</span>
+    <span class="c1">#&lt;레이블 키&gt;: &lt;레이블 값&gt;</span>
+    <span class="na">disktype</span><span class="pi">:</span> <span class="s">ssd</span>
 </code></pre></div></div>
 
-<p>수정된 yaml파일 다시 배포하기:</p>
+<h2 id="node-affinity">node affinity</h2>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl apply <span class="nt">-f</span> test-taint.yaml
-deployment.apps/test-taint created
+<p><strong>nodeSelector</strong> 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.<br /></p>
+
+<p><strong>nodeAffinity</strong> 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다.</p>
+
+<p>또한 <strong>nodeAffinity</strong> 에는 아래와 같이 두가지 타입이 있습니다.</p>
+
+<ul>
+  <li>requiredDuringSchedulingIgnoredDuringExecution</li>
+  <li>preferredDuringSchedulingIgnoredDuringExecution</li>
+</ul>
+
+<p>첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다
+두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라
+pod이 스케쥴되는 형태입니다.</p>
+
+<p>미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서
+affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다.</p>
+
+<h3 id="예제">예제</h3>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">with-node-affinity</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">affinity</span><span class="pi">:</span>
+    <span class="na">nodeAffinity</span><span class="pi">:</span>
+      <span class="na">requiredDuringSchedulingIgnoredDuringExecution</span><span class="pi">:</span>
+        <span class="na">nodeSelectorTerms</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">matchExpressions</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="na">key</span><span class="pi">:</span> <span class="s">kubernetes.io/e2e-az-name</span>
+            <span class="na">operator</span><span class="pi">:</span> <span class="s">In</span>
+            <span class="na">values</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="s">e2e-az1</span>
+            <span class="pi">-</span> <span class="s">e2e-az2</span>
+      <span class="na">preferredDuringSchedulingIgnoredDuringExecution</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">weight</span><span class="pi">:</span> <span class="m">1</span>
+        <span class="na">preference</span><span class="pi">:</span>
+          <span class="na">matchExpressions</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="na">key</span><span class="pi">:</span> <span class="s">another-node-label-key</span>
+            <span class="na">operator</span><span class="pi">:</span> <span class="s">In</span>
+            <span class="na">values</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="s">another-node-label-value</span>
+  <span class="na">containers</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">with-node-affinity</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">k8s.gcr.io/pause:2.0</span>
 </code></pre></div></div>
 
-<p>pod 리스트를 다시 확인해보면 각 1개의노드에 1개의 pod이 생성된걸 확인할 수 있습니다.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ kubectl get pods -o wide
-NAME                          READY   STATUS    RESTARTS   AGE   IP           NODE         NOMINATED NODE   READINESS GATES
-test-taint-77b85b88c6-8hq5l   1/1     Running   0          43s   10.244.3.9   instance-1   &lt;none&gt;           &lt;none&gt;
-test-taint-77b85b88c6-957bv   1/1     Running   0          43s   10.244.1.7   worker-2     &lt;none&gt;           &lt;none&gt;
-test-taint-77b85b88c6-f6xn2   1/1     Running   0          43s   10.244.2.8   worker-1     &lt;none&gt;           &lt;none&gt;
-</code></pre></div></div>
-</div>
-<section class="article__sharing d-print-none"></section><div class="d-print-none">
-<footer class="article__footer"><meta itemprop="dateModified" content="2021-05-30T00:00:00+09:00">
-<!-- start custom article footer snippet -->
+<p>Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다.</p>
+
+<ul>
+  <li><strong>requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우</strong>:
+    <ul>
+      <li>조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다.</li>
+    </ul>
+  </li>
+  <li><strong>requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우</strong>:
+    <ul>
+      <li>첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다.</li>
+      <li>두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다.</li>
+    </ul>
+  </li>
+  <li><strong>preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우</strong>:
+    <ul>
+      <li>조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 <strong>requiredDuringSchedulingIgnoredDuringExecution</strong> 을 만족하는 노드가 없다면 해당 pod은 pending 상태가
+될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 <strong>preferredDuringSchedulingIgnoredDuringExecution</strong> 조건이 맞는 노드로 배정 될 것입니다. <br /></p>
+
+<p><code>weight</code> 는 선호도입니다 만약 여러개의 <strong>preferredDuringSchedulingIgnoredDuringExecution</strong> 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.</p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-31T00:00:00+09:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
-<div class="article__subscribe">
-<div class="subscribe">
-<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
-</div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
 </div></footer>
-<div class="article__section-navigator clearfix">
-<div class="previous">
-<span>이전</span><a href="/2021/05/28/Learning-Kubernetes-03.html">[ #3 ] Replicasets &amp; Deployment </a>
-</div>
-<div class="next">
-<span>다음</span><a href="/2021/05/31/Learning-Kubernetes-05.html">[ #5 ] pod 스케쥴링-2 </a>
-</div>
-</div>
-</div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/05/30/Learning-Kubernetes-04.html">[ #4 ] pod 스케쥴링-1 </a></div><div class="next"><span>다음</span><a href="/2021/05/31/Learning-Kubernetes-06.html">[ #6 ] static pod</a></div></div></div>
 
 </div>
 
@@ -522,39 +451,30 @@ test-taint-77b85b88c6-f6xn2   1/1     Running   0          43s   10.244.2.8   wo
   });
 })();
 </script>
-</div>
-<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div>
-<div class="page__footer d-print-none">
+            </div></div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main">
-<div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong">
-<meta itemprop="url" content="/">
-<div class="footer__author-links">
-<div class="author-links">
+  <div class="main"><div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a>
-</li></ul>
+      </a></ul>
 </div>
 </div>
-    </div>
-<div class="site-info mt-2">
+    </div><div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div>
-</div>
-    </div>
-<script>(function() {
+</div></div>
+    </div><script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -618,8 +538,7 @@ test-taint-77b85b88c6-f6xn2   1/1     Running   0          43s   10.244.2.8   wo
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
-<script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -711,7 +630,7 @@ test-taint-77b85b88c6-f6xn2   1/1     Running   0          43s   10.244.2.8   wo
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text">
+        <input type="text" />
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -835,8 +754,7 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div>
-</div>
+</div></div>
 
 
 <script>(function() {

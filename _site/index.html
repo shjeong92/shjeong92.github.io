@@ -280,7 +280,75 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/30/Learning-Kubernetes-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] 원하는 노드에 pod 배정하기 </h2></a></header>
+          <header><a href="/2021/05/31/Learning-Kubernetes-06.html"><h2 itemprop="headline" class="item__header">[ #6 ] static pod</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">Static pods이란
+
+제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 
+이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다.
+
+각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다.
+
+우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다...</div><p><a href="/2021/05/31/Learning-Kubernetes-06.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Replicasets">Replicasets</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Deployment">Deployment</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=static">static</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=pod">pod</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/05/31/Learning-Kubernetes-05.html"><h2 itemprop="headline" class="item__header">[ #5 ] pod 스케쥴링-2 </h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">nodeSelector
+nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.
+1. 노드에 레이블 붙이기
+
+노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.
+kubectl label nodes &lt;노드 이름&gt; &lt;레이블 키&gt;=&lt;레이블 값&gt;
+
+
+2. pod설정에 nodeSelector 필드 추가하기
+실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  la...</div><p><a href="/2021/05/31/Learning-Kubernetes-05.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Replicasets">Replicasets</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Deployment">Deployment</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Google">Google</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=cloud">cloud</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/05/30/Learning-Kubernetes-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] pod 스케쥴링-1 </h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">Taint &amp; Toleration
 
 
@@ -496,57 +564,8 @@ b1545defe462   bridge           bridge    local
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
     <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/19/Learning-Docker-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Docker 기본 익히기 </h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Image vs Container
-
-도커 이미지
-도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.
-
-도커 컨테이너
-도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
-컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.
-
-허브로부터 이미지 받아오기
-docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다.
-$ docker pull &lt;image&gt;
-
-
-
-이미지 실행하기
-
-docker run 커맨드를 사용하여 원하는 이미지를 실...</div><p><a href="/2021/05/19/Learning-Docker-01.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Docker">Docker</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/14/Github-01.html"><h2 itemprop="headline" class="item__header">깃헙 history를 주물러봅시다</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">서론
-
-때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.
-
-얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Git...</div><p><a href="/2021/05/14/Github-01.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Github">Github</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Commit">Commit</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SVN">SVN</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=history">history</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=modify">modify</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
-    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 18개, 3 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 20개, 3 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>

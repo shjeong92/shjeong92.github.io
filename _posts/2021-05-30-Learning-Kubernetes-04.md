@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "[ #4 ] 원하는 노드에 pod 배정하기 "
+title: "[ #4 ] pod 스케쥴링-1 "
 tags: Docker Kubernetes Replicasets Deployment Google cloud
 ---
 
@@ -33,7 +33,7 @@ node/worker-1 tainted
 
 describe로 잘 적용 되었는지 확인해 봅시다.
 ~~~sh
-kubectl describe node worker-1 | grep -i taint
+$ kubectl describe node worker-1 | grep -i taint
 Taints:             key=value:NoSchedule
 ~~~
 잘 적용이 되었군요.

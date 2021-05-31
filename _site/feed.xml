@@ -1,5 +1,255 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-30T23:54:33+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
-</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #4 ] 원하는 노드에 pod 배정하기</title><link href="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html" rel="alternate" type="text/html" title="[ #4 ] 원하는 노드에 pod 배정하기" /><published>2021-05-30T00:00:00+09:00</published><updated>2021-05-30T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html">&lt;h2 id=&quot;taint--toleration&quot;&gt;Taint &amp;amp; Toleration&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-31T20:46:03+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #5 ] pod 스케쥴링-2</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html" rel="alternate" type="text/html" title="[ #5 ] pod 스케쥴링-2" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">&lt;h2 id=&quot;nodeselector&quot;&gt;nodeSelector&lt;/h2&gt;
+&lt;p&gt;nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.&lt;/p&gt;
+&lt;h3 id=&quot;1-노드에-레이블-붙이기&quot;&gt;1. 노드에 레이블 붙이기&lt;/h3&gt;
+
+&lt;p&gt;노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;레이블 값&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-pod설정에-nodeselector-필드-추가하기&quot;&gt;2. pod설정에 nodeSelector 필드 추가하기&lt;/h3&gt;
+&lt;p&gt;실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;spec아래에 nodeSelector을 추가해줍니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;imagePullPolicy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;IfNotPresent&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;nodeSelector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;#&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;disktype&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssd&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;node-affinity&quot;&gt;node affinity&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;nodeSelector&lt;/strong&gt; 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;nodeAffinity&lt;/strong&gt; 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;또한 &lt;strong&gt;nodeAffinity&lt;/strong&gt; 에는 아래와 같이 두가지 타입이 있습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
+  &lt;li&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다
+두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라
+pod이 스케쥴되는 형태입니다.&lt;/p&gt;
+
+&lt;p&gt;미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서
+affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;예제&quot;&gt;예제&lt;/h3&gt;
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;affinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;nodeAffinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;nodeSelectorTerms&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kubernetes.io/e2e-az-name&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az1&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az2&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;preference&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-key&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-value&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;k8s.gcr.io/pause:2.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다.&lt;/li&gt;
+      &lt;li&gt;두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 &lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 만족하는 노드가 없다면 해당 pod은 pending 상태가
+될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 조건이 맞는 노드로 배정 될 것입니다. &lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;weight&lt;/code&gt; 는 선호도입니다 만약 여러개의 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">nodeSelector nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다. 1. 노드에 레이블 붙이기 노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다. kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;=&amp;lt;레이블 값&amp;gt; 2. pod설정에 nodeSelector 필드 추가하기 실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면 apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx spec아래에 nodeSelector을 추가해줍니다. apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx imagePullPolicy: IfNotPresent nodeSelector: #&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt; disktype: ssd node affinity nodeSelector 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다. nodeAffinity 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다. 또한 nodeAffinity 에는 아래와 같이 두가지 타입이 있습니다. requiredDuringSchedulingIgnoredDuringExecution preferredDuringSchedulingIgnoredDuringExecution 첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다 두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라 pod이 스케쥴되는 형태입니다. 미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서 affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다. 예제 apiVersion: v1 kind: Pod metadata: name: with-node-affinity spec: affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: kubernetes.io/e2e-az-name operator: In values: - e2e-az1 - e2e-az2 preferredDuringSchedulingIgnoredDuringExecution: - weight: 1 preference: matchExpressions: - key: another-node-label-key operator: In values: - another-node-label-value containers: - name: with-node-affinity image: k8s.gcr.io/pause:2.0 Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다. requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우: 조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다. requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우: 첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다. 두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다. preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우: 조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다. 위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 requiredDuringSchedulingIgnoredDuringExecution 을 만족하는 노드가 없다면 해당 pod은 pending 상태가 될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 preferredDuringSchedulingIgnoredDuringExecution 조건이 맞는 노드로 배정 될 것입니다. weight 는 선호도입니다 만약 여러개의 preferredDuringSchedulingIgnoredDuringExecution 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.</summary></entry><entry><title type="html">[ #6 ] static pod</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html" rel="alternate" type="text/html" title="[ #6 ] static pod" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html">&lt;h2 id=&quot;static-pods이란&quot;&gt;Static pods이란&lt;/h2&gt;
+
+&lt;p&gt;제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 &lt;code&gt;kube-apiserver&lt;/code&gt;가 있고, 각 워커노드에는 &lt;code&gt;kubelet&lt;/code&gt; 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. &lt;br /&gt;
+이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get nodes &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; wide
+NAME         STATUS   ROLES                  AGE    VERSION
+instance-1   Ready    &amp;lt;none&amp;gt;                 3d3h   v1.21.1
+master       Ready    control-plane,master   3d3h   v1.21.1
+worker-1     Ready    &amp;lt;none&amp;gt;                 3d3h   v1.21.1
+worker-2     Ready    &amp;lt;none&amp;gt;                 3d3h   v1.21.1
+
+&lt;span class=&quot;c&quot;&gt;#worker 에 접속하기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; ~/.ssh/rsa-gcp-worker-1 shjeong920522@10.178.0.5
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;특징-1&quot;&gt;특징 1&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;kubelet&lt;/strong&gt; 은 기본적으로 /etc/kubernetes/manifests 파일안의 pod.yaml 을 바라보는데, 이는 kubelet.service 의 config.yaml파일안에 staticPodPath에 정의되어있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;직접 확인해봅시다&lt;/p&gt;
+
+&lt;p&gt;우선 아래 커맨드를 입력하여 config.yaml파일의 위치를 알아냅니다&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 모든서비스 확장 | kubelet 정보중에서 | --config 포함하는줄 가져오기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ps &lt;span class=&quot;nt&quot;&gt;-ef&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;kubelet | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\-&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;-config&quot;&lt;/span&gt;
+root     18270     1  1 May28 ?        01:31:14 /usr/bin/kubelet &lt;span class=&quot;nt&quot;&gt;--bootstrap-kubeconfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/etc/kubernetes/bootstrap-kubelet.conf &lt;span class=&quot;nt&quot;&gt;--kubeconfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/etc/kubernetes/kubelet.conf &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/var/lib/kubelet/config.yaml &lt;span class=&quot;nt&quot;&gt;--network-plugin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;cni &lt;span class=&quot;nt&quot;&gt;--pod-infra-container-image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;k8s.gcr.io/pause:3.4.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;해당 파일을 확인해 봅시다&lt;/p&gt;
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s&quot;&gt;$ sudo vi config=/var/lib/kubelet/config.yaml&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kubelet.config.k8s.io/v1beta1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;anonymous&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;webhook&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;cacheTTL&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;x509&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;clientCAFile&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/etc/kubernetes/pki/ca.crt&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;authorization&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Webhook&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;webhook&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;cacheAuthorizedTTL&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;cacheUnauthorizedTTL&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;cgroupDriver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;systemd&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;clusterDNS&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;10.96.0.10&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;clusterDomain&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cluster.local&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;cpuManagerReconcilePeriod&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;evictionPressureTransitionPeriod&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;fileCheckFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;healthzBindAddress&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;127.0.0.1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;healthzPort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10248&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;httpCheckFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;imageMinimumGCAge&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;KubeletConfiguration&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;logging&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;nodeStatusReportFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;nodeStatusUpdateFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;resolvConf&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/run/systemd/resolve/resolv.conf&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;rotateCertificates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;runtimeRequestTimeout&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;shutdownGracePeriod&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;shutdownGracePeriodCriticalPods&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;staticPodPath&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/etc/kubernetes/manifests        &amp;lt;------------------------------ staticPodPath 가 설정되어 있는것을 확인할 수 있습니다.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;streamingConnectionIdleTimeout&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;syncFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;volumeStatsAggPeriod&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;위와 같이 파일을 통으로 확인해보아도 되지만 grep명령어를 사용하면 더욱 편히 찾을 수도 있습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo grep &lt;/span&gt;static /var/lib/kubelet/config.yaml
+staticPodPath: /etc/kubernetes/manifests
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;특징-2&quot;&gt;특징 2&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;만약 해동 폴더내에 kind: Pod인 yaml 파일이있다면 kubelet이 자동으로 이를 생성하며 static pod의 이름에는 자동으로 해당 노드의 이름이 suffix로 붙습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;잘 생성되나 확인해 봅시다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /etc/kubernetes/manifests
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vi static.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;간단한 pod을 해당 볼더에 생성해줍니다.&lt;/p&gt;
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#static.yaml&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;myapp-pod&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;myapp&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;front-end&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx-container&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;마스터&lt;/strong&gt; 노드로 이동하여 확인해봅시다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get pods
+NAME                 READY   STATUS    RESTARTS   AGE
+myapp-pod-worker-1   1/1     Running   0          42m
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;static pod를 생성한 노드의 이름인 worker-1 가 Pod이름의 suffix로 붙어있는것을 확인할 수 있습니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;특징-3&quot;&gt;특징 3&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;마스터노드에서 kubectl delete 명령어를 사용하더라도 워커노드의 kubelet이 다시 살려냅니다. static pod는 해당 워커노드의 kubelet이 관리하기 떄문입니다.
+따라서 해당 pod의 image를 변경하고싶다면 manifest 폴더안의 해당 yaml파일의 이미지를 수정해야하고, 지우려면 해당 yaml파일을 삭제하면 됩니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그럼 정말로 다시 시작되는지 마스터노드에서 &lt;strong&gt;myapp-pod-worker-1&lt;/strong&gt;을 삭제해 봅시다&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl delete pod myapp-pod-worker-1
+pod &lt;span class=&quot;s2&quot;&gt;&quot;myapp-pod-worker-1&quot;&lt;/span&gt; deleted
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;지운다음에 바로 확인해보면&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get pods
+NAME                 READY   STATUS    RESTARTS   AGE
+myapp-pod-worker-1   0/1     Pending   0          1s
+
+kubectl get pods
+NAME                 READY   STATUS    RESTARTS   AGE
+myapp-pod-worker-1   1/1     Running   0   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다.
+따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="static" /><category term="pod" /><summary type="html">Static pods이란 제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다. 각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다. 우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다 $ kubectl get nodes -o wide NAME STATUS ROLES AGE VERSION instance-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 master Ready control-plane,master 3d3h v1.21.1 worker-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 worker-2 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 #worker 에 접속하기 $ ssh -i ~/.ssh/rsa-gcp-worker-1 shjeong920522@10.178.0.5 특징 1 kubelet 은 기본적으로 /etc/kubernetes/manifests 파일안의 pod.yaml 을 바라보는데, 이는 kubelet.service 의 config.yaml파일안에 staticPodPath에 정의되어있습니다. 직접 확인해봅시다 우선 아래 커맨드를 입력하여 config.yaml파일의 위치를 알아냅니다 # 모든서비스 확장 | kubelet 정보중에서 | --config 포함하는줄 가져오기 $ ps -ef | grep kubelet | grep &quot;\--config&quot; root 18270 1 1 May28 ? 01:31:14 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.4.1 해당 파일을 확인해 봅시다 $ sudo vi config=/var/lib/kubelet/config.yaml apiVersion: kubelet.config.k8s.io/v1beta1 authentication: anonymous: enabled: false webhook: cacheTTL: 0s enabled: true x509: clientCAFile: /etc/kubernetes/pki/ca.crt authorization: mode: Webhook webhook: cacheAuthorizedTTL: 0s cacheUnauthorizedTTL: 0s cgroupDriver: systemd clusterDNS: - 10.96.0.10 clusterDomain: cluster.local cpuManagerReconcilePeriod: 0s evictionPressureTransitionPeriod: 0s fileCheckFrequency: 0s healthzBindAddress: 127.0.0.1 healthzPort: 10248 httpCheckFrequency: 0s imageMinimumGCAge: 0s kind: KubeletConfiguration logging: {} nodeStatusReportFrequency: 0s nodeStatusUpdateFrequency: 0s resolvConf: /run/systemd/resolve/resolv.conf rotateCertificates: true runtimeRequestTimeout: 0s shutdownGracePeriod: 0s shutdownGracePeriodCriticalPods: 0s staticPodPath: /etc/kubernetes/manifests &amp;lt;------------------------------ staticPodPath 가 설정되어 있는것을 확인할 수 있습니다. streamingConnectionIdleTimeout: 0s syncFrequency: 0s volumeStatsAggPeriod: 0s 위와 같이 파일을 통으로 확인해보아도 되지만 grep명령어를 사용하면 더욱 편히 찾을 수도 있습니다. $ sudo grep static /var/lib/kubelet/config.yaml staticPodPath: /etc/kubernetes/manifests 특징 2 만약 해동 폴더내에 kind: Pod인 yaml 파일이있다면 kubelet이 자동으로 이를 생성하며 static pod의 이름에는 자동으로 해당 노드의 이름이 suffix로 붙습니다. 잘 생성되나 확인해 봅시다. $ cd /etc/kubernetes/manifests $ sudo vi static.yaml 간단한 pod을 해당 볼더에 생성해줍니다. #static.yaml apiVersion: v1 kind: Pod metadata: name: myapp-pod labels: app: myapp type: front-end spec: containers: - name: nginx-container image: nginx 마스터 노드로 이동하여 확인해봅시다. $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 42m static pod를 생성한 노드의 이름인 worker-1 가 Pod이름의 suffix로 붙어있는것을 확인할 수 있습니다. 특징 3 마스터노드에서 kubectl delete 명령어를 사용하더라도 워커노드의 kubelet이 다시 살려냅니다. static pod는 해당 워커노드의 kubelet이 관리하기 떄문입니다. 따라서 해당 pod의 image를 변경하고싶다면 manifest 폴더안의 해당 yaml파일의 이미지를 수정해야하고, 지우려면 해당 yaml파일을 삭제하면 됩니다. 그럼 정말로 다시 시작되는지 마스터노드에서 myapp-pod-worker-1을 삭제해 봅시다 $ kubectl delete pod myapp-pod-worker-1 pod &quot;myapp-pod-worker-1&quot; deleted 지운다음에 바로 확인해보면 $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 0/1 Pending 0 1s kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다. 따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.</summary></entry><entry><title type="html">[ #4 ] pod 스케쥴링-1</title><link href="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html" rel="alternate" type="text/html" title="[ #4 ] pod 스케쥴링-1" /><published>2021-05-30T00:00:00+09:00</published><updated>2021-05-30T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html">&lt;h2 id=&quot;taint--toleration&quot;&gt;Taint &amp;amp; Toleration&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;taint: 노드마다 설정가능&lt;/li&gt;
@@ -27,7 +277,7 @@ node/worker-1 tainted
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;describe로 잘 적용 되었는지 확인해 봅시다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl describe node worker-1 | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; taint
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl describe node worker-1 | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; taint
 Taints:             &lt;span class=&quot;nv&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;value:NoSchedule
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;잘 적용이 되었군요.&lt;/p&gt;
@@ -143,7 +393,7 @@ NAME                          READY   STATUS    RESTARTS   AGE   IP           NO
 test-taint-77b85b88c6-8hq5l   1/1     Running   0          43s   10.244.3.9   instance-1   &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
 test-taint-77b85b88c6-957bv   1/1     Running   0          43s   10.244.1.7   worker-2     &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
 test-taint-77b85b88c6-f6xn2   1/1     Running   0          43s   10.244.2.8   worker-1     &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">Taint &amp;amp; Toleration taint: 노드마다 설정가능 toleration: taint를 무시할 수 있음 주로 노드를 지정된 역할만 하게할때 사용합니다. 예를들어 gpu잇는 노드에는 다른 pod들은 올라가지않고 gpu쓰는 pod들만 올라가게 하는등의 상황에 사용할 수 있습니다. taint에는 사용할 수 있는 3가지 옵션이 있습니다. NoSchedule : toleration이 없으면 pod이 스케쥴되지 않음, 기존 실행되던 pod에는 적용 안됨 PreferNoSchedule : toleration이 없으면 pod을 스케줄링안하려고 하지만 필수는 아님, 클러스터내에 자원이 부족하거나 하면 taint가 걸려있는 노드에서도 pod이 스케줄링될 수 있음 NoExecute : toleration이 없으면 pod이 스케줄되지 않으며 기존에 실행되던 pod도 toleration이 없으면 종료시킴. taint 형식은 다음과 같습니다. $ kubectl taint node {nodename} {key}={value}:{option} 하나의 노드에 taint 적용하기 $ kubectl taint node worker-1 key=value:NoSchedule node/worker-1 tainted describe로 잘 적용 되었는지 확인해 봅시다. kubectl describe node worker-1 | grep -i taint Taints: key=value:NoSchedule 잘 적용이 되었군요. taint의 옵션이 NoSchedule 이므로 pod에 toleration 필드에 같은 key, value가 없다면 생성되지 않겠죠? 확인해봅시다. :rocket:테스트해보기 Deployment로 pod을 띄어보겠습니다. 환경: 실습에 사용한 클러스터는 마스터노드1개 워커노드3개로 구성되었으며, 이름은 다음과 같고, 워커노드들의 cpu와 ram스팩은 모두 같게 설정하였습니다. taint는 worker-1 노드에 설정하였습니다. master worker-1 worker-2 instance-1 우선 pod을 세개 생성하는 test-taint.yaml이라는 deployment를 만들어줍니다 $ kubectl create deployment test-taint --image=nginx --replicas=3 --dry-run=client -o yaml &amp;gt; test-taint.yaml yaml파일을 열어보면 이렇습니다. kind: Deployment metadata: creationTimestamp: null labels: app: test-taint name: test-taint spec: replicas: 3 selector: matchLabels: app: test-taint strategy: {} template: metadata: creationTimestamp: null labels: app: test-taint spec: containers: - image: nginx name: nginx resources: {} status: {} 만들어진 yaml파일을 apply 해봅시다. $ kubectl apply -f test-taint.yaml deployment.apps/test-taint created pod을 확인해보면 taint를 설정한 node에는 pod이 배정되지 않은것을 확인 할 수 있습니다. $ kubectl get pods -o wide NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES test-taint-6bd4977499-2thmv 1/1 Running 0 106s 10.244.3.7 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-6bd4977499-4sccs 1/1 Running 0 106s 10.244.1.6 worker-2 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-6bd4977499-h4rt8 1/1 Running 0 106s 10.244.3.8 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 이제 이 deployment를 삭제하고 toleration을 적용시킨후 다시 deployment를 apply 해보겠습니다. $ kubectl delete deployment test-taint deployment.apps &quot;test-taint&quot; deleted $ vim test-taint.yaml spec.template.spec 밑에 toleration옵션을 추가해줍니다. apiVersion: apps/v1 kind: Deployment metadata: creationTimestamp: null labels: app: test-taint name: test-taint spec: replicas: 3 selector: matchLabels: app: test-taint strategy: {} template: metadata: creationTimestamp: null labels: app: test-taint spec: tolerations: - key: key operator: Equal value: value effect: NoSchedule containers: - image: nginx name: nginx resources: {} status: {} 수정된 yaml파일 다시 배포하기: $ kubectl apply -f test-taint.yaml deployment.apps/test-taint created pod 리스트를 다시 확인해보면 각 1개의노드에 1개의 pod이 생성된걸 확인할 수 있습니다. $ kubectl get pods -o wide NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES test-taint-77b85b88c6-8hq5l 1/1 Running 0 43s 10.244.3.9 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-77b85b88c6-957bv 1/1 Running 0 43s 10.244.1.7 worker-2 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-77b85b88c6-f6xn2 1/1 Running 0 43s 10.244.2.8 worker-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt;</summary></entry><entry><title type="html">[ #3 ] Replicasets &amp;amp; Deployment</title><link href="https://shjeong92.github.io/2021/05/28/Learning-Kubernetes-03.html" rel="alternate" type="text/html" title="[ #3 ] Replicasets &amp;amp; Deployment" /><published>2021-05-28T00:00:00+09:00</published><updated>2021-05-28T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/28/Learning-Kubernetes-03</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/28/Learning-Kubernetes-03.html">&lt;hr /&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">Taint &amp;amp; Toleration taint: 노드마다 설정가능 toleration: taint를 무시할 수 있음 주로 노드를 지정된 역할만 하게할때 사용합니다. 예를들어 gpu잇는 노드에는 다른 pod들은 올라가지않고 gpu쓰는 pod들만 올라가게 하는등의 상황에 사용할 수 있습니다. taint에는 사용할 수 있는 3가지 옵션이 있습니다. NoSchedule : toleration이 없으면 pod이 스케쥴되지 않음, 기존 실행되던 pod에는 적용 안됨 PreferNoSchedule : toleration이 없으면 pod을 스케줄링안하려고 하지만 필수는 아님, 클러스터내에 자원이 부족하거나 하면 taint가 걸려있는 노드에서도 pod이 스케줄링될 수 있음 NoExecute : toleration이 없으면 pod이 스케줄되지 않으며 기존에 실행되던 pod도 toleration이 없으면 종료시킴. taint 형식은 다음과 같습니다. $ kubectl taint node {nodename} {key}={value}:{option} 하나의 노드에 taint 적용하기 $ kubectl taint node worker-1 key=value:NoSchedule node/worker-1 tainted describe로 잘 적용 되었는지 확인해 봅시다. $ kubectl describe node worker-1 | grep -i taint Taints: key=value:NoSchedule 잘 적용이 되었군요. taint의 옵션이 NoSchedule 이므로 pod에 toleration 필드에 같은 key, value가 없다면 생성되지 않겠죠? 확인해봅시다. :rocket:테스트해보기 Deployment로 pod을 띄어보겠습니다. 환경: 실습에 사용한 클러스터는 마스터노드1개 워커노드3개로 구성되었으며, 이름은 다음과 같고, 워커노드들의 cpu와 ram스팩은 모두 같게 설정하였습니다. taint는 worker-1 노드에 설정하였습니다. master worker-1 worker-2 instance-1 우선 pod을 세개 생성하는 test-taint.yaml이라는 deployment를 만들어줍니다 $ kubectl create deployment test-taint --image=nginx --replicas=3 --dry-run=client -o yaml &amp;gt; test-taint.yaml yaml파일을 열어보면 이렇습니다. kind: Deployment metadata: creationTimestamp: null labels: app: test-taint name: test-taint spec: replicas: 3 selector: matchLabels: app: test-taint strategy: {} template: metadata: creationTimestamp: null labels: app: test-taint spec: containers: - image: nginx name: nginx resources: {} status: {} 만들어진 yaml파일을 apply 해봅시다. $ kubectl apply -f test-taint.yaml deployment.apps/test-taint created pod을 확인해보면 taint를 설정한 node에는 pod이 배정되지 않은것을 확인 할 수 있습니다. $ kubectl get pods -o wide NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES test-taint-6bd4977499-2thmv 1/1 Running 0 106s 10.244.3.7 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-6bd4977499-4sccs 1/1 Running 0 106s 10.244.1.6 worker-2 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-6bd4977499-h4rt8 1/1 Running 0 106s 10.244.3.8 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 이제 이 deployment를 삭제하고 toleration을 적용시킨후 다시 deployment를 apply 해보겠습니다. $ kubectl delete deployment test-taint deployment.apps &quot;test-taint&quot; deleted $ vim test-taint.yaml spec.template.spec 밑에 toleration옵션을 추가해줍니다. apiVersion: apps/v1 kind: Deployment metadata: creationTimestamp: null labels: app: test-taint name: test-taint spec: replicas: 3 selector: matchLabels: app: test-taint strategy: {} template: metadata: creationTimestamp: null labels: app: test-taint spec: tolerations: - key: key operator: Equal value: value effect: NoSchedule containers: - image: nginx name: nginx resources: {} status: {} 수정된 yaml파일 다시 배포하기: $ kubectl apply -f test-taint.yaml deployment.apps/test-taint created pod 리스트를 다시 확인해보면 각 1개의노드에 1개의 pod이 생성된걸 확인할 수 있습니다. $ kubectl get pods -o wide NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES test-taint-77b85b88c6-8hq5l 1/1 Running 0 43s 10.244.3.9 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-77b85b88c6-957bv 1/1 Running 0 43s 10.244.1.7 worker-2 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-77b85b88c6-f6xn2 1/1 Running 0 43s 10.244.2.8 worker-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt;</summary></entry><entry><title type="html">[ #3 ] Replicasets &amp;amp; Deployment</title><link href="https://shjeong92.github.io/2021/05/28/Learning-Kubernetes-03.html" rel="alternate" type="text/html" title="[ #3 ] Replicasets &amp;amp; Deployment" /><published>2021-05-28T00:00:00+09:00</published><updated>2021-05-28T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/28/Learning-Kubernetes-03</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/28/Learning-Kubernetes-03.html">&lt;hr /&gt;
 
 &lt;h2 id=&quot;replicaset&quot;&gt;Replicaset&lt;/h2&gt;
 
@@ -1675,205 +1925,4 @@ CONTAINER ID   IMAGE       COMMAND                  CREATED             STATUS  
 &lt;p&gt;입력해서 원하지않는 모든 dirty data를 삭제후&lt;/p&gt;
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git push &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;입력하여 리모트 리포로 하드 푸시해줍니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Github" /><category term="Commit" /><category term="SVN" /><category term="history" /><category term="modify" /><summary type="html">서론 때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해 작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다. 얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Gitguardian에 sign한적도 없는데 실수로 민감한 정보를 올릴때마다 Alert 메일을 보내옵니다. 과거에 저는 새로운 커밋으로 덮으면 과거 기록은 못 보는줄 알고 얼른 비밀번호를 환경변수로 바꾼후 다시 푸시 했었습니다. 하지만 commits history를 보면 비밀번호에 관한정보는 그대로 담겨있었고 history 수정 방법을 몰라 쌓아왔던 잔디를 포기하며 새로운 repo를 파서 다시 푸시했었습니다. 잔디들을 잃는 고통은 뼈를깎는 고통과 같았지만 어쩔 수 없었습니다. 하지만 이번에는 얘기가 달랐습니다. 이 2주동안 진행한 개인 프로젝트였는데 14일치의 잔디(총 50+ commits) 들을 통으로 없애기는 정말 싫었고, history를 수정할 방법을 찾고 말겠다고 다짐후 결국 찾았습니다. 이 글을 본 여러분들은 잔디를 잃지않고도 누출된 비밀정보의 history를 마음대로 주무를 수 있을 것입니다. 1. BGF Repo-Cleaner 설치 아래의 링크로 이동하여 해당 파일을 다운로드받으세요 만약 자바가 설치되어있지않다면 자바 또한 설치해주세요. BGF Repo-Cleaner 다운로드하기 Download 폴더안에 파일이 있을겁니다 #.zshrc alias bfg=&apos;java -jar ~/Downloads/bfg-1.14.0.jar&apos; 추후에도 편하게 쓰기위해 alias를 설정해줍니다. 2. 히스토리를 변경하고자하는 폴더로 들어갑니다. git init을 했던 위치로 이동하면되는 겁니다. 터미널에 ls -a 했을때 .git 이 보이면 모든 준비가 끝이났습니다. 3. 여러가지 옵션. option 1. 만약 HelloWorld.txt에 관한 모든 커밋 히스토리를 없애고싶다면 터미널에 $ bfg --delete-files HelloWorld.txt .git 뭔가 여러줄뜰거에요. 끝나고나면 $ git reflog expire --expire=now --all &amp;amp;&amp;amp; git gc --prune=now --aggressive 입력해서 원하지않는 모든 dirty data를 삭제할거에요 그 다음, $ git push -f &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt; 입력하여 리모트 리포로 하드 푸시해줍니다. 최신의(오류를 모드 제거했다고 가정함으로)커밋을 제외한 모든 히스토리에서 해당파일정보는 보이지 않을거에요. option 2. 파일에관한 히스토리는 모두유지하면서 원하는 정보만 가리고싶을때에는 이 방법을 이용하세요. #settings.py AWS_ACCESS_KEY_ID = &apos;itsmyaccesskeyid&apos; AWS_SECRET_ACCESS_KEY = &apos;itsmysecretaccesskey&apos; 이방법을 쓰면 모든 히스토리에 있는 모든 ‘itsmyaccesskeyid’ 나 ‘itsmysecretaccesskey’ 를 아래와 같이 ***REMOVED*** 로 바꾸거나 원하는대로 바꿔줄 수 도있습니다. AWS_ACCESS_KEY_ID = ***REMOVED*** AWS_SECRET_ACCESS_KEY = ***REMOVED*** 먼저 replacements.txt를 만들어봅시다 (.git 이 위치한 폴더에) 여기에도 여러가지 옵션이있고, 정규표현식도 이용할 수 도 있지만 간단한 옵션들만 설명하겠습니다. #replacements.txt itsmyaccesskeyid # itsmyaccesskeyid 를 &apos;***REMOVED***&apos; 로 바꿔줍니다 (default) itsmysecretaccesskey==&amp;gt;examplePass # itsmysecretaccesskey 를 &apos;examplePass&apos; 로 바꿔줍니다. PASSWORD3==&amp;gt; # PASSWORD 를 &apos;&apos; 로 바꿔줍니다. 귀찮다 싶으시면 그냥 txt파일 하나만들고, 민감한정보 모두를 나열해주시면됩니다. (변수명이 아닌 정보 그자체를 나열해야합니다) 자 이제 모든 정보를 지울 준비가 완료되었습니다. 터미널에 $ bfg --replace-text replacements.txt .git 입력후 엔터쳐주세요 그다음 option1 과 마찬가지로 $ git reflog expire --expire=now --all &amp;amp;&amp;amp; git gc --prune=now --aggressive 입력해서 원하지않는 모든 dirty data를 삭제후 $ git push -f &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt; 입력하여 리모트 리포로 하드 푸시해줍니다.</summary></entry><entry><title type="html">[ #10 ] useContext hook</title><link href="https://shjeong92.github.io/2021/04/29/Learning-React-10.html" rel="alternate" type="text/html" title="[ #10 ] useContext hook" /><published>2021-04-29T00:00:00+09:00</published><updated>2021-04-29T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/29/Learning-React-10</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/29/Learning-React-10.html">&lt;h1 id=&quot;usecontext&quot;&gt;useContext&lt;/h1&gt;
-
-&lt;h2 id=&quot;usecontext란-무엇인가&quot;&gt;useContext란 무엇인가?&lt;/h2&gt;
-
-&lt;p&gt;이때까지 부모 컴포넌트에서 자식컴포넌트에 정보를 전달할때 props를 통하여 전달 했었습니다.&lt;/p&gt;
-
-&lt;p&gt;A(부모) =&amp;gt; B =&amp;gt; C = &amp;gt; D 순으로 nested 되어있을경우 부모로부터 D로 데이터를 전송하려면 B, C, D 순으로 전달했었죠.&lt;/p&gt;
-
-&lt;p&gt;나중에 props의 이름을 까먹거나하면 정말 헷갈렸었는데 이번에 &lt;strong&gt;useContext&lt;/strong&gt; 사용하는 법을 배우고 신세계가 열렸습니다.&lt;/p&gt;
-
-&lt;p&gt;:star2:useContext를 이용하면 B, C를 거치지 않고 A =&amp;gt; D로 직행으로 원하는 데이터를 전송할 수 있습니다!&lt;/p&gt;
-&lt;h2 id=&quot;usecontext-어떻게-사용할까요---1&quot;&gt;useContext 어떻게 사용할까요? - 1&lt;/h2&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;UserContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;UserContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Provider&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;whatever you want to pass!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;wow&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;UserContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Provider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;1-1-react의-메서드의-하나인-createcontext를-이용하여-context를-생성해줍니다&quot;&gt;1-1 React의 메서드의 하나인 createContext()를 이용하여 Context를 생성해줍니다.&lt;/h3&gt;
-
-&lt;h3 id=&quot;1-2-생성된-context-태그로-감싸줍니다&quot;&gt;1-2 생성된 Context 태그로 감싸줍니다.&lt;/h3&gt;
-
-&lt;h3 id=&quot;1-3-원하는-정보를-value-안에-실어줍니다&quot;&gt;1-3 원하는 정보를 value 안에 실어줍니다.&lt;/h3&gt;
-
-&lt;h2 id=&quot;usecontext-어떻게-사용할까요---2&quot;&gt;useContext 어떻게 사용할까요? - 2&lt;/h2&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;useContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;UserContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;../App&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DeeplyNestedComponent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;UserContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-           &lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;
-           //wow whatever you want to pass!
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DeeplyNestedComponent&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;2-1-정보보다-하위에-있으면서-정보를-전달할-컴포넌트js-오픈해줍니다&quot;&gt;2-1 정보보다 하위에 있으면서 정보를 전달할 컴포넌트.js 오픈해줍니다.&lt;/h3&gt;
-
-&lt;h3 id=&quot;2-2-usecontext-hook-과--appjs에서-생성한-usercontext를-import-해줍니다&quot;&gt;2-2 useContext hook 과  App.js에서 생성한 UserContext를 import 해줍니다.&lt;/h3&gt;
-
-&lt;h3 id=&quot;2-3-원하는-이름의-variable에-usecontextusercontext를-담아주고-필요한데로-정제하여-사용하시면-됩니다&quot;&gt;2-3 원하는 이름의 variable에 useContext(UserContext)를 담아주고 필요한데로 정제하여 사용하시면 됩니다!&lt;/h3&gt;
-
-&lt;p&gt;:star2:본 예제 에서는 간단히 스트링을 전달하였지만 배열이나 오브젝트 또한 전달이 가능합니다&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">useContext useContext란 무엇인가? 이때까지 부모 컴포넌트에서 자식컴포넌트에 정보를 전달할때 props를 통하여 전달 했었습니다. A(부모) =&amp;gt; B =&amp;gt; C = &amp;gt; D 순으로 nested 되어있을경우 부모로부터 D로 데이터를 전송하려면 B, C, D 순으로 전달했었죠. 나중에 props의 이름을 까먹거나하면 정말 헷갈렸었는데 이번에 useContext 사용하는 법을 배우고 신세계가 열렸습니다. :star2:useContext를 이용하면 B, C를 거치지 않고 A =&amp;gt; D로 직행으로 원하는 데이터를 전송할 수 있습니다! useContext 어떻게 사용할까요? - 1 import React from &quot;react&quot;; export const UserContext = React.createContext(); function App() { return ( &amp;lt;UserContext.Provider value={&quot;whatever you want to pass!&quot;}&amp;gt; &amp;lt;div&amp;gt;wow&amp;lt;/div&amp;gt; &amp;lt;/UserContext.Provider&amp;gt; ); } export default App; 1-1 React의 메서드의 하나인 createContext()를 이용하여 Context를 생성해줍니다. 1-2 생성된 Context 태그로 감싸줍니다. 1-3 원하는 정보를 value 안에 실어줍니다. useContext 어떻게 사용할까요? - 2 import React,{useContext} from &apos;react&apos; import {UserContext} from &apos;../App&apos;; const DeeplyNestedComponent = () =&amp;gt; { const message = useContext(UserContext); return ( &amp;lt;div&amp;gt; {message} //wow whatever you want to pass! &amp;lt;/div&amp;gt; ) } export default DeeplyNestedComponent 2-1 정보보다 하위에 있으면서 정보를 전달할 컴포넌트.js 오픈해줍니다. 2-2 useContext hook 과 App.js에서 생성한 UserContext를 import 해줍니다. 2-3 원하는 이름의 variable에 useContext(UserContext)를 담아주고 필요한데로 정제하여 사용하시면 됩니다! :star2:본 예제 에서는 간단히 스트링을 전달하였지만 배열이나 오브젝트 또한 전달이 가능합니다</summary></entry><entry><title type="html">[ #9 ] useEffect hook</title><link href="https://shjeong92.github.io/2021/04/29/Learning-React-09.html" rel="alternate" type="text/html" title="[ #9 ] useEffect hook" /><published>2021-04-29T00:00:00+09:00</published><updated>2021-04-29T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/04/29/Learning-React-09</id><content type="html" xml:base="https://shjeong92.github.io/2021/04/29/Learning-React-09.html">&lt;h1 id=&quot;1-useeffect&quot;&gt;1. useEffect&lt;/h1&gt;
-
-&lt;h2 id=&quot;useeffect란&quot;&gt;useEffect란?&lt;/h2&gt;
-
-&lt;p&gt;useEffect는 기본적으로 몇가지 조건에 의해 작동하게 됩니다. &lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;조건-1&quot;&gt;조건 1.&lt;/h3&gt;
-
-&lt;p&gt;페이지가 처음 렌더링 되고난 후 useEffect 내의 함수는 무조건 한번 실행되고 봅니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;useEffect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;something&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    
-&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;조건-2&quot;&gt;조건 2.&lt;/h3&gt;
-&lt;p&gt;만약에 useEffect의 2번재 파라미터값이 없다면 이는 해당 컴포넌트가 렌더링 될 때마다 실행됩니다.
-두번째 파라미터는 watch 값들의 목록입니다 만약 값이 변경되면 useEffect의 함수가 실행되기때문에 
-아무것도 전달하지 않으면 계속실행됩니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;useEffect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;something&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    
-&lt;span class=&quot;p&quot;&gt;},[])&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;useEffect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;someProp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    
-&lt;span class=&quot;p&quot;&gt;},[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;someProp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;조건-3&quot;&gt;조건 3.&lt;/h3&gt;
-
-&lt;p&gt;만약에 useEffect의 2번재 파라미터에 [] 빈 배열을 넣어주게되면 []를 지켜봐야하는 값으로 보게됩니다.
-빈 배열은 컴포넌트가 랜더링되나 마나 변하지 않겠죠? 따라서 useEffect의 조건1인 컴포넌트의 첫 랜더링때 한번 실행되고 맙니다.&lt;/p&gt;
-
-&lt;h3 id=&quot;clean-up을-이용하는-useeffect&quot;&gt;clean-up을 이용하는 useEffect&lt;/h3&gt;
-
-&lt;p&gt;네트워크에 request요청을 보내거나, DOM을 수동으로 조작하는것은 clean-up이 따로 필요 없습니다.
-하지만 아래의 경우는 좀 다릅니다.&lt;/p&gt;
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;IntervalHookCounter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setCount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    
-    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stopwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setStopwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tick&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;setCount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nx&quot;&gt;useEffect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;interval&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setInterval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        
-
-    &lt;span class=&quot;p&quot;&gt;},[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;해당코드는 얼핏 보면 잘 동작 할 것 같습니다만, 심각하게 문제가 있는 코드입니다.
-문제는 interval에 있습니다. 랜더링 될 때마다 새로운 interval이 생성되기 때문입니다.
-처음 몇초간은 타이머가 잘 동작하는것 같지만 조금지나면 시간이 올라가던 초가 고장나는게 보일 것입니다.
-log 로 count를 찍어보면 이렇게 출력됩니다
-1
-1
-2
-1
-2
-3
-1
-2
-3
-4
-1
-2
-3
-4
-5
-따라서 인터벌의 청소가 필요한겁니다.
-근데 어떻게 청소를할까요?&lt;/p&gt;
-
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;useEffect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;interval&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setInterval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;clearInterval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;interval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;},[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;간단합니다. useEffect함수 내에 함수를 return 하면 됩니다.
-순서별로 보면 이렇습니다. &lt;br /&gt;
-&lt;strong&gt;
-랜더링 =&amp;gt;
-인터벌생성 =&amp;gt;
-1초후 =&amp;gt;
-인터벌 제거 =&amp;gt;
-리 랜더링
-&lt;/strong&gt;
-&lt;br /&gt;
-:star2: 리턴에있는 함수는 모든 작업이 끝나고, 랜더링 되기전에 실행됩니다.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;useEffect에 친해지기위해 간단한 스톱워치를 만들어 보았습니다.&lt;/p&gt;
-&lt;div class=&quot;language-jsx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useEffect&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;react&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;IntervalHookCounter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;//시간은 0초부터 시작합니다.&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setCount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;//스톱워치는 처음에 멈춰있어요&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stopwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setStopwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;useState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-    
-    &lt;span class=&quot;nx&quot;&gt;useEffect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        
-        &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;interval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//STOP watch 가 켜져 있을경우만 인터벌 생성해줍니다.&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stopwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-             &lt;span class=&quot;nx&quot;&gt;interval&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setInterval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setCount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)},&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;clearInterval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;interval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;제거됨&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//count가 올라가거나, stop워치가 켜지거나 껴지는경우 return 함수가 실행되어 그다음 인터벌이 문제없이 생성되게 청소해줍니다.&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;},[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stopwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onClick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setStopwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stopwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;OFF&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;ON&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onClick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setCount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;Reset&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;IntervalHookCounter&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="React" /><summary type="html">1. useEffect useEffect란? useEffect는 기본적으로 몇가지 조건에 의해 작동하게 됩니다. 조건 1. 페이지가 처음 렌더링 되고난 후 useEffect 내의 함수는 무조건 한번 실행되고 봅니다. useEffect(() =&amp;gt; { function doSomething(){ console.log(&quot;something&quot;) } doSomething(); }) 조건 2. 만약에 useEffect의 2번재 파라미터값이 없다면 이는 해당 컴포넌트가 렌더링 될 때마다 실행됩니다. 두번째 파라미터는 watch 값들의 목록입니다 만약 값이 변경되면 useEffect의 함수가 실행되기때문에 아무것도 전달하지 않으면 계속실행됩니다. useEffect(() =&amp;gt; { function doSomething(){ console.log(&quot;something&quot;) } doSomething(); },[]) useEffect(() =&amp;gt; { function doSomething(){ console.log(someProp); } doSomething(); },[someProp]) 조건 3. 만약에 useEffect의 2번재 파라미터에 [] 빈 배열을 넣어주게되면 []를 지켜봐야하는 값으로 보게됩니다. 빈 배열은 컴포넌트가 랜더링되나 마나 변하지 않겠죠? 따라서 useEffect의 조건1인 컴포넌트의 첫 랜더링때 한번 실행되고 맙니다. clean-up을 이용하는 useEffect 네트워크에 request요청을 보내거나, DOM을 수동으로 조작하는것은 clean-up이 따로 필요 없습니다. 하지만 아래의 경우는 좀 다릅니다. function IntervalHookCounter() { const [count, setCount] = useState(0) const [stopwatch, setStopwatch] = useState(false) const tick = () =&amp;gt; { setCount(count+1) } useEffect(() =&amp;gt; { const interval = setInterval(tick, 1000) },[count]) 해당코드는 얼핏 보면 잘 동작 할 것 같습니다만, 심각하게 문제가 있는 코드입니다. 문제는 interval에 있습니다. 랜더링 될 때마다 새로운 interval이 생성되기 때문입니다. 처음 몇초간은 타이머가 잘 동작하는것 같지만 조금지나면 시간이 올라가던 초가 고장나는게 보일 것입니다. log 로 count를 찍어보면 이렇게 출력됩니다 1 1 2 1 2 3 1 2 3 4 1 2 3 4 5 따라서 인터벌의 청소가 필요한겁니다. 근데 어떻게 청소를할까요? useEffect(() =&amp;gt; { const interval = setInterval(tick, 1000) return () =&amp;gt; { clearInterval(interval) console.log(count); } },[count]) 간단합니다. useEffect함수 내에 함수를 return 하면 됩니다. 순서별로 보면 이렇습니다. 랜더링 =&amp;gt; 인터벌생성 =&amp;gt; 1초후 =&amp;gt; 인터벌 제거 =&amp;gt; 리 랜더링 :star2: 리턴에있는 함수는 모든 작업이 끝나고, 랜더링 되기전에 실행됩니다. useEffect에 친해지기위해 간단한 스톱워치를 만들어 보았습니다. import React, { useState, useEffect } from &apos;react&apos; function IntervalHookCounter() { //시간은 0초부터 시작합니다. const [count, setCount] = useState(0) //스톱워치는 처음에 멈춰있어요 const [stopwatch, setStopwatch] = useState(false) useEffect(() =&amp;gt; { let interval; //STOP watch 가 켜져 있을경우만 인터벌 생성해줍니다. if(stopwatch) interval = setInterval(() =&amp;gt; {setCount(prev =&amp;gt; prev + 1)}, 1000) return () =&amp;gt; { clearInterval(interval) console.log(&quot;제거됨&quot;); } //count가 올라가거나, stop워치가 켜지거나 껴지는경우 return 함수가 실행되어 그다음 인터벌이 문제없이 생성되게 청소해줍니다. },[count,stopwatch]) return ( &amp;lt;div&amp;gt; {count} &amp;lt;button onClick={() =&amp;gt; setStopwatch(prev =&amp;gt; !prev)}&amp;gt;{stopwatch? &apos;OFF&apos; : &apos;ON&apos;}&amp;lt;/button&amp;gt; &amp;lt;button onClick={() =&amp;gt; setCount(0)}&amp;gt;Reset&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; ) } export default IntervalHookCounter</summary></entry></feed>
+&lt;p&gt;입력하여 리모트 리포로 하드 푸시해줍니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Github" /><category term="Commit" /><category term="SVN" /><category term="history" /><category term="modify" /><summary type="html">서론 때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해 작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다. 얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Gitguardian에 sign한적도 없는데 실수로 민감한 정보를 올릴때마다 Alert 메일을 보내옵니다. 과거에 저는 새로운 커밋으로 덮으면 과거 기록은 못 보는줄 알고 얼른 비밀번호를 환경변수로 바꾼후 다시 푸시 했었습니다. 하지만 commits history를 보면 비밀번호에 관한정보는 그대로 담겨있었고 history 수정 방법을 몰라 쌓아왔던 잔디를 포기하며 새로운 repo를 파서 다시 푸시했었습니다. 잔디들을 잃는 고통은 뼈를깎는 고통과 같았지만 어쩔 수 없었습니다. 하지만 이번에는 얘기가 달랐습니다. 이 2주동안 진행한 개인 프로젝트였는데 14일치의 잔디(총 50+ commits) 들을 통으로 없애기는 정말 싫었고, history를 수정할 방법을 찾고 말겠다고 다짐후 결국 찾았습니다. 이 글을 본 여러분들은 잔디를 잃지않고도 누출된 비밀정보의 history를 마음대로 주무를 수 있을 것입니다. 1. BGF Repo-Cleaner 설치 아래의 링크로 이동하여 해당 파일을 다운로드받으세요 만약 자바가 설치되어있지않다면 자바 또한 설치해주세요. BGF Repo-Cleaner 다운로드하기 Download 폴더안에 파일이 있을겁니다 #.zshrc alias bfg=&apos;java -jar ~/Downloads/bfg-1.14.0.jar&apos; 추후에도 편하게 쓰기위해 alias를 설정해줍니다. 2. 히스토리를 변경하고자하는 폴더로 들어갑니다. git init을 했던 위치로 이동하면되는 겁니다. 터미널에 ls -a 했을때 .git 이 보이면 모든 준비가 끝이났습니다. 3. 여러가지 옵션. option 1. 만약 HelloWorld.txt에 관한 모든 커밋 히스토리를 없애고싶다면 터미널에 $ bfg --delete-files HelloWorld.txt .git 뭔가 여러줄뜰거에요. 끝나고나면 $ git reflog expire --expire=now --all &amp;amp;&amp;amp; git gc --prune=now --aggressive 입력해서 원하지않는 모든 dirty data를 삭제할거에요 그 다음, $ git push -f &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt; 입력하여 리모트 리포로 하드 푸시해줍니다. 최신의(오류를 모드 제거했다고 가정함으로)커밋을 제외한 모든 히스토리에서 해당파일정보는 보이지 않을거에요. option 2. 파일에관한 히스토리는 모두유지하면서 원하는 정보만 가리고싶을때에는 이 방법을 이용하세요. #settings.py AWS_ACCESS_KEY_ID = &apos;itsmyaccesskeyid&apos; AWS_SECRET_ACCESS_KEY = &apos;itsmysecretaccesskey&apos; 이방법을 쓰면 모든 히스토리에 있는 모든 ‘itsmyaccesskeyid’ 나 ‘itsmysecretaccesskey’ 를 아래와 같이 ***REMOVED*** 로 바꾸거나 원하는대로 바꿔줄 수 도있습니다. AWS_ACCESS_KEY_ID = ***REMOVED*** AWS_SECRET_ACCESS_KEY = ***REMOVED*** 먼저 replacements.txt를 만들어봅시다 (.git 이 위치한 폴더에) 여기에도 여러가지 옵션이있고, 정규표현식도 이용할 수 도 있지만 간단한 옵션들만 설명하겠습니다. #replacements.txt itsmyaccesskeyid # itsmyaccesskeyid 를 &apos;***REMOVED***&apos; 로 바꿔줍니다 (default) itsmysecretaccesskey==&amp;gt;examplePass # itsmysecretaccesskey 를 &apos;examplePass&apos; 로 바꿔줍니다. PASSWORD3==&amp;gt; # PASSWORD 를 &apos;&apos; 로 바꿔줍니다. 귀찮다 싶으시면 그냥 txt파일 하나만들고, 민감한정보 모두를 나열해주시면됩니다. (변수명이 아닌 정보 그자체를 나열해야합니다) 자 이제 모든 정보를 지울 준비가 완료되었습니다. 터미널에 $ bfg --replace-text replacements.txt .git 입력후 엔터쳐주세요 그다음 option1 과 마찬가지로 $ git reflog expire --expire=now --all &amp;amp;&amp;amp; git gc --prune=now --aggressive 입력해서 원하지않는 모든 dirty data를 삭제후 $ git push -f &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt; 입력하여 리모트 리포로 하드 푸시해줍니다.</summary></entry></feed>
