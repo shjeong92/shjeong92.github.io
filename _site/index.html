@@ -280,6 +280,36 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/06/01/Handling-ssh-config.html"><h2 itemprop="headline" class="item__header">ssh config 설정으로 간편하게 ssh하기</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요.
+
+이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다.
+
+key pair 생성하기
+
+#-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음)
+$ssh-keygen -t rsa -f ~/.ssh/&lt;KEY_FILE_NAME&gt; -C "acc...</div><p><a href="/2021/06/01/Handling-ssh-config.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Replicasets">Replicasets</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Deployment">Deployment</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=static">static</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=pod">pod</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 01일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-01T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/05/31/Learning-Kubernetes-06.html"><h2 itemprop="headline" class="item__header">[ #6 ] static pod</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">Static pods이란
 
@@ -536,36 +566,8 @@ FROM명령문은 base image를 지정해주기 위해서 사용합니다. 하나
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 22일</span>
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-22T00:00:00+09:00">
     <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너,명령어"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/20/Learning-Docker-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] Docker 네트워크 사용하기 </h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.
-
-네트워크 조회
-
-docker network ls 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다.
-$ docker network ls
-NETWORK ID     NAME             DRIVER    SCOPE
-b1545defe462   bridge           bridge    local
-2ff...</div><p><a href="/2021/05/20/Learning-Docker-02.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Docker">Docker</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=network">network</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 20개, 3 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 21개, 3 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>

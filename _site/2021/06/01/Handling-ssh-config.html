@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>TIL - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>ssh config 설정으로 간편하게 ssh하기 - Hyuk's devlog</title>
 
-<meta name="description" content="Your Site Description
-">
-<link rel="canonical" href="https://shjeong92.github.io/page2/"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요.이 글에선 맥에서 GC...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/06/01/Handling-ssh-config.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -255,406 +254,162 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root">
-<div class="page__main js-page-main page__viewport cell cell--auto">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner">
-<div class="page__header d-print-none">
-<header class="header"><div class="main">
+      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
+        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a>
-</div>
-<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
-</div>
-<nav class="navigation">
-        <ul>
-<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
-<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
-</ul>
-      </nav>
-</div>
+" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+      </nav></div>
   </header>
-</div>
-<div class="page__content"><div class="main"><div class="grid grid--reverse">
+</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
-              <div class="col-main cell cell--auto">
-<!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div>
-<meta itemprop="headline" content="TIL">
-<meta itemprop="author" content="Sanghyuk Jeong">
-<div class="js-article-content">
-<div class="layout--articles">
-<div class="article-list items items--divided">
-<article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/20/Learning-Docker-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] Docker 네트워크 사용하기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>ssh config 설정으로 간편하게 ssh하기</h1></header></div><meta itemprop="headline" content="ssh config 설정으로 간편하게 ssh하기"><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Replicasets">Replicasets</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Deployment">Deployment</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=static">static</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=pod">pod</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 01일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-01T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
-네트워크 조회
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><p>최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요.</p>
 
-docker network ls 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다.
-$ docker network ls
-NETWORK ID     NAME             DRIVER    SCOPE
-b1545defe462   bridge           bridge    local
-2ff...</div>
-<p><a href="/2021/05/20/Learning-Docker-02.html">더보기</a></p>
+<p>이 글에선 맥에서 GCP에 접속하기 위한 <code>RSA key pair</code>를 생성하는 부분부터 <code>ssh config</code> 설정하는법을 다루겠습니다.</p>
+
+<h2 id="key-pair-생성하기">key pair 생성하기</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음)
+$ssh-keygen -t rsa -f ~/.ssh/&lt;KEY_FILE_NAME&gt; -C "account@gmail.com"
+</code></pre></div></div>
+
+<p>위와같이 입력하면 RSA key pair가 생성됩니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen <span class="nt">-t</span> rsa <span class="nt">-f</span> ~/.ssh/test <span class="nt">-C</span> <span class="s2">"test@gmail.com"</span>
+Generating public/private rsa key pair.
+Enter passphrase <span class="o">(</span>empty <span class="k">for </span>no passphrase<span class="o">)</span>: 
+Enter same passphrase again: 
+Your identification has been saved <span class="k">in</span> /Users/sanghyukjeong/.ssh/test.
+Your public key has been saved <span class="k">in</span> /Users/sanghyukjeong/.ssh/test.pub.
+The key fingerprint is:
+SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ <span class="nb">test</span>@gmail.com
+The key<span class="s1">'s randomart image is:
++---[RSA 3072]----+
+|+E+=. .....      |
+|.o*.o..oo.       |
+|.=.o. .+         |
+|... ... o.       |
+|o+   ...S        |
+|B..  . B         |
+|*+ .  * +        |
+|O.o    +         |
+|oOo    .o        |
++----[SHA256]-----+
+</span></code></pre></div></div>
+
+<p>이후 cat명령어로 rsa 공개키를 확인할 수 있는데
+구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat</span> ~/.ssh/test.pub
+ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk<span class="o">=</span> <span class="nb">test</span>@gmail.com
+</code></pre></div></div>
+
+<h2 id="key-등록하기">key 등록하기</h2>
+
+<p><a href="https://shjeong92.github.io/assets/images/gcp.png">gcp</a></p>
+
+<p>compute엔진 -&gt; 메타데이터 -&gt; SSH 키로 이동후에</p>
+
+<p>항목추가를 클릭하여 공개키를 추가합니다.</p>
+
+<p>키등록이 끝났으니 ssh 접속을 해봅시다</p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-06-01T00:00:00+09:00"><!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+</div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/05/31/Learning-Kubernetes-06.html">[ #6 ] static pod</a></div></div></div>
+
 </div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=network">network</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/19/Learning-Docker-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Docker 기본 익히기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Image vs Container
 
-도커 이미지
-도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
 
-도커 컨테이너
-도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
-컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.
-
-허브로부터 이미지 받아오기
-docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다.
-$ docker pull &lt;image&gt;
-
-
-
-이미지 실행하기
-
-docker run 커맨드를 사용하여 원하는 이미지를 실...</div>
-<p><a href="/2021/05/19/Learning-Docker-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/14/Github-01.html"><h2 itemprop="headline" class="item__header">깃헙 history를 주물러봅시다</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">서론
-
-때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.
-
-얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Git...</div>
-<p><a href="/2021/05/14/Github-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Github">Github</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Commit">Commit</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SVN">SVN</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=history">history</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=modify">modify</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
-    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/29/Learning-React-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] useContext hook</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">useContext
-
-useContext란 무엇인가?
-
-이때까지 부모 컴포넌트에서 자식컴포넌트에 정보를 전달할때 props를 통하여 전달 했었습니다.
-
-A(부모) =&gt; B =&gt; C = &gt; D 순으로 nested 되어있을경우 부모로부터 D로 데이터를 전송하려면 B, C, D 순으로 전달했었죠.
-
-나중에 props의 이름을 까먹거나하면 정말 헷갈렸었는데 이번에 useContext 사용하는 법을 배우고 신세계가 열렸습니다.
-
-<img class="emoji" title=":star2:" alt=":star2:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f31f.png" height="20" width="20">useContext를 이용하면 B, C를 거치지 않고 A =&gt; D로 직행으로 원하는 데이터를 전송할 수 있습니다!
-useContext 어떻게 사용할까요? - 1
-
-...</div>
-<p><a href="/2021/04/29/Learning-React-10.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/29/Learning-React-09.html"><h2 itemprop="headline" class="item__header">[ #9 ] useEffect hook</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. useEffect
-
-useEffect란?
-
-useEffect는 기본적으로 몇가지 조건에 의해 작동하게 됩니다. 
-
-조건 1.
-
-페이지가 처음 렌더링 되고난 후 useEffect 내의 함수는 무조건 한번 실행되고 봅니다.
-
-useEffect(() =&gt; {
-    function doSomething(){
-        console.log("something")
-    }
-    doSomething();
-    
-})
-
-조건 2.
-만약에 useEffect의 2번재 파라미터값이 없다면 이는 해당 컴포넌트가 렌더링 될 때마다 실행됩니다.
-두번째 파라미터는 watch 값들의 목록입니다 만약 값이 변경되면 us...</div>
-<p><a href="/2021/04/29/Learning-React-09.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/28/Learning-React-08.html"><h2 itemprop="headline" class="item__header">[ #8 ] Portal, useRef</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. Portal을 사용하기.
-
-//index.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import './index.css';
-import App from './App';
-
-ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
-
-modal, overlayed popup같은 경우는 따로 분리해서 보여주는게 맞다고 합니다. 하지만 어떻게 그렇게 할 수 있을까요?.
-
-//index.html
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-  &lt;he...</div>
-<p><a href="/2021/04/28/Learning-React-08.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 28일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-28T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/27/Learning-React-07.html"><h2 itemprop="headline" class="item__header">[ #7 ] 3 ways to fullfill jsx's requirement</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">JSX requirement
-
-import React from 'react'
-
-const AddUser = () =&gt; {
-  return (
-    &lt;div&gt;이건&lt;/div&gt;
-    &lt;div&gt;에러나요&lt;/div&gt;
-  )
-}
-
-export default AddUser
-
-
-리액트 jsx는 오직 하나의 html element만을 return할 수 있습니다.  
-따라서 위의 코드는 에러를 뿜어냅니다.
-
-
-
-이를 수정하기 위해선 이 두태그를 하나의 div로 감싸줘야 합니다.
-
-import React from "react";
-
-const AddUser = () =&gt; {
-  r...</div>
-<p><a href="/2021/04/27/Learning-React-07.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 27일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-27T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/26/Learning-React-06.html"><h2 itemprop="headline" class="item__header">[ #6 ] setState &amp; conditional content</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. useState 를 사용하는 방법.
-기존코드
-
-
-const[expenses, setExpenses]=useState(initial_expenses)
-
-  const addExpenseHandler = (expense) =&gt; {
-    temp = [{
-        ...data,
-        expense,
-    }]
-    setExpenses(temp);
-  }
-
-
-함수 useState()는 현재값과, setExpenses라는 값을 변경하는 메소드를 반환하는줄 알았고, setExpenses(바꿀값) 을 통하여 
-값을 직접 변경할 수 있는정도로만 알고있엇다. 
-
-useState의 두번째 반환값 s...</div>
-<p><a href="/2021/04/26/Learning-React-06.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 26일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-26T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article>
-</div>
-</div>
-<div class="layout--home"><div class="pagination">
-<p>전체 글 21개, 3 페이지</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap">
-<li><a class="button button--secondary button--circle" href="/">
-            <i class="fas fa-angle-left"></i>
-          </a></li>
-<li>
-              <a class="button button--secondary button--circle" href="/"><span>1</span></a>
-            </li>
-<li>
-              <div class="button button--primary button--circle focus"><span>2</span></div>
-            </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page3"><span>3</span></a>
-              </li>
-<li><a class="button button--secondary button--circle" href="/page3">
-            <i class="fas fa-angle-right"></i>
-          </a></li>
-</ul>
-    </div>
-  </div></div>
-<script>/*(function () {
-
-})();*/
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
-</div>
-<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div>
-<div class="page__footer d-print-none">
+            </div></div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main">
-<div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong">
-<meta itemprop="url" content="/">
-<div class="footer__author-links">
-<div class="author-links">
+  <div class="main"><div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a>
-</li></ul>
+      </a></ul>
 </div>
 </div>
-    </div>
-<div class="site-info mt-2">
+    </div><div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
+        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div>
-</div>
-    </div>
-<script>(function() {
+</div></div>
+    </div><script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -718,8 +473,7 @@ useState의 두번째 반환값 s...</div>
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
-<script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -811,7 +565,7 @@ useState의 두번째 반환값 s...</div>
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text">
+        <input type="text" />
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -935,8 +689,7 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div>
-</div>
+</div></div>
 
 
 <script>(function() {
@@ -1173,6 +926,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script>
     </div>
     <script>(function () {

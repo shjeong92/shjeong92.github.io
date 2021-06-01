@@ -1,5 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-05-31T20:46:03+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
-</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #5 ] pod 스케쥴링-2</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html" rel="alternate" type="text/html" title="[ #5 ] pod 스케쥴링-2" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">&lt;h2 id=&quot;nodeselector&quot;&gt;nodeSelector&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-06-01T11:44:44+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">ssh config 설정으로 간편하게 ssh하기</title><link href="https://shjeong92.github.io/2021/06/01/Handling-ssh-config.html" rel="alternate" type="text/html" title="ssh config 설정으로 간편하게 ssh하기" /><published>2021-06-01T00:00:00+09:00</published><updated>2021-06-01T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/06/01/Handling-ssh-config</id><content type="html" xml:base="https://shjeong92.github.io/2021/06/01/Handling-ssh-config.html">&lt;p&gt;최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요.&lt;/p&gt;
+
+&lt;p&gt;이 글에선 맥에서 GCP에 접속하기 위한 &lt;code&gt;RSA key pair&lt;/code&gt;를 생성하는 부분부터 &lt;code&gt;ssh config&lt;/code&gt; 설정하는법을 다루겠습니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;key-pair-생성하기&quot;&gt;key pair 생성하기&lt;/h2&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음)
+$ssh-keygen -t rsa -f ~/.ssh/&amp;lt;KEY_FILE_NAME&amp;gt; -C &quot;account@gmail.com&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;위와같이 입력하면 RSA key pair가 생성됩니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh-keygen &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; rsa &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; ~/.ssh/test &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;test@gmail.com&quot;&lt;/span&gt;
+Generating public/private rsa key pair.
+Enter passphrase &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;empty &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;no passphrase&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 
+Enter same passphrase again: 
+Your identification has been saved &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; /Users/sanghyukjeong/.ssh/test.
+Your public key has been saved &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; /Users/sanghyukjeong/.ssh/test.pub.
+The key fingerprint is:
+SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;@gmail.com
+The key&lt;span class=&quot;s1&quot;&gt;&apos;s randomart image is:
++---[RSA 3072]----+
+|+E+=. .....      |
+|.o*.o..oo.       |
+|.=.o. .+         |
+|... ... o.       |
+|o+   ...S        |
+|B..  . B         |
+|*+ .  * +        |
+|O.o    +         |
+|oOo    .o        |
++----[SHA256]-----+
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;이후 cat명령어로 rsa 공개키를 확인할 수 있는데
+구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; ~/.ssh/test.pub
+ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;@gmail.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;key-등록하기&quot;&gt;key 등록하기&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://shjeong92.github.io/assets/images/gcp.png&quot;&gt;gcp&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;compute엔진 -&amp;gt; 메타데이터 -&amp;gt; SSH 키로 이동후에&lt;/p&gt;
+
+&lt;p&gt;항목추가를 클릭하여 공개키를 추가합니다.&lt;/p&gt;
+
+&lt;p&gt;키등록이 끝났으니 ssh 접속을 해봅시다&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="static" /><category term="pod" /><summary type="html">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요. 이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다. key pair 생성하기 #-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음) $ssh-keygen -t rsa -f ~/.ssh/&amp;lt;KEY_FILE_NAME&amp;gt; -C &quot;account@gmail.com&quot; 위와같이 입력하면 RSA key pair가 생성됩니다. ssh-keygen -t rsa -f ~/.ssh/test -C &quot;test@gmail.com&quot; Generating public/private rsa key pair. Enter passphrase (empty for no passphrase): Enter same passphrase again: Your identification has been saved in /Users/sanghyukjeong/.ssh/test. Your public key has been saved in /Users/sanghyukjeong/.ssh/test.pub. The key fingerprint is: SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ test@gmail.com The key&apos;s randomart image is: +---[RSA 3072]----+ |+E+=. ..... | |.o*.o..oo. | |.=.o. .+ | |... ... o. | |o+ ...S | |B.. . B | |*+ . * + | |O.o + | |oOo .o | +----[SHA256]-----+ 이후 cat명령어로 rsa 공개키를 확인할 수 있는데 구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다. $ cat ~/.ssh/test.pub ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk= test@gmail.com key 등록하기 gcp compute엔진 -&amp;gt; 메타데이터 -&amp;gt; SSH 키로 이동후에 항목추가를 클릭하여 공개키를 추가합니다. 키등록이 끝났으니 ssh 접속을 해봅시다</summary></entry><entry><title type="html">[ #5 ] pod 스케쥴링-2</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html" rel="alternate" type="text/html" title="[ #5 ] pod 스케쥴링-2" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">&lt;h2 id=&quot;nodeselector&quot;&gt;nodeSelector&lt;/h2&gt;
 &lt;p&gt;nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.&lt;/p&gt;
 &lt;h3 id=&quot;1-노드에-레이블-붙이기&quot;&gt;1. 노드에 레이블 붙이기&lt;/h3&gt;
 
@@ -1824,105 +1873,4 @@ CONTAINER ID   IMAGE       COMMAND                  CREATED             STATUS  
 1:M 19 May 08:54:29.494 &lt;span class=&quot;c&quot;&gt;# Server initialized&lt;/span&gt;
 1:M 19 May 08:54:29.494 &lt;span class=&quot;c&quot;&gt;# WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.&lt;/span&gt;
 1:M 19 May 08:54:29.494 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Ready to accept connections
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><summary type="html">Image vs Container 도커 이미지 도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다. 도커 컨테이너 도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다. 컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다. 허브로부터 이미지 받아오기 docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다. $ docker pull &amp;lt;image&amp;gt; 이미지 실행하기 docker run 커맨드를 사용하여 원하는 이미지를 실행시킬 수 있습니다. $ docker run &amp;lt;image&amp;gt; 먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, 없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다. 디폴트로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다. -d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다. –rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다. 현재 실행중인 컨테이너 리스트 docker ps커맨드를 사용하면 현재 실행중인 컨테이너 목록을 보여줍니다. $ docker ps -a 옵션을 추가하면, 실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다. $ docker ps -a 로컬머신과 네트워크 바인딩하기 $ docker run -p 6000:6379 redis -p옵션으로 로컬머신과 컨테이너를 바인딩 할 수 있습니다. $ docker ps CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES 14eb691f51ad redis &quot;docker-entrypoint.s…&quot; About a minute ago Up About a minute 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp flamboyant_khorana docker ps 커맨드를 이용하여 실행되고있는 컨테이너를 보면 redis컨테이너는 6379포트로 liten중이고 해당 컨테이너의 6379포트는 로컬머신의 6000포트와 바인딩 되어있음을 확인 할 수 있습니다. 컨테이너에 이름부여하기 컨테이너 생성시 이름을 –name “원하는이름” 을 적어주면 원하는 이름으로 컨테이너 생성이 가능합니다. 이름을 지정하지 않을경우 랜덤으로 만들어집니다. $ docker run -p 6000:6379 --name redis-named redis:4.0 1:C 19 May 10:11:04.418 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo 1:C 19 May 10:11:04.418 # Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started 1:C 19 May 10:11:04.418 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf 1:M 19 May 10:11:04.420 * Running mode=standalone, port=6379. 1:M 19 May 10:11:04.420 # Server initialized 1:M 19 May 10:11:04.420 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled. 1:M 19 May 10:11:04.420 * Ready to accept connections docker ps커맨드로 로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다. $ docker ps CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES a5846e3006f2 redis:4.0 &quot;docker-entrypoint.s…&quot; 3 minutes ago Up 3 minutes 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp redis-named 컨테이너 실행하기 docker start커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다. $ docker start &amp;lt;idOrNameOfContainer&amp;gt; 컨테이너 종료하기 docker stop커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다. $ docker stop &amp;lt;idOrNameOfContainer&amp;gt; 컨테이너의 쉘에 접근하기 docker exec -it [idOrNameOfContainer] /bin/bash 원하는 컨테이너의 쉘에 접속하기 위해 쓰입니다. 다른 방법으로는 docker desktop에서 원하는 컨테이너를 클릭해서 해당 컨테이너의 쉘에 접근 가능합니다. 다음과 같이 해당 컨테이너에 root권한으로 원으며 원하는 작업을 할 수가 있겠습니다. $ docker exec -it a5846e /bin/bash root@a5846e3006f2:/data# ls dump.rdb root@a5846e3006f2:/data# cd / root@a5846e3006f2:/# ls bin boot data dev etc home lib media mnt opt proc root run sbin srv sys tmp usr var root@a5846e3006f2:/# env HOSTNAME=a5846e3006f2 REDIS_DOWNLOAD_SHA=1e1e18420a86cfb285933123b04a82e1ebda20bfb0a289472745a087587e93a7 PWD=/ HOME=/root REDIS_VERSION=4.0.14 GOSU_VERSION=1.12 TERM=xterm REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-4.0.14.tar.gz SHLVL=1 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin _=/usr/bin/env OLDPWD=/data 쉘접속을 종료하기위해 exit을 입력하거나, ctrl+D로 빠져나올 수 있습니다. 컨테이너의 로그 확인하기 docker logs커맨드로 원하는 컨테이너의 로그를 확인할 수 있습니다. $ docker logs &amp;lt;idOrNameOfConainer&amp;gt; 원하는 컨테이너의 로그를 보고 싶을때 쓸 수 있습니다. $ docker ps -a CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES 95424043babd redis:4.0 &quot;docker-entrypoint.s…&quot; About an hour ago Up About an hour 0.0.0.0:6001-&amp;gt;6379/tcp, :::6001-&amp;gt;6379/tcp epic_wiles 14eb691f51ad redis &quot;docker-entrypoint.s…&quot; About an hour ago Up About an hour 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp flamboyant_khorana $ docker logs epic_wiles 1:C 19 May 08:54:29.491 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo 1:C 19 May 08:54:29.493 # Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started 1:C 19 May 08:54:29.493 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf 1:M 19 May 08:54:29.494 * Running mode=standalone, port=6379. 1:M 19 May 08:54:29.494 # Server initialized 1:M 19 May 08:54:29.494 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled. 1:M 19 May 08:54:29.494 * Ready to accept connections</summary></entry><entry><title type="html">깃헙 history를 주물러봅시다</title><link href="https://shjeong92.github.io/2021/05/14/Github-01.html" rel="alternate" type="text/html" title="깃헙 history를 주물러봅시다" /><published>2021-05-14T00:00:00+09:00</published><updated>2021-05-14T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/14/Github-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/14/Github-01.html">&lt;h2 id=&quot;서론&quot;&gt;서론&lt;/h2&gt;
-
-&lt;p&gt;때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.&lt;/p&gt;
-
-&lt;p&gt;얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Gitguardian에 sign한적도 없는데 실수로 민감한 정보를 올릴때마다 Alert 메일을 보내옵니다.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;과거에 저는 새로운 커밋으로 덮으면 과거 기록은 못 보는줄 알고 얼른 비밀번호를 환경변수로 바꾼후 다시 푸시 했었습니다. 하지만 commits history를 보면 비밀번호에 관한정보는 그대로 담겨있었고 history 수정 방법을 몰라 쌓아왔던 잔디를 포기하며 새로운 repo를 파서 다시 푸시했었습니다. 잔디들을 잃는 고통은 뼈를깎는 고통과 같았지만 어쩔 수 없었습니다.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;하지만 이번에는 얘기가 달랐습니다. &lt;br /&gt;
-이 2주동안 진행한 개인 프로젝트였는데 14일치의 잔디(총 50+ commits) 들을 통으로 없애기는 정말 싫었고, history를 수정할 방법을 찾고 말겠다고 다짐후 결국 찾았습니다. &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;이 글을 본 여러분들은 잔디를 잃지않고도 누출된 비밀정보의 history를 마음대로 주무를 수 있을 것입니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;1-bgf-repo-cleaner-설치&quot;&gt;1. BGF Repo-Cleaner 설치&lt;/h2&gt;
-
-&lt;p&gt;아래의 링크로 이동하여 해당 파일을 다운로드받으세요
-만약 자바가 설치되어있지않다면 자바 또한 설치해주세요.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://rtyley.github.io/bfg-repo-cleaner/&quot;&gt;BGF Repo-Cleaner&lt;/a&gt; 다운로드하기&lt;/p&gt;
-
-&lt;p&gt;Download 폴더안에 파일이 있을겁니다&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#.zshrc&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;bfg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;java -jar ~/Downloads/bfg-1.14.0.jar&apos;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;추후에도 편하게 쓰기위해 alias를 설정해줍니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;2-히스토리를-변경하고자하는-폴더로-들어갑니다&quot;&gt;2. 히스토리를 변경하고자하는 폴더로 들어갑니다.&lt;/h2&gt;
-
-&lt;p&gt;git init을 했던 위치로 이동하면되는 겁니다.&lt;/p&gt;
-
-&lt;p&gt;터미널에 ls -a 했을때
-.git 이 보이면 모든 준비가 끝이났습니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;3-여러가지-옵션&quot;&gt;3. 여러가지 옵션.&lt;/h2&gt;
-
-&lt;h3 id=&quot;option-1&quot;&gt;option 1.&lt;/h3&gt;
-
-&lt;p&gt;만약 HelloWorld.txt에 관한 모든 커밋 히스토리를 없애고싶다면 
-터미널에&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bfg &lt;span class=&quot;nt&quot;&gt;--delete-files&lt;/span&gt; HelloWorld.txt .git 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;뭔가 여러줄뜰거에요. 끝나고나면&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git reflog expire &lt;span class=&quot;nt&quot;&gt;--expire&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;now &lt;span class=&quot;nt&quot;&gt;--all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; git gc &lt;span class=&quot;nt&quot;&gt;--prune&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;now &lt;span class=&quot;nt&quot;&gt;--aggressive&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;입력해서 원하지않는 모든 dirty data를 삭제할거에요
-그 다음,&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git push &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;입력하여 리모트 리포로 하드 푸시해줍니다.&lt;/p&gt;
-
-&lt;p&gt;최신의(오류를 모드 제거했다고 가정함으로)커밋을 제외한 모든 히스토리에서 해당파일정보는 보이지 않을거에요.&lt;/p&gt;
-
-&lt;h3 id=&quot;option-2&quot;&gt;option 2.&lt;/h3&gt;
-
-&lt;p&gt;파일에관한 히스토리는 모두유지하면서 원하는 정보만 가리고싶을때에는 이 방법을 이용하세요.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;#settings.py&lt;/p&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AWS_ACCESS_KEY_ID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&apos;itsmyaccesskeyid&apos;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;AWS_SECRET_ACCESS_KEY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&apos;itsmysecretaccesskey&apos;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;이방법을 쓰면 모든 히스토리에 있는 모든 ‘itsmyaccesskeyid’ 나 ‘itsmysecretaccesskey’ 를 아래와 같이 ***REMOVED*** 로 바꾸거나 원하는대로 바꿔줄 수 도있습니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AWS_ACCESS_KEY_ID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;***&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;REMOVED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;***&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;AWS_SECRET_ACCESS_KEY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;***&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;REMOVED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;***&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;먼저 replacements.txt를 만들어봅시다 (.git 이 위치한 폴더에)
-여기에도 여러가지 옵션이있고, 정규표현식도 이용할 수 도 있지만 간단한 옵션들만 설명하겠습니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#replacements.txt
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;itsmyaccesskeyid&lt;/span&gt;                           &lt;span class=&quot;c1&quot;&gt;# itsmyaccesskeyid 를 &apos;***REMOVED***&apos; 로 바꿔줍니다 (default)
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;itsmysecretaccesskey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;examplePass&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;# itsmysecretaccesskey 를 &apos;examplePass&apos; 로 바꿔줍니다.
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PASSWORD3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&amp;gt;&lt;/span&gt;                               &lt;span class=&quot;c1&quot;&gt;# PASSWORD 를 &apos;&apos; 로 바꿔줍니다.
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;귀찮다 싶으시면 그냥 txt파일 하나만들고, 민감한정보 모두를 나열해주시면됩니다. (변수명이 아닌 정보 그자체를 나열해야합니다)&lt;/p&gt;
-
-&lt;p&gt;자 이제 모든 정보를 지울 준비가 완료되었습니다.&lt;/p&gt;
-
-&lt;p&gt;터미널에&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bfg &lt;span class=&quot;nt&quot;&gt;--replace-text&lt;/span&gt; replacements.txt .git
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;입력후 엔터쳐주세요&lt;/p&gt;
-
-&lt;p&gt;그다음 option1 과 마찬가지로&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git reflog expire &lt;span class=&quot;nt&quot;&gt;--expire&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;now &lt;span class=&quot;nt&quot;&gt;--all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; git gc &lt;span class=&quot;nt&quot;&gt;--prune&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;now &lt;span class=&quot;nt&quot;&gt;--aggressive&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;입력해서 원하지않는 모든 dirty data를 삭제후&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git push &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;입력하여 리모트 리포로 하드 푸시해줍니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Github" /><category term="Commit" /><category term="SVN" /><category term="history" /><category term="modify" /><summary type="html">서론 때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해 작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다. 얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Gitguardian에 sign한적도 없는데 실수로 민감한 정보를 올릴때마다 Alert 메일을 보내옵니다. 과거에 저는 새로운 커밋으로 덮으면 과거 기록은 못 보는줄 알고 얼른 비밀번호를 환경변수로 바꾼후 다시 푸시 했었습니다. 하지만 commits history를 보면 비밀번호에 관한정보는 그대로 담겨있었고 history 수정 방법을 몰라 쌓아왔던 잔디를 포기하며 새로운 repo를 파서 다시 푸시했었습니다. 잔디들을 잃는 고통은 뼈를깎는 고통과 같았지만 어쩔 수 없었습니다. 하지만 이번에는 얘기가 달랐습니다. 이 2주동안 진행한 개인 프로젝트였는데 14일치의 잔디(총 50+ commits) 들을 통으로 없애기는 정말 싫었고, history를 수정할 방법을 찾고 말겠다고 다짐후 결국 찾았습니다. 이 글을 본 여러분들은 잔디를 잃지않고도 누출된 비밀정보의 history를 마음대로 주무를 수 있을 것입니다. 1. BGF Repo-Cleaner 설치 아래의 링크로 이동하여 해당 파일을 다운로드받으세요 만약 자바가 설치되어있지않다면 자바 또한 설치해주세요. BGF Repo-Cleaner 다운로드하기 Download 폴더안에 파일이 있을겁니다 #.zshrc alias bfg=&apos;java -jar ~/Downloads/bfg-1.14.0.jar&apos; 추후에도 편하게 쓰기위해 alias를 설정해줍니다. 2. 히스토리를 변경하고자하는 폴더로 들어갑니다. git init을 했던 위치로 이동하면되는 겁니다. 터미널에 ls -a 했을때 .git 이 보이면 모든 준비가 끝이났습니다. 3. 여러가지 옵션. option 1. 만약 HelloWorld.txt에 관한 모든 커밋 히스토리를 없애고싶다면 터미널에 $ bfg --delete-files HelloWorld.txt .git 뭔가 여러줄뜰거에요. 끝나고나면 $ git reflog expire --expire=now --all &amp;amp;&amp;amp; git gc --prune=now --aggressive 입력해서 원하지않는 모든 dirty data를 삭제할거에요 그 다음, $ git push -f &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt; 입력하여 리모트 리포로 하드 푸시해줍니다. 최신의(오류를 모드 제거했다고 가정함으로)커밋을 제외한 모든 히스토리에서 해당파일정보는 보이지 않을거에요. option 2. 파일에관한 히스토리는 모두유지하면서 원하는 정보만 가리고싶을때에는 이 방법을 이용하세요. #settings.py AWS_ACCESS_KEY_ID = &apos;itsmyaccesskeyid&apos; AWS_SECRET_ACCESS_KEY = &apos;itsmysecretaccesskey&apos; 이방법을 쓰면 모든 히스토리에 있는 모든 ‘itsmyaccesskeyid’ 나 ‘itsmysecretaccesskey’ 를 아래와 같이 ***REMOVED*** 로 바꾸거나 원하는대로 바꿔줄 수 도있습니다. AWS_ACCESS_KEY_ID = ***REMOVED*** AWS_SECRET_ACCESS_KEY = ***REMOVED*** 먼저 replacements.txt를 만들어봅시다 (.git 이 위치한 폴더에) 여기에도 여러가지 옵션이있고, 정규표현식도 이용할 수 도 있지만 간단한 옵션들만 설명하겠습니다. #replacements.txt itsmyaccesskeyid # itsmyaccesskeyid 를 &apos;***REMOVED***&apos; 로 바꿔줍니다 (default) itsmysecretaccesskey==&amp;gt;examplePass # itsmysecretaccesskey 를 &apos;examplePass&apos; 로 바꿔줍니다. PASSWORD3==&amp;gt; # PASSWORD 를 &apos;&apos; 로 바꿔줍니다. 귀찮다 싶으시면 그냥 txt파일 하나만들고, 민감한정보 모두를 나열해주시면됩니다. (변수명이 아닌 정보 그자체를 나열해야합니다) 자 이제 모든 정보를 지울 준비가 완료되었습니다. 터미널에 $ bfg --replace-text replacements.txt .git 입력후 엔터쳐주세요 그다음 option1 과 마찬가지로 $ git reflog expire --expire=now --all &amp;amp;&amp;amp; git gc --prune=now --aggressive 입력해서 원하지않는 모든 dirty data를 삭제후 $ git push -f &amp;lt;remote-repo&amp;gt; &amp;lt;localbranchname&amp;gt; 입력하여 리모트 리포로 하드 푸시해줍니다.</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><summary type="html">Image vs Container 도커 이미지 도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다. 도커 컨테이너 도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다. 컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다. 허브로부터 이미지 받아오기 docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다. $ docker pull &amp;lt;image&amp;gt; 이미지 실행하기 docker run 커맨드를 사용하여 원하는 이미지를 실행시킬 수 있습니다. $ docker run &amp;lt;image&amp;gt; 먼저 해당 이미지가 로컬머신에 있는지 확인합니다. 만약에있다면 해당이미지를 실행시켜주고, 없다면 Docker hub 에서 pull 해와서 실행 시켜줍니다. 디폴트로 attatched모드(해당 쉘이 닫히면 서버도 종료되는)로 실행됩니다. -d 옵션을 추가함으로써 백그라운드에서(쉘이 종료되도 서버는 유지되게) 실행되게 할 수 있습니다. –rm 옵션을 추가함으로써 해당 컨테이너를 멈춤과동시에 삭제시킬 수 있습니다. 현재 실행중인 컨테이너 리스트 docker ps커맨드를 사용하면 현재 실행중인 컨테이너 목록을 보여줍니다. $ docker ps -a 옵션을 추가하면, 실행되고 있는 모든 컨테이너들의 리스트를 보여줍니다. $ docker ps -a 로컬머신과 네트워크 바인딩하기 $ docker run -p 6000:6379 redis -p옵션으로 로컬머신과 컨테이너를 바인딩 할 수 있습니다. $ docker ps CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES 14eb691f51ad redis &quot;docker-entrypoint.s…&quot; About a minute ago Up About a minute 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp flamboyant_khorana docker ps 커맨드를 이용하여 실행되고있는 컨테이너를 보면 redis컨테이너는 6379포트로 liten중이고 해당 컨테이너의 6379포트는 로컬머신의 6000포트와 바인딩 되어있음을 확인 할 수 있습니다. 컨테이너에 이름부여하기 컨테이너 생성시 이름을 –name “원하는이름” 을 적어주면 원하는 이름으로 컨테이너 생성이 가능합니다. 이름을 지정하지 않을경우 랜덤으로 만들어집니다. $ docker run -p 6000:6379 --name redis-named redis:4.0 1:C 19 May 10:11:04.418 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo 1:C 19 May 10:11:04.418 # Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started 1:C 19 May 10:11:04.418 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf 1:M 19 May 10:11:04.420 * Running mode=standalone, port=6379. 1:M 19 May 10:11:04.420 # Server initialized 1:M 19 May 10:11:04.420 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled. 1:M 19 May 10:11:04.420 * Ready to accept connections docker ps커맨드로 로 원하는 이름으로 컨테이너가 생성되었는지 확인해 봅니다. $ docker ps CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES a5846e3006f2 redis:4.0 &quot;docker-entrypoint.s…&quot; 3 minutes ago Up 3 minutes 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp redis-named 컨테이너 실행하기 docker start커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다. $ docker start &amp;lt;idOrNameOfContainer&amp;gt; 컨테이너 종료하기 docker stop커맨드를 이용하여 원하는 컨테이너를 실행할 수 있습니다. $ docker stop &amp;lt;idOrNameOfContainer&amp;gt; 컨테이너의 쉘에 접근하기 docker exec -it [idOrNameOfContainer] /bin/bash 원하는 컨테이너의 쉘에 접속하기 위해 쓰입니다. 다른 방법으로는 docker desktop에서 원하는 컨테이너를 클릭해서 해당 컨테이너의 쉘에 접근 가능합니다. 다음과 같이 해당 컨테이너에 root권한으로 원으며 원하는 작업을 할 수가 있겠습니다. $ docker exec -it a5846e /bin/bash root@a5846e3006f2:/data# ls dump.rdb root@a5846e3006f2:/data# cd / root@a5846e3006f2:/# ls bin boot data dev etc home lib media mnt opt proc root run sbin srv sys tmp usr var root@a5846e3006f2:/# env HOSTNAME=a5846e3006f2 REDIS_DOWNLOAD_SHA=1e1e18420a86cfb285933123b04a82e1ebda20bfb0a289472745a087587e93a7 PWD=/ HOME=/root REDIS_VERSION=4.0.14 GOSU_VERSION=1.12 TERM=xterm REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-4.0.14.tar.gz SHLVL=1 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin _=/usr/bin/env OLDPWD=/data 쉘접속을 종료하기위해 exit을 입력하거나, ctrl+D로 빠져나올 수 있습니다. 컨테이너의 로그 확인하기 docker logs커맨드로 원하는 컨테이너의 로그를 확인할 수 있습니다. $ docker logs &amp;lt;idOrNameOfConainer&amp;gt; 원하는 컨테이너의 로그를 보고 싶을때 쓸 수 있습니다. $ docker ps -a CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES 95424043babd redis:4.0 &quot;docker-entrypoint.s…&quot; About an hour ago Up About an hour 0.0.0.0:6001-&amp;gt;6379/tcp, :::6001-&amp;gt;6379/tcp epic_wiles 14eb691f51ad redis &quot;docker-entrypoint.s…&quot; About an hour ago Up About an hour 0.0.0.0:6000-&amp;gt;6379/tcp, :::6000-&amp;gt;6379/tcp flamboyant_khorana $ docker logs epic_wiles 1:C 19 May 08:54:29.491 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo 1:C 19 May 08:54:29.493 # Redis version=4.0.14, bits=64, commit=00000000, modified=0, pid=1, just started 1:C 19 May 08:54:29.493 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf 1:M 19 May 08:54:29.494 * Running mode=standalone, port=6379. 1:M 19 May 08:54:29.494 # Server initialized 1:M 19 May 08:54:29.494 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command &apos;echo never &amp;gt; /sys/kernel/mm/transparent_hugepage/enabled&apos; as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled. 1:M 19 May 08:54:29.494 * Ready to accept connections</summary></entry></feed>
