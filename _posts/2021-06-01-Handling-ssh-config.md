@@ -51,7 +51,7 @@ ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOx
 
 ## key 등록하기
 
-![gcp](/assets/images/gcp.png)
+![gcp](https://user-images.githubusercontent.com/75003424/120263396-9136a700-c2d6-11eb-8c97-65769591c66c.png)
 
 compute엔진 -> 메타데이터 -> SSH 키로 이동후에
 
