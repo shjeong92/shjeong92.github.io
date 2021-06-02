@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "ssh config 설정으로 간편하게 ssh하기"
+title: "ssh config 설정으로 간편하게 ssh접속하기"
 tags: gcloud ssh key-gen rsa config 
 ---
 
@@ -153,7 +153,7 @@ New release '20.04.2 LTS' available.
 Run 'do-release-upgrade' to upgrade to it.
 
 
-Last login: Tue Jun  1 03:44:23 2021 from 122.34.103.55
+Last login: Tue Jun  1 03:44:23 2021 from 122.32.103.55
 shjeong920522@master:~$ 
 ~~~
 
