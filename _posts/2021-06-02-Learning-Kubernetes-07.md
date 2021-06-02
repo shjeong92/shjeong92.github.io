@@ -26,10 +26,9 @@ Recreate 방식은 이전버전 A를 종료시킨후 신규버전 B를 롤아웃
 
 + 처음 쿠버네티스에 입문하였을때 replicaset과, deployment의 차이점은 yaml파일로만 놓고 봤을때는 다른점이 kind 부분 말고는 없었습니다. 똑같이 파드를 적정갯수 만큼 생성해주고, crash되면 다시 복구시켜주는 점에서는 말이죠.
 
-오늘 배포방식에 대해 공부하면서 왜 deployment를 사용하여 pod을 배포하는가에 대한 궁금증을 풀 수 있었습니다.
+오늘은 배포방식에 대해 공부하면서 왜 deployment를 사용하여 pod을 배포하는가에 대한 궁금증을 풀 수 있었습니다.
 
-
-Deployment를 사용하여 pod을 배포하게되면 롤아웃을 생성합니다. 그리고 이 롤아웃은 새로운 배포 버전(revision)을 생성합니다. 이말이 잘 이해가 안 되실수도 있는데
+Deployment를 사용하여 pod을 배포 하게되면 롤아웃을 생성합니다. 그리고 이 롤아웃은 새로운 배포 버전(revision)을 생성합니다. 이말이 잘 이해가 안 되실수도 있는데
 
 자세한 설명은 실습을 진행하면서 하도록 하겠습니다.
 
@@ -360,7 +359,43 @@ Events:
   Normal  ScalingReplicaSet  2m1s (x2 over 33m)   deployment-controller  Scaled down replica set myapp-deployment-7df67f74c5 to 0
 
 ~~~
+ 
+undo 를 여러번하니 nginx <-> nginx:1.20 왔다 갔다 하는 모습을 보여줍니다.
 
-바로 직전단계의 버전만을 기억하고 있었고, 다시 undo 하자 image가 1.20으로 바뀐것을 확인할 수 있었습니다.
 
-따라서 undo를 여러번 한다고 더 과거의 버전으로 돌아갈 수는 없는것을 확인할 수 있었습니다.
+
+## :rocket: history 
+history를 보아도 두줄의 결과만 보여주기도했고, 정말 바로 이전단계까지만 이동할 수 있는건지도 궁금했습니다.
+
+궁금한건 못참기에 바로 kubernetes.io를 찾다보니 원하는 revision으로 가려면 **--to-revision=[resion-number]** 를 입력해야되는것을 알 수 있었습니다.
+
+deployment 의 spec 밑에 revisionHistoryLimit: 10 으로 설정되어 있는것도 확인했으며 이 또한 수정할 수 있었군요 ㅎㅎ
+
+바로 이전 단계만 이동 가능하다고 포스트 올렸다가 호다닥 수정하네요 
+
+
+
+그나저나 history에는 왜 사람 햇갈리게 두줄만을 보여줬던 걸까요?
+
+kubernetes는 상당히 **똑똑했기** 때문입니다. 
+
+이미 기억하고있는 replicaset랑 다름이 없기에 새로운 replicaset을 생성하지 않는것이었습니다. 
+
+history에 없는 다른 버전의 nginx의 이미지로 바꾸어주니 replicaset과 history 각각 하나씩 더 생기는것을 확인할 수 있었습니다.
+
+~~~sh
+$ kubectl get rs
+NAME                          DESIRED   CURRENT   READY   AGE
+myapp-deployment-54d59f8648   3         3         3       17m
+myapp-deployment-79896f8f68   0         0         0       117m
+myapp-deployment-7df67f74c5   0         0         0       118m
+
+$ kubectl rollout history deploy myapp-deployment
+deployment.apps/myapp-deployment 
+REVISION  CHANGE-CAUSE
+3         image updated to 1.20
+4         <none>
+5         <none>
+~~~
+
+
