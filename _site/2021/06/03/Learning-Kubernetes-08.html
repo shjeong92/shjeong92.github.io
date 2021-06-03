@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #7 ] 배포 전략 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #8 ] 클러스터 유지보수 - Hyuk's devlog</title>
 
-<meta name="description" content="쿠버네티스에는아래 그림과 같이 두가지 배포방법이 있습니다RecreateRecreate 방식은 이전버전 A를 종료시킨후 신규버전 B를 롤아웃 시키는 방식입니다.pros  가장 쉬운 배포방법  클라우드 리소스 비요이 적음cons  A가 중지되고 B가 배포되기전까지 서비스가 중단되어 사...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/06/02/Learning-Kubernetes-07.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다.쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다.그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -292,21 +292,15 @@
 <!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #7 ] 배포 전략</h1></header></div>
-<meta itemprop="headline" content="[ #7 ] 배포 전략">
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #8 ] 클러스터 유지보수</h1></header></div>
+<meta itemprop="headline" content="[ #8 ] 클러스터 유지보수">
 <div class="article__info clearfix">
 <ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
 <li>
               <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Deployment">Deployment</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=maintenance">maintenance</a>
             </li>
 <li>
               <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
@@ -321,397 +315,425 @@
               <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=rolling">rolling</a>
-            </li>
-<li>
               <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
             </li>
 </ul>
 <ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 02일</span>
+<i class="far fa-calendar-alt"></i> <span>2021년 06월 03일</span>
             </li></ul>
 </div>
 <meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-02T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod,strategy,쿠버네티스,rolling,update">
+<meta itemprop="datePublished" content="2021-06-03T00:00:00+09:00">
+    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update">
 <div class="js-article-content">
 <div class="layout--article">
 <!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody">
-<p>쿠버네티스에는아래 그림과 같이 두가지 배포방법이 있습니다</p>
+<p>오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다.</p>
 
-<p><img src="https://user-images.githubusercontent.com/75003424/120428975-9582c300-c3af-11eb-95cf-ba8825576440.png" alt="deplstrategy"></p>
+<p>쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다.</p>
 
-<h2 id="recreate">Recreate</h2>
-<p>Recreate 방식은 이전버전 A를 종료시킨후 신규버전 B를 롤아웃 시키는 방식입니다.</p>
+<p>그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요?</p>
 
-<h3 id="pros">pros</h3>
 <ul>
-  <li>가장 쉬운 배포방법</li>
-  <li>클라우드 리소스 비요이 적음</li>
+  <li>master node의 kube-contoller-manager에는 pod-eviction-timeout이 존재합니다</li>
 </ul>
 
-<h3 id="cons">cons</h3>
+<h2 id="컨디션">컨디션</h2>
+
+<p>각 노드에는 아래와 같이 여러가지 condition이 존재합니다</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">노드 컨디션</th>
+      <th style="text-align: left">설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Ready</strong></td>
+      <td style="text-align: left">노드가 상태 양호하며 파드를 수용할 준비가 되어 있는 경우 True, 노드의 상태가 불량하여 파드를 수용하지 못할 경우 False, 그리고 노드 컨트롤러가 마지막 node-monitor-grace-period (기본값 40 기간 동안 노드로부터 응답을 받지 못한 경우) Unknown</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>DiskPressure</strong></td>
+      <td style="text-align: left">디스크 사이즈 상에 압박이 있는 경우, 즉 디스크 용량이 넉넉치 않은 경우 True, 반대의 경우 False</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>MemoryPressure</strong></td>
+      <td style="text-align: left">노드 메모리 상에 압박이 있는 경우, 즉 노드 메모리가 넉넉치 않은 경우 True, 반대의 경우 False</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>PIDPressure</strong></td>
+      <td style="text-align: left">프로세스 상에 압박이 있는 경우, 즉 노드 상에 많은 프로세스들이 존재하는 경우 True, 반대의 경우 False</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>NetworkUnavailable</strong></td>
+      <td style="text-align: left">노드에 대해 네트워크가 올바르게 구성되지 않은 경우 True, 반대의 경우 False</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>또한 노드 lifecycle controller는 컨디션을 아래와 같은 <strong><em>built-in taint</em></strong>를 자동으로 생성합니다.</p>
+
+<h3 id="built-in-taints">built-in taints</h3>
 <ul>
-  <li>A가 중지되고 B가 배포되기전까지 서비스가 중단되어 사용자에게 악영향을 줌</li>
+  <li>node.kubernetes.io/not-ready: 노드가 준비되지 않음. 이는 NodeCondition Ready 가 “False”로 됨에 해당.</li>
+  <li>node.kubernetes.io/unreachable: 노드가 노드 컨트롤러에서 도달할 수 없음. 이는  NodeCondition Ready 가 “Unknown”로 됨에 해당.</li>
+  <li>node.kubernetes.io/memory-pressure: 노드에 메모리 할당 압박이 있음.</li>
+  <li>node.kubernetes.io/disk-pressure: 노드에 디스크 할당 압박이 있음.</li>
+  <li>node.kubernetes.io/pid-pressure: 노드에 PID 할당 압박이 있음.</li>
+  <li>node.kubernetes.io/network-unavailable: 노드의 네트워크를 사용할 수 없음.</li>
+  <li>node.kubernetes.io/unschedulable: 노드를 스케줄할 수 없음.</li>
+  <li>node.cloudprovider.kubernetes.io/uninitialized: “외부” 클라우드 공급자로 kubelet을 시작하면, 이 테인트가 노드에서 사용 불가능으로 표시되도록 설정됨.</li>
 </ul>
 
-<h2 id="rolling-update">Rolling Update</h2>
+<p>그 중에서도 <code>ready</code> 컨디션은 좀 특별한데요. 
+ready 컨디션의 상태가 pod-eviction-timeout (kube-controller-manager에 전달된 인수) 보다 더 길게 Unknown 또는 False로 유지되는 경우, 노드 상에 모든 파드는 노드 컨트롤러에 의해 삭제되도록 스케줄 됩니다.</p>
+
+<p>클라우드-컨트롤러-관리자의 컨트롤러가 이 노드를 초기화하면, kubelet이 이 테인트를 제거합니다 즉 다시 pod가 배정될 수 있는 상태가 되는것이죠. 기본 축출 타임아웃 기간은 기본 5분으로 설정되어 있습니다. 만약 노드가 다운되었다가 5분안에 복구가 되었다면 노드 내의 pod들은 그대로 존재하지만, 설정된 타임아웃 시간을 초과한다면 그안의 파드들은 모두 중단 되는것입니다.</p>
+
+<p>만약 수정하고 싶다면 마스터 노드의 kube-system 네임스페이스에 있는 kube-controller-manager-master을 edit해주면됩니다.</p>
+
+<p>그런데 말이죠 이 pod는 static pod입니다. 
+<a href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html">6번째 포스트</a>에서 설명 했었는데 static pod 를 수정하려면 
+static pod을 생성한 yaml파일 자체를 수정한다고 했었죠?</p>
+
+<p>static pod의 위치를 찾는것 부터 복습해봅시다</p>
+
+<p>우선 config.yaml파일의 위치를 찾아줍니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ps <span class="nt">-ef</span> | <span class="nb">grep </span>kubelet | <span class="nb">grep</span> <span class="s2">"</span><span class="se">\-</span><span class="s2">-config"</span>
+
+root     10476     1  3 May28 ?        05:09:26 /usr/bin/kubelet <span class="nt">--bootstrap-kubeconfig</span><span class="o">=</span>/etc/kubernetes/bootstrap-kubelet.conf <span class="nt">--kubeconfig</span><span class="o">=</span>/etc/kubernetes/kubelet.conf <span class="nt">--config</span><span class="o">=</span>/var/lib/kubelet/config.yaml <span class="nt">--network-plugin</span><span class="o">=</span>cni <span class="nt">--pod-infra-container-image</span><span class="o">=</span>k8s.gcr.io/pause:3.4.1
+</code></pre></div></div>
+
+<p>config.yaml파일 내에서 staticpath를 찾아냅시다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo grep</span> <span class="nt">-i</span> static /var/lib/kubelet/config.yaml
+staticPodPath: /etc/kubernetes/manifests
+</code></pre></div></div>
+
+<p>staticPodPath로 이동후 뭐가있나 확인해봅니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> /etc/kubernetes/manifests
+
+<span class="nv">$ </span><span class="nb">ls
+</span>etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml
+</code></pre></div></div>
+
+<p>자 이제 이 yaml파일을 수정하면 됩니다.
+저는 이 기본 5분인 eviction-timeout을 60초로 바꾸어 보겠습니다.</p>
+
+<p>command에 <code>--pod-eviction-timeout=60s</code> 옵션을 추가해 줌으로써 말이죠.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">annotations</span><span class="pi">:</span>
+    <span class="s">kubernetes.io/config.hash</span><span class="pi">:</span> <span class="s">47cace34a635d6f3e305eee20e0e7b30</span>
+    <span class="s">kubernetes.io/config.mirror</span><span class="pi">:</span> <span class="s">47cace34a635d6f3e305eee20e0e7b30</span>
+    <span class="s">kubernetes.io/config.seen</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2021-05-28T03:40:42.961803243Z"</span>
+    <span class="s">kubernetes.io/config.source</span><span class="pi">:</span> <span class="s">file</span>
+  <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2021-05-28T03:40:55Z"</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">component</span><span class="pi">:</span> <span class="s">kube-controller-manager</span>
+    <span class="na">tier</span><span class="pi">:</span> <span class="s">control-plane</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">kube-controller-manager-master</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">kube-system</span>
+  <span class="na">ownerReferences</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+    <span class="na">controller</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">kind</span><span class="pi">:</span> <span class="s">Node</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">master</span>
+    <span class="na">uid</span><span class="pi">:</span> <span class="s">69f4d243-9420-45a9-928e-672a1d3b977a</span>
+  <span class="na">resourceVersion</span><span class="pi">:</span> <span class="s2">"</span><span class="s">478"</span>
+  <span class="na">uid</span><span class="pi">:</span> <span class="s">4cfad35d-8664-42cf-9ed9-5fd5b4d771a4</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">containers</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">command</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">kube-controller-manager</span>
+    <span class="pi">-</span> <span class="s">--allocate-node-cidrs=true</span>
+    <span class="pi">-</span> <span class="s">--pod-eviction-timeout=60s</span>      <span class="c1">#&lt;----------- 해당라인을 추가하면 이제 5분이아닌 60초로 변경됩니다.</span>
+    <span class="pi">-</span> <span class="s">--authentication-kubeconfig=/etc/kubernetes/controller-manager.conf</span>
+    <span class="pi">-</span> <span class="s">--authorization-kubeconfig=/etc/kubernetes/controller-manager.conf</span>
+    <span class="pi">-</span> <span class="s">--bind-address=127.0.0.1</span>
+    <span class="pi">-</span> <span class="s">--client-ca-file=/etc/kubernetes/pki/ca.crt</span>
+    <span class="pi">-</span> <span class="s">--cluster-cidr=10.244.0.0/16</span>
+    <span class="pi">-</span> <span class="s">--cluster-name=kubernetes</span>
+    <span class="pi">-</span> <span class="s">--cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt</span>
+    <span class="pi">-</span> <span class="s">--cluster-signing-key-file=/etc/kubernetes/pki/ca.key</span>
+    <span class="pi">-</span> <span class="s">--controllers=*,bootstrapsigner,tokencleaner</span>
+    <span class="pi">-</span> <span class="s">--kubeconfig=/etc/kubernetes/controller-manager.conf</span>
+    <span class="pi">-</span> <span class="s">--leader-elect=true</span>
+    <span class="pi">-</span> <span class="s">--port=0</span>
+    <span class="pi">-</span> <span class="s">--requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt</span>
+    <span class="pi">-</span> <span class="s">--root-ca-file=/etc/kubernetes/pki/ca.crt</span>
+    <span class="pi">-</span> <span class="s">--service-account-private-key-file=/etc/kubernetes/pki/sa.key</span>
+    <span class="pi">-</span> <span class="s">--service-cluster-ip-range=10.96.0.0/12</span>
+    <span class="pi">-</span> <span class="s">--use-service-account-credentials=true</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">k8s.gcr.io/kube-controller-manager:v1.21.1</span>
+
+<span class="s">...중략</span>
+
+</code></pre></div></div>
+<p>저장해주면 멈췄다가</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kube-controller-manager-master    0/1     Running   0          3s
+</code></pre></div></div>
+<p>옵션을 적용시켜 pod시 재시동됩니다~</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kube-controller-manager-master    1/1     Running   0          3s
+</code></pre></div></div>
+
+<h2 id="eviction-timeout의-존재이유">eviction timeout의 존재이유?</h2>
+<p>위에서 eviction timeout의 값을 바꾸는 실습을 해보았는데요 이 timeout은 무엇과 연관이 있는지 두가지 케이스를 통해서 알아보겠습니다.</p>
+
 <ul>
   <li>
-    <p>기존서버를 순차적으로 중지시키며 순차적으로 업그레이드 시키는 방식으로, kubernetes에서 spec.strategy.type을 지정하지 않으면 기본적으로 RollingUpdate를 사용합니다.</p>
+<strong>case1: node가 먹통이 되었다가 설정해놓은 eviction-timeout보다 짦은시간안에 복구된경우</strong>
+    <ul>
+      <li>노드내에 있던 pod들이 kubectl에 의해 다시 해당노드에서 재시작됩니다.</li>
+    </ul>
   </li>
   <li>
-    <p>처음 쿠버네티스에 입문하였을때 replicaset과, deployment의 차이점은 yaml파일로만 놓고 봤을때는 다른점이 kind 부분 말고는 없었습니다. 똑같이 파드를 적정갯수 만큼 생성해주고, crash되면 다시 복구시켜주는 점에서는 말이죠.</p>
+<strong>case2: node가 먹통이 된후 eviction-timeout을 초과한경우</strong>
+    <ul>
+      <li>해당 노드에있는 pod들을 모두 축출한 후에 노드가 재시동됩니다.</li>
+      <li>해당 노드에있던 pod이 replicaset을 통해 생성되었다면 다시 다른노드에 잘 생성이 되겠지만, 일반 pod이라면 다시 살아나지 못할겁니다.</li>
+    </ul>
   </li>
 </ul>
 
-<p>오늘은 배포방식에 대해 공부하면서 왜 deployment를 사용하여 pod을 배포하는가에 대한 궁금증을 풀 수 있었습니다.</p>
+<h2 id="노드관련-명령어">노드관련 명령어</h2>
+<ul>
+  <li>
+<code> kubectl drain node </code>
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl drain node
+</code></pre></div>    </div>
+    <ul>
+      <li>
+        <p>해당 노드에있는 pod들을 종료시키고, 다른노드에 재시작시킵니다 (graceful node shutdown) 또한 해당 노드를 unschedulable하게 만든다.</p>
+      </li>
+      <li>
+        <p>kubernetes의 버전 또는 리눅스 커널등의 업그레이드할 때 사용할 수 있겠습니다(kubeadm, kubelet, kubectl, …)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+<code> kubectl cordon node </code>
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl cordon node
+</code></pre></div>    </div>
+    <ul>
+      <li>해당 노드를 unschedulable하게 만듭니다</li>
+      <li><strong>실행 중인 Pod를 축출하지는 않습니다</strong></li>
+    </ul>
+  </li>
+  <li>
+<code> kubectl uncordon node </code>
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl uncordon node
+</code></pre></div>    </div>
+    <ul>
+      <li>해당 노드를 schedulable하게 만든다</li>
+      <li>업그레이드를 마친 노드를 스케쥴러블하게 만듭니다 (taint를 제거)</li>
+      <li><strong>drain명령에 의해서 집나간 pod들이 다시 집을 찾아오진 않습니다.</strong></li>
+    </ul>
+  </li>
+</ul>
 
-<p>Deployment를 사용하여 pod을 배포 하게되면 롤아웃을 생성합니다. 그리고 이 롤아웃은 새로운 배포 버전(revision)을 생성합니다. 이말이 잘 이해가 안 되실수도 있는데</p>
+<h2 id="쿠버네티스-버전-및-버전차이-지원">쿠버네티스 버전 및 버전차이 지원</h2>
 
-<p>자세한 설명은 실습을 진행하면서 하도록 하겠습니다.</p>
+<h3 id="버전">버전</h3>
+<p>쿠버네티스 버전은 x.y.z로 표현되는데, 여기서 x는 메이저 버전, y는 마이너 버전, z는 시맨틱 버전 용어에 따른 패치 버전입니다.
+kubernetes에는 여러가지 컴포넌트가 있습니다.
+각각의 버전은 전부 동일해야할까요? 아닙니다.</p>
 
-<p>아래와같이 deployment definition을 작성한 yaml파일이 있습니다.</p>
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#depl.yaml</span>
-<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
-<span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">name</span><span class="pi">:</span> <span class="s">myapp-deployment</span>
-  <span class="na">labels</span><span class="pi">:</span>
-    <span class="na">app</span><span class="pi">:</span> <span class="s">myapp</span>
-    <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
-<span class="na">spec</span><span class="pi">:</span>
-  <span class="na">template</span><span class="pi">:</span>
-    <span class="na">metadata</span><span class="pi">:</span>
-      <span class="na">name</span><span class="pi">:</span> <span class="s">myapp-pod</span>
-      <span class="na">labels</span><span class="pi">:</span>
-        <span class="na">app</span><span class="pi">:</span> <span class="s">myapp</span>
-        <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
-    <span class="na">spec</span><span class="pi">:</span>
-      <span class="na">containers</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">nginx-container</span>
-        <span class="na">image</span><span class="pi">:</span> <span class="s">nginx</span>
-  <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
-  <span class="na">selector</span><span class="pi">:</span>
-    <span class="na">matchLabels</span><span class="pi">:</span>
-      <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
+<p>kube-apiserver의 버전이 주축이되고, 나머지 컴포넌트는 각각 다르게 한 두단계 버전이 낮거나 같아도 상관이 없습니다. 특별하게 <strong>kubectl</strong>의 경우는 kube-apiserver의 버전보다 한단계 높은경우도 지원이 됩니다.</p>
+
+<p>더 자세한 내용은 <a href="https://kubernetes.io/ko/docs/setup/release/version-skew-policy/">공식문서</a>에서 확인가능 합니다</p>
+
+<h2 id="클러스터-업그레이드">클러스터 업그레이드</h2>
+
+<p>kubernets는 latest버전부터 두단계 낮은버전까지 서비스를 지원하는데요, 만약에 현재 1.19버전을 사용하고 있는데 1.22버전이 출시 된다면 업그레이드를 해야겠죠.</p>
+
+<p>그렇다면 1.19버전에서 한번에 1.22번으로 업그레이드 시키면될까요? 추천되는 방법에 의하면
+한단계 한단계씩 차례차례로 업그레이드 해야된다고 합니다.</p>
+
+<h3 id="업그레이드-방법">업그레이드 방법</h3>
+
+<p>쿠버네티스 환경을 어떻게 구성하였는가에 따라 업그레이드 방법이 다양합니다.</p>
+
+<ul>
+  <li>
+<strong>구글의 GKE, AWS의 EKS등의 kubernete를 지원하는 cloud의 경우</strong>
+    <ul>
+      <li>간단한 클릭 몇번으로 업그레이드 가능</li>
+    </ul>
+  </li>
+  <li>
+<strong>The hard way로 설치한경우</strong>
+    <ul>
+      <li>한땀한땀 설치한 것처럼 업그레이드 또한 한땀한땀 해야합니다</li>
+    </ul>
+  </li>
+</ul>
+
+<p>저는 <strong>kubeadm</strong>을 이용하여 kubernetes환경을 구축하였고, <strong>kubeadm</strong>을 통한 업그레이드 방법에 대해 자세히 설명해 보겠습니다.</p>
+
+<p>저의 쿠버네티스 환경은 한개의 master노드, 3개의 worker노드로 구성되어있습니다. 1.20버전을 이용하고 있는데 1.21버전으로 업그레이드 해보겠습니다.</p>
+
+<h3 id="step1---마스터-노드에-kubeadm-업그레이드-시키기">STEP1 - 마스터 노드에 kubeadm 업그레이드 시키기.</h3>
+
+<p>마스터 노드에 접속합니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh gcloud
+</code></pre></div></div>
+<ul>
+  <li>
+<strong>ssh config</strong>에 설정을 해놨기에 이렇게 간단하게 접속가능합니다. <strong>ssh config 설정방법</strong>이 궁금하시면 <a href="https://shjeong92.github.io/2021/06/01/Handling-ssh-config.html">여기</a>로 이동하세요.</li>
+</ul>
+
+<p>그리고  kubernetes환경을 구축할때 hold시켜놨었던 kubeadm을 unhold시켜주고, apt-get 색인 업데이트후, kubeadm을 업데이트 한다음 다시 kubeadm을 hold시켜 줄겁니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 1.21.x-00에서 x를 최신 패치 버전으로 바꿉니다</span>
+apt-mark unhold kubeadm <span class="o">&amp;&amp;</span> <span class="se">\</span>
+apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nv">kubeadm</span><span class="o">=</span>1.21.x-00 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+apt-mark hold kubeadm
+
+<span class="c">#버전 확인해주기</span>
+<span class="nv">$ </span>kubeadm version
+kubeadm version: &amp;version.Info<span class="o">{</span>Major:<span class="s2">"1"</span>, Minor:<span class="s2">"21"</span>, GitVersion:<span class="s2">"v1.21.1"</span>, GitCommit:<span class="s2">"5e58841cce77d4bc13713ad2b91fa0d961e69192"</span>, GitTreeState:<span class="s2">"clean"</span>, BuildDate:<span class="s2">"2021-05-12T14:17:27Z"</span>, GoVersion:<span class="s2">"go1.16.4"</span>, Compiler:<span class="s2">"gc"</span>, Platform:<span class="s2">"linux/amd64"</span><span class="o">}</span>
 </code></pre></div></div>
 
-<p>아래의 명령어를 사용하여 deployment를 생성하게되면</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply <span class="nt">-f</span> depl.yaml
-</code></pre></div></div>
+<p><strong>apt-mark unhold</strong>와 <strong>apt-mark hold</strong> 해주는 이유는 kubeadm을 업그레이드하면 설치시 kubelet과 같은 다른 구성 요소가 기본적으로 최신 버전 으로 자동으로 업그레이드되기 때문입니다. (kubernetes는 여러버전을 한꺼번에 업그레이드 권장하지 않기때문입니다!) 이를 해결하기 위해 보류를 사용하여 패키지를 보류 된 것으로 표시하여 패키지가 자동으로 설치, 업그레이드 또는 제거되지 않도록합니다.</p>
 
-<p>myapp-deployment라는 이름을가진 deployment와, myapp-deployment-hash값 을 가진 replicaset, 그리고 deployment를 통해 생성된 replicaset에 의해 생성된 pod을 확인할 수 있습니다.</p>
+<h3 id="step2---업그레이드-정보-확인하기">STEP2 - 업그레이드 정보 확인하기</h3>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get all
-NAME                                    READY   STATUS    RESTARTS   AGE
-pod/myapp-deployment-7df67f74c5-4nkmq   1/1     Running   0          5m27s
-pod/myapp-deployment-7df67f74c5-bnl9r   1/1     Running   0          5m27s
-pod/myapp-deployment-7df67f74c5-jsd9p   1/1     Running   0          5m27s
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubeadm upgrade plan
 
-NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>   AGE
-service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   5d2h
+...
 
-NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/myapp-deployment   3/3     3            3           5m27s
+COMPONENT            CURRENT AVAILABLE
 
-NAME                                          DESIRED   CURRENT   READY   AGE
-replicaset.apps/myapp-deployment-7df67f74c5   3         3         3       5m27s
-</code></pre></div></div>
+API Server           v1.20.0 v1.21.1
 
-<p>아직까지는 별 차이가 없지요, deployment가 생겼다는것 외에는 말입니다.</p>
+Controller Manager   v1.20.0 v1.21.1
 
-<p>하지만 사실은 이외에도 <code>revision</code>이라는 것을 생성합니다.</p>
+Scheduler            v1.20.0 v1.21.1
 
-<p>이는 해당 deployment를 업데이트 할때마다 생기고, 이전 <code>revision</code>의 정보도 가집니다. 또한, 새로운 버전의 <code>replicaset</code>을 생성하고, 이전버전의 <code>replicaset</code>의 정보를 남겨놓습니다.</p>
+Kube Proxy           v1.20.0 v1.21.1
 
-<p>만약에 업데이트후에 문제가 생겼을시에 롤백을 가능케 하기 위해서 입니다. 그리고 이러한점이 <strong>deployment</strong>를 사용해서 pod을 배포했을때랑 <strong>replicaset</strong>을 사용했을때의 가장 큰 차이점이 아닐까 싶습니다.</p>
-
-<h2 id="rollout-상태확인">Rollout 상태확인</h2>
-
-<p>deployment를 사용하여 pod을 배포하게되면 rollout을 생성한다고 했었는데 
-추가로 사용할 수 있는 커맨드도 생깁니다. <code>rollout</code> 이라는 커맨드인데요.</p>
-
-<p>rollout 커맨드를 통하여 deployment의 revision및 history를 확인할 수 있습니다</p>
-
-<p><code> kubectl rollout status deployment </code> 커맨드를 사용하여 다음과 같이 롤아웃 생성의 상태를 확인할 수 있습니다.</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl rollout status deployment/myapp-deployment
-Waiting <span class="k">for </span>deployment <span class="s2">"myapp-deployment"</span> rollout to finish: 0 of 3 updated replicas are available...
-Waiting <span class="k">for </span>deployment <span class="s2">"myapp-deployment"</span> rollout to finish: 1 of 3 updated replicas are available...
-Waiting <span class="k">for </span>deployment <span class="s2">"myapp-deployment"</span> rollout to finish: 2 of 3 updated replicas are available...
-deployment <span class="s2">"myapp-deployment"</span> successfully rolled out
-</code></pre></div></div>
-
-<h2 id="rollout-history-확인">Rollout history 확인</h2>
-
-<p>또한 <code> kubectl rollout history deployment </code> 커맨드를 사용하면 아래와 같이 리비전 정보를 확인할 수 있는데요</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl rollout <span class="nb">history </span>deploy/myapp-deployment
-deployment.apps/myapp-deployment 
-REVISION  CHANGE-CAUSE
-1         &lt;none&gt;
-</code></pre></div></div>
-
-<p>하나의 revision 밖에 보이지않습니다. 그 이유는 depl.yaml을 이용하여 처음으로 배포한 버전이기 때문입니다.</p>
-
-<h2 id="rollout-update">Rollout update</h2>
-<p>해당 deployment를 업데이트하면 어떤일이 생기는지 보도록 하겠습니다.</p>
-
-<p>우선 yaml파일을 수정해줍니다</p>
-
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#depl.yaml</span>
-<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
-<span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">name</span><span class="pi">:</span> <span class="s">myapp-deployment</span>
-  <span class="na">labels</span><span class="pi">:</span>
-    <span class="na">app</span><span class="pi">:</span> <span class="s">myapp</span>
-    <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
-<span class="na">spec</span><span class="pi">:</span>
-  <span class="na">template</span><span class="pi">:</span>
-    <span class="na">metadata</span><span class="pi">:</span>
-      <span class="na">name</span><span class="pi">:</span> <span class="s">myapp-pod</span>
-      <span class="na">labels</span><span class="pi">:</span>
-        <span class="na">app</span><span class="pi">:</span> <span class="s">myapp</span>
-        <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
-    <span class="na">spec</span><span class="pi">:</span>
-      <span class="na">containers</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">nginx-container</span>
-        <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:1.20-alpine       &lt;----- 바뀐부분</span>
-  <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
-  <span class="na">selector</span><span class="pi">:</span>
-    <span class="na">matchLabels</span><span class="pi">:</span>
-      <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
-</code></pre></div></div>
-<p>이미지를 바꿀때에는 간단하게 set image를 통해서도 가능하지만 개인적으로 변경상황을 이력으로 남기는게 좋다고 생각하여 해당 방법을 사용합니다.</p>
-
-<p>변경사항을 적용시켜줍니다.</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl apply <span class="nt">-f</span> depl.yaml
-deployment.apps/myapp-deployment configured
-</code></pre></div></div>
-
-<p>그다음 replicaset과 revision을 확인해봅시다</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get rs
-NAME                          DESIRED   CURRENT   READY   AGE
-myapp-deployment-79896f8f68   3         3         3       5m14s
-myapp-deployment-7df67f74c5   0         0         0       5m42s
-</code></pre></div></div>
-<p>replicaset이 하나더 생겼으며,</p>
-
-<p>revision도 하나더 생긴것을 확인할 수 있습니다.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ kubectl rollout history deploy myapp-deployment
-deployment.apps/myapp-deployment 
-REVISION  CHANGE-CAUSE
-2         &lt;none&gt;
-1         &lt;none&gt;
-</code></pre></div></div>
-
-<p>하지만 change-cause가 None 으로 되있으면 무엇이 바뀌었는지 알 수 가없는데, 아래 커맨드를 이용하면 따로 설정이 가능합니다.</p>
-
-<p><code>kubectl annotate deployment.v1.apps/[deployment name] kubernetes.io/change-cause="reason of update"</code></p>
-
-<p>해당커맨드를 사용하여 주석을 달고 다시 확인해봅시다</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl annotate deployment.v1.apps/myapp-deployment kubernetes.io/change-cause<span class="o">=</span><span class="s2">"image updated to 1.20"</span>
-deployment.apps/myapp-deployment annotated
-
-
-<span class="nv">$ </span>kubectl rollout <span class="nb">history </span>deployment myapp-deployment
-deployment.apps/myapp-deployment 
-REVISION  CHANGE-CAUSE
-1         &lt;none&gt;
-2         image updated to 1.20
-</code></pre></div></div>
-<p>주석이 잘 달린것을 확인할 수 있습니다.</p>
-
-<h2 id="rollback">Rollback</h2>
-<p>만약에 새로운 버전으로 업데이트를 했는데 문제가 생겼을때 이전 버전 으로 돌아갈 수 있는 기능입니다.</p>
-
-<p><code> kubeclt rollout undo deployment </code>커맨드를 사용하여 롤백 시킬 수 있습니다.</p>
-
-<p>직접 실습해봅시다.</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl rollout undo deployment myapp-deployment
-deployment.apps/myapp-deployment rolled back
-</code></pre></div></div>
-<p>성공적으로 롤백 되었다고 뜹니다.</p>
-
-<p>우선 image가 다시 원래대로 돌아왔는지 확인해봅니다</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl describe deployment myapp-deployment
-Name:                   myapp-deployment
-Namespace:              default
-CreationTimestamp:      Wed, 02 Jun 2021 07:05:06 +0000
-Labels:                 <span class="nv">app</span><span class="o">=</span>myapp
-                        <span class="nb">type</span><span class="o">=</span>front-end
-Annotations:            deployment.kubernetes.io/revision: 3
-                        kubernetes.io/change-cause: 
-Selector:               <span class="nb">type</span><span class="o">=</span>front-end
-Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
-StrategyType:           RollingUpdate
-MinReadySeconds:        0
-RollingUpdateStrategy:  25% max unavailable, 25% max surge
-Pod Template:
-  Labels:  <span class="nv">app</span><span class="o">=</span>myapp
-           <span class="nb">type</span><span class="o">=</span>front-end
-  Containers:
-   nginx-container:
-    Image:        nginx          &lt;<span class="nt">-------</span> 1.20 에서 다시 원래대로 돌아온것을 확인할 수 있습니다.
-    Port:         &lt;none&gt;
-    Host Port:    &lt;none&gt;
-    Environment:  &lt;none&gt;
-    Mounts:       &lt;none&gt;
-  Volumes:        &lt;none&gt;
-Conditions:
-  Type           Status  Reason
-  <span class="nt">----</span>           <span class="nt">------</span>  <span class="nt">------</span>
-  Available      True    MinimumReplicasAvailable
-  Progressing    True    NewReplicaSetAvailable
-OldReplicaSets:  &lt;none&gt;
-NewReplicaSet:   myapp-deployment-7df67f74c5 <span class="o">(</span>3/3 replicas created<span class="o">)</span>
-Events:
-  Type    Reason             Age                  From                   Message
-  <span class="nt">----</span>    <span class="nt">------</span>             <span class="nt">----</span>                 <span class="nt">----</span>                   <span class="nt">-------</span>
-  Normal  ScalingReplicaSet  23m                  deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 1
-  Normal  ScalingReplicaSet  23m                  deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 2
-  Normal  ScalingReplicaSet  23m                  deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 2
-  Normal  ScalingReplicaSet  23m                  deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 1
-  Normal  ScalingReplicaSet  23m                  deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 3
-  Normal  ScalingReplicaSet  23m                  deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 0
-  Normal  ScalingReplicaSet  4m28s                deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 1
-  Normal  ScalingReplicaSet  4m24s                deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 2
-  Normal  ScalingReplicaSet  4m24s                deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 2
-  Normal  ScalingReplicaSet  4m20s <span class="o">(</span>x2 over 24m<span class="o">)</span>  deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 3
-  Normal  ScalingReplicaSet  4m20s                deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 1
-  Normal  ScalingReplicaSet  4m16s                deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 0
-</code></pre></div></div>
-
-<p>그럼 replicaset과 revision은 어떨까요?</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#이미지 1.20으로 업데이트후 replicaset 상태</span>
-<span class="nv">$ </span>kubectl get rs
-NAME                          DESIRED   CURRENT   READY   AGE
-myapp-deployment-79896f8f68   3         3         3       5m14s
-myapp-deployment-7df67f74c5   0         0         0       5m42s
-</code></pre></div></div>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#롤백후 replicaset상태</span>
-<span class="nv">$ </span>kubectl get rs
-NAME                          DESIRED   CURRENT   READY   AGE
-myapp-deployment-79896f8f68   0         0         0       25m
-myapp-deployment-7df67f74c5   3         3         3       26m
-</code></pre></div></div>
-
-<p><strong>revision</strong></p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl rollout <span class="nb">history </span>deployment myapp-deployment
-deployment.apps/myapp-deployment 
-REVISION  CHANGE-CAUSE
-2         image updated to 1.20
-3         &lt;none&gt;
-</code></pre></div></div>
-
-<p>replicaset은 이전 버전의 replicaset으로 바뀐것을 확인할 수가 있는데 revision은 1로돌아가는것이아닌 1이 증가한 것을 확인할 수 있습니다.
-여기서 궁금한점이 생겼습니다.</p>
-
-<p><strong>undo를 여러번하면 어떻게될까요?</strong></p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl rollout <span class="nb">history </span>deployment myapp-deployment
-deployment.apps/myapp-deployment 
-REVISION  CHANGE-CAUSE
-3         &lt;none&gt;
-4         image updated to 1.20
-</code></pre></div></div>
-
-<h3 id="결과">결과</h3>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl describe deployment myapp-deployment
-Name:                   myapp-deployment
-Namespace:              default
-CreationTimestamp:      Wed, 02 Jun 2021 07:05:06 +0000
-Labels:                 <span class="nv">app</span><span class="o">=</span>myapp
-                        <span class="nb">type</span><span class="o">=</span>front-end
-Annotations:            deployment.kubernetes.io/revision: 4
-                        kubernetes.io/change-cause: image updated to 1.20
-Selector:               <span class="nb">type</span><span class="o">=</span>front-end
-Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
-StrategyType:           RollingUpdate
-MinReadySeconds:        0
-RollingUpdateStrategy:  25% max unavailable, 25% max surge
-Pod Template:
-  Labels:  <span class="nv">app</span><span class="o">=</span>myapp
-           <span class="nb">type</span><span class="o">=</span>front-end
-  Containers:
-   nginx-container:
-    Image:        nginx:1.20
-    Port:         &lt;none&gt;
-    Host Port:    &lt;none&gt;
-    Environment:  &lt;none&gt;
-    Mounts:       &lt;none&gt;
-  Volumes:        &lt;none&gt;
-Conditions:
-  Type           Status  Reason
-  <span class="nt">----</span>           <span class="nt">------</span>  <span class="nt">------</span>
-  Available      True    MinimumReplicasAvailable
-  Progressing    True    NewReplicaSetAvailable
-OldReplicaSets:  &lt;none&gt;
-NewReplicaSet:   myapp-deployment-79896f8f68 <span class="o">(</span>3/3 replicas created<span class="o">)</span>
-Events:
-  Type    Reason             Age                  From                   Message
-  <span class="nt">----</span>    <span class="nt">------</span>             <span class="nt">----</span>                 <span class="nt">----</span>                   <span class="nt">-------</span>
-  Normal  ScalingReplicaSet  14m                  deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 1
-  Normal  ScalingReplicaSet  14m                  deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 2
-  Normal  ScalingReplicaSet  14m                  deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 2
-  Normal  ScalingReplicaSet  14m <span class="o">(</span>x2 over 33m<span class="o">)</span>    deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 3
-  Normal  ScalingReplicaSet  14m                  deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 1
-  Normal  ScalingReplicaSet  13m                  deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 0
-  Normal  ScalingReplicaSet  2m13s <span class="o">(</span>x2 over 33m<span class="o">)</span>  deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 1
-  Normal  ScalingReplicaSet  2m9s <span class="o">(</span>x2 over 33m<span class="o">)</span>   deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 2
-  Normal  ScalingReplicaSet  2m9s <span class="o">(</span>x2 over 33m<span class="o">)</span>   deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 2
-  Normal  ScalingReplicaSet  2m5s <span class="o">(</span>x2 over 33m<span class="o">)</span>   deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 1
-  Normal  ScalingReplicaSet  2m5s <span class="o">(</span>x2 over 33m<span class="o">)</span>   deployment-controller  Scaled up replica <span class="nb">set </span>myapp-deployment-79896f8f68 to 3
-  Normal  ScalingReplicaSet  2m1s <span class="o">(</span>x2 over 33m<span class="o">)</span>   deployment-controller  Scaled down replica <span class="nb">set </span>myapp-deployment-7df67f74c5 to 0
+...
 
 </code></pre></div></div>
 
-<p>undo 를 여러번하니 nginx &lt;-&gt; nginx:1.20 왔다 갔다 하는 모습을 보여줍니다.</p>
+<h3 id="step3---업그레이드-적용시키기">STEP3 - 업그레이드 적용시키기</h3>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubeadm upgrade plan apply v1.21.1
+<span class="o">(</span>조금 오래걸릴 수도 있습니다<span class="o">)</span>
 
-<h2 id="rocket-history">
-<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> history</h2>
-<p>history를 보아도 두줄의 결과만 보여주기도했고, 정말 바로 이전단계까지만 이동할 수 있는건지도 궁금했습니다.</p>
+아래와같이뜨면 성공
+<span class="o">[</span>upgrade/successful] SUCCESS! Your cluster was upgraded to <span class="s2">"v1.21.1"</span><span class="nb">.</span> Enjoy!
 
-<p>궁금한건 못참기에 바로 kubernetes.io를 찾다보니 원하는 revision으로 가려면 <strong>–to-revision=[resion-number]</strong> 를 입력해야되는것을 알 수 있었습니다.</p>
+<span class="o">[</span>upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets <span class="k">if </span>you haven<span class="s1">'t already done so.
+</span></code></pre></div></div>
 
-<p>deployment 의 spec 밑에 revisionHistoryLimit: 10 으로 설정되어 있는것도 확인했으며 이 또한 수정할 수 있었군요 ㅎㅎ</p>
+<h3 id="step4---node-drain후-kubelet-kubectl-업데이트후-재시작하기">STEP4 - node drain후 kubelet, kubectl 업데이트후 재시작하기</h3>
 
-<p>바로 이전 단계만 이동 가능하다고 포스트 올렸다가 호다닥 수정하네요</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#노드 드레인하기(모든 pod 종료후 다른노드에 새로 실행하기 및 해당노드 unschedulable하게 만듬)</span>
+<span class="nv">$ </span>kubectl drain &lt;node-to-drain&gt; <span class="nt">--ignore-daemonsets</span>
 
-<p>그나저나 history에는 왜 사람 햇갈리게 두줄만을 보여줬던 걸까요?</p>
+<span class="nv">$ </span>apt-mark unhold kubelet kubectl <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nv">kubelet</span><span class="o">=</span>1.21.1-00 <span class="nv">kubectl</span><span class="o">=</span>1.21.1-00 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-mark hold kubelet kubectl
 
-<p>kubernetes는 상당히 <strong>똑똑했기</strong> 때문입니다.</p>
+<span class="c">#설정 수정사항 재로딩</span>
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl daemon-reload
+<span class="c">#kubelet 재시작</span>
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl restart kubelet
 
-<p>이미 기억하고있는 replicaset랑 다름이 없기에 새로운 replicaset을 생성하지 않는것이었습니다.</p>
+<span class="c">#업데이트가 끝났으므로 다시 schedulable하게 만들어주기</span>
+<span class="nv">$ </span>kubectl uncordon &lt;node-to-uncordon&gt;
 
-<p>history에 없는 다른 버전의 nginx의 이미지로 바꾸어주니 replicaset과 history 각각 하나씩 더 생기는것을 확인할 수 있었습니다.</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get rs
-NAME                          DESIRED   CURRENT   READY   AGE
-myapp-deployment-54d59f8648   3         3         3       17m
-myapp-deployment-79896f8f68   0         0         0       117m
-myapp-deployment-7df67f74c5   0         0         0       118m
-
-<span class="nv">$ </span>kubectl rollout <span class="nb">history </span>deploy myapp-deployment
-deployment.apps/myapp-deployment 
-REVISION  CHANGE-CAUSE
-3         image updated to 1.20
-4         &lt;none&gt;
-5         &lt;none&gt;
 </code></pre></div></div>
+
+<p>여기까지가 마스터노드의 업그레이드 방법이었습니다.</p>
+
+<hr>
+<h1 id="rocket-여기서부터는-워커노드들을-업그레이드-합니다">
+<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> 여기서부터는 워커노드들을 업그레이드 합니다.</h1>
+
+<h3 id="step5---워커-노드에-kubeadm-설치하기">STEP5 - 워커 노드에 kubeadm 설치하기</h3>
+
+<p>우선 3개의 워커노드중 하나인 worker-1에 접속합니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh worker-1 
+</code></pre></div></div>
+<p>그 다음, 마스터노드에 설치했던과 같은방법으로 kubeadm를 설치합니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>apt-mark unhold kubeadm <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nv">kubeadm</span><span class="o">=</span>1.21.x-00 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-mark hold kubeadm
+</code></pre></div></div>
+
+<p>아까 마스터노드에서 아래의 커맨드를 이용해 upgrade가능 버전을 확인하고 v1.21.1로 apply했었습니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubeadm upgrade plan
+<span class="nv">$ </span>kubeadm upgrade apply v1.21.1
+</code></pre></div></div>
+<p>하지만 워커노드에서는 아래의 커맨드를 이용하여 클러스터에서 kubeadm ClusterConfiguration 을 가져오며,
+이 노드의 kubelet 구성을 업그레이드 합니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubeadm upgrade node
+</code></pre></div></div>
+
+<p>그리고 마스터 노드로 이동하여 업그레이드 할 워커노드를 드레인 해줍니다. (마스터 노드에서 워커노드로 접속했었기에 접속 종료하면 마스터노드로 이동합니다.)</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">exit
+logout
+</span>Connection to 10.128.0.5 closed.
+
+<span class="nv">$ </span>kubectl drain worker-1 <span class="nt">--ignore-daemonsets</span>
+</code></pre></div></div>
+
+<h3 id="step6---워커노드의-kubelet-및-kubectl-업그레이드">STEP6 - 워커노드의 kubelet 및 kubectl 업그레이드</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 다시 워커노드로 접속하기</span>
+<span class="nv">$ </span>ssh worker-1
+ 
+
+<span class="c"># kubectl 과 kubelet 업데이트하기</span>
+<span class="nv">$ </span>apt-mark unhold kubectl kubelet <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nv">kubectl</span><span class="o">=</span>1.21.1-00 <span class="nv">kubelet</span><span class="o">=</span>1.21.1-00 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-mark hold kubectl kubelet
+</code></pre></div></div>
+
+<h3 id="step7---kubelet-다시-시작하기">STEP7 - kubelet 다시 시작하기</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl restart kubelet
+</code></pre></div></div>
+
+<h3 id="step8---cordon-해재하기">STEP8 - cordon 해재하기</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#마스터노드로 이동하기</span>
+<span class="nv">$ </span><span class="nb">exit</span>
+
+<span class="nv">$ </span>kubectl uncordon worker-1
+</code></pre></div></div>
+
+<h3 id="step9---반복하기">STEP9 - 반복하기</h3>
+
+<p>업그레이드 할 워커노드에
+STEP5 ~ STEP8을 똑같이 진행해줍니다</p>
+
+<p>마지막으로 업데이트가 잘 되었는지 확인해줍니다</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get nodes
+NAME         STATUS   ROLES                  AGE    VERSION
+master       Ready    control-plane,master   6d8h   v1.21.1
+worker-1     Ready    &lt;none&gt;                 6d8h   v1.21.1
+worker-2     Ready    &lt;none&gt;                 6d8h   v1.21.1
+worker-3     Ready    &lt;none&gt;                 6d8h   v1.21.1
+</code></pre></div></div>
+
+<p>버전이 v1.21.1로 잘 업그레이드 된것을 확인할 수 있습니다.</p>
 
 </div>
 <section class="article__sharing d-print-none"></section><div class="d-print-none">
-<footer class="article__footer"><meta itemprop="dateModified" content="2021-06-02T00:00:00+09:00">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-06-03T00:00:00+09:00">
 <!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
@@ -720,14 +742,9 @@ REVISION  CHANGE-CAUSE
 <i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
 </div>
 </div></footer>
-<div class="article__section-navigator clearfix">
-<div class="previous">
-<span>이전</span><a href="/2021/06/01/Handling-ssh-config.html">ssh config 설정으로 간편하게 ssh접속하기</a>
-</div>
-<div class="next">
-<span>다음</span><a href="/2021/06/03/Learning-Kubernetes-08.html">[ #8 ] 클러스터 유지보수</a>
-</div>
-</div>
+<div class="article__section-navigator clearfix"><div class="previous">
+<span>이전</span><a href="/2021/06/02/Learning-Kubernetes-07.html">[ #7 ] 배포 전략</a>
+</div></div>
 </div>
 
 </div>

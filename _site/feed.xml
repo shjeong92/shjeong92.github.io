@@ -1,5 +1,391 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-06-02T18:09:15+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
-</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #7 ] 배포 전략</title><link href="https://shjeong92.github.io/2021/06/02/Learning-Kubernetes-07.html" rel="alternate" type="text/html" title="[ #7 ] 배포 전략" /><published>2021-06-02T00:00:00+09:00</published><updated>2021-06-02T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/06/02/Learning-Kubernetes-07</id><content type="html" xml:base="https://shjeong92.github.io/2021/06/02/Learning-Kubernetes-07.html">&lt;p&gt;쿠버네티스에는아래 그림과 같이 두가지 배포방법이 있습니다&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-06-03T22:26:16+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #8 ] 클러스터 유지보수</title><link href="https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08.html" rel="alternate" type="text/html" title="[ #8 ] 클러스터 유지보수" /><published>2021-06-03T00:00:00+09:00</published><updated>2021-06-03T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08</id><content type="html" xml:base="https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08.html">&lt;p&gt;오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다.&lt;/p&gt;
+
+&lt;p&gt;쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다.&lt;/p&gt;
+
+&lt;p&gt;그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요?&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;master node의 kube-contoller-manager에는 pod-eviction-timeout이 존재합니다&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;컨디션&quot;&gt;컨디션&lt;/h2&gt;
+
+&lt;p&gt;각 노드에는 아래와 같이 여러가지 condition이 존재합니다&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;노드 컨디션&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;strong&gt;Ready&lt;/strong&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;노드가 상태 양호하며 파드를 수용할 준비가 되어 있는 경우 True, 노드의 상태가 불량하여 파드를 수용하지 못할 경우 False, 그리고 노드 컨트롤러가 마지막 node-monitor-grace-period (기본값 40 기간 동안 노드로부터 응답을 받지 못한 경우) Unknown&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;strong&gt;DiskPressure&lt;/strong&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;디스크 사이즈 상에 압박이 있는 경우, 즉 디스크 용량이 넉넉치 않은 경우 True, 반대의 경우 False&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;strong&gt;MemoryPressure&lt;/strong&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;노드 메모리 상에 압박이 있는 경우, 즉 노드 메모리가 넉넉치 않은 경우 True, 반대의 경우 False&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;strong&gt;PIDPressure&lt;/strong&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;프로세스 상에 압박이 있는 경우, 즉 노드 상에 많은 프로세스들이 존재하는 경우 True, 반대의 경우 False&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;strong&gt;NetworkUnavailable&lt;/strong&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;노드에 대해 네트워크가 올바르게 구성되지 않은 경우 True, 반대의 경우 False&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;또한 노드 lifecycle controller는 컨디션을 아래와 같은 &lt;strong&gt;&lt;em&gt;built-in taint&lt;/em&gt;&lt;/strong&gt;를 자동으로 생성합니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;built-in-taints&quot;&gt;built-in taints&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;node.kubernetes.io/not-ready: 노드가 준비되지 않음. 이는 NodeCondition Ready 가 “False”로 됨에 해당.&lt;/li&gt;
+  &lt;li&gt;node.kubernetes.io/unreachable: 노드가 노드 컨트롤러에서 도달할 수 없음. 이는  NodeCondition Ready 가 “Unknown”로 됨에 해당.&lt;/li&gt;
+  &lt;li&gt;node.kubernetes.io/memory-pressure: 노드에 메모리 할당 압박이 있음.&lt;/li&gt;
+  &lt;li&gt;node.kubernetes.io/disk-pressure: 노드에 디스크 할당 압박이 있음.&lt;/li&gt;
+  &lt;li&gt;node.kubernetes.io/pid-pressure: 노드에 PID 할당 압박이 있음.&lt;/li&gt;
+  &lt;li&gt;node.kubernetes.io/network-unavailable: 노드의 네트워크를 사용할 수 없음.&lt;/li&gt;
+  &lt;li&gt;node.kubernetes.io/unschedulable: 노드를 스케줄할 수 없음.&lt;/li&gt;
+  &lt;li&gt;node.cloudprovider.kubernetes.io/uninitialized: “외부” 클라우드 공급자로 kubelet을 시작하면, 이 테인트가 노드에서 사용 불가능으로 표시되도록 설정됨.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그 중에서도 &lt;code&gt;ready&lt;/code&gt; 컨디션은 좀 특별한데요. 
+ready 컨디션의 상태가 pod-eviction-timeout (kube-controller-manager에 전달된 인수) 보다 더 길게 Unknown 또는 False로 유지되는 경우, 노드 상에 모든 파드는 노드 컨트롤러에 의해 삭제되도록 스케줄 됩니다.&lt;/p&gt;
+
+&lt;p&gt;클라우드-컨트롤러-관리자의 컨트롤러가 이 노드를 초기화하면, kubelet이 이 테인트를 제거합니다 즉 다시 pod가 배정될 수 있는 상태가 되는것이죠. 기본 축출 타임아웃 기간은 기본 5분으로 설정되어 있습니다. 만약 노드가 다운되었다가 5분안에 복구가 되었다면 노드 내의 pod들은 그대로 존재하지만, 설정된 타임아웃 시간을 초과한다면 그안의 파드들은 모두 중단 되는것입니다.&lt;/p&gt;
+
+&lt;p&gt;만약 수정하고 싶다면 마스터 노드의 kube-system 네임스페이스에 있는 kube-controller-manager-master을 edit해주면됩니다.&lt;/p&gt;
+
+&lt;p&gt;그런데 말이죠 이 pod는 static pod입니다. 
+&lt;a href=&quot;https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html&quot;&gt;6번째 포스트&lt;/a&gt;에서 설명 했었는데 static pod 를 수정하려면 
+static pod을 생성한 yaml파일 자체를 수정한다고 했었죠?&lt;/p&gt;
+
+&lt;p&gt;static pod의 위치를 찾는것 부터 복습해봅시다&lt;/p&gt;
+
+&lt;p&gt;우선 config.yaml파일의 위치를 찾아줍니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ps &lt;span class=&quot;nt&quot;&gt;-ef&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;kubelet | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\-&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;-config&quot;&lt;/span&gt;
+
+root     10476     1  3 May28 ?        05:09:26 /usr/bin/kubelet &lt;span class=&quot;nt&quot;&gt;--bootstrap-kubeconfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/etc/kubernetes/bootstrap-kubelet.conf &lt;span class=&quot;nt&quot;&gt;--kubeconfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/etc/kubernetes/kubelet.conf &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/var/lib/kubelet/config.yaml &lt;span class=&quot;nt&quot;&gt;--network-plugin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;cni &lt;span class=&quot;nt&quot;&gt;--pod-infra-container-image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;k8s.gcr.io/pause:3.4.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;config.yaml파일 내에서 staticpath를 찾아냅시다&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo grep&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; static /var/lib/kubelet/config.yaml
+staticPodPath: /etc/kubernetes/manifests
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;staticPodPath로 이동후 뭐가있나 확인해봅니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /etc/kubernetes/manifests
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls
+&lt;/span&gt;etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;자 이제 이 yaml파일을 수정하면 됩니다.
+저는 이 기본 5분인 eviction-timeout을 60초로 바꾸어 보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;command에 &lt;code&gt;--pod-eviction-timeout=60s&lt;/code&gt; 옵션을 추가해 줌으로써 말이죠.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;annotations&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;kubernetes.io/config.hash&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;47cace34a635d6f3e305eee20e0e7b30&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;kubernetes.io/config.mirror&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;47cace34a635d6f3e305eee20e0e7b30&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;kubernetes.io/config.seen&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;2021-05-28T03:40:42.961803243Z&quot;&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;kubernetes.io/config.source&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;file&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;creationTimestamp&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;2021-05-28T03:40:55Z&quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-controller-manager&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;tier&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;control-plane&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-controller-manager-master&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-system&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;ownerReferences&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;controller&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Node&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;master&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;uid&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;69f4d243-9420-45a9-928e-672a1d3b977a&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;resourceVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;478&quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;uid&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;4cfad35d-8664-42cf-9ed9-5fd5b4d771a4&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-controller-manager&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--allocate-node-cidrs=true&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--pod-eviction-timeout=60s&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;#&amp;lt;----------- 해당라인을 추가하면 이제 5분이아닌 60초로 변경됩니다.&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--authentication-kubeconfig=/etc/kubernetes/controller-manager.conf&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--authorization-kubeconfig=/etc/kubernetes/controller-manager.conf&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--bind-address=127.0.0.1&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--client-ca-file=/etc/kubernetes/pki/ca.crt&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--cluster-cidr=10.244.0.0/16&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--cluster-name=kubernetes&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--cluster-signing-key-file=/etc/kubernetes/pki/ca.key&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--controllers=*,bootstrapsigner,tokencleaner&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--kubeconfig=/etc/kubernetes/controller-manager.conf&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--leader-elect=true&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--port=0&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--root-ca-file=/etc/kubernetes/pki/ca.crt&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--service-account-private-key-file=/etc/kubernetes/pki/sa.key&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--service-cluster-ip-range=10.96.0.0/12&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--use-service-account-credentials=true&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;k8s.gcr.io/kube-controller-manager:v1.21.1&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;...중략&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;저장해주면 멈췄다가&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kube-controller-manager-master    0/1     Running   0          3s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;옵션을 적용시켜 pod시 재시동됩니다~&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kube-controller-manager-master    1/1     Running   0          3s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;eviction-timeout의-존재이유&quot;&gt;eviction timeout의 존재이유?&lt;/h2&gt;
+&lt;p&gt;위에서 eviction timeout의 값을 바꾸는 실습을 해보았는데요 이 timeout은 무엇과 연관이 있는지 두가지 케이스를 통해서 알아보겠습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;case1: node가 먹통이 되었다가 설정해놓은 eviction-timeout보다 짦은시간안에 복구된경우&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;노드내에 있던 pod들이 kubectl에 의해 다시 해당노드에서 재시작됩니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;case2: node가 먹통이 된후 eviction-timeout을 초과한경우&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;해당 노드에있는 pod들을 모두 축출한 후에 노드가 재시동됩니다.&lt;/li&gt;
+      &lt;li&gt;해당 노드에있던 pod이 replicaset을 통해 생성되었다면 다시 다른노드에 잘 생성이 되겠지만, 일반 pod이라면 다시 살아나지 못할겁니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;노드관련-명령어&quot;&gt;노드관련 명령어&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt; kubectl drain node &lt;/code&gt;
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl drain node
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;p&gt;해당 노드에있는 pod들을 종료시키고, 다른노드에 재시작시킵니다 (graceful node shutdown) 또한 해당 노드를 unschedulable하게 만든다.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;kubernetes의 버전 또는 리눅스 커널등의 업그레이드할 때 사용할 수 있겠습니다(kubeadm, kubelet, kubectl, …)&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code&gt; kubectl cordon node &lt;/code&gt;
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl cordon node
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;ul&gt;
+      &lt;li&gt;해당 노드를 unschedulable하게 만듭니다&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;실행 중인 Pod를 축출하지는 않습니다&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code&gt; kubectl uncordon node &lt;/code&gt;
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl uncordon node
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;ul&gt;
+      &lt;li&gt;해당 노드를 schedulable하게 만든다&lt;/li&gt;
+      &lt;li&gt;업그레이드를 마친 노드를 스케쥴러블하게 만듭니다 (taint를 제거)&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;drain명령에 의해서 집나간 pod들이 다시 집을 찾아오진 않습니다.&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;쿠버네티스-버전-및-버전차이-지원&quot;&gt;쿠버네티스 버전 및 버전차이 지원&lt;/h2&gt;
+
+&lt;h3 id=&quot;버전&quot;&gt;버전&lt;/h3&gt;
+&lt;p&gt;쿠버네티스 버전은 x.y.z로 표현되는데, 여기서 x는 메이저 버전, y는 마이너 버전, z는 시맨틱 버전 용어에 따른 패치 버전입니다.
+kubernetes에는 여러가지 컴포넌트가 있습니다.
+각각의 버전은 전부 동일해야할까요? 아닙니다.&lt;/p&gt;
+
+&lt;p&gt;kube-apiserver의 버전이 주축이되고, 나머지 컴포넌트는 각각 다르게 한 두단계 버전이 낮거나 같아도 상관이 없습니다. 특별하게 &lt;strong&gt;kubectl&lt;/strong&gt;의 경우는 kube-apiserver의 버전보다 한단계 높은경우도 지원이 됩니다.&lt;/p&gt;
+
+&lt;p&gt;더 자세한 내용은 &lt;a href=&quot;https://kubernetes.io/ko/docs/setup/release/version-skew-policy/&quot;&gt;공식문서&lt;/a&gt;에서 확인가능 합니다&lt;/p&gt;
+
+&lt;h2 id=&quot;클러스터-업그레이드&quot;&gt;클러스터 업그레이드&lt;/h2&gt;
+
+&lt;p&gt;kubernets는 latest버전부터 두단계 낮은버전까지 서비스를 지원하는데요, 만약에 현재 1.19버전을 사용하고 있는데 1.22버전이 출시 된다면 업그레이드를 해야겠죠.&lt;/p&gt;
+
+&lt;p&gt;그렇다면 1.19버전에서 한번에 1.22번으로 업그레이드 시키면될까요? 추천되는 방법에 의하면
+한단계 한단계씩 차례차례로 업그레이드 해야된다고 합니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;업그레이드-방법&quot;&gt;업그레이드 방법&lt;/h3&gt;
+
+&lt;p&gt;쿠버네티스 환경을 어떻게 구성하였는가에 따라 업그레이드 방법이 다양합니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;구글의 GKE, AWS의 EKS등의 kubernete를 지원하는 cloud의 경우&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;간단한 클릭 몇번으로 업그레이드 가능&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;The hard way로 설치한경우&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;한땀한땀 설치한 것처럼 업그레이드 또한 한땀한땀 해야합니다&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;저는 &lt;strong&gt;kubeadm&lt;/strong&gt;을 이용하여 kubernetes환경을 구축하였고, &lt;strong&gt;kubeadm&lt;/strong&gt;을 통한 업그레이드 방법에 대해 자세히 설명해 보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;저의 쿠버네티스 환경은 한개의 master노드, 3개의 worker노드로 구성되어있습니다. 1.20버전을 이용하고 있는데 1.21버전으로 업그레이드 해보겠습니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;step1---마스터-노드에-kubeadm-업그레이드-시키기&quot;&gt;STEP1 - 마스터 노드에 kubeadm 업그레이드 시키기.&lt;/h3&gt;
+
+&lt;p&gt;마스터 노드에 접속합니다&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh gcloud
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;ssh config&lt;/strong&gt;에 설정을 해놨기에 이렇게 간단하게 접속가능합니다. &lt;strong&gt;ssh config 설정방법&lt;/strong&gt;이 궁금하시면 &lt;a href=&quot;https://shjeong92.github.io/2021/06/01/Handling-ssh-config.html&quot;&gt;여기&lt;/a&gt;로 이동하세요.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그리고  kubernetes환경을 구축할때 hold시켜놨었던 kubeadm을 unhold시켜주고, apt-get 색인 업데이트후, kubeadm을 업데이트 한다음 다시 kubeadm을 hold시켜 줄겁니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 1.21.x-00에서 x를 최신 패치 버전으로 바꿉니다&lt;/span&gt;
+apt-mark unhold kubeadm &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+apt-get update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;kubeadm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.21.x-00 &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+apt-mark hold kubeadm
+
+&lt;span class=&quot;c&quot;&gt;#버전 확인해주기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubeadm version
+kubeadm version: &amp;amp;version.Info&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;Major:&lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;, Minor:&lt;span class=&quot;s2&quot;&gt;&quot;21&quot;&lt;/span&gt;, GitVersion:&lt;span class=&quot;s2&quot;&gt;&quot;v1.21.1&quot;&lt;/span&gt;, GitCommit:&lt;span class=&quot;s2&quot;&gt;&quot;5e58841cce77d4bc13713ad2b91fa0d961e69192&quot;&lt;/span&gt;, GitTreeState:&lt;span class=&quot;s2&quot;&gt;&quot;clean&quot;&lt;/span&gt;, BuildDate:&lt;span class=&quot;s2&quot;&gt;&quot;2021-05-12T14:17:27Z&quot;&lt;/span&gt;, GoVersion:&lt;span class=&quot;s2&quot;&gt;&quot;go1.16.4&quot;&lt;/span&gt;, Compiler:&lt;span class=&quot;s2&quot;&gt;&quot;gc&quot;&lt;/span&gt;, Platform:&lt;span class=&quot;s2&quot;&gt;&quot;linux/amd64&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;apt-mark unhold&lt;/strong&gt;와 &lt;strong&gt;apt-mark hold&lt;/strong&gt; 해주는 이유는 kubeadm을 업그레이드하면 설치시 kubelet과 같은 다른 구성 요소가 기본적으로 최신 버전 으로 자동으로 업그레이드되기 때문입니다. (kubernetes는 여러버전을 한꺼번에 업그레이드 권장하지 않기때문입니다!) 이를 해결하기 위해 보류를 사용하여 패키지를 보류 된 것으로 표시하여 패키지가 자동으로 설치, 업그레이드 또는 제거되지 않도록합니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;step2---업그레이드-정보-확인하기&quot;&gt;STEP2 - 업그레이드 정보 확인하기&lt;/h3&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubeadm upgrade plan
+
+...
+
+COMPONENT            CURRENT AVAILABLE
+
+API Server           v1.20.0 v1.21.1
+
+Controller Manager   v1.20.0 v1.21.1
+
+Scheduler            v1.20.0 v1.21.1
+
+Kube Proxy           v1.20.0 v1.21.1
+
+...
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;step3---업그레이드-적용시키기&quot;&gt;STEP3 - 업그레이드 적용시키기&lt;/h3&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubeadm upgrade plan apply v1.21.1
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;조금 오래걸릴 수도 있습니다&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+아래와같이뜨면 성공
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;upgrade/successful] SUCCESS! Your cluster was upgraded to &lt;span class=&quot;s2&quot;&gt;&quot;v1.21.1&quot;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; Enjoy!
+
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;you haven&lt;span class=&quot;s1&quot;&gt;&apos;t already done so.
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;step4---node-drain후-kubelet-kubectl-업데이트후-재시작하기&quot;&gt;STEP4 - node drain후 kubelet, kubectl 업데이트후 재시작하기&lt;/h3&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#노드 드레인하기(모든 pod 종료후 다른노드에 새로 실행하기 및 해당노드 unschedulable하게 만듬)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl drain &amp;lt;node-to-drain&amp;gt; &lt;span class=&quot;nt&quot;&gt;--ignore-daemonsets&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-mark unhold kubelet kubectl &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-get update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;kubelet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.21.1-00 &lt;span class=&quot;nv&quot;&gt;kubectl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.21.1-00 &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-mark hold kubelet kubectl
+
+&lt;span class=&quot;c&quot;&gt;#설정 수정사항 재로딩&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl daemon-reload
+&lt;span class=&quot;c&quot;&gt;#kubelet 재시작&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl restart kubelet
+
+&lt;span class=&quot;c&quot;&gt;#업데이트가 끝났으므로 다시 schedulable하게 만들어주기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl uncordon &amp;lt;node-to-uncordon&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;여기까지가 마스터노드의 업그레이드 방법이었습니다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;rocket-여기서부터는-워커노드들을-업그레이드-합니다&quot;&gt;:rocket: 여기서부터는 워커노드들을 업그레이드 합니다.&lt;/h1&gt;
+
+&lt;h3 id=&quot;step5---워커-노드에-kubeadm-설치하기&quot;&gt;STEP5 - 워커 노드에 kubeadm 설치하기&lt;/h3&gt;
+
+&lt;p&gt;우선 3개의 워커노드중 하나인 worker-1에 접속합니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh worker-1 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;그 다음, 마스터노드에 설치했던과 같은방법으로 kubeadm를 설치합니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-mark unhold kubeadm &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-get update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;kubeadm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.21.x-00 &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-mark hold kubeadm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;아까 마스터노드에서 아래의 커맨드를 이용해 upgrade가능 버전을 확인하고 v1.21.1로 apply했었습니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubeadm upgrade plan
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubeadm upgrade apply v1.21.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;하지만 워커노드에서는 아래의 커맨드를 이용하여 클러스터에서 kubeadm ClusterConfiguration 을 가져오며,
+이 노드의 kubelet 구성을 업그레이드 합니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubeadm upgrade node
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;그리고 마스터 노드로 이동하여 업그레이드 할 워커노드를 드레인 해줍니다. (마스터 노드에서 워커노드로 접속했었기에 접속 종료하면 마스터노드로 이동합니다.)&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit
+logout
+&lt;/span&gt;Connection to 10.128.0.5 closed.
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl drain worker-1 &lt;span class=&quot;nt&quot;&gt;--ignore-daemonsets&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;step6---워커노드의-kubelet-및-kubectl-업그레이드&quot;&gt;STEP6 - 워커노드의 kubelet 및 kubectl 업그레이드&lt;/h3&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 다시 워커노드로 접속하기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh worker-1
+ 
+
+&lt;span class=&quot;c&quot;&gt;# kubectl 과 kubelet 업데이트하기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-mark unhold kubectl kubelet &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-get update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;kubectl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.21.1-00 &lt;span class=&quot;nv&quot;&gt;kubelet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.21.1-00 &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;apt-mark hold kubectl kubelet
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;step7---kubelet-다시-시작하기&quot;&gt;STEP7 - kubelet 다시 시작하기&lt;/h3&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl daemon-reload
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl restart kubelet
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;step8---cordon-해재하기&quot;&gt;STEP8 - cordon 해재하기&lt;/h3&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#마스터노드로 이동하기&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl uncordon worker-1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;step9---반복하기&quot;&gt;STEP9 - 반복하기&lt;/h3&gt;
+
+&lt;p&gt;업그레이드 할 워커노드에
+STEP5 ~ STEP8을 똑같이 진행해줍니다&lt;/p&gt;
+
+&lt;p&gt;마지막으로 업데이트가 잘 되었는지 확인해줍니다&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get nodes
+NAME         STATUS   ROLES                  AGE    VERSION
+master       Ready    control-plane,master   6d8h   v1.21.1
+worker-1     Ready    &amp;lt;none&amp;gt;                 6d8h   v1.21.1
+worker-2     Ready    &amp;lt;none&amp;gt;                 6d8h   v1.21.1
+worker-3     Ready    &amp;lt;none&amp;gt;                 6d8h   v1.21.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;버전이 v1.21.1로 잘 업그레이드 된것을 확인할 수 있습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Kubernetes" /><category term="maintenance" /><category term="static" /><category term="pod" /><category term="strategy" /><category term="쿠버네티스" /><category term="update" /><summary type="html">오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다. 쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다. 그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요? master node의 kube-contoller-manager에는 pod-eviction-timeout이 존재합니다 컨디션 각 노드에는 아래와 같이 여러가지 condition이 존재합니다 노드 컨디션 설명 Ready 노드가 상태 양호하며 파드를 수용할 준비가 되어 있는 경우 True, 노드의 상태가 불량하여 파드를 수용하지 못할 경우 False, 그리고 노드 컨트롤러가 마지막 node-monitor-grace-period (기본값 40 기간 동안 노드로부터 응답을 받지 못한 경우) Unknown DiskPressure 디스크 사이즈 상에 압박이 있는 경우, 즉 디스크 용량이 넉넉치 않은 경우 True, 반대의 경우 False MemoryPressure 노드 메모리 상에 압박이 있는 경우, 즉 노드 메모리가 넉넉치 않은 경우 True, 반대의 경우 False PIDPressure 프로세스 상에 압박이 있는 경우, 즉 노드 상에 많은 프로세스들이 존재하는 경우 True, 반대의 경우 False NetworkUnavailable 노드에 대해 네트워크가 올바르게 구성되지 않은 경우 True, 반대의 경우 False 또한 노드 lifecycle controller는 컨디션을 아래와 같은 built-in taint를 자동으로 생성합니다. built-in taints node.kubernetes.io/not-ready: 노드가 준비되지 않음. 이는 NodeCondition Ready 가 “False”로 됨에 해당. node.kubernetes.io/unreachable: 노드가 노드 컨트롤러에서 도달할 수 없음. 이는 NodeCondition Ready 가 “Unknown”로 됨에 해당. node.kubernetes.io/memory-pressure: 노드에 메모리 할당 압박이 있음. node.kubernetes.io/disk-pressure: 노드에 디스크 할당 압박이 있음. node.kubernetes.io/pid-pressure: 노드에 PID 할당 압박이 있음. node.kubernetes.io/network-unavailable: 노드의 네트워크를 사용할 수 없음. node.kubernetes.io/unschedulable: 노드를 스케줄할 수 없음. node.cloudprovider.kubernetes.io/uninitialized: “외부” 클라우드 공급자로 kubelet을 시작하면, 이 테인트가 노드에서 사용 불가능으로 표시되도록 설정됨. 그 중에서도 ready 컨디션은 좀 특별한데요. ready 컨디션의 상태가 pod-eviction-timeout (kube-controller-manager에 전달된 인수) 보다 더 길게 Unknown 또는 False로 유지되는 경우, 노드 상에 모든 파드는 노드 컨트롤러에 의해 삭제되도록 스케줄 됩니다. 클라우드-컨트롤러-관리자의 컨트롤러가 이 노드를 초기화하면, kubelet이 이 테인트를 제거합니다 즉 다시 pod가 배정될 수 있는 상태가 되는것이죠. 기본 축출 타임아웃 기간은 기본 5분으로 설정되어 있습니다. 만약 노드가 다운되었다가 5분안에 복구가 되었다면 노드 내의 pod들은 그대로 존재하지만, 설정된 타임아웃 시간을 초과한다면 그안의 파드들은 모두 중단 되는것입니다. 만약 수정하고 싶다면 마스터 노드의 kube-system 네임스페이스에 있는 kube-controller-manager-master을 edit해주면됩니다. 그런데 말이죠 이 pod는 static pod입니다. 6번째 포스트에서 설명 했었는데 static pod 를 수정하려면 static pod을 생성한 yaml파일 자체를 수정한다고 했었죠? static pod의 위치를 찾는것 부터 복습해봅시다 우선 config.yaml파일의 위치를 찾아줍니다. $ ps -ef | grep kubelet | grep &quot;\--config&quot; root 10476 1 3 May28 ? 05:09:26 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.4.1 config.yaml파일 내에서 staticpath를 찾아냅시다 $ sudo grep -i static /var/lib/kubelet/config.yaml staticPodPath: /etc/kubernetes/manifests staticPodPath로 이동후 뭐가있나 확인해봅니다. $ cd /etc/kubernetes/manifests $ ls etcd.yaml kube-apiserver.yaml kube-controller-manager.yaml kube-scheduler.yaml 자 이제 이 yaml파일을 수정하면 됩니다. 저는 이 기본 5분인 eviction-timeout을 60초로 바꾸어 보겠습니다. command에 --pod-eviction-timeout=60s 옵션을 추가해 줌으로써 말이죠. apiVersion: v1 kind: Pod metadata: annotations: kubernetes.io/config.hash: 47cace34a635d6f3e305eee20e0e7b30 kubernetes.io/config.mirror: 47cace34a635d6f3e305eee20e0e7b30 kubernetes.io/config.seen: &quot;2021-05-28T03:40:42.961803243Z&quot; kubernetes.io/config.source: file creationTimestamp: &quot;2021-05-28T03:40:55Z&quot; labels: component: kube-controller-manager tier: control-plane name: kube-controller-manager-master namespace: kube-system ownerReferences: - apiVersion: v1 controller: true kind: Node name: master uid: 69f4d243-9420-45a9-928e-672a1d3b977a resourceVersion: &quot;478&quot; uid: 4cfad35d-8664-42cf-9ed9-5fd5b4d771a4 spec: containers: - command: - kube-controller-manager - --allocate-node-cidrs=true - --pod-eviction-timeout=60s #&amp;lt;----------- 해당라인을 추가하면 이제 5분이아닌 60초로 변경됩니다. - --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf - --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf - --bind-address=127.0.0.1 - --client-ca-file=/etc/kubernetes/pki/ca.crt - --cluster-cidr=10.244.0.0/16 - --cluster-name=kubernetes - --cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt - --cluster-signing-key-file=/etc/kubernetes/pki/ca.key - --controllers=*,bootstrapsigner,tokencleaner - --kubeconfig=/etc/kubernetes/controller-manager.conf - --leader-elect=true - --port=0 - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt - --root-ca-file=/etc/kubernetes/pki/ca.crt - --service-account-private-key-file=/etc/kubernetes/pki/sa.key - --service-cluster-ip-range=10.96.0.0/12 - --use-service-account-credentials=true image: k8s.gcr.io/kube-controller-manager:v1.21.1 ...중략 저장해주면 멈췄다가 kube-controller-manager-master 0/1 Running 0 3s 옵션을 적용시켜 pod시 재시동됩니다~ kube-controller-manager-master 1/1 Running 0 3s eviction timeout의 존재이유? 위에서 eviction timeout의 값을 바꾸는 실습을 해보았는데요 이 timeout은 무엇과 연관이 있는지 두가지 케이스를 통해서 알아보겠습니다. case1: node가 먹통이 되었다가 설정해놓은 eviction-timeout보다 짦은시간안에 복구된경우 노드내에 있던 pod들이 kubectl에 의해 다시 해당노드에서 재시작됩니다. case2: node가 먹통이 된후 eviction-timeout을 초과한경우 해당 노드에있는 pod들을 모두 축출한 후에 노드가 재시동됩니다. 해당 노드에있던 pod이 replicaset을 통해 생성되었다면 다시 다른노드에 잘 생성이 되겠지만, 일반 pod이라면 다시 살아나지 못할겁니다. 노드관련 명령어 kubectl drain node $ kubectl drain node 해당 노드에있는 pod들을 종료시키고, 다른노드에 재시작시킵니다 (graceful node shutdown) 또한 해당 노드를 unschedulable하게 만든다. kubernetes의 버전 또는 리눅스 커널등의 업그레이드할 때 사용할 수 있겠습니다(kubeadm, kubelet, kubectl, …) kubectl cordon node $ kubectl cordon node 해당 노드를 unschedulable하게 만듭니다 실행 중인 Pod를 축출하지는 않습니다 kubectl uncordon node $ kubectl uncordon node 해당 노드를 schedulable하게 만든다 업그레이드를 마친 노드를 스케쥴러블하게 만듭니다 (taint를 제거) drain명령에 의해서 집나간 pod들이 다시 집을 찾아오진 않습니다. 쿠버네티스 버전 및 버전차이 지원 버전 쿠버네티스 버전은 x.y.z로 표현되는데, 여기서 x는 메이저 버전, y는 마이너 버전, z는 시맨틱 버전 용어에 따른 패치 버전입니다. kubernetes에는 여러가지 컴포넌트가 있습니다. 각각의 버전은 전부 동일해야할까요? 아닙니다. kube-apiserver의 버전이 주축이되고, 나머지 컴포넌트는 각각 다르게 한 두단계 버전이 낮거나 같아도 상관이 없습니다. 특별하게 kubectl의 경우는 kube-apiserver의 버전보다 한단계 높은경우도 지원이 됩니다. 더 자세한 내용은 공식문서에서 확인가능 합니다 클러스터 업그레이드 kubernets는 latest버전부터 두단계 낮은버전까지 서비스를 지원하는데요, 만약에 현재 1.19버전을 사용하고 있는데 1.22버전이 출시 된다면 업그레이드를 해야겠죠. 그렇다면 1.19버전에서 한번에 1.22번으로 업그레이드 시키면될까요? 추천되는 방법에 의하면 한단계 한단계씩 차례차례로 업그레이드 해야된다고 합니다. 업그레이드 방법 쿠버네티스 환경을 어떻게 구성하였는가에 따라 업그레이드 방법이 다양합니다. 구글의 GKE, AWS의 EKS등의 kubernete를 지원하는 cloud의 경우 간단한 클릭 몇번으로 업그레이드 가능 The hard way로 설치한경우 한땀한땀 설치한 것처럼 업그레이드 또한 한땀한땀 해야합니다 저는 kubeadm을 이용하여 kubernetes환경을 구축하였고, kubeadm을 통한 업그레이드 방법에 대해 자세히 설명해 보겠습니다. 저의 쿠버네티스 환경은 한개의 master노드, 3개의 worker노드로 구성되어있습니다. 1.20버전을 이용하고 있는데 1.21버전으로 업그레이드 해보겠습니다. STEP1 - 마스터 노드에 kubeadm 업그레이드 시키기. 마스터 노드에 접속합니다 $ ssh gcloud ssh config에 설정을 해놨기에 이렇게 간단하게 접속가능합니다. ssh config 설정방법이 궁금하시면 여기로 이동하세요. 그리고 kubernetes환경을 구축할때 hold시켜놨었던 kubeadm을 unhold시켜주고, apt-get 색인 업데이트후, kubeadm을 업데이트 한다음 다시 kubeadm을 hold시켜 줄겁니다. # 1.21.x-00에서 x를 최신 패치 버전으로 바꿉니다 apt-mark unhold kubeadm &amp;amp;&amp;amp; \ apt-get update &amp;amp;&amp;amp; apt-get install -y kubeadm=1.21.x-00 &amp;amp;&amp;amp; \ apt-mark hold kubeadm #버전 확인해주기 $ kubeadm version kubeadm version: &amp;amp;version.Info{Major:&quot;1&quot;, Minor:&quot;21&quot;, GitVersion:&quot;v1.21.1&quot;, GitCommit:&quot;5e58841cce77d4bc13713ad2b91fa0d961e69192&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2021-05-12T14:17:27Z&quot;, GoVersion:&quot;go1.16.4&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;} apt-mark unhold와 apt-mark hold 해주는 이유는 kubeadm을 업그레이드하면 설치시 kubelet과 같은 다른 구성 요소가 기본적으로 최신 버전 으로 자동으로 업그레이드되기 때문입니다. (kubernetes는 여러버전을 한꺼번에 업그레이드 권장하지 않기때문입니다!) 이를 해결하기 위해 보류를 사용하여 패키지를 보류 된 것으로 표시하여 패키지가 자동으로 설치, 업그레이드 또는 제거되지 않도록합니다. STEP2 - 업그레이드 정보 확인하기 $ kubeadm upgrade plan ... COMPONENT CURRENT AVAILABLE API Server v1.20.0 v1.21.1 Controller Manager v1.20.0 v1.21.1 Scheduler v1.20.0 v1.21.1 Kube Proxy v1.20.0 v1.21.1 ... STEP3 - 업그레이드 적용시키기 $ kubeadm upgrade plan apply v1.21.1 (조금 오래걸릴 수도 있습니다) 아래와같이뜨면 성공 [upgrade/successful] SUCCESS! Your cluster was upgraded to &quot;v1.21.1&quot;. Enjoy! [upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets if you haven&apos;t already done so. STEP4 - node drain후 kubelet, kubectl 업데이트후 재시작하기 #노드 드레인하기(모든 pod 종료후 다른노드에 새로 실행하기 및 해당노드 unschedulable하게 만듬) $ kubectl drain &amp;lt;node-to-drain&amp;gt; --ignore-daemonsets $ apt-mark unhold kubelet kubectl &amp;amp;&amp;amp; \ $ apt-get update &amp;amp;&amp;amp; apt-get install -y kubelet=1.21.1-00 kubectl=1.21.1-00 &amp;amp;&amp;amp; \ $ apt-mark hold kubelet kubectl #설정 수정사항 재로딩 $ sudo systemctl daemon-reload #kubelet 재시작 $ sudo systemctl restart kubelet #업데이트가 끝났으므로 다시 schedulable하게 만들어주기 $ kubectl uncordon &amp;lt;node-to-uncordon&amp;gt; 여기까지가 마스터노드의 업그레이드 방법이었습니다. :rocket: 여기서부터는 워커노드들을 업그레이드 합니다. STEP5 - 워커 노드에 kubeadm 설치하기 우선 3개의 워커노드중 하나인 worker-1에 접속합니다. ssh worker-1 그 다음, 마스터노드에 설치했던과 같은방법으로 kubeadm를 설치합니다. $ apt-mark unhold kubeadm &amp;amp;&amp;amp; \ $ apt-get update &amp;amp;&amp;amp; apt-get install -y kubeadm=1.21.x-00 &amp;amp;&amp;amp; \ $ apt-mark hold kubeadm 아까 마스터노드에서 아래의 커맨드를 이용해 upgrade가능 버전을 확인하고 v1.21.1로 apply했었습니다. $ kubeadm upgrade plan $ kubeadm upgrade apply v1.21.1 하지만 워커노드에서는 아래의 커맨드를 이용하여 클러스터에서 kubeadm ClusterConfiguration 을 가져오며, 이 노드의 kubelet 구성을 업그레이드 합니다. $ kubeadm upgrade node 그리고 마스터 노드로 이동하여 업그레이드 할 워커노드를 드레인 해줍니다. (마스터 노드에서 워커노드로 접속했었기에 접속 종료하면 마스터노드로 이동합니다.) $ exit logout Connection to 10.128.0.5 closed. $ kubectl drain worker-1 --ignore-daemonsets STEP6 - 워커노드의 kubelet 및 kubectl 업그레이드 # 다시 워커노드로 접속하기 $ ssh worker-1 # kubectl 과 kubelet 업데이트하기 $ apt-mark unhold kubectl kubelet &amp;amp;&amp;amp; \ $ apt-get update &amp;amp;&amp;amp; apt-get install -y kubectl=1.21.1-00 kubelet=1.21.1-00 &amp;amp;&amp;amp; \ $ apt-mark hold kubectl kubelet STEP7 - kubelet 다시 시작하기 $ sudo systemctl daemon-reload $ sudo systemctl restart kubelet STEP8 - cordon 해재하기 #마스터노드로 이동하기 $ exit $ kubectl uncordon worker-1 STEP9 - 반복하기 업그레이드 할 워커노드에 STEP5 ~ STEP8을 똑같이 진행해줍니다 마지막으로 업데이트가 잘 되었는지 확인해줍니다 $ kubectl get nodes NAME STATUS ROLES AGE VERSION master Ready control-plane,master 6d8h v1.21.1 worker-1 Ready &amp;lt;none&amp;gt; 6d8h v1.21.1 worker-2 Ready &amp;lt;none&amp;gt; 6d8h v1.21.1 worker-3 Ready &amp;lt;none&amp;gt; 6d8h v1.21.1 버전이 v1.21.1로 잘 업그레이드 된것을 확인할 수 있습니다.</summary></entry><entry><title type="html">[ #7 ] 배포 전략</title><link href="https://shjeong92.github.io/2021/06/02/Learning-Kubernetes-07.html" rel="alternate" type="text/html" title="[ #7 ] 배포 전략" /><published>2021-06-02T00:00:00+09:00</published><updated>2021-06-02T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/06/02/Learning-Kubernetes-07</id><content type="html" xml:base="https://shjeong92.github.io/2021/06/02/Learning-Kubernetes-07.html">&lt;p&gt;쿠버네티스에는아래 그림과 같이 두가지 배포방법이 있습니다&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/75003424/120428975-9582c300-c3af-11eb-95cf-ba8825576440.png&quot; alt=&quot;deplstrategy&quot; /&gt;&lt;/p&gt;
 
@@ -508,7 +894,121 @@ Last login: Tue Jun  1 03:44:23 2021 from 122.32.103.55
 shjeong920522@master:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="gcloud" /><category term="ssh" /><category term="key-gen" /><category term="rsa" /><category term="config" /><summary type="html">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요. 이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다. key pair 생성하기 #-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음) $ssh-keygen -t rsa -f ~/.ssh/&amp;lt;KEY_FILE_NAME&amp;gt; -C &quot;account@gmail.com&quot; 위와같이 입력하면 RSA key pair가 생성됩니다. ssh-keygen -t rsa -f ~/.ssh/test -C &quot;test@gmail.com&quot; Generating public/private rsa key pair. Enter passphrase (empty for no passphrase): Enter same passphrase again: Your identification has been saved in /Users/sanghyukjeong/.ssh/test. Your public key has been saved in /Users/sanghyukjeong/.ssh/test.pub. The key fingerprint is: SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ test@gmail.com The key&apos;s randomart image is: +---[RSA 3072]----+ |+E+=. ..... | |.o*.o..oo. | |.=.o. .+ | |... ... o. | |o+ ...S | |B.. . B | |*+ . * + | |O.o + | |oOo .o | +----[SHA256]-----+ 이후 cat명령어로 rsa 공개키를 확인할 수 있는데 구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다. $ cat ~/.ssh/test.pub ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk= test@gmail.com key 등록하기 compute엔진 -&amp;gt; 메타데이터 -&amp;gt; SSH 키로 이동후에 항목추가를 클릭하여 공개키를 추가합니다. 키등록이 끝났으니 ssh 접속을 해봅시다 $ ssh -i ~/.ssh/test yourID@your.gcloudExternal.ip Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 03:44:22 UTC 2021 System load: 0.27 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 10.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 10.244.0.1 Processes: 143 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 잘 접속 되는것을 확인할 수 있습니다. 그러나 접속할때마다 저 커맨드를 다 입력하는것은 참 귀찮은일입니다. ip정도는 한번보면 외우시는분이 아니라면요 ㅎㅎ 이제 ssh config파일 설정에대해 알아봅시다 ssh config 설정하여 ssh 접속 간편하게 하기 Linux/Unix서버 접속 계정들을 여러 가지 관리하는 경우, 별도로 메모나 파일에 접속 계정 / 비밀번호 등을 관리하거나 alias에 접속 명령어를 설정하는 번거로움이 있습니다. 하지만 .ssh 경로 밑 config 파일에 계정 정보들을 저장하여 관리하면 정말 편리하게 접속들을 관리할 수 있습니다. 우선 사용자 홈 디렉토리에서 .ssh 폴더로 접근합니다. .ssh 폴더는 ssh 접속을 한 번이라도 했다면, rsa 파일이나 known_hosts 등이 생성되기 때문에 자동으로 생성되는 디렉토리입니다. 홈디렉토리에 있는 .ssh폴더에 들어가서 config 파일을 생성해줍니다. $ cd ~/.ssh $ vim config Host gcloud HostName 10.178.0.3 User shjeong920522 IdentityFile: ~/.ssh/test Port 22 Host: 접속할 정보의 이름입니다. HostName: 접속할 서버의 외부 IP 주소를 입력하세요 User: 접속할 서버의 user 정보입니다. IdentityFile: 인증 키파일이 필요한 경우, 키파일 경로를 설정합니다. 이전 단계에 rsa 키페어 만든거 기억나시죠? Port: ssh 접속 포트입니다. 생략 가능하며, 생략할 경우에 디폴트로 22번 포트로 실생됩니다. 모든 설정이 끝났으니 google cloud에 접속해보겠습니다. # config 에서 Host에 등록한 접속할 정보만 적어주면 접속이되는 마법.... $ ssh gcloud Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 04:05:52 UTC 2021 System load: 0.65 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 12.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 12.244.0.1 Processes: 144 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 11 updates can be applied immediately. To see these additional updates run: apt list --upgradable New release &apos;20.04.2 LTS&apos; available. Run &apos;do-release-upgrade&apos; to upgrade to it. Last login: Tue Jun 1 03:44:23 2021 from 122.32.103.55 shjeong920522@master:~$ 이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.</summary></entry><entry><title type="html">[ #6 ] static pod</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html" rel="alternate" type="text/html" title="[ #6 ] static pod" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html">&lt;h2 id=&quot;static-pods이란&quot;&gt;Static pods이란&lt;/h2&gt;
+&lt;p&gt;이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="gcloud" /><category term="ssh" /><category term="key-gen" /><category term="rsa" /><category term="config" /><summary type="html">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요. 이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다. key pair 생성하기 #-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음) $ssh-keygen -t rsa -f ~/.ssh/&amp;lt;KEY_FILE_NAME&amp;gt; -C &quot;account@gmail.com&quot; 위와같이 입력하면 RSA key pair가 생성됩니다. ssh-keygen -t rsa -f ~/.ssh/test -C &quot;test@gmail.com&quot; Generating public/private rsa key pair. Enter passphrase (empty for no passphrase): Enter same passphrase again: Your identification has been saved in /Users/sanghyukjeong/.ssh/test. Your public key has been saved in /Users/sanghyukjeong/.ssh/test.pub. The key fingerprint is: SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ test@gmail.com The key&apos;s randomart image is: +---[RSA 3072]----+ |+E+=. ..... | |.o*.o..oo. | |.=.o. .+ | |... ... o. | |o+ ...S | |B.. . B | |*+ . * + | |O.o + | |oOo .o | +----[SHA256]-----+ 이후 cat명령어로 rsa 공개키를 확인할 수 있는데 구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다. $ cat ~/.ssh/test.pub ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk= test@gmail.com key 등록하기 compute엔진 -&amp;gt; 메타데이터 -&amp;gt; SSH 키로 이동후에 항목추가를 클릭하여 공개키를 추가합니다. 키등록이 끝났으니 ssh 접속을 해봅시다 $ ssh -i ~/.ssh/test yourID@your.gcloudExternal.ip Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 03:44:22 UTC 2021 System load: 0.27 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 10.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 10.244.0.1 Processes: 143 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 잘 접속 되는것을 확인할 수 있습니다. 그러나 접속할때마다 저 커맨드를 다 입력하는것은 참 귀찮은일입니다. ip정도는 한번보면 외우시는분이 아니라면요 ㅎㅎ 이제 ssh config파일 설정에대해 알아봅시다 ssh config 설정하여 ssh 접속 간편하게 하기 Linux/Unix서버 접속 계정들을 여러 가지 관리하는 경우, 별도로 메모나 파일에 접속 계정 / 비밀번호 등을 관리하거나 alias에 접속 명령어를 설정하는 번거로움이 있습니다. 하지만 .ssh 경로 밑 config 파일에 계정 정보들을 저장하여 관리하면 정말 편리하게 접속들을 관리할 수 있습니다. 우선 사용자 홈 디렉토리에서 .ssh 폴더로 접근합니다. .ssh 폴더는 ssh 접속을 한 번이라도 했다면, rsa 파일이나 known_hosts 등이 생성되기 때문에 자동으로 생성되는 디렉토리입니다. 홈디렉토리에 있는 .ssh폴더에 들어가서 config 파일을 생성해줍니다. $ cd ~/.ssh $ vim config Host gcloud HostName 10.178.0.3 User shjeong920522 IdentityFile: ~/.ssh/test Port 22 Host: 접속할 정보의 이름입니다. HostName: 접속할 서버의 외부 IP 주소를 입력하세요 User: 접속할 서버의 user 정보입니다. IdentityFile: 인증 키파일이 필요한 경우, 키파일 경로를 설정합니다. 이전 단계에 rsa 키페어 만든거 기억나시죠? Port: ssh 접속 포트입니다. 생략 가능하며, 생략할 경우에 디폴트로 22번 포트로 실생됩니다. 모든 설정이 끝났으니 google cloud에 접속해보겠습니다. # config 에서 Host에 등록한 접속할 정보만 적어주면 접속이되는 마법.... $ ssh gcloud Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 04:05:52 UTC 2021 System load: 0.65 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 12.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 12.244.0.1 Processes: 144 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 11 updates can be applied immediately. To see these additional updates run: apt list --upgradable New release &apos;20.04.2 LTS&apos; available. Run &apos;do-release-upgrade&apos; to upgrade to it. Last login: Tue Jun 1 03:44:23 2021 from 122.32.103.55 shjeong920522@master:~$ 이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.</summary></entry><entry><title type="html">[ #5 ] pod 스케쥴링-2</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html" rel="alternate" type="text/html" title="[ #5 ] pod 스케쥴링-2" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">&lt;h2 id=&quot;nodeselector&quot;&gt;nodeSelector&lt;/h2&gt;
+&lt;p&gt;nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.&lt;/p&gt;
+&lt;h3 id=&quot;1-노드에-레이블-붙이기&quot;&gt;1. 노드에 레이블 붙이기&lt;/h3&gt;
+
+&lt;p&gt;노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;레이블 값&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-pod설정에-nodeselector-필드-추가하기&quot;&gt;2. pod설정에 nodeSelector 필드 추가하기&lt;/h3&gt;
+&lt;p&gt;실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;spec아래에 nodeSelector을 추가해줍니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;imagePullPolicy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;IfNotPresent&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;nodeSelector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;#&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;disktype&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssd&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;node-affinity&quot;&gt;node affinity&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;nodeSelector&lt;/strong&gt; 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;nodeAffinity&lt;/strong&gt; 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;또한 &lt;strong&gt;nodeAffinity&lt;/strong&gt; 에는 아래와 같이 두가지 타입이 있습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
+  &lt;li&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다
+두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라
+pod이 스케쥴되는 형태입니다.&lt;/p&gt;
+
+&lt;p&gt;미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서
+affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;예제&quot;&gt;예제&lt;/h3&gt;
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;affinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;nodeAffinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;nodeSelectorTerms&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kubernetes.io/e2e-az-name&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az1&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az2&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;preference&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-key&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-value&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;k8s.gcr.io/pause:2.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다.&lt;/li&gt;
+      &lt;li&gt;두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 &lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 만족하는 노드가 없다면 해당 pod은 pending 상태가
+될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 조건이 맞는 노드로 배정 될 것입니다. &lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;weight&lt;/code&gt; 는 선호도입니다 만약 여러개의 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">nodeSelector nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다. 1. 노드에 레이블 붙이기 노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다. kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;=&amp;lt;레이블 값&amp;gt; 2. pod설정에 nodeSelector 필드 추가하기 실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면 apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx spec아래에 nodeSelector을 추가해줍니다. apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx imagePullPolicy: IfNotPresent nodeSelector: #&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt; disktype: ssd node affinity nodeSelector 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다. nodeAffinity 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다. 또한 nodeAffinity 에는 아래와 같이 두가지 타입이 있습니다. requiredDuringSchedulingIgnoredDuringExecution preferredDuringSchedulingIgnoredDuringExecution 첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다 두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라 pod이 스케쥴되는 형태입니다. 미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서 affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다. 예제 apiVersion: v1 kind: Pod metadata: name: with-node-affinity spec: affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: kubernetes.io/e2e-az-name operator: In values: - e2e-az1 - e2e-az2 preferredDuringSchedulingIgnoredDuringExecution: - weight: 1 preference: matchExpressions: - key: another-node-label-key operator: In values: - another-node-label-value containers: - name: with-node-affinity image: k8s.gcr.io/pause:2.0 Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다. requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우: 조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다. requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우: 첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다. 두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다. preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우: 조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다. 위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 requiredDuringSchedulingIgnoredDuringExecution 을 만족하는 노드가 없다면 해당 pod은 pending 상태가 될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 preferredDuringSchedulingIgnoredDuringExecution 조건이 맞는 노드로 배정 될 것입니다. weight 는 선호도입니다 만약 여러개의 preferredDuringSchedulingIgnoredDuringExecution 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.</summary></entry><entry><title type="html">[ #6 ] static pod</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html" rel="alternate" type="text/html" title="[ #6 ] static pod" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html">&lt;h2 id=&quot;static-pods이란&quot;&gt;Static pods이란&lt;/h2&gt;
 
 &lt;p&gt;제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 &lt;code&gt;kube-apiserver&lt;/code&gt;가 있고, 각 워커노드에는 &lt;code&gt;kubelet&lt;/code&gt; 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. &lt;br /&gt;
 이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다.&lt;/p&gt;
@@ -644,121 +1144,7 @@ NAME                 READY   STATUS    RESTARTS   AGE
 myapp-pod-worker-1   1/1     Running   0   
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다.
-따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="static" /><category term="pod" /><summary type="html">Static pods이란 제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다. 각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다. 우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다 $ kubectl get nodes -o wide NAME STATUS ROLES AGE VERSION instance-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 master Ready control-plane,master 3d3h v1.21.1 worker-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 worker-2 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 #worker 에 접속하기 $ ssh -i ~/.ssh/rsa-gcp-worker-1 shjeong920522@10.178.0.5 특징 1 kubelet 은 기본적으로 /etc/kubernetes/manifests 파일안의 pod.yaml 을 바라보는데, 이는 kubelet.service 의 config.yaml파일안에 staticPodPath에 정의되어있습니다. 직접 확인해봅시다 우선 아래 커맨드를 입력하여 config.yaml파일의 위치를 알아냅니다 # 모든서비스 확장 | kubelet 정보중에서 | --config 포함하는줄 가져오기 $ ps -ef | grep kubelet | grep &quot;\--config&quot; root 18270 1 1 May28 ? 01:31:14 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.4.1 해당 파일을 확인해 봅시다 $ sudo vi config=/var/lib/kubelet/config.yaml apiVersion: kubelet.config.k8s.io/v1beta1 authentication: anonymous: enabled: false webhook: cacheTTL: 0s enabled: true x509: clientCAFile: /etc/kubernetes/pki/ca.crt authorization: mode: Webhook webhook: cacheAuthorizedTTL: 0s cacheUnauthorizedTTL: 0s cgroupDriver: systemd clusterDNS: - 10.96.0.10 clusterDomain: cluster.local cpuManagerReconcilePeriod: 0s evictionPressureTransitionPeriod: 0s fileCheckFrequency: 0s healthzBindAddress: 127.0.0.1 healthzPort: 10248 httpCheckFrequency: 0s imageMinimumGCAge: 0s kind: KubeletConfiguration logging: {} nodeStatusReportFrequency: 0s nodeStatusUpdateFrequency: 0s resolvConf: /run/systemd/resolve/resolv.conf rotateCertificates: true runtimeRequestTimeout: 0s shutdownGracePeriod: 0s shutdownGracePeriodCriticalPods: 0s staticPodPath: /etc/kubernetes/manifests &amp;lt;------------------------------ staticPodPath 가 설정되어 있는것을 확인할 수 있습니다. streamingConnectionIdleTimeout: 0s syncFrequency: 0s volumeStatsAggPeriod: 0s 위와 같이 파일을 통으로 확인해보아도 되지만 grep명령어를 사용하면 더욱 편히 찾을 수도 있습니다. $ sudo grep static /var/lib/kubelet/config.yaml staticPodPath: /etc/kubernetes/manifests 특징 2 만약 해동 폴더내에 kind: Pod인 yaml 파일이있다면 kubelet이 자동으로 이를 생성하며 static pod의 이름에는 자동으로 해당 노드의 이름이 suffix로 붙습니다. 잘 생성되나 확인해 봅시다. $ cd /etc/kubernetes/manifests $ sudo vi static.yaml 간단한 pod을 해당 볼더에 생성해줍니다. #static.yaml apiVersion: v1 kind: Pod metadata: name: myapp-pod labels: app: myapp type: front-end spec: containers: - name: nginx-container image: nginx 마스터 노드로 이동하여 확인해봅시다. $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 42m static pod를 생성한 노드의 이름인 worker-1 가 Pod이름의 suffix로 붙어있는것을 확인할 수 있습니다. 특징 3 마스터노드에서 kubectl delete 명령어를 사용하더라도 워커노드의 kubelet이 다시 살려냅니다. static pod는 해당 워커노드의 kubelet이 관리하기 떄문입니다. 따라서 해당 pod의 image를 변경하고싶다면 manifest 폴더안의 해당 yaml파일의 이미지를 수정해야하고, 지우려면 해당 yaml파일을 삭제하면 됩니다. 그럼 정말로 다시 시작되는지 마스터노드에서 myapp-pod-worker-1을 삭제해 봅시다 $ kubectl delete pod myapp-pod-worker-1 pod &quot;myapp-pod-worker-1&quot; deleted 지운다음에 바로 확인해보면 $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 0/1 Pending 0 1s kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다. 따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.</summary></entry><entry><title type="html">[ #5 ] pod 스케쥴링-2</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html" rel="alternate" type="text/html" title="[ #5 ] pod 스케쥴링-2" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">&lt;h2 id=&quot;nodeselector&quot;&gt;nodeSelector&lt;/h2&gt;
-&lt;p&gt;nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.&lt;/p&gt;
-&lt;h3 id=&quot;1-노드에-레이블-붙이기&quot;&gt;1. 노드에 레이블 붙이기&lt;/h3&gt;
-
-&lt;p&gt;노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;레이블 값&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;2-pod설정에-nodeselector-필드-추가하기&quot;&gt;2. pod설정에 nodeSelector 필드 추가하기&lt;/h3&gt;
-&lt;p&gt;실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;spec아래에 nodeSelector을 추가해줍니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;imagePullPolicy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;IfNotPresent&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;nodeSelector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;#&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;disktype&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssd&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;node-affinity&quot;&gt;node affinity&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;nodeSelector&lt;/strong&gt; 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;nodeAffinity&lt;/strong&gt; 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다.&lt;/p&gt;
-
-&lt;p&gt;또한 &lt;strong&gt;nodeAffinity&lt;/strong&gt; 에는 아래와 같이 두가지 타입이 있습니다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
-  &lt;li&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다
-두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라
-pod이 스케쥴되는 형태입니다.&lt;/p&gt;
-
-&lt;p&gt;미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서
-affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다.&lt;/p&gt;
-
-&lt;h3 id=&quot;예제&quot;&gt;예제&lt;/h3&gt;
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;affinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;nodeAffinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;nodeSelectorTerms&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kubernetes.io/e2e-az-name&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az1&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az2&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;preference&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-key&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-value&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;k8s.gcr.io/pause:2.0&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다.&lt;/li&gt;
-      &lt;li&gt;두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 &lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 만족하는 노드가 없다면 해당 pod은 pending 상태가
-될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 조건이 맞는 노드로 배정 될 것입니다. &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;weight&lt;/code&gt; 는 선호도입니다 만약 여러개의 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">nodeSelector nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다. 1. 노드에 레이블 붙이기 노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다. kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;=&amp;lt;레이블 값&amp;gt; 2. pod설정에 nodeSelector 필드 추가하기 실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면 apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx spec아래에 nodeSelector을 추가해줍니다. apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx imagePullPolicy: IfNotPresent nodeSelector: #&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt; disktype: ssd node affinity nodeSelector 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다. nodeAffinity 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다. 또한 nodeAffinity 에는 아래와 같이 두가지 타입이 있습니다. requiredDuringSchedulingIgnoredDuringExecution preferredDuringSchedulingIgnoredDuringExecution 첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다 두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라 pod이 스케쥴되는 형태입니다. 미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서 affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다. 예제 apiVersion: v1 kind: Pod metadata: name: with-node-affinity spec: affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: kubernetes.io/e2e-az-name operator: In values: - e2e-az1 - e2e-az2 preferredDuringSchedulingIgnoredDuringExecution: - weight: 1 preference: matchExpressions: - key: another-node-label-key operator: In values: - another-node-label-value containers: - name: with-node-affinity image: k8s.gcr.io/pause:2.0 Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다. requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우: 조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다. requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우: 첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다. 두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다. preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우: 조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다. 위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 requiredDuringSchedulingIgnoredDuringExecution 을 만족하는 노드가 없다면 해당 pod은 pending 상태가 될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 preferredDuringSchedulingIgnoredDuringExecution 조건이 맞는 노드로 배정 될 것입니다. weight 는 선호도입니다 만약 여러개의 preferredDuringSchedulingIgnoredDuringExecution 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.</summary></entry><entry><title type="html">[ #4 ] pod 스케쥴링-1</title><link href="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html" rel="alternate" type="text/html" title="[ #4 ] pod 스케쥴링-1" /><published>2021-05-30T00:00:00+09:00</published><updated>2021-05-30T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html">&lt;h2 id=&quot;taint--toleration&quot;&gt;Taint &amp;amp; Toleration&lt;/h2&gt;
+따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="static" /><category term="pod" /><summary type="html">Static pods이란 제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다. 각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다. 우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다 $ kubectl get nodes -o wide NAME STATUS ROLES AGE VERSION instance-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 master Ready control-plane,master 3d3h v1.21.1 worker-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 worker-2 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 #worker 에 접속하기 $ ssh -i ~/.ssh/rsa-gcp-worker-1 shjeong920522@10.178.0.5 특징 1 kubelet 은 기본적으로 /etc/kubernetes/manifests 파일안의 pod.yaml 을 바라보는데, 이는 kubelet.service 의 config.yaml파일안에 staticPodPath에 정의되어있습니다. 직접 확인해봅시다 우선 아래 커맨드를 입력하여 config.yaml파일의 위치를 알아냅니다 # 모든서비스 확장 | kubelet 정보중에서 | --config 포함하는줄 가져오기 $ ps -ef | grep kubelet | grep &quot;\--config&quot; root 18270 1 1 May28 ? 01:31:14 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.4.1 해당 파일을 확인해 봅시다 $ sudo vi config=/var/lib/kubelet/config.yaml apiVersion: kubelet.config.k8s.io/v1beta1 authentication: anonymous: enabled: false webhook: cacheTTL: 0s enabled: true x509: clientCAFile: /etc/kubernetes/pki/ca.crt authorization: mode: Webhook webhook: cacheAuthorizedTTL: 0s cacheUnauthorizedTTL: 0s cgroupDriver: systemd clusterDNS: - 10.96.0.10 clusterDomain: cluster.local cpuManagerReconcilePeriod: 0s evictionPressureTransitionPeriod: 0s fileCheckFrequency: 0s healthzBindAddress: 127.0.0.1 healthzPort: 10248 httpCheckFrequency: 0s imageMinimumGCAge: 0s kind: KubeletConfiguration logging: {} nodeStatusReportFrequency: 0s nodeStatusUpdateFrequency: 0s resolvConf: /run/systemd/resolve/resolv.conf rotateCertificates: true runtimeRequestTimeout: 0s shutdownGracePeriod: 0s shutdownGracePeriodCriticalPods: 0s staticPodPath: /etc/kubernetes/manifests &amp;lt;------------------------------ staticPodPath 가 설정되어 있는것을 확인할 수 있습니다. streamingConnectionIdleTimeout: 0s syncFrequency: 0s volumeStatsAggPeriod: 0s 위와 같이 파일을 통으로 확인해보아도 되지만 grep명령어를 사용하면 더욱 편히 찾을 수도 있습니다. $ sudo grep static /var/lib/kubelet/config.yaml staticPodPath: /etc/kubernetes/manifests 특징 2 만약 해동 폴더내에 kind: Pod인 yaml 파일이있다면 kubelet이 자동으로 이를 생성하며 static pod의 이름에는 자동으로 해당 노드의 이름이 suffix로 붙습니다. 잘 생성되나 확인해 봅시다. $ cd /etc/kubernetes/manifests $ sudo vi static.yaml 간단한 pod을 해당 볼더에 생성해줍니다. #static.yaml apiVersion: v1 kind: Pod metadata: name: myapp-pod labels: app: myapp type: front-end spec: containers: - name: nginx-container image: nginx 마스터 노드로 이동하여 확인해봅시다. $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 42m static pod를 생성한 노드의 이름인 worker-1 가 Pod이름의 suffix로 붙어있는것을 확인할 수 있습니다. 특징 3 마스터노드에서 kubectl delete 명령어를 사용하더라도 워커노드의 kubelet이 다시 살려냅니다. static pod는 해당 워커노드의 kubelet이 관리하기 떄문입니다. 따라서 해당 pod의 image를 변경하고싶다면 manifest 폴더안의 해당 yaml파일의 이미지를 수정해야하고, 지우려면 해당 yaml파일을 삭제하면 됩니다. 그럼 정말로 다시 시작되는지 마스터노드에서 myapp-pod-worker-1을 삭제해 봅시다 $ kubectl delete pod myapp-pod-worker-1 pod &quot;myapp-pod-worker-1&quot; deleted 지운다음에 바로 확인해보면 $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 0/1 Pending 0 1s kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다. 따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.</summary></entry><entry><title type="html">[ #4 ] pod 스케쥴링-1</title><link href="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html" rel="alternate" type="text/html" title="[ #4 ] pod 스케쥴링-1" /><published>2021-05-30T00:00:00+09:00</published><updated>2021-05-30T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html">&lt;h2 id=&quot;taint--toleration&quot;&gt;Taint &amp;amp; Toleration&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;taint: 노드마다 설정가능&lt;/li&gt;
@@ -1965,234 +2351,4 @@ I am a value
 &lt;p&gt;설정된 인자 값은 다음과 같이 &lt;code&gt;${인자명}&lt;/code&gt; 형태로 읽어서 사용할 수 있습니다.&lt;/p&gt;
 
 &lt;div class=&quot;language-docker highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CMD&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; start.sh -h 127.0.0.1 -p ${port}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="network" /><category term="도커" /><category term="네트워크" /><category term="컨테이너" /><category term="명령어" /><summary type="html">Dockerfile 포멧 하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다. # 주석(Comment) 명령어(INSTRUCTION) 인자(arguments) 각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다. FROM 명령문 FROM &amp;lt;이미지&amp;gt; FROM &amp;lt;이미지&amp;gt;:&amp;lt;태그&amp;gt; FROM명령문은 base image를 지정해주기 위해서 사용합니다. 하나의 Docker image는 base 이미지로부터 시작해서 새로운 이미지를 중첩해서 여러 단계의 이미지 층을 쌓아가면서 만들어지는 것입니다. python 최신버전을 base 이미지로 사용 FROM python:latest NodeJS 11버전을 base 이미지로 사용 FROM node:latest WORKDIR 명령문 WORKDIR 명령문은 쉘의 cd 와 같습니다. WORKDIR 명령문을 사용하여 디렉토리 위치를 이동시키면 그이후에 등장하는 모든 커멘드(RUN, CMD, ENTRYPOINT, COPY, ADD)는 해당 디렉토리 위치 기준으로 실행됩니다 WORKDIR &amp;lt;이동할경로&amp;gt; /usr/test로 작헙할 디렉토리위치 전환 WORKDIR /usr/test RUN 명령문 RUN [&quot;&amp;lt;커맨드&amp;gt;&quot;, &quot;&amp;lt;파라미터1&amp;gt;&quot;, &quot;&amp;lt;파라미터2&amp;gt;&quot; ...] RUN &amp;lt;전체 커맨드&amp;gt; npm 패키지 설치 RUN npm install --silent pip 패키지 설치 RUN pip install -r requirements.txt #Dockerfile FROM ubuntu:latest CMD [&quot;echo&quot;, &quot;CMD test&quot;] 위와 같은 도커파일이 있을 때, 이미지를 빌드하고 실행해보도록 하겠습니다. 먼저, 아래 명령어로 이미지를 빌드해줍니다. docker build -t cmd_test . ENTRYPOINT 명령문 ENTRYPOINT [&quot;&amp;lt;커맨드&amp;gt;&quot;, &quot;&amp;lt;파라미터1&amp;gt;&quot;, &quot;&amp;lt;파라미터2&amp;gt;&quot; ...] ENTRYPOINT &amp;lt;전체 커맨드&amp;gt; ENTRYPOINT 명령문은 컨테이너가 실행될때 항상 실행되야하는 커멘드를 지정할 때 사용합니다. Django 서버 실행하기 ENTRYPOINT [&quot;python&quot;, &quot;manage.py&quot;, &quot;runserver&quot;] CMD 명령문 CMD [&quot;&amp;lt;커맨드&amp;gt;&quot;,&quot;&amp;lt;파라미터1&amp;gt;&quot;,&quot;&amp;lt;파라미터2&amp;gt;&quot;] CMD [&quot;&amp;lt;파라미터1&amp;gt;&quot;,&quot;&amp;lt;파라미터2&amp;gt;&quot;] CMD &amp;lt;전체 커맨드&amp;gt; CMD 명령문은 컨테이너가 시작될때 디폴트로 실행할 커맨드나, 디폴트로 파라미터를 넘길때 사용됩니다. CMD 명령문은 Dockerfile의 마지막 라인에 쓰곤하는데요, 이 명령문은 Dockerfile당 한줄만 사용할 수 있습니다. 여러줄을 쓴다면 가장 마지막 줄만 적용됩니다. 또한, docker run뒤에 인자가 주어진다면 도커파일내의 CMD명령문은 무시됩니다. EXPOSE 명령문 EXPOSE &amp;lt;포트&amp;gt; EXPOSE &amp;lt;포트&amp;gt;/&amp;lt;프로토콜&amp;gt; EXPOSE 명령문은 네트워크 상에서 컨테이너로 들어오는 트래픽(traffic)을 리스닝(listening)하는 포트와 프로토콜를 지정하기 위해서 사용됩니다. 프로토콜은 TCP와 UDP 중 선택할 수 있는데 지정하지 않으면 TCP가 기본값으로 사용됩니다. 여기서 주의해야할 점은 EXPOSE 명령문으로 지정된 포트는 해당 컨테이너 내부에서만 유효한데요, 호스트 컴퓨터로부터 해당 포트로 접근을 허용하려면 docker run 커맨드에 -p 옵션을 추가하여 바인딩 해줘야 합니다. 80/TCP 포트로 리스닝 EXPOSE 80 80/UDP 포트로 리스닝 EXPOSE 80/udp COPY/ADD 명령문 COPY &amp;lt;src&amp;gt;... &amp;lt;dest&amp;gt; COPY [&quot;&amp;lt;src&amp;gt;&quot;,... &quot;&amp;lt;dest&amp;gt;&quot;] COPY 명령문은 호스트 컴퓨터에 있는 디렉터리나 파일을 Docker 이미지의 파일 시스템으로 복사하기 위해서 사용됩니다. 절대 경로와 상대 경로를 모두 지원하며, 상대 경로를 사용할 때는 이 전에 등장하는 WORKDIR 명령문으로 작업 디렉토리를 어디로 전환했는지 고려해야 합니다. 이미지를 빌드한 디렉터리의 모든 파일을 컨테이너의 app/test 디렉터리로 복사 WORKDIR app/test COPY . . ADD 명령문은 좀 더 파워풀한 COPY 명령어라고 보시면되는데요, ADD 명령문은 일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 COPY 를 사용하는것이 권장됩니다. ENV 명령문 ENV &amp;lt;키&amp;gt; &amp;lt;값&amp;gt; ENV &amp;lt;키&amp;gt;=&amp;lt;값&amp;gt; ENV 명령문은 환경 변수를 설정하기 위해서 사용합니다. ENV 명령문으로 설정된 환경 변수는 이미지 빌드 시에도 사용됨은 물론이고, 해당 컨테이너에서 돌아가는 애플리케이션도 접근할 수 있습니다. DB_PASS 환경 변수를 1234로 설정 ENV DB_PASS 1234 ARG 명령문 ARG &amp;lt;이름&amp;gt; ARG &amp;lt;이름&amp;gt;=&amp;lt;기본 값&amp;gt; ARG 명령문은 docker build 커맨드로 이미지를 빌드 할때, --build-arg 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다. 예를 들어, Dockerfile에 다음과 같이 ARG 명령문으로 port를 인자로 선언해주면, ARG port 다음과 같이 docker build 커맨드에 --build-arg 옵션에 port 값을 넘길 수가 있습니다. $ docker build --build-arg port=8080 . 인자의 디폴트값을 지정해주면, --build-arg 옵션으로 해당 인자가 넘어오지 않았을 때 사용됩니다. ARG port=8080 설정된 인자 값은 다음과 같이 ${인자명} 형태로 읽어서 사용할 수 있습니다. CMD start.sh -h 127.0.0.1 -p ${port}</summary></entry><entry><title type="html">[ #2 ] Docker 네트워크 사용하기</title><link href="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html" rel="alternate" type="text/html" title="[ #2 ] Docker 네트워크 사용하기" /><published>2021-05-20T00:00:00+09:00</published><updated>2021-05-20T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/20/Learning-Docker-02</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html">&lt;p&gt;Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;네트워크-조회&quot;&gt;네트워크 조회&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;docker network ls&lt;/code&gt; 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;ls
-&lt;/span&gt;NETWORK ID     NAME             DRIVER    SCOPE
-b1545defe462   bridge           bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;2fff1f6ef4f0   core_default     bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;95295abe6cbb   docker_default   bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;a152a103d15b   host             host      &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;7cf51facc103   mongo-network    bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;f984d450d39e   none             null      &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code&gt;bridge&lt;/code&gt;, &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt; 은 Docker 데몬이 실행되면서 기본적으로 생성되는 네트워크인데, 사용자가 직접 네트워크를 생성해서 사용하는게 권장된다고 합니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;네트워크-종류&quot;&gt;네트워크 종류&lt;/h2&gt;
-&lt;p&gt;Docker 네트워크는 &lt;code&gt;bridge&lt;/code&gt;, &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;overlay&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt;, &lt;code&gt;container&lt;/code&gt; 가 있습니다.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;bridge 네트워크는 하나의 호스트 컴퓨터 내에서 여러 컨테이너들이 서로 소통할 수 있도록 해줍니다.&lt;/li&gt;
-  &lt;li&gt;host 네트워크는 컨터이너를 호스트 컴퓨터와 동일한 네트워크에서 컨테이너를 돌리기 위해서 사용됩니다.&lt;/li&gt;
-  &lt;li&gt;overlay 네트워크는 여러 호스트에 분산되어 돌아가는 컨테이너들 간에 네트워킹을 위해서 사용됩니다.&lt;/li&gt;
-  &lt;li&gt;none 네트워크는 네트워크를 사용하지 않는다는 것입니다.&lt;/li&gt;
-  &lt;li&gt;container 네트워크는 다른 컨테이너의 네트워크 환경 공유를위해 쓰입니다.
-&lt;code&gt;--net container: (containerIdOrName)  &lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;네트워크-생성&quot;&gt;네트워크 생성&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;docker network create (name)&lt;/code&gt; 커맨드를 사용하면 새로운 Docker 네트워크를 생성할 수 있습니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network create new
-56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;ls
-&lt;/span&gt;NETWORK ID     NAME             DRIVER    SCOPE
-b1545defe462   bridge           bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;95295abe6cbb   docker_default   bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;a152a103d15b   host             host      &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;7cf51facc103   mongo-network    bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;56aabbc93d48   new              bridge    &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt; &amp;lt;&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; 새로생긴 네트워크
-f984d450d39e   none             null      &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;-d 옵션을 추가하면 네트워크의 종류를 정의할 수도 있습니다. 기본값은 bridge 입니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;네트워크-디테일-확인하기&quot;&gt;네트워크 디테일 확인하기&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;docker network inspect&lt;/code&gt;커맨드를 사용하면 다음과 같이 네트워크의 상세정보를 확인할 수 있습니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;techworld-js-docker-demo-app docker network inspect new
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;new&quot;&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Id&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7&quot;&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Created&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;2021-05-20T11:38:23.716924633Z&quot;&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Scope&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;local&quot;&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Driver&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;bridge&quot;&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;EnableIPv6&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;IPAM&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;Driver&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;Options&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;Config&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;s2&quot;&gt;&quot;Subnet&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.0/20&quot;&lt;/span&gt;,
-                    &lt;span class=&quot;s2&quot;&gt;&quot;Gateway&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.1&quot;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Internal&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Attachable&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Ingress&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;ConfigFrom&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;Network&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;ConfigOnly&quot;&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Options&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Labels&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;디폴트-네트워크&quot;&gt;디폴트 네트워크&lt;/h2&gt;
-
-&lt;p&gt;컨테이너 생성시 –net 태그를 사용하여 원하는 네트워크에 연결시킨 상태로 만들 수 있습니다 만약 –net 옵션을 사용하지 않으면 기본적으로 bridge라는 디폴트 네트워크에 붙습니다.&lt;/p&gt;
-
-&lt;p&gt;자그럼 &lt;code&gt;sample&lt;/code&gt;이라는 컨테이너를 하나 실행해보겠습니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-itd&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; sample busybox
-c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;–net 옵션을 사용하지 않았으니 bridge 네트워크에 붙었겠지요? 한번 확인해봅시다.&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network inspect bridge
-
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 
-  &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  ...중략
-    &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;s2&quot;&gt;&quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;sample&quot;&lt;/span&gt;,
-          &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;8e3585999080257814d644b79484041fd7b517fe467dcd21c55175922cce69cf&quot;&lt;/span&gt;,
-          &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;02:42:ac:11:00:02&quot;&lt;/span&gt;,
-          &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;172.17.0.2/16&quot;&lt;/span&gt;,
-          &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
-  ...중략
-
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;containers 안에 sample이 잘 들어가있는것을 확인할 수 있습니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;네트워크에-컨테이너-연결&quot;&gt;네트워크에 컨테이너 연결&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;docker network connect&lt;/code&gt;커맨드를 사용하면 원하는 네트워크에 컨테이너를 연결할 수 있습니다.
-sample컨테이너를 new 네트워크에 연결후 확인해 보겠습니다.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network connect new sample
-
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network inspect new
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-    ...중략
-        &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;sample&quot;&lt;/span&gt;,
-                &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080&quot;&lt;/span&gt;,
-                &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;02:42:c0:a8:60:02&quot;&lt;/span&gt;,
-                &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.2/20&quot;&lt;/span&gt;,
-                &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Options&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;Labels&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
-    ...중략
-&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;이와같이 잘 연결된 것을 확인 할 수 있습니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;네트워크로부터-컨테이너-연결-해제&quot;&gt;네트워크로부터 컨테이너 연결 해제&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;docker network disconnect&lt;/code&gt; 커맨드를 이용하여 디폴트 네트워크인 bridge 과 sample의 연결을 해재 하겠습니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network disconnect bridge sample
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;잘 해제된것을 확인해 봅시다.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network inspect bridge
-
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 
-  &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  ...중략
-    &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
-  ...중략
-
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;두번째-컨테이너-연결&quot;&gt;두번째 컨테이너 연결&lt;/h2&gt;
-&lt;p&gt;같은 네트워크에 다른 서로 다른 컨테이너들을 연결시키면 통신 가능하다고 했었죠? 한번 직접 확인해봅시다.
-우선 두번째 sample을 만들어주고,&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-itd&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; sample2 &lt;span class=&quot;nt&quot;&gt;--net&lt;/span&gt; new busybox
-6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;네트워크에 잘 붙었는지 확인합니다&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network inspect new
-
-  ...중략
-    &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;sample2&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;68c44b54a118ab3f54ea29aff5a6bbb1431668d40b4f1cc22807525592ca362b&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;02:42:c0:a8:60:03&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.3/20&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;,
-        &lt;span class=&quot;s2&quot;&gt;&quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;sample&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;02:42:c0:a8:60:02&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;192.168.96.2/20&quot;&lt;/span&gt;,
-            &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  ...중략
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;new라는 네트워크에 sample과 sample2가 잘 연결되었습니다.&lt;/p&gt;
-
-&lt;h2 id=&quot;컨테이너-간-네트워킹&quot;&gt;컨테이너 간 네트워킹&lt;/h2&gt;
-
-&lt;p&gt;이제 두 컨테이너가 네트워크를 통해 통신 가능한지 테스트 해보겠습니다.&lt;/p&gt;
-
-&lt;p&gt;우선 &lt;code&gt;sample&lt;/code&gt; 컨테이너에서 &lt;code&gt;sample2&lt;/code&gt; 컨테이너로 &lt;code&gt;ping&lt;/code&gt; 을 날려봅니다 컨테이너 이름대신 ip로 입력할 수도 있지만 이름을 넣는게 편하겠지요.&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;sample ping sample2
-PING sample2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;192.168.96.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 56 data bytes
-64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.109 ms
-64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.232 ms
-64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.196 ms
-64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.198 ms
-64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.164 ms
-64 bytes from 192.168.96.3: &lt;span class=&quot;nb&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;5 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.199 ms
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;네트워크-삭제&quot;&gt;네트워크 삭제&lt;/h2&gt;
-
-&lt;p&gt;마지막으로 &lt;code&gt;docker network rm&lt;/code&gt;커맨드를 사용하여 &lt;code&gt;new&lt;/code&gt; 네트워크를 삭제해보겠습니다.
-&lt;br /&gt;&lt;br /&gt;
-에러가 뜨면서 삭제가 되질 않습니다&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;new
-Error response from daemon: error &lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;removing network: network new &lt;span class=&quot;nb&quot;&gt;id &lt;/span&gt;56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7 has active endpoints
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;네트워크를 삭제하기위해선 해당 네트워크상에서 실행중인 컨테이너가 있으면 안됩니다.
-따라서 
-&lt;code&gt;docker stop&lt;/code&gt;커맨드로 컨테이너들을 멈춰주고 다시 지워보겠습니다.&lt;/p&gt;
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker stop sample sample2
-sample
-sample2
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;rm &lt;/span&gt;new
-new
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;docker network &lt;span class=&quot;nb&quot;&gt;ls
-&lt;/span&gt;NETWORK ID     NAME             DRIVER    SCOPE
-b1545defe462   bridge           bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;95295abe6cbb   docker_default   bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;a152a103d15b   host             host      &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;7cf51facc103   mongo-network    bridge    &lt;span class=&quot;nb&quot;&gt;local
-&lt;/span&gt;f984d450d39e   none             null      &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;성공적으로 삭제되었습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="network" /><category term="도커" /><category term="네트워크" /><category term="컨테이너" /><summary type="html">Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다. 네트워크 조회 docker network ls 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다. $ docker network ls NETWORK ID NAME DRIVER SCOPE b1545defe462 bridge bridge local 2fff1f6ef4f0 core_default bridge local 95295abe6cbb docker_default bridge local a152a103d15b host host local 7cf51facc103 mongo-network bridge local f984d450d39e none null local bridge, host, none 은 Docker 데몬이 실행되면서 기본적으로 생성되는 네트워크인데, 사용자가 직접 네트워크를 생성해서 사용하는게 권장된다고 합니다. 네트워크 종류 Docker 네트워크는 bridge, host, overlay, none, container 가 있습니다. bridge 네트워크는 하나의 호스트 컴퓨터 내에서 여러 컨테이너들이 서로 소통할 수 있도록 해줍니다. host 네트워크는 컨터이너를 호스트 컴퓨터와 동일한 네트워크에서 컨테이너를 돌리기 위해서 사용됩니다. overlay 네트워크는 여러 호스트에 분산되어 돌아가는 컨테이너들 간에 네트워킹을 위해서 사용됩니다. none 네트워크는 네트워크를 사용하지 않는다는 것입니다. container 네트워크는 다른 컨테이너의 네트워크 환경 공유를위해 쓰입니다. --net container: (containerIdOrName) 네트워크 생성 docker network create (name) 커맨드를 사용하면 새로운 Docker 네트워크를 생성할 수 있습니다. $ docker network create new 56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7 $ docker network ls NETWORK ID NAME DRIVER SCOPE b1545defe462 bridge bridge local 95295abe6cbb docker_default bridge local a152a103d15b host host local 7cf51facc103 mongo-network bridge local 56aabbc93d48 new bridge local &amp;lt;-- 새로생긴 네트워크 f984d450d39e none null local -d 옵션을 추가하면 네트워크의 종류를 정의할 수도 있습니다. 기본값은 bridge 입니다. 네트워크 디테일 확인하기 docker network inspect커맨드를 사용하면 다음과 같이 네트워크의 상세정보를 확인할 수 있습니다. $ techworld-js-docker-demo-app docker network inspect new [ { &quot;Name&quot;: &quot;new&quot;, &quot;Id&quot;: &quot;56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7&quot;, &quot;Created&quot;: &quot;2021-05-20T11:38:23.716924633Z&quot;, &quot;Scope&quot;: &quot;local&quot;, &quot;Driver&quot;: &quot;bridge&quot;, &quot;EnableIPv6&quot;: false, &quot;IPAM&quot;: { &quot;Driver&quot;: &quot;default&quot;, &quot;Options&quot;: {}, &quot;Config&quot;: [ { &quot;Subnet&quot;: &quot;192.168.96.0/20&quot;, &quot;Gateway&quot;: &quot;192.168.96.1&quot; } ] }, &quot;Internal&quot;: false, &quot;Attachable&quot;: false, &quot;Ingress&quot;: false, &quot;ConfigFrom&quot;: { &quot;Network&quot;: &quot;&quot; }, &quot;ConfigOnly&quot;: false, &quot;Containers&quot;: {}, &quot;Options&quot;: {}, &quot;Labels&quot;: {} } ] 디폴트 네트워크 컨테이너 생성시 –net 태그를 사용하여 원하는 네트워크에 연결시킨 상태로 만들 수 있습니다 만약 –net 옵션을 사용하지 않으면 기본적으로 bridge라는 디폴트 네트워크에 붙습니다. 자그럼 sample이라는 컨테이너를 하나 실행해보겠습니다. docker run -itd --name sample busybox c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473 –net 옵션을 사용하지 않았으니 bridge 네트워크에 붙었겠지요? 한번 확인해봅시다. $ docker network inspect bridge [ { ...중략 &quot;Containers&quot;: { &quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;: { &quot;Name&quot;: &quot;sample&quot;, &quot;EndpointID&quot;: &quot;8e3585999080257814d644b79484041fd7b517fe467dcd21c55175922cce69cf&quot;, &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;, &quot;IPv4Address&quot;: &quot;172.17.0.2/16&quot;, &quot;IPv6Address&quot;: &quot;&quot; } }, ...중략 } ] containers 안에 sample이 잘 들어가있는것을 확인할 수 있습니다. 네트워크에 컨테이너 연결 docker network connect커맨드를 사용하면 원하는 네트워크에 컨테이너를 연결할 수 있습니다. sample컨테이너를 new 네트워크에 연결후 확인해 보겠습니다. $ docker network connect new sample $ docker network inspect new [ ...중략 &quot;Containers&quot;: { &quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;: { &quot;Name&quot;: &quot;sample&quot;, &quot;EndpointID&quot;: &quot;6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080&quot;, &quot;MacAddress&quot;: &quot;02:42:c0:a8:60:02&quot;, &quot;IPv4Address&quot;: &quot;192.168.96.2/20&quot;, &quot;IPv6Address&quot;: &quot;&quot; } }, &quot;Options&quot;: {}, &quot;Labels&quot;: {} ...중략 ] 이와같이 잘 연결된 것을 확인 할 수 있습니다. 네트워크로부터 컨테이너 연결 해제 docker network disconnect 커맨드를 이용하여 디폴트 네트워크인 bridge 과 sample의 연결을 해재 하겠습니다. $ docker network disconnect bridge sample 잘 해제된것을 확인해 봅시다. $ docker network inspect bridge [ { ...중략 &quot;Containers&quot;: {} ...중략 } ] 두번째 컨테이너 연결 같은 네트워크에 다른 서로 다른 컨테이너들을 연결시키면 통신 가능하다고 했었죠? 한번 직접 확인해봅시다. 우선 두번째 sample을 만들어주고, docker run -itd --name sample2 --net new busybox 6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c 네트워크에 잘 붙었는지 확인합니다 $ docker network inspect new ...중략 &quot;Containers&quot;: { &quot;6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c&quot;: { &quot;Name&quot;: &quot;sample2&quot;, &quot;EndpointID&quot;: &quot;68c44b54a118ab3f54ea29aff5a6bbb1431668d40b4f1cc22807525592ca362b&quot;, &quot;MacAddress&quot;: &quot;02:42:c0:a8:60:03&quot;, &quot;IPv4Address&quot;: &quot;192.168.96.3/20&quot;, &quot;IPv6Address&quot;: &quot;&quot; }, &quot;c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473&quot;: { &quot;Name&quot;: &quot;sample&quot;, &quot;EndpointID&quot;: &quot;6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080&quot;, &quot;MacAddress&quot;: &quot;02:42:c0:a8:60:02&quot;, &quot;IPv4Address&quot;: &quot;192.168.96.2/20&quot;, &quot;IPv6Address&quot;: &quot;&quot; } } ...중략 new라는 네트워크에 sample과 sample2가 잘 연결되었습니다. 컨테이너 간 네트워킹 이제 두 컨테이너가 네트워크를 통해 통신 가능한지 테스트 해보겠습니다. 우선 sample 컨테이너에서 sample2 컨테이너로 ping 을 날려봅니다 컨테이너 이름대신 ip로 입력할 수도 있지만 이름을 넣는게 편하겠지요. docker exec sample ping sample2 PING sample2 (192.168.96.3): 56 data bytes 64 bytes from 192.168.96.3: seq=0 ttl=64 time=0.109 ms 64 bytes from 192.168.96.3: seq=1 ttl=64 time=0.232 ms 64 bytes from 192.168.96.3: seq=2 ttl=64 time=0.196 ms 64 bytes from 192.168.96.3: seq=3 ttl=64 time=0.198 ms 64 bytes from 192.168.96.3: seq=4 ttl=64 time=0.164 ms 64 bytes from 192.168.96.3: seq=5 ttl=64 time=0.199 ms 네트워크 삭제 마지막으로 docker network rm커맨드를 사용하여 new 네트워크를 삭제해보겠습니다. 에러가 뜨면서 삭제가 되질 않습니다 $ docker network rm new Error response from daemon: error while removing network: network new id 56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7 has active endpoints 네트워크를 삭제하기위해선 해당 네트워크상에서 실행중인 컨테이너가 있으면 안됩니다. 따라서 docker stop커맨드로 컨테이너들을 멈춰주고 다시 지워보겠습니다. $ docker stop sample sample2 sample sample2 $ docker network rm new new $ docker network ls NETWORK ID NAME DRIVER SCOPE b1545defe462 bridge bridge local 95295abe6cbb docker_default bridge local a152a103d15b host host local 7cf51facc103 mongo-network bridge local f984d450d39e none null local 성공적으로 삭제되었습니다.</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="network" /><category term="도커" /><category term="네트워크" /><category term="컨테이너" /><category term="명령어" /><summary type="html">Dockerfile 포멧 하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다. # 주석(Comment) 명령어(INSTRUCTION) 인자(arguments) 각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다. FROM 명령문 FROM &amp;lt;이미지&amp;gt; FROM &amp;lt;이미지&amp;gt;:&amp;lt;태그&amp;gt; FROM명령문은 base image를 지정해주기 위해서 사용합니다. 하나의 Docker image는 base 이미지로부터 시작해서 새로운 이미지를 중첩해서 여러 단계의 이미지 층을 쌓아가면서 만들어지는 것입니다. python 최신버전을 base 이미지로 사용 FROM python:latest NodeJS 11버전을 base 이미지로 사용 FROM node:latest WORKDIR 명령문 WORKDIR 명령문은 쉘의 cd 와 같습니다. WORKDIR 명령문을 사용하여 디렉토리 위치를 이동시키면 그이후에 등장하는 모든 커멘드(RUN, CMD, ENTRYPOINT, COPY, ADD)는 해당 디렉토리 위치 기준으로 실행됩니다 WORKDIR &amp;lt;이동할경로&amp;gt; /usr/test로 작헙할 디렉토리위치 전환 WORKDIR /usr/test RUN 명령문 RUN [&quot;&amp;lt;커맨드&amp;gt;&quot;, &quot;&amp;lt;파라미터1&amp;gt;&quot;, &quot;&amp;lt;파라미터2&amp;gt;&quot; ...] RUN &amp;lt;전체 커맨드&amp;gt; npm 패키지 설치 RUN npm install --silent pip 패키지 설치 RUN pip install -r requirements.txt #Dockerfile FROM ubuntu:latest CMD [&quot;echo&quot;, &quot;CMD test&quot;] 위와 같은 도커파일이 있을 때, 이미지를 빌드하고 실행해보도록 하겠습니다. 먼저, 아래 명령어로 이미지를 빌드해줍니다. docker build -t cmd_test . ENTRYPOINT 명령문 ENTRYPOINT [&quot;&amp;lt;커맨드&amp;gt;&quot;, &quot;&amp;lt;파라미터1&amp;gt;&quot;, &quot;&amp;lt;파라미터2&amp;gt;&quot; ...] ENTRYPOINT &amp;lt;전체 커맨드&amp;gt; ENTRYPOINT 명령문은 컨테이너가 실행될때 항상 실행되야하는 커멘드를 지정할 때 사용합니다. Django 서버 실행하기 ENTRYPOINT [&quot;python&quot;, &quot;manage.py&quot;, &quot;runserver&quot;] CMD 명령문 CMD [&quot;&amp;lt;커맨드&amp;gt;&quot;,&quot;&amp;lt;파라미터1&amp;gt;&quot;,&quot;&amp;lt;파라미터2&amp;gt;&quot;] CMD [&quot;&amp;lt;파라미터1&amp;gt;&quot;,&quot;&amp;lt;파라미터2&amp;gt;&quot;] CMD &amp;lt;전체 커맨드&amp;gt; CMD 명령문은 컨테이너가 시작될때 디폴트로 실행할 커맨드나, 디폴트로 파라미터를 넘길때 사용됩니다. CMD 명령문은 Dockerfile의 마지막 라인에 쓰곤하는데요, 이 명령문은 Dockerfile당 한줄만 사용할 수 있습니다. 여러줄을 쓴다면 가장 마지막 줄만 적용됩니다. 또한, docker run뒤에 인자가 주어진다면 도커파일내의 CMD명령문은 무시됩니다. EXPOSE 명령문 EXPOSE &amp;lt;포트&amp;gt; EXPOSE &amp;lt;포트&amp;gt;/&amp;lt;프로토콜&amp;gt; EXPOSE 명령문은 네트워크 상에서 컨테이너로 들어오는 트래픽(traffic)을 리스닝(listening)하는 포트와 프로토콜를 지정하기 위해서 사용됩니다. 프로토콜은 TCP와 UDP 중 선택할 수 있는데 지정하지 않으면 TCP가 기본값으로 사용됩니다. 여기서 주의해야할 점은 EXPOSE 명령문으로 지정된 포트는 해당 컨테이너 내부에서만 유효한데요, 호스트 컴퓨터로부터 해당 포트로 접근을 허용하려면 docker run 커맨드에 -p 옵션을 추가하여 바인딩 해줘야 합니다. 80/TCP 포트로 리스닝 EXPOSE 80 80/UDP 포트로 리스닝 EXPOSE 80/udp COPY/ADD 명령문 COPY &amp;lt;src&amp;gt;... &amp;lt;dest&amp;gt; COPY [&quot;&amp;lt;src&amp;gt;&quot;,... &quot;&amp;lt;dest&amp;gt;&quot;] COPY 명령문은 호스트 컴퓨터에 있는 디렉터리나 파일을 Docker 이미지의 파일 시스템으로 복사하기 위해서 사용됩니다. 절대 경로와 상대 경로를 모두 지원하며, 상대 경로를 사용할 때는 이 전에 등장하는 WORKDIR 명령문으로 작업 디렉토리를 어디로 전환했는지 고려해야 합니다. 이미지를 빌드한 디렉터리의 모든 파일을 컨테이너의 app/test 디렉터리로 복사 WORKDIR app/test COPY . . ADD 명령문은 좀 더 파워풀한 COPY 명령어라고 보시면되는데요, ADD 명령문은 일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 COPY 를 사용하는것이 권장됩니다. ENV 명령문 ENV &amp;lt;키&amp;gt; &amp;lt;값&amp;gt; ENV &amp;lt;키&amp;gt;=&amp;lt;값&amp;gt; ENV 명령문은 환경 변수를 설정하기 위해서 사용합니다. ENV 명령문으로 설정된 환경 변수는 이미지 빌드 시에도 사용됨은 물론이고, 해당 컨테이너에서 돌아가는 애플리케이션도 접근할 수 있습니다. DB_PASS 환경 변수를 1234로 설정 ENV DB_PASS 1234 ARG 명령문 ARG &amp;lt;이름&amp;gt; ARG &amp;lt;이름&amp;gt;=&amp;lt;기본 값&amp;gt; ARG 명령문은 docker build 커맨드로 이미지를 빌드 할때, --build-arg 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다. 예를 들어, Dockerfile에 다음과 같이 ARG 명령문으로 port를 인자로 선언해주면, ARG port 다음과 같이 docker build 커맨드에 --build-arg 옵션에 port 값을 넘길 수가 있습니다. $ docker build --build-arg port=8080 . 인자의 디폴트값을 지정해주면, --build-arg 옵션으로 해당 인자가 넘어오지 않았을 때 사용됩니다. ARG port=8080 설정된 인자 값은 다음과 같이 ${인자명} 형태로 읽어서 사용할 수 있습니다. CMD start.sh -h 127.0.0.1 -p ${port}</summary></entry></feed>

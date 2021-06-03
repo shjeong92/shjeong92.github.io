@@ -280,6 +280,56 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/06/03/Learning-Kubernetes-08.html"><h2 itemprop="headline" class="item__header">[ #8 ] 클러스터 유지보수</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다.
+
+쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다.
+
+그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요?
+
+
+  master node의 kube-contoller-manager에는 pod-eviction-timeout이 존재합니다
+
+
+컨디션
+
+각 노드에는 아래와 같이 여러가지 condition이 존재합니다
+
+
+  
+    
+      노드 컨디션
+      설명
+    
+  
+  
+    
+      Ready
+      노드가 상...</div><p><a href="/2021/06/03/Learning-Kubernetes-08.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=maintenance">maintenance</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=static">static</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=pod">pod</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=strategy">strategy</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=update">update</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 03일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-03T00:00:00+09:00">
+    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/06/02/Learning-Kubernetes-07.html"><h2 itemprop="headline" class="item__header">[ #7 ] 배포 전략</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">쿠버네티스에는아래 그림과 같이 두가지 배포방법이 있습니다
 
@@ -537,52 +587,8 @@ taint에는 사용할 수 있는 3가지 옵션이 있습니다.
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 27일</span>
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-27T00:00:00+09:00">
     <meta itemprop="keywords" content="Docker,Kubernetes,CKA,도커,컨테이너,container,etcd,Google,cloud"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/26/Learning-Kubernetes-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Kubernetes의 구조</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">ETCD란 무엇인가?
-
-Distributed Reliable Key Value Store
-분산 시스템의 중요한 데이터를위한 신뢰할 수있는 분산 key/value 저장소이며 다음과 같은 특징이 있습니다.
-
-  단순함: 잘 정의 된 사용자용 API
-  보안: 선택적 클라이언트 인증을 사용하는 자동 TLS
-  속도: 10000 쓰기 / sec
-
-
-mac에 etcd 설치하여 사용해보기
-
-# brew를 이용하여 간편히 설치
-$ brew install etcd
-# etcd를 백그라운드 환경으로 실행시키기
-$ brew services start etcd
-
-# Key value 생성
-$ etcdctl put key "I am a...</div><p><a href="/2021/05/26/Learning-Kubernetes-01.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Docker">Docker</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CKA">CKA</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=container">container</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=etcd">etcd</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 26일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-26T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,CKA,도커,컨테이너,container,etcd"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 22개, 3 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 23개, 3 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
