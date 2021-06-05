@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>아카이브 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #9 ] 클러스터 백업 & 복구 - Hyuk's devlog</title>
 
-<meta name="description" content="Your Site Description
-">
-<link rel="canonical" href="https://shjeong92.github.io/archive.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="이번 포스트에서는 ETCD database를 이용한 클러스터 백업 및 복구 방법에 대해서 다뤄보겠습니다.etcd란etcd는 모든 클러스터 데이터에 대한 Kubernetes의 백업 저장소로 사용되는 일관되고 가용성이 높은 키 값 저장소입니다그리고 ETCD는 각 마스터노드에 존재하고,...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/06/04/Learning-Kubernetes-09.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -255,7 +254,7 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport cell cell--auto">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -269,310 +268,351 @@
 </svg>
 <a title="Your Site Description
 " href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item navigation__item--active"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>아카이브</h1></header></div><meta itemprop="headline" content="아카이브"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--archive js-all"><div class="site-tags js-tags">
-  <ul class="menu">
-    <li>
-      <button type="button" class="button button--secondary button--pill tag-button tag-button--all" data-encode="">
-        Show All<div class="tag-button__count">24</div>
-      </button>
-    </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="CKA">
-          <span>CKA</span><div class="tag-button__count">2</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="Commit">
-          <span>Commit</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-3" data-encode="Deployment">
-          <span>Deployment</span><div class="tag-button__count">5</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-4" data-encode="Docker">
-          <span>Docker</span><div class="tag-button__count">10</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="Github">
-          <span>Github</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="Google">
-          <span>Google</span><div class="tag-button__count">4</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-4" data-encode="Kubernetes">
-          <span>Kubernetes</span><div class="tag-button__count">9</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-4" data-encode="React">
-          <span>React</span><div class="tag-button__count">10</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-3" data-encode="Replicasets">
-          <span>Replicasets</span><div class="tag-button__count">5</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="SVN">
-          <span>SVN</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="cloud">
-          <span>cloud</span><div class="tag-button__count">4</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="config">
-          <span>config</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="container">
-          <span>container</span><div class="tag-button__count">2</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="etcd">
-          <span>etcd</span><div class="tag-button__count">2</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="gcloud">
-          <span>gcloud</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="history">
-          <span>history</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="key-gen">
-          <span>key-gen</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="maintenance">
-          <span>maintenance</span><div class="tag-button__count">2</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="modify">
-          <span>modify</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="network">
-          <span>network</span><div class="tag-button__count">2</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="pod">
-          <span>pod</span><div class="tag-button__count">4</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="rolling">
-          <span>rolling</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="rsa">
-          <span>rsa</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="ssh">
-          <span>ssh</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="static">
-          <span>static</span><div class="tag-button__count">4</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="strategy">
-          <span>strategy</span><div class="tag-button__count">3</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="update">
-          <span>update</span><div class="tag-button__count">3</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">
-          <span>네트워크</span><div class="tag-button__count">2</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="%EB%8F%84%EC%BB%A4">
-          <span>도커</span><div class="tag-button__count">4</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%AA%85%EB%A0%B9%EC%96%B4">
-          <span>명령어</span><div class="tag-button__count">1</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">
-          <span>컨테이너</span><div class="tag-button__count">4</div>
-        </button>
-      </li><li><button type="button" class="button button--pill tag-button tag-button-2" data-encode="%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">
-          <span>쿠버네티스</span><div class="tag-button__count">3</div>
-        </button>
-      </li></ul>
-</div>
-<div class="js-result layout--archive__result d-none"><div class="article-list items"><section><h2 class="article-list__group-header">2021</h2><ul class="items"><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Kubernetes,maintenance,static,pod,strategy,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,update">
-        <div class="item__content"><span class="item__meta">06월 04일</span><a itemprop="headline" class="item__header" href="/2021/06/04/Learning-Kubernetes-09.html">[ #9 ] 클러스터 백업 & 복구</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Kubernetes,maintenance,static,pod,strategy,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,update">
-        <div class="item__content"><span class="item__meta">06월 03일</span><a itemprop="headline" class="item__header" href="/2021/06/03/Learning-Kubernetes-08.html">[ #8 ] 클러스터 유지보수</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,static,pod,strategy,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,rolling,update">
-        <div class="item__content"><span class="item__meta">06월 02일</span><a itemprop="headline" class="item__header" href="/2021/06/02/Learning-Kubernetes-07.html">[ #7 ] 배포 전략</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="gcloud,ssh,key-gen,rsa,config">
-        <div class="item__content"><span class="item__meta">06월 01일</span><a itemprop="headline" class="item__header" href="/2021/06/01/Handling-ssh-config.html">ssh config 설정으로 간편하게 ssh접속하기</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,static,pod">
-        <div class="item__content"><span class="item__meta">05월 31일</span><a itemprop="headline" class="item__header" href="/2021/05/31/Learning-Kubernetes-06.html">[ #6 ] static pod</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
-        <div class="item__content"><span class="item__meta">05월 31일</span><a itemprop="headline" class="item__header" href="/2021/05/31/Learning-Kubernetes-05.html">[ #5 ] pod 스케쥴링-2 </a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
-        <div class="item__content"><span class="item__meta">05월 30일</span><a itemprop="headline" class="item__header" href="/2021/05/30/Learning-Kubernetes-04.html">[ #4 ] pod 스케쥴링-1 </a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
-        <div class="item__content"><span class="item__meta">05월 28일</span><a itemprop="headline" class="item__header" href="/2021/05/28/Learning-Kubernetes-03.html">[ #3 ] Replicasets & Deployment </a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,CKA,%EB%8F%84%EC%BB%A4,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88,container,etcd,Google,cloud">
-        <div class="item__content"><span class="item__meta">05월 27일</span><a itemprop="headline" class="item__header" href="/2021/05/27/Learning-Kubernetes-02.html">[ #2 ] Kubernetes 설치 및 환경 구성하기 </a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,CKA,%EB%8F%84%EC%BB%A4,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88,container,etcd">
-        <div class="item__content"><span class="item__meta">05월 26일</span><a itemprop="headline" class="item__header" href="/2021/05/26/Learning-Kubernetes-01.html">[ #1 ] Kubernetes의 구조</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,network,%EB%8F%84%EC%BB%A4,%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88,%EB%AA%85%EB%A0%B9%EC%96%B4">
-        <div class="item__content"><span class="item__meta">05월 22일</span><a itemprop="headline" class="item__header" href="/2021/05/22/Learning-Docker-03.html">[ #3 ] Dockerfile에서 자주 쓰이는 명령어</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,network,%EB%8F%84%EC%BB%A4,%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">
-        <div class="item__content"><span class="item__meta">05월 20일</span><a itemprop="headline" class="item__header" href="/2021/05/20/Learning-Docker-02.html">[ #2 ] Docker 네트워크 사용하기 </a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker">
-        <div class="item__content"><span class="item__meta">05월 19일</span><a itemprop="headline" class="item__header" href="/2021/05/19/Learning-Docker-01.html">[ #1 ] Docker 기본 익히기 </a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Github,Commit,SVN,history,modify">
-        <div class="item__content"><span class="item__meta">05월 14일</span><a itemprop="headline" class="item__header" href="/2021/05/14/Github-01.html">깃헙 history를 주물러봅시다</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 29일</span><a itemprop="headline" class="item__header" href="/2021/04/29/Learning-React-09.html">[ #9 ] useEffect hook</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 29일</span><a itemprop="headline" class="item__header" href="/2021/04/29/Learning-React-10.html">[ #10 ] useContext hook</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 28일</span><a itemprop="headline" class="item__header" href="/2021/04/28/Learning-React-08.html">[ #8 ] Portal, useRef</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 27일</span><a itemprop="headline" class="item__header" href="/2021/04/27/Learning-React-07.html">[ #7 ] 3 ways to fullfill jsx's requirement</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 26일</span><a itemprop="headline" class="item__header" href="/2021/04/26/Learning-React-06.html">[ #6 ] setState & conditional content</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-05.html">[ #5 ] state의 역행 childretn -> parent</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-04.html">[ #4 ] useState 사용하는 방법</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-03.html">[ #3 ] useState 사용해보기</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-02.html">[ #2 ] Props.children 과 커스텀 컴포넌트(태그)</a></div>
-      </li><li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
-        <div class="item__content"><span class="item__meta">04월 24일</span><a itemprop="headline" class="item__header" href="/2021/04/24/Learning-React-01.html">[ #1 ] Props란? </a></div>
-      </li></div>
-</div>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #9 ] 클러스터 백업 & 복구</h1></header></div><meta itemprop="headline" content="[ #9 ] 클러스터 백업 & 복구"><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=maintenance">maintenance</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=static">static</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=pod">pod</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=strategy">strategy</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=update">update</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 04일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-04T00:00:00+09:00">
+    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><p>이번 포스트에서는 ETCD database를 이용한 클러스터 백업 및 복구 방법에 대해서 다뤄보겠습니다.</p>
+
+<h2 id="etcd란">etcd란</h2>
+
+<p>etcd는 모든 클러스터 데이터에 대한 Kubernetes의 백업 저장소로 사용되는 일관되고 가용성이 높은 키 값 저장소입니다</p>
+
+<p>그리고 ETCD는 각 마스터노드에 존재하고, key=value의 데이터는 마스터 노드의 /var/lib/etcd 에 저장됩니다.</p>
+
+<p>ETCD는 built in 스냅샷 solution을 가지고 있는데요 이를통해 현재 실행중인 모든 리소스의 정보를 백업하고, 복구할 수 있습니다.</p>
+
+<h3 id="step1---etcd가-설치되어-있지-않을경우-설치합니다">STEP1 - etcd가 설치되어 있지 않을경우 설치합니다.</h3>
+
+<p>제 쿠버네티 클러스터는 1 개의 마스터노드, 3개의 워커노드로 구성되어 있습니다. googld cloud compute engine 인스턴스를 사용하여 구성하였으며 모든 노드는 Ubuntu 18.04.5 LTS 버전입니다.</p>
+
+<p>아래 커맨드를 이용해 etcd-client를 설치해줍니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>apt update
+
+<span class="nv">$ </span><span class="nb">sudo </span>apt <span class="nb">install </span>etcd-client
+</code></pre></div></div>
+
+<h3 id="step2---복구시킬-환경-구성">STEP2 - 복구시킬 환경 구성</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#depl.yaml</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">myapp-deployment</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">myapp</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">myapp-pod</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">myapp</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">nginx-container</span>
+        <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:1.19</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">matchLabels</span><span class="pi">:</span>
+      <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
+</code></pre></div></div>
+
+<p>간단한 yaml파일을 통해 3개의 nginx 파드를 배포합니다</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl apply <span class="nt">-f</span> depl.yml 
+deployment.apps/myapp-deployment created
+</code></pre></div></div>
+
+<p>그리고 현재 어떤 리소스들이 돌아가고있는지 확인해주고 이 상황의 스냅샷을 생성할겁니다</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ kubectl get all
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/myapp-deployment-7f6679cc7d-5qwxx   1/1     Running   0          32s
+pod/myapp-deployment-7f6679cc7d-855lp   1/1     Running   0          32s
+pod/myapp-deployment-7f6679cc7d-bxxjx   1/1     Running   0          32s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   8d
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/myapp-deployment   3/3     3            3           32s
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/myapp-deployment-7f6679cc7d   3         3         3       32s
+shjeong920522@master:~/Pod$ 
+
+</code></pre></div></div>
+
+<h2 id="스냅샷-생성하기">스냅샷 생성하기</h2>
+
+<p>etcdctl의 스냅샷을 생성하기위해선 아래와같은 옵션이 필요합니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>etcdctl <span class="nt">--cacert</span><span class="o">=</span>옵션값 <span class="se">\</span>
+<span class="nt">--cert</span><span class="o">=</span>옵션값 <span class="se">\</span>
+<span class="nt">--key</span><span class="o">=</span>옵션값 <span class="se">\</span>
+snapshot save 백업경로 및 파일이름
+</code></pre></div></div>
+
+<p><strong>그렇다면 이 옵션값은 어디서 확인가능할까요?</strong></p>
+
+<p>ps명령어 와 grep을 를 활용하면 된답니다</p>
+
+<p>아래 명령어를 사용하여 다 찾아서 값을 가져와도되지만</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ps <span class="nt">-ef</span> | <span class="nb">grep </span>etcd
+root      2863  2764  1 05:36 ?        00:00:23 etcd <span class="nt">--advertise-client-urls</span><span class="o">=</span>https://10.178.0.2:2379 <span class="nt">--cert-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.crt <span class="nt">--client-cert-auth</span><span class="o">=</span><span class="nb">true</span> <span class="nt">--data-dir</span><span class="o">=</span>/var/lib/etcd <span class="nt">--initial-advertise-peer-urls</span><span class="o">=</span>https://10.178.0.2:2380 <span class="nt">--initial-cluster</span><span class="o">=</span><span class="nv">master</span><span class="o">=</span>https://10.178.0.2:2380 <span class="nt">--key-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.key <span class="nt">--listen-client-urls</span><span class="o">=</span>https://127.0.0.1:2379,https://10.178.0.2:2379 <span class="nt">--listen-metrics-urls</span><span class="o">=</span>http://127.0.0.1:2381 <span class="nt">--listen-peer-urls</span><span class="o">=</span>https://10.178.0.2:2380 <span class="nt">--name</span><span class="o">=</span>master <span class="nt">--peer-cert-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/peer.crt <span class="nt">--peer-client-cert-auth</span><span class="o">=</span><span class="nb">true</span> <span class="nt">--peer-key-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/peer.key <span class="nt">--peer-trusted-ca-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/ca.crt <span class="nt">--snapshot-count</span><span class="o">=</span>10000 <span class="nt">--trusted-ca-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/ca.crt
+</code></pre></div></div>
+
+<p>표에 들어간 커맨드로 원하는 부분을 강조시켜 찾는방법을 추천드립니다. 눈알굴려서 찾는것보다 훨씬 빠르더라구요</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><center>etcdctl 명령 옵션</center></th>
+      <th style="text-align: left"><center>etcd <br />프로세스 실행옵션</center></th>
+      <th style="text-align: left"><center>값</center></th>
+      <th><center>커맨드로 빨리찾기</center></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">--cacert</td>
+      <td style="text-align: left">--trusted-ca-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/ca.crt</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep trusted</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">--cert</td>
+      <td style="text-align: left">--cert-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/server.crt</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--cert"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">--key</td>
+      <td style="text-align: left">--key-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/server.key</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--key"</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>그리고 값 부분은 항상 같은것이 아닐 수도 있기에 커맨드로 직접 확인하셔야 합니다.</p>
+
+<p>자 이제 스냅샷을 생성하기위하여 우선 루트계정으로 전환해줍니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-i</span>
+</code></pre></div></div>
+
+<p>아래와 같이 환경변수를 등록해줍니다
+ETCDCTL_API 3버전을 사용하기 위함입니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root# <span class="nb">export </span><span class="nv">ETCDCTL_API</span><span class="o">=</span>3
+</code></pre></div></div>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root# etcdctl <span class="nt">--cacert</span><span class="o">=</span>/etc/kubernetes/pki/etcd/ca.crt <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--cert</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.crt <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--key</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.key <span class="se">\</span>
+<span class="o">&gt;</span> snapshot save /opt/backup
+Snapshot saved at /opt/backup
+</code></pre></div></div>
+
+<p>스냅샷을 생성하였으니 아까 배포하였던 deployment 를 delete하고 etcdctl 복구를하여
+정말 동작하던 deployment를 다시 배포해주는지 확인해봅시다</p>
+
+<p>우선 루트계정에서 로그아웃 해주시구요</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root# <span class="nb">exit
+logout</span>
+</code></pre></div></div>
+
+<p>deployment를 삭제시켜줍니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl delete <span class="nt">-f</span> depl.yml 
+deployment.apps <span class="s2">"myapp-deployment"</span> deleted
+</code></pre></div></div>
+
+<p>복구하기로 넘어갑니다.</p>
+
+<h2 id="스냅샷으로-복구하기">스냅샷으로 복구하기</h2>
+
+<p>복구할때는 스냅샷을 만들때 넣었던 옵션에서 네가지의 옵션이 더 추가됩니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><center>etcdctl 명령 옵션</center></th>
+      <th style="text-align: left"><center>etcd <br />프로세스 실행옵션</center></th>
+      <th style="text-align: left"><center>값</center></th>
+      <th><center>커맨드로 빨리찾기</center></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">--cacert</td>
+      <td style="text-align: left">--trusted-ca-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/ca.crt</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep trusted</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">--cert</td>
+      <td style="text-align: left">--cert-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/server.crt</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--cert"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">--key</td>
+      <td style="text-align: left">--key-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/server.key</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--key"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">--initial-advertise-peer-urls</td>
+      <td style="text-align: left">--initial-advertise-peer-urls</td>
+      <td style="text-align: left">https://10.178.0.2:2380</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep initial</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">--initial-cluster=master</td>
+      <td style="text-align: left">--initial-cluster=master</td>
+      <td style="text-align: left">https://10.178.0.2:2380</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep initial</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">--data-dir</td>
+      <td style="text-align: left">--data-dir</td>
+      <td style="text-align: left">/var/lib/etcd_backup</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--data-dir" </code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">--name</td>
+      <td style="text-align: left">--name</td>
+      <td style="text-align: left">master(마스터노드이름)</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--name"</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>자 여기까지가 restore 할때 필요한 모든 옵션입니다.</p>
+
+<p>이제 아까 찍어놨던 스냅샷으로 복구되는지 확인해봅시다.</p>
+
+<p>우선 루트 계정으로 전환하구요</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-i</span>
+</code></pre></div></div>
+
+<p>restore 명령어를 입력해주고 로그아웃해줍니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root# etcdctl <span class="nt">--cacert</span><span class="o">=</span>/etc/kubernetes/pki/etcd/ca.crt <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--cert</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.crt <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--key</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.key <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--initial-advertise-peer-urls</span><span class="o">=</span>https://10.178.0.2:2380 <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--initial-cluster</span><span class="o">=</span><span class="nv">master</span><span class="o">=</span>https://10.178.0.2:2380 <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--data-dir</span><span class="o">=</span>/var/lib/etcd_backup <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--name</span><span class="o">=</span>master <span class="se">\ </span>
+<span class="o">&gt;</span> snapshot restore /opt/backup
+
+root# <span class="nb">exit
+logout</span>
+</code></pre></div></div>
+
+<p>/opt/backup 에 생성해뒀던 스냅샷을이용해서 /var/lib 위치에 etcd_backup 파일을 생성합니다
+staticpod에서 실행되는 etcd가 이를 바라보도록 해줘야하겠지요</p>
+
+<p>staticpod의 위치인 /etc/kubernetes/manifest로 이동후 etcd.yaml을 수정해야합니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> /etc/kubernetes/manifest
+
+<span class="nv">$ </span><span class="nb">sudo </span>vim etcd.yaml
+
+~~~yaml
+<span class="c">#etcd.yaml</span>
+...중략
+
+volumes:
+- hostPath:
+    path: /etc/kubernetes/pki/etcd
+    <span class="nb">type</span>: DirectoryOrCreate
+  name: etcd-certs
+- hostPath:
+    path: /var/lib/etcd_backup     &lt;<span class="nt">-----------</span>  backup한 스냅샷을 바라보게 수정해줍니다
+    <span class="nb">type</span>: DirectoryOrCreate
+  name: etcd-data
+
+...
+</code></pre></div></div>
+
+<p>변경사항을 저장해주면 새로 로드될때까지 시간이 조금걸립니다</p>
+
+<p>잠시후 정말 실행 중이던 deployment가 실행중인지 확인해봅시다</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get deploy
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+myapp-deployment   3/3     3            3           20s
+</code></pre></div></div>
+
+<p>짜잔.. 잘 복구된것을 확인할 수 있었습니다</p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-06-04T00:00:00+09:00"><!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+</div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/06/03/Learning-Kubernetes-08.html">[ #8 ] 클러스터 유지보수</a></div></div></div>
+
 </div>
 
 <script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
-  function queryString() {
-    // This function is anonymous, is executed immediately and
-    // the return value is assigned to QueryString!
-    var i = 0, queryObj = {}, pair;
-    var queryStr = window.location.search.substring(1);
-    var queryArr = queryStr.split('&');
-    for (i = 0; i < queryArr.length; i++) {
-      pair = queryArr[i].split('=');
-      // If first entry with this name
-      if (typeof queryObj[pair[0]] === 'undefined') {
-        queryObj[pair[0]] = pair[1];
-        // If second entry with this name
-      } else if (typeof queryObj[pair[0]] === 'string') {
-        queryObj[pair[0]] = [queryObj[pair[0]], pair[1]];
-        // If third or later entry with this name
-      } else {
-        queryObj[pair[0]].push(pair[1]);
-      }
-    }
-    return queryObj;
-  }
-
-  var setUrlQuery = (function() {
-    var baseUrl =  window.location.href.split('?')[0];
-    return function(query) {
-      if (typeof query === 'string') {
-        window.history.replaceState(null, '', baseUrl + query);
-      } else {
-        window.history.replaceState(null, '', baseUrl);
-      }
-    };
-  })();
-
   window.Lazyload.js(SOURCES.jquery, function() {
-    var $tags = $('.js-tags');
-    var $articleTags = $tags.find('button');
-    var $tagShowAll = $tags.find('.tag-button--all');
-    var $result = $('.js-result');
-    var $sections = $result.find('section');
-    var sectionArticles = [];
-    var $lastFocusButton = null;
-    var sectionTopArticleIndex = [];
-    var hasInit = false;
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
 
-    $sections.each(function() {
-      sectionArticles.push($(this).find('.item'));
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
     });
-
-    function init() {
-      var i, index = 0;
-      for (i = 0; i < $sections.length; i++) {
-        sectionTopArticleIndex.push(index);
-        index += $sections.eq(i).find('.item').length;
-      }
-      sectionTopArticleIndex.push(index);
-    }
-
-    function searchButtonsByTag(_tag/*raw tag*/) {
-      if (!_tag) {
-        return $tagShowAll;
-      }
-      var _buttons = $articleTags.filter('[data-encode="' + _tag + '"]');
-      if (_buttons.length === 0) {
-        return $tagShowAll;
-      }
-      return _buttons;
-    }
-    function buttonFocus(target) {
-      if (target) {
-        target.addClass('focus');
-        $lastFocusButton && !$lastFocusButton.is(target) && $lastFocusButton.removeClass('focus');
-        $lastFocusButton = target;
-      }
-    }
-
-    function tagSelect (tag/*raw tag*/, target) {
-      var result = {}, $articles;
-      var i, j, k, _tag;
-
-      for (i = 0; i < sectionArticles.length; i++) {
-        $articles = sectionArticles[i];
-        for (j = 0; j < $articles.length; j++) {
-          if (tag === '' || tag === undefined) {
-            result[i] || (result[i] = {});
-            result[i][j] = true;
-          } else {
-            var tags = $articles.eq(j).data('tags').split(',');
-            for (k = 0; k < tags.length; k++) {
-              if (tags[k] === tag) {
-                result[i] || (result[i] = {});
-                result[i][j] = true; break;
-              }
-            }
-          }
-        }
-      }
-
-      for (i = 0; i < sectionArticles.length; i++) {
-        result[i] && $sections.eq(i).removeClass('d-none');
-        result[i] || $sections.eq(i).addClass('d-none');
-        for (j = 0; j < sectionArticles[i].length; j++) {
-          if (result[i] && result[i][j]) {
-            sectionArticles[i].eq(j).removeClass('d-none');
-          } else {
-            sectionArticles[i].eq(j).addClass('d-none');
-          }
-        }
-      }
-
-      hasInit || ($result.removeClass('d-none'), hasInit = true);
-
-
-      if (target) {
-        buttonFocus(target);
-        _tag = target.attr('data-encode');
-        if (_tag === '' || typeof _tag !== 'string') {
-          setUrlQuery();
-        } else {
-          setUrlQuery('?tag=' + _tag);
-        }
-      } else {
-        buttonFocus(searchButtonsByTag(tag));
-      }
-    }
-
-    var query = queryString(), _tag = query.tag;
-    init(); tagSelect(_tag);
-    $tags.on('click', 'button', function() {
-      tagSelect($(this).data('encode'), $(this));
-    });
-
   });
 })();
 </script>
-
-
 </div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
@@ -1113,6 +1153,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script>
     </div>
     <script>(function () {
