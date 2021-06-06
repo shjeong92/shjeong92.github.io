@@ -1,1 +1,4 @@
-Sitemap: https://shjeong92.github.io/sitemap.xml
+ User-agent: *
+ Allow: /
+ Sitemap: {{ '/sitemap.xml' | relative_url | prepend: site.url }}
+    
