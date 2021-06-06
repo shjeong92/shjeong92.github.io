@@ -228,4 +228,4 @@ NAME               READY   UP-TO-DATE   AVAILABLE   AGE
 myapp-deployment   3/3     3            3           20s
 ~~~
 
-짜잔.. 잘 복구된것을 확인할 수 있었습니다 
+짜잔~ 잘 복구된것을 확인할 수 있었습니다 
