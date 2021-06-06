@@ -1,32 +1,118 @@
-  ---
-    layout: null
-    sitemap:
-      exclude: 'yes'
-    ---
-    <?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      {% for post in site.posts %}
-        {% unless post.published == false %}
-        <url>
-          <loc>{{ site.url }}{{ post.url }}</loc>
-          {% if post.sitemap.lastmod %}
-            <lastmod>{{ post.sitemap.lastmod | date: "%Y-%m-%d" }}</lastmod>
-          {% elsif post.date %}
-            <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
-          {% else %}
-            <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
-          {% endif %}
-          {% if post.sitemap.changefreq %}
-            <changefreq>{{ post.sitemap.changefreq }}</changefreq>
-          {% else %}
-            <changefreq>monthly</changefreq>
-          {% endif %}
-          {% if post.sitemap.priority %}
-            <priority>{{ post.sitemap.priority }}</priority>
-          {% else %}
-            <priority>0.5</priority>
-          {% endif %}
-        </url>
-        {% endunless %}
-      {% endfor %}
-    </urlset>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://shjeong92.github.io/2021/04/24/Learning-React-01.html</loc>
+<lastmod>2021-04-24T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/25/Learning-React-02.html</loc>
+<lastmod>2021-04-25T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/25/Learning-React-03.html</loc>
+<lastmod>2021-04-25T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/25/Learning-React-04.html</loc>
+<lastmod>2021-04-25T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/25/Learning-React-05.html</loc>
+<lastmod>2021-04-25T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/26/Learning-React-06.html</loc>
+<lastmod>2021-04-26T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/27/Learning-React-07.html</loc>
+<lastmod>2021-04-27T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/28/Learning-React-08.html</loc>
+<lastmod>2021-04-28T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/29/Learning-React-09.html</loc>
+<lastmod>2021-04-29T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/04/29/Learning-React-10.html</loc>
+<lastmod>2021-04-29T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/14/Github-01.html</loc>
+<lastmod>2021-05-14T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/19/Learning-Docker-01.html</loc>
+<lastmod>2021-05-19T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html</loc>
+<lastmod>2021-05-20T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html</loc>
+<lastmod>2021-05-22T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/26/Learning-Kubernetes-01.html</loc>
+<lastmod>2021-05-26T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/27/Learning-Kubernetes-02.html</loc>
+<lastmod>2021-05-27T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/28/Learning-Kubernetes-03.html</loc>
+<lastmod>2021-05-28T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html</loc>
+<lastmod>2021-05-30T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html</loc>
+<lastmod>2021-05-31T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html</loc>
+<lastmod>2021-05-31T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/06/01/Handling-ssh-config.html</loc>
+<lastmod>2021-06-01T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/06/02/Learning-Kubernetes-07.html</loc>
+<lastmod>2021-06-02T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08.html</loc>
+<lastmod>2021-06-03T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/2021/06/04/Learning-Kubernetes-09.html</loc>
+<lastmod>2021-06-04T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>https://shjeong92.github.io/about.html</loc>
+</url>
+<url>
+<loc>https://shjeong92.github.io/archive.html</loc>
+</url>
+<url>
+<loc>https://shjeong92.github.io/</loc>
+</url>
+<url>
+<loc>https://shjeong92.github.io/page2/</loc>
+</url>
+<url>
+<loc>https://shjeong92.github.io/page3/</loc>
+</url>
+<url>
+<loc>https://shjeong92.github.io/googlef8c27063971e85b8.html</loc>
+<lastmod>2021-06-06T22:15:33+09:00</lastmod>
+</url>
+</urlset>
