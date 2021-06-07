@@ -280,6 +280,44 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/06/07/Learning-Kubernetes-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] 클러스터 보안 - 1</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">기본적인 인증 수단에는 Static Password File을 통한 방법과, Static Token File을 이용한 방법이 있습니다.
+
+1 - Static Password File
+
+아래의 유저정보가 담긴 csv파일을 통하여 인증 할 수 있습니다.
+#user-details.csv
+password123,username1,userId1
+password133,username2,userId2
+password113,username3,userId3 
+
+
+kubeadm으로 클러스터를 구성하였으면 
+그러기 위해선 staticpodpath위치에 kube-apiserver.yaml 이 존재하는데, 아래와같이 실행 옵션을 추가해주면...</div><p><a href="/2021/06/07/Learning-Kubernetes-10.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=maintenance">maintenance</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=static">static</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=pod">pod</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=strategy">strategy</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=update">update</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 07일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-07T00:00:00+09:00">
+    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/06/04/Learning-Kubernetes-09.html"><h2 itemprop="headline" class="item__header">[ #9 ] 클러스터 백업 & 복구</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">이번 포스트에서는 ETCD database를 이용한 클러스터 백업 및 복구 방법에 대해서 다뤄보겠습니다.
 
@@ -559,36 +597,8 @@ taint에는 사용할 수 있는 3가지 옵션이 있습니다.
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 30일</span>
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-30T00:00:00+09:00">
     <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/28/Learning-Kubernetes-03.html"><h2 itemprop="headline" class="item__header">[ #3 ] Replicasets & Deployment </h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Replicaset
-
-먼저 Deployment의 개념중에서 가장 중요한것은 ReplicaSet입니다. Replication Controller의 새로운 버전으로 Label Selector를 통해 노드 상의 여러 Pod의 생성/복제/삭제 등의 라이프 싸이클을 관리합니다.
-
-작동 방식
-레플리카셋을 정의하는 필드는 획득 가능한 파드를 식별하는 방법이 명시된 셀렉터, 유지해야 하는 파드 개수를 명시하는 레플리카의 개수, 그리고 레플리카 수 유지를 위해 생성하는 신규 파드에 대한 데이터를 명시하는 파드 템플릿을 포함한다. 그러면 레플리카셋은 필드에 지정된 설정을 충족하기 위해 필요한 만큼 파드를 만들고 삭제합니다. 레플리카...</div><p><a href="/2021/05/28/Learning-Kubernetes-03.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Docker">Docker</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Deployment">Deployment</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Google">Google</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=cloud">cloud</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 28일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-28T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 24개, 3 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 25개, 4 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -598,6 +608,8 @@ taint에는 사용할 수 있는 3가지 옵션이 있습니다.
                 <a class="button button--secondary button--circle" href="/page2"><span>2</span></a>
               </li><li>
                 <a class="button button--secondary button--circle" href="/page3"><span>3</span></a>
+              </li><li>
+                <a class="button button--secondary button--circle" href="/page4"><span>4</span></a>
               </li><li><a class="button button--secondary button--circle" href="/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
