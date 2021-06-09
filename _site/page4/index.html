@@ -280,6 +280,26 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/04/25/Learning-React-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] Props.children 과 커스텀 컴포넌트(태그)</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. props.children &amp; custom tag
+
+컴포넌트를 호출할때 각각의 변수정보또한 같이 보내게 된다. 이는 하나의 객체안에 담겨서 넘어가게되는데
+이때 children 이라는 정보든 따로 넘겨주지 않아도 기본적으로 전달되는 정보이다.
+
+본글에서는 Card.js 라는 wrapper 컴포넌트를 만들면서 자세히 설명하도록 하겠다.
+
+Expenses.js
+import React from "react";
+import ExpenseItem from "./ExpenseItem";
+import Card from "../UI/Card"
+import "./Expenses.css";
+const Expenses = ...</div><p><a href="/2021/04/25/Learning-React-02.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=React">React</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 04월 25일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
+    <meta itemprop="keywords" content="React"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/04/24/Learning-React-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Props란? </h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">1. props
 오늘은 props 에 대하여 배웠다.
@@ -303,7 +323,7 @@ function App() {
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-24T00:00:00+09:00">
     <meta itemprop="keywords" content="React"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 25개, 4 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 26개, 4 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/page3">
             <i class="fas fa-angle-left"></i>

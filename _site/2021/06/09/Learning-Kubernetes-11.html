@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #10 ] 클러스터 보안 - 1 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #11 ] 클러스터 보안 - 2 - Hyuk's devlog</title>
 
-<meta name="description" content="기본적인 인증 수단에는 Static Password File을 통한 방법과, Static Token File을 이용한 방법이 있습니다.1 - Static Password File아래의 유저정보가 담긴 csv파일을 통하여 인증 할 수 있습니다.#user-details.csvpassw...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/06/07/Learning-Kubernetes-10.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="1. TLS / SSL / HTTPS 란?SSL(Secure Socket Layer)SSL은 웹사이트와 브라우저(혹은, 두 서버) 사이에 전송된 데이터를 암호화하여 인터넷 연결 보안을 유지하는 표준 기술입니다.이는 해커가 개인 정보 및 금융 정보를 포함한 전송되는 모든 정보를 열람...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/06/09/Learning-Kubernetes-11.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -279,109 +279,244 @@
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #10 ] 클러스터 보안 - 1</h1></header></div><meta itemprop="headline" content="[ #10 ] 클러스터 보안 - 1"><div class="article__info clearfix"><ul class="left-col menu"><li>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #11 ] 클러스터 보안 - 2</h1></header></div><meta itemprop="headline" content="[ #11 ] 클러스터 보안 - 2"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=Kubernetes">Kubernetes</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=maintenance">maintenance</a>
+                href="/archive.html?tag=HTTPS">HTTPS</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=static">static</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=pod">pod</a>
+                href="/archive.html?tag=SSL">SSL</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=strategy">strategy</a>
+                href="/archive.html?tag=TLS">TLS</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=update">update</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 07일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-07T00:00:00+09:00">
-    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=%EB%B3%B4%EC%95%88">보안</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Security">Security</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%8C%80%EC%B9%AD%ED%82%A4">대칭키</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">비대칭키</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 09일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-09T00:00:00+09:00">
+    <meta itemprop="keywords" content="Kubernetes,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>기본적인 인증 수단에는 <strong>Static Password File</strong>을 통한 방법과, <strong>Static Token File</strong>을 이용한 방법이 있습니다.</p>
+<div class="article__content" itemprop="articleBody"><h2 id="1-tls--ssl--https-란">1. TLS / SSL / HTTPS 란?</h2>
 
-<h2 id="1---static-password-file">1 - Static Password File</h2>
+<h3 id="sslsecure-socket-layer"><strong>SSL(Secure Socket Layer)</strong></h3>
+<p>SSL은 웹사이트와 브라우저(혹은, 두 서버) 사이에 전송된 데이터를 암호화하여 인터넷 연결 보안을 유지하는 표준 기술입니다.</p>
 
-<p>아래의 유저정보가 담긴 csv파일을 통하여 인증 할 수 있습니다.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#user-details.csv
-password123,username1,userId1
-password133,username2,userId2
-password113,username3,userId3 
-</code></pre></div></div>
+<p>이는 해커가 개인 정보 및 금융 정보를 포함한 전송되는 모든 정보를 열람하거나 훔치는 것을 방지합니다.</p>
 
-<p>kubeadm으로 클러스터를 구성하였으면 
-그러기 위해선 staticpodpath위치에 kube-apiserver.yaml 이 존재하는데, 아래와같이 실행 옵션을 추가해주면 됩니다</p>
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">...중략</span>
-  <span class="s">- command</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">kube-apiserver</span>
-    <span class="pi">-</span> <span class="s">--advertise-address=10.178.0.2</span>
-    <span class="pi">-</span> <span class="s">--allow-privileged=true</span>
-    <span class="pi">-</span> <span class="s">--authorization-mode=Node,RBAC</span>
-    <span class="pi">-</span> <span class="s">--client-ca-file=/etc/kubernetes/pki/ca.crt</span>
-    <span class="pi">-</span> <span class="s">--enable-admission-plugins=NodeRestriction</span>
-    <span class="pi">-</span> <span class="s">--enable-bootstrap-token-auth=true</span>
-    <span class="pi">-</span> <span class="s">--etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt</span>
-    <span class="pi">-</span> <span class="s">--etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt</span>
-    <span class="pi">-</span> <span class="s">--etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key</span>
-    <span class="pi">-</span> <span class="s">--etcd-servers=https://127.0.0.1:2379</span>
-    <span class="pi">-</span> <span class="s">--insecure-port=0</span>
-    <span class="pi">-</span> <span class="s">--basic-auth-file=user-details.csv        &lt;-----추가된 실행옵션</span>
-<span class="nn">...</span>
-</code></pre></div></div>
+<p>쉽게 말하자면, <strong>네트워크 통신을 할 때 보안을 제공하기 위해 설계된 암호 규약</strong>이며, TCP/IP 네트워크를 사용하는 통신에 적용됩니다.</p>
 
-<p>또한 이 파일은 선택적으로 4번째 컬럼에 그룹명을 넣을 수도 있습니다.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#user-details.csv 
-password123,username1,userId1,group1
-password133,username2,userId2,group2
-password113,username3,userId3,group2
-</code></pre></div></div>
+<ul>
+  <li>
+    <p><strong>SSL의 구조</strong></p>
 
-<h2 id="2---static-token-file">2 - Static Token File</h2>
+    <p><img src="https://user-images.githubusercontent.com/75003424/121298850-7ea01b80-c92f-11eb-8f4c-2f01adc53c1f.jpeg" alt="ssl-arch" /></p>
+  </li>
+</ul>
 
-<p>두번째 기본 인증 방법으로 Password 대신에 Token을 사용하는 방법인데요</p>
+<h3 id="tlstransport-layer-socket">TLS(Transport Layer Socket)</h3>
 
-<p>첫번째 컬럼에 비밀번호 대신에 토큰이 들어가는 차이가 있고,</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user-token-details.csv
-AjkfgljADSKFfjkwelkasdfKdfgkdlfga,username1,userId1,group1(optional)
-RAakjkfskfgElkasdfjkERlfkglgDFFLg,username2,userId2,group2(optional)
-lfkjgkqlwemdfgEaklFKSGkejsfdkgkas,username1,userId2,group2(optional)
-</code></pre></div></div>
+<p>이름은 SSL 과 다르지만 사실 둘은 같다고 합니다. TLS1.0은 SSL 3.0을 그대로 계승한 것이라고 합니다.</p>
 
-<p>실행 옵션이 다른 차이점이 있습니다.</p>
+<h3 id="http--https">HTTP / HTTPS</h3>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">...중략</span>
-  <span class="s">- command</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">kube-apiserver</span>
-    <span class="pi">-</span> <span class="s">--advertise-address=10.178.0.2</span>
-    <span class="pi">-</span> <span class="s">--allow-privileged=true</span>
-    <span class="pi">-</span> <span class="s">--authorization-mode=Node,RBAC</span>
-    <span class="pi">-</span> <span class="s">--client-ca-file=/etc/kubernetes/pki/ca.crt</span>
-    <span class="pi">-</span> <span class="s">--enable-admission-plugins=NodeRestriction</span>
-    <span class="pi">-</span> <span class="s">--enable-bootstrap-token-auth=true</span>
-    <span class="pi">-</span> <span class="s">--etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt</span>
-    <span class="pi">-</span> <span class="s">--etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt</span>
-    <span class="pi">-</span> <span class="s">--etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key</span>
-    <span class="pi">-</span> <span class="s">--etcd-servers=https://127.0.0.1:2379</span>
-    <span class="pi">-</span> <span class="s">--insecure-port=0</span>
-    <span class="pi">-</span> <span class="s">--token-auth-file=user-details.csv        &lt;-----추가된 실행옵션</span>
-<span class="nn">...</span>
-</code></pre></div></div>
+<h4 id="--http">- HTTP</h4>
 
-<p>위 두가지 방법은 추천되는 인증 방식이 아니라고합니다.
-다음 포스트에서는 실제로 쓰이는 방식에 대해 다뤄보겠습니다.</p>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-06-07T00:00:00+09:00"><!-- start custom article footer snippet -->
+<ul>
+  <li>HTTP 는 다음과 같이 암호화 되지 않은 평문으로 데이터를 전송합니다</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/75003424/121309439-24a65280-c93d-11eb-8bb3-c1d429e260e2.png" alt="http" /></p>
+
+<p>따라서 누군가 패킷을 훔쳐보는 스니핑(Sniffing) 공격에 취약하지요.</p>
+
+<p>HTTP 통신에선 해커가 Wire Shark를 통해 패킷을 확인하면 내 비밀번호가 그대로 서버로 전송되는 것을 볼 수 있는것이죠</p>
+
+<h4 id="--https">- HTTPS</h4>
+
+<ul>
+  <li>HTTPS 는 다음과 같이 암호화 된 데이터를 전송합니다</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/75003424/121309445-27a14300-c93d-11eb-8c69-f6f5cc6a9e6f.png" alt="https" /></p>
+
+<p>이때 사용하는 보안 인증(암호화 + 서버인증 등)이 TLS(SSL)입니다.</p>
+
+<p>즉, HTTPS는 TLS 프로토콜 위에서 돌아가는 HTTP 프로토콜입니다.</p>
+
+<p>간단하게 말해서 통신할 떄에 데이터를 ‘암호화’ 하는 보안이 필요하다,</p>
+
+<p>HTTP 통신에서 보안을 추가한 것이 HTTPS이며</p>
+
+<p>이때 보안은 TLS를 통해 한다 정도로 알고 넘어가면 되겠습니다.</p>
+
+<hr />
+
+<h2 id="2-암호화">2. 암호화</h2>
+
+<p>이제 TCP/IP 통신을 할 땐 데이터를 암호화 하는 보안이 필요하고,</p>
+
+<p>그 보안 인증에 TLS가 있다는 것도 알았으니 <strong>TLS가 어떻게 데이터를 암호화 하는지</strong> 알아봅시다.</p>
+
+<p>먼저, TLS는 보안과 성능상 이슈로 두 가지의 암호화 방법을 혼용해서 사용합니다.</p>
+
+<p>따라서 다음 두 가지 암호화 방법을 이해해야 합니다</p>
+
+<ul>
+  <li><strong>대칭키 암호화(Symmetric key algorithm)</strong></li>
+  <li><strong>비대칭키 암호화(Asymmetric key algorithm)</strong></li>
+</ul>
+
+<p><br /></p>
+
+<p>암호화를 하기 위해선 일종의 키(key)가 필요합니다.</p>
+
+<p>키는 뭐 문자가 될 수도 있고 숫자가 될 수도 있고 마음대로 정할 수 있지요.</p>
+
+<p>암호화는 그냥 하는 것이 아니라 이 <strong>[키]</strong> + <strong>[데이터]</strong>를 이용하여 <strong>[암호화된 데이터]</strong>를 만들어 내는 것입니다</p>
+
+<p>따라서 키가 단 한 글자라도 다르다면 암호화의 내용도 전혀 달라집니다!</p>
+
+<ul>
+  <li>
+    <h3 id="대칭키-암호화">대칭키 암호화</h3>
+    <p><strong>대칭키 암호화는, 암호화를 하는 키와 암호를 해독하는 키가 같은 방식입니다.</strong></p>
+
+    <p>이때 암호화와 복호화에 동시에 사용되는 이 키를  <strong>대칭키</strong>  라고 합니다.</p>
+
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>구매자: 총 삽니다.
+<span class="c">#판매자: 불법이니까 위치를 암호화해서 보내줘 암호화키 0528를 사용해서 암호화해서 보내줘</span>
+        
+      구매자: <span class="s2">"창원에서 만나요"</span> 를 대칭키인 0528로 암호화
+
+구매자: <span class="nv">AgjgkeALAk</span><span class="o">=</span>gjkfgsdfgjlkaD
+        
+      판매자: 받은 암호화 메세지를 대칭키인 0528로 복호화
+  
+<span class="c">#판매자: 거기서 봅시다</span>
+</code></pre></div>    </div>
+    <p>자, 여기서 이제 대칭키 암호화의 단점이 드러납니다.</p>
+
+    <p>대칭키는 상대방도 나도 서로 공유를 해야하기 때문에,</p>
+
+    <p>대칭키를 전달하는 과정에서 누가 훔쳐볼 위험이 있습니다.</p>
+
+    <p>만약 대칭키가 해킹당한다면 그럼 당연히 복호화가 가능하니, 데이터도 누출되게 되겠죠 :b</p>
+
+    <p>이처럼 대칭키 암호화 방식에선, <strong>대칭키를 상대에게 전달하는 방식에서 해킹당할 리스크가</strong> 있습니다.</p>
+
+    <p>이러한 대칭키 암호화의 근본적인 문제를 해결하고자 나온것이 다음에 소개하는 <strong>비대칭키 암호화 방식</strong>입니다.</p>
+  </li>
+  <li>
+    <h3 id="비대칭키-암호화">비대칭키 암호화</h3>
+    <p><strong>하나의 키를 갖는 대칭키 암호화 방식과 달리,  비대칭키 암호화 방식 은 한 쌍의 키를 갖게 됩니다.</strong></p>
+
+    <p>한마디로 비대칭키 암호화 방식에선 키가 2개 입니다.</p>
+
+    <p>이 두개의 키로 각각 암호화, 복호화를 할 수 있습니다.</p>
+
+    <p><br /></p>
+
+    <p>만일 A, B라는 두 개의 키가 있다면 A키로 암호화한 데이터는 B키로만 복호화를 할 수 있습니다.</p>
+
+    <p>또한 B키로 암호화한 데이터는 A키로만 복호화를 할 수 있습니다.</p>
+
+    <p>A키로 암호화한 데이터를 A키로 복호화 할 순 없으며, B키도 마찬가지 입니다.</p>
+
+    <p><br /></p>
+
+    <p>통상적으로 비대칭키 방식에서 가지는 두개의 키에서</p>
+
+    <p>하나는  <strong>공개 키(Public Key)</strong> ,  하나는  <strong>개인키(비밀키, Private Key)</strong> 라고 부릅니다.</p>
+
+    <p>이렇기 때문에 공개키는 암호화를, 개인키는 복호화를 한다고 알려져 있는데 그렇지 않답니다.</p>
+
+    <p>이를 그림으로 설명하자면 다음과 같습니다</p>
+
+    <p><br /></p>
+
+    <p><img src="https://user-images.githubusercontent.com/75003424/121317973-c631a200-c945-11eb-90c2-4779f59efea7.png" alt="enc" /></p>
+
+    <p><br /></p>
+
+    <p><br />
+이렇듯 한 쌍의 키로 암호화, 복호화를 하는 방식을  <strong>RSA 알고리즘</strong>  이라 합니다!
+<br /></p>
+
+    <p>조금더 이해하기쉽게 그림으로 표현해보자면 아래와 같습니다.</p>
+
+    <p><img src="https://user-images.githubusercontent.com/75003424/121333638-f122f280-c953-11eb-8ce0-3f6b8763e3c8.png" alt="rsa" /></p>
+
+    <p>상대방의 공개키를 바탕으로 암호화해서 보내면 해당 공개키의 쌍인 비밀키를 가진 상대방 만이 암호를 해독할 수가 있겠죠?</p>
+
+    <p>해커가 공개키를 얻는다고해도 암호를 해독할 수 없기때문에 더욱 안전한 암호화 방식입니다.</p>
+
+    <p>언뜻 보면 <strong>비대칭키(RSA)</strong> 방식의 방법이 이렇게 완벽해 보이는데</p>
+
+    <p>왜 TLS는 대칭키 방식과 비대칭키 방식을 같이 사용 할까요?</p>
+
+    <p><br />
+그 이유는 RSA 알고리즘을 이용한 암호화 방식은 복잡한 수학적 원리로 이루어져 있어,</p>
+
+    <p><strong>CPU 리소스를 크게 소모한다는 단점</strong>이 있기 때문입니다.</p>
+
+    <p>이때문에, RSA 비대칭키 방식으로만 통신을 하기에 성능상 어려움이 있습니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="3-tls의-암호화-방식">3. TLS의 암호화 방식</h2>
+
+<p>지금까지 대칭키 방식과 비대칭키 방식의 원리를 알아보았습니다.</p>
+
+<p>위에서 설명드린 두 방식의 단점 때문에, TLS에서는 이 두 가지 방식을 보완하여 사용합니다.</p>
+
+<p>대칭키 방식에서의 가장 큰 문제점은 대칭키를 전달할 때 해킹당할 리스크였죠?</p>
+
+<p>이를 RSA 비대칭키 방식으로 보안한 것입니다.</p>
+
+<p>실제 통신을 할 때는 CPU 리소스 소모가 적은 대칭키 방식으로 데이터를 주고 받습니다.</p>
+
+<p>이하기쉽게 그림으로 설명드리도록 하겠습니다!</p>
+
+<p><img src="https://user-images.githubusercontent.com/75003424/121340354-7b6e5500-c95a-11eb-9450-97a64678b9cc.png" alt="tls" /></p>
+
+<p><strong>CPU 리소스를 크게 소모한다는 RSA</strong>방식은 한번만 사용하여 대칭키를 알아내는용도로만 쓰이고</p>
+
+<p>나머지 통신은 값이 싼 대칭키 방식을 사용하는 것입니다.</p>
+
+<p>그림으로 보니 더 쉽게 이해가 되시지요?</p>
+
+<p>이렇게  TLS, SSL, 대칭키, 비대칭키(공개키, 개인키)에 대해선 모두 알아보았구요</p>
+
+<p>이번 포스팅은 길어지니 여기서 마치고,</p>
+
+<p>이 다음 포스팅에선 인증서, 디지털 서명, CA 등등에 대해 다뤄보겠습니다~</p>
+
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-06-09T00:00:00+09:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/06/04/Learning-Kubernetes-09.html">[ #9 ] 클러스터 백업 & 복구</a></div><div class="next"><span>다음</span><a href="/2021/06/09/Learning-Kubernetes-11.html">[ #11 ] 클러스터 보안 - 2</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/06/07/Learning-Kubernetes-10.html">[ #10 ] 클러스터 보안 - 1</a></div></div></div>
 
 </div>
 

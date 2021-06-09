@@ -83,4 +83,5 @@ lfkjgkqlwemdfgEaklFKSGkejsfdkgkas,username1,userId2,group2(optional)
 ...
 ~~~
 
-## TLS 인증방식
+위 두가지 방법은 추천되는 인증 방식이 아니라고합니다.
+다음 포스트에서는 실제로 쓰이는 방식에 대해 다뤄보겠습니다.
