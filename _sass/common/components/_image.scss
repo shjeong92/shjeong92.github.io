@@ -5,6 +5,9 @@
 .image--md {
   width: map-get($image, width);
 }
+.image--hf {
+  width: map-get($image, width-hf);
+}
 .image--xl {
   width: map-get($image, width-xl);
 }

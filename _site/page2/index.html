@@ -280,6 +280,44 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/05/31/Learning-Kubernetes-05.html"><h2 itemprop="headline" class="item__header">[ #5 ] pod 스케쥴링-2 </h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">nodeSelector
+nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.
+1. 노드에 레이블 붙이기
+
+노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.
+kubectl label nodes &lt;노드 이름&gt; &lt;레이블 키&gt;=&lt;레이블 값&gt;
+
+
+2. pod설정에 nodeSelector 필드 추가하기
+실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  la...</div><p><a href="/2021/05/31/Learning-Kubernetes-05.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Docker">Docker</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Replicasets">Replicasets</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Deployment">Deployment</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Google">Google</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=cloud">cloud</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/05/30/Learning-Kubernetes-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] pod 스케쥴링-1 </h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">Taint &amp; Toleration
 
@@ -521,32 +559,8 @@ docker run 커맨드를 사용하여 원하는 이미지를 실...</div><p><a hr
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
     <meta itemprop="keywords" content="Docker"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/14/Github-01.html"><h2 itemprop="headline" class="item__header">깃헙 history를 주물러봅시다</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">서론
-
-때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.
-
-얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Git...</div><p><a href="/2021/05/14/Github-01.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Github">Github</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Commit">Commit</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SVN">SVN</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=history">history</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=modify">modify</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
-    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 26개, 4 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 27개, 4 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/">
             <i class="fas fa-angle-left"></i>

@@ -1187,7 +1187,9 @@ input:focus { outline: none; }
 
 .image--md, .image { width: 12rem; }
 
-.image--xl { width: 20em; }
+.image--hf { width: 35em; }
+
+.image--xl { width: 40em; }
 
 .image--lg { width: 16rem; }
 

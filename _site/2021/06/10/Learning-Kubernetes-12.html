@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="ko">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>TIL - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #12 ] 클러스터 보안 - 3 - Hyuk's devlog</title>
 
-<meta name="description" content="Your Site Description
-">
-<link rel="canonical" href="https://shjeong92.github.io/page4/"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="1. TLS가 제공하는 이점들      기밀성 (암호화)    이전 포스팅에서 공부했던 암호화에 해당하는 항목입니다.    서버와 주고 받는 데이터가 스니핑👀 되는 것을 방지합니다.    패킷이 오가는 것을 훔쳐 볼 순 있어도 안전하게 암호화 된 패킷이라 복호화 할 수 없기 떄문에...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -255,7 +254,7 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport cell cell--auto">
+      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -274,98 +273,396 @@
   </header>
 </div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/25/Learning-React-03.html"><h2 itemprop="headline" class="item__header">[ #3 ] useState 사용해보기</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Title을 바꿔봅시다.
-왜 제목이 안바뀔까요~
-//ExpenseItem.js
-import React, { useState } from "react";
-import ExpenseDate from "./ExpenseDate";
-import Card from "../UI/Card";
-import "./ExpenseItem.css";
-const ExpenseItem = (props) =&gt; {
-  const title = props.title;
-  const clickHandler = () =&gt; {
-    title = "Clicked!"
-    console.log("You definitely clicked!...</div><p><a href="/2021/04/25/Learning-React-03.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #12 ] 클러스터 보안 - 3</h1></header></div><meta itemprop="headline" content="[ #12 ] 클러스터 보안 - 3"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=React">React</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 04월 25일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
-    <meta itemprop="keywords" content="React"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/25/Learning-React-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] Props.children 과 커스텀 컴포넌트(태그)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. props.children &amp; custom tag
-
-컴포넌트를 호출할때 각각의 변수정보또한 같이 보내게 된다. 이는 하나의 객체안에 담겨서 넘어가게되는데
-이때 children 이라는 정보든 따로 넘겨주지 않아도 기본적으로 전달되는 정보이다.
-
-본글에서는 Card.js 라는 wrapper 컴포넌트를 만들면서 자세히 설명하도록 하겠다.
-
-Expenses.js
-import React from "react";
-import ExpenseItem from "./ExpenseItem";
-import Card from "../UI/Card"
-import "./Expenses.css";
-const Expenses = ...</div><p><a href="/2021/04/25/Learning-React-02.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=React">React</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 04월 25일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
-    <meta itemprop="keywords" content="React"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/24/Learning-React-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Props란? </h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. props
-오늘은 props 에 대하여 배웠다.
-custom component에 값들을 전송할때 해당 태그안에 객체이름=value식으로 보낼 수 있으며
-해당 컴포넌트에서는 보내어진 모든 객체들을 하나의 객체안에 몽땅 넣어서 전달한다.
-
-Card.js 라는 Wrapper 컴포넌트를 만들면서 자세히 설명하도록 하겠다.
-
-
-App.js
-ExpensesItem 으로 expenses 객체 전달하기.
-import ExpenseItems from "./components/ExpenseItems";
-import './App.css';
-function App() {
-  const expenses = [
-    {
-      ...</div><p><a href="/2021/04/24/Learning-React-01.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=React">React</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 04월 24일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-04-24T00:00:00+09:00">
-    <meta itemprop="keywords" content="React"></div>
-      </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 27개, 4 페이지</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/page3">
-            <i class="fas fa-angle-left"></i>
-          </a></li><li>
-              <a class="button button--secondary button--circle" href="/"><span>1</span></a>
+                href="/archive.html?tag=RootCA">RootCA</a>
             </li><li>
-                <a class="button button--secondary button--circle" href="/page2"><span>2</span></a>
-              </li><li>
-                <a class="button button--secondary button--circle" href="/page3"><span>3</span></a>
-              </li><li>
-              <div class="button button--primary button--circle focus"><span>4</span></div>
-            </li><li><div class="button button--secondary button--circle disabled">
-            <i class="fas fa-angle-right"></i>
-          </div></li></ul>
-    </div>
-  </div></div>
-<script>/*(function () {
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=HTTPS">HTTPS</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=static">static</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SSL">SSL</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=TLS">TLS</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%B3%B4%EC%95%88">보안</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Security">Security</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%8C%80%EC%B9%AD%ED%82%A4">대칭키</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">비대칭키</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=certificate">certificate</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%9D%B8%EC%A6%9D%EC%84%9C">인증서</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 10일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-10T00:00:00+09:00">
+    <meta itemprop="keywords" content="RootCA,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키,certificate,인증서"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
-})();*/
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h2 id="1-tls가-제공하는-이점들">1. TLS가 제공하는 이점들</h2>
+
+<ul>
+  <li>
+    <h3 id="기밀성-암호화">기밀성 (암호화)</h3>
+    <p>이전 포스팅에서 공부했던 암호화에 해당하는 항목입니다.</p>
+
+    <p>서버와 주고 받는 데이터가 스니핑👀 되는 것을 방지합니다.</p>
+
+    <p>패킷이 오가는 것을 훔쳐 볼 순 있어도 안전하게 암호화 된 패킷이라 복호화 할 수 없기 떄문에</p>
+
+    <p>데이터는 훔쳐볼 수 없습니다.</p>
+  </li>
+  <li>
+    <h3 id="데이터-무결성">데이터 무결성</h3>
+    <p>통신 도중 데이터가 제 3자에 의해 악의로 변경될 일이 없습니다.</p>
+
+    <p>1번 기밀성과 같은 선상에서 보시면 됩니다.</p>
+
+    <p>서로의 대칭키를 RSA 알고리즘을 통해 안전하게 공유한 후에 암호화하여 통신하기 때문에</p>
+
+    <p>제 3자가 대칭키를 알아내지 않는 한 중간에서 암호화된 데이터를 임의로 수정하지 못하겠죠.</p>
+  </li>
+  <li>
+    <h3 id="서버-인증">서버 인증</h3>
+    <p>1, 2번은 지난 포스팅에 공부했던 암호화 알고리즘을 통해 가능하다고 보여져요.</p>
+
+    <p>근데  만약 위의 암호화 방식으로만 서버와 클라이언트가 통신을 한다고 가정해 봅시다.</p>
+
+    <p>서버와 나는 암호화를 통해 통신하기 때문에 아무도 데이터를 훔쳐볼 수도 건들 수도 없겠지!</p>
+
+    <p>여기까지도 좋습니다 근데 만약 서버가 신뢰할 수 없는 서버라면 얘기가 달라지겠지요?</p>
+
+    <p><br /></p>
+
+    <p>요즘 웹 브라우저에 성가신 팝업이 표시되는 경우</p>
+
+    <p>웹을 탐색하는 도중에 무료 경품을 제공한다거나 기기에 문제가 있다고 경고하는 팝업이나 알림이 표시되는 경험은 한번씩 해 보셨을거라고 생각합니다.</p>
+
+    <p>이러한 유형의 팝업은 대개 사기성 광고이며, 사용자를 속여 사기꾼에게 개인 정보나 돈을 제공하도록 하기 위해 만들어졌습니다.</p>
+
+    <p>이런 서버에 아무리 암호화된 데이터를 보낸다 한들 서버가 사기꾼놈의 서버라면 정말 큰 문제지요.</p>
+
+    <p><br /></p>
+
+    <p>이처럼, 서버와 클라이언트 간 통신을 할 때는</p>
+
+    <p>서버가 신뢰할 수 있는 서버라는 것을 확인하는 작업이 필요합니다.</p>
+
+    <p>이럴 때 사용하는 것이 바로 <strong>‘인증서’</strong> 입니다!!!</p>
+
+    <p>이번에 공부할 포스팅에서 왜 인증서라는 것에 대해 공부하는지 이제 아시겠죠?</p>
+
+    <p>자 그럼 이제 시작해 봅시다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="2-인증서란-">2. 인증서란 ?</h2>
+
+<p>인증서라는 것이 무엇일까요? 이름부터 이미 감이 오지 않나요?</p>
+
+<p>바로 위에서 서버가 <strong>신뢰할 수 있는 진짜 서버 임을 확인하기 위해 필요한 것</strong>이 바로  <strong>인증서</strong> 입니다!</p>
+
+<p>인증서에는 다음과 같은 정보들을 포함하고 있습니다.</p>
+
+<ol>
+  <li>
+    <p><strong>서비스 정보(인증서를 발급한 CA, 서비스의 도메인 등)</strong></p>
+  </li>
+  <li>
+    <p><strong>서버 측 공개키(공개키, 공개키 암호화 방법)</strong></p>
+  </li>
+  <li>
+    <p><strong>지문, 디지털 서명 등</strong></p>
+  </li>
+</ol>
+
+<p>여러분이 지금 보고계신 이 블로그도 인증서를 가지고 있답니다.</p>
+
+<p>주소창의 가장 왼쪽에 🔒 보이시나요?</p>
+
+<p><br />
+  <img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121352044-651ac600-c967-11eb-8060-8ae61c7b66db.png" />
+  <br /></p>
+
+<p>자물쇠가 잠겨있다는 건 이전 포스팅에서 공부했던 HTTPS 통신이라는 뜻입니다 보안되어 있다는 말이지요</p>
+
+<p>제 블로그는 GitHub Pages를 통해 만들어졌는데요 개인 도메인도 무료로 HTTPS를 지원하지요.</p>
+
+<p>그럼 깃헙의 인증서를 한번 들여다 봅시다.</p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121352050-677d2000-c967-11eb-9a37-7c9525bdc5fe.png" /></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121352053-6815b680-c967-11eb-9393-6580c47f3634.png" /></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121352060-68ae4d00-c967-11eb-9fb3-fe167317905d.png" /></p>
+
+<p>앞서 말했듯 서버의 공개키, 서명, 지문, 발급자 정보 등이 포함되어 있는것을 확인할수 있습니다!</p>
+
+<p>이것들이 인증서에서 어떤 역할을 하는지는 차차 알아봅시다.</p>
+
+<p>그러기 전에 먼저,</p>
+
+<p>이 인증서는 어디서 어떻게 생성할까요?</p>
+
+<hr />
+
+<h2 id="3-ca-certificate-authority">3. CA (Certificate Authority)</h2>
+
+<p>CA는 인증서를 발급해주는 기관으로, Root Certificate라고 부르기도 합니다.</p>
+
+<p>CA는 아무 기업이나 할 수 있는 게 아니라 신뢰성이 엄격하게 공인된 기업들만 할 수 있습니다.</p>
+
+<p>TLS 통신을 하려면 이 CA를 통해서 인증서를 발급받아야 합니다.</p>
+
+<p>먼저, 미리 알아둘 것은 <strong>CA는 자체적으로 공개키와 비밀키를 가지고 있습니다</strong>.</p>
+
+<p>CA의 비밀키는 절대 누설 되어선 안 되며, 이것이 노출되는 바람에 <strong><em>디지노타</em></strong> 라는 회사가 파산된 사례도 있습니다.</p>
+
+<hr />
+<h2 id="4-ca에서-인증서-발급받기">4. CA에서 인증서 발급받기</h2>
+
+<p>자 이제 CA로부터 인증서를 발급받는 방법을 알아 봅시다.</p>
+
+<p>먼저 그림으로 전체적인 메커니즘을 보고 넘어 갑시다.</p>
+
+<p><br /></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121363254-bdef5c00-c971-11eb-8c83-08197bec1eca.png" /></p>
+
+<p>자 실제 인증서를 통해 확인해 봅시다.</p>
+
+<p>먼저, 발급 받고자 하는 기관은 자신의 사이트 정보(도메인 등)과 공개키를 CA에게 제출합니다.</p>
+
+<p>그러면 CA는 검증을 걸친 후 발급 받고자 하는 서버의 공개 키를 해시(SHA-256 등) 합니다.</p>
+
+<p>이렇게 해시한 값을  <strong>Finger Print(지문)</strong> 이라고 합니다.</p>
+
+<p>이제 이 지문을 CA의 비밀키로 암호화 하고,</p>
+
+<p>인증서의 발급자 서명으로 등록합니다.</p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121364644-efb4f280-c972-11eb-8025-142d5566ecdc.png" /></p>
+
+<p>이렇게 서명된 것을 <strong>디지털 서명 (Digital Signing)</strong> 이라고 합니다.</p>
+
+<p>이제 CA는 서버에게 이 디지털 서명, 발급자 정보 등등이 등록되어 있는 인증서를 발급해 줍니다.</p>
+
+<p>이러한 방식처럼,</p>
+
+<p><strong>상위 인증 기관이 하위 인증서가 포함하고 있는 공개키 (인증서)를 상위 기관의 비밀키로 암호화</strong> 하여</p>
+
+<p>상호 보증하게 되는 것을 <strong>인증서 체인(Certificate Chain)</strong> 이라고 합니다.</p>
+
+<p>내가 발급받는 CA 기관이 Root CA가 아니라면, 이 CA 기관마저 또 상위 CA에게 인증서를 발급받은 것입니다.</p>
+
+<p>보통 3단계에 걸쳐서 인증서 체인이 일어나는데,</p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121366057-20495c00-c974-11eb-9bc2-29d1cbb745d8.png" /></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121368826-4ff96380-c976-11eb-9d30-d1b7192b8c85.png" /></p>
+
+<ol>
+  <li>
+    <p>Github.com의 인증서는 그 상위 인증서인
+ Digicert SHA2 CA(Intermediate CA)의 비밀키로 암호화 된 것이며,</p>
+  </li>
+  <li>
+    <p>Digicert SHA2 CA인증서는 그 상위 인증서인
+  Digicert High Assurance EV Root CA 의 인증기관의 비밀키로 암호화 된 것입니다.</p>
+  </li>
+  <li>
+    <p>Digicert High Assurance EV Root는 상위 인증기관이 없는 Root CA이기 때문에 Self-Signed    되어 있습니다.</p>
+  </li>
+</ol>
+
+<p>Self-SIgned (스스로 보증)  이란,</p>
+
+<p>자신의 인증서를 해시한 후, CA가 아닌 자신의 비밀키로 암호화 하여 서명으로 등록</p>
+
+<p>하는 것을 말합니다</p>
+
+<p>이게 바로 인증서 체인입니다.</p>
+
+<h2 id="5-ssltls-인증서의-작동원리">5. SSL(TLS) 인증서의 작동원리</h2>
+
+<p>CA에서 발급받은 인증서를 통해 서버의 신뢰성을 인증한다고 했었습니다.</p>
+
+<p>근데 클라이언트는 이 인증서가 CA에서 발급받은 것인지, 중간에 누가 조작한 것인지를 어떻게 확인할까요?</p>
+
+<p>먼저 알아 두어야할 것은, <strong>클라이언트들은 CA 리스트들을 이미 가지고 있습니다.</strong></p>
+
+<p>OS를 설치할 때 PC에 포함되어있고 브라우저가 이를 읽어옵니다</p>
+
+<p>크롬의경우 Setting -&gt; Privacy and security -&gt; Manage certificates 를 클릭하면</p>
+
+<p>설치되어있는 CA 리스트르 보여줍니다.</p>
+
+<p>직접 확인해 봅시다.</p>
+
+<p><strong>먼저 우측상단의 땡땡이 클릭후 Settings클릭!</strong></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121470999-f3d82300-c9f9-11eb-8d8f-02d21716a4ae.png" /></p>
+
+<p><strong>Privacy and security 클릭후 securit클릭!</strong></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121471000-f3d82300-c9f9-11eb-8819-8ae4315e6a60.png" /></p>
+
+<p><strong>Manage certificates클릭!</strong></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121471003-f470b980-c9f9-11eb-9e2d-575dd6190569.png" /></p>
+
+<p><strong>엄청 많은 인증서가 보이시지요 ㅎㅎ 그중에는 깃헙인증서의 상위 인증기관인 Digicert의 인증서도 보이는군요</strong></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121470986-efac0580-c9f9-11eb-8570-c56e67f76953.png" /></p>
+
+<p><strong>맥의경우 Keychain Access앱을 클릭하면 똑같은 위치로 이동할 수 있습니다.</strong></p>
+
+<p><img class="image image--md" src="https://user-images.githubusercontent.com/75003424/121470998-f33f8c80-c9f9-11eb-976a-7cc0985209a8.png" /></p>
+
+<hr />
+
+<p>자 이제 정말 어떻게 인증하는지 알아보자구요.</p>
+
+<h3 id="a-인증서-신청하기">a. 인증서 신청하기</h3>
+
+<p><br /></p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121473525-c7260a80-c9fd-11eb-91ab-f94d0fd781eb.png" /></p>
+
+<p><br /></p>
+
+<p>서버A는 자신이 믿을 수 있는 서버임을 인증하기 위해 CA에서 인증서를 발급받으려 합니다.</p>
+
+<p>그러기 위해선 자신의 사이트 정보와 사이트의 공개키를 CA에 제출합니다.</p>
+
+<p>그러면 CA는 검증을 걸친 후 다음과 같은 과정을 거칩니다</p>
+
+<ul>
+  <li>
+    <p><strong>제출받은 서버의 공개키를 해시하여 Finger Print를 생성하고</strong></p>
+  </li>
+  <li>
+    <p><strong>Finger Print를 CA의 비밀키로 암호화(Digital signing)</strong></p>
+  </li>
+</ul>
+
+<p>그리고 서버에게 이런 정보들이 들어 있는 <strong>인증서를 발급</strong>해 줍니다.</p>
+
+<p>서버는 이제 자신이 진짜 서버임을 인증해줄 인증서를 갖고 있는 것입니다.</p>
+
+<h3 id="b-클라이언트의-인증된-서버-확인방법">b. 클라이언트의 인증된 서버 확인방법</h3>
+
+<p>아무개씨가 서버에 접속 하려고 합니다. 근데 신뢰할 수 있는 서버에 접속을 해야겠지요</p>
+
+<p>이전 포스트에서 배운 TLS 통신을 통해 서버는 <strong>CA에서 발급받은 인증서를 아무개씨에게 넘깁니다</strong></p>
+
+<p>근데 그 과정에서 <em>해커</em> 가 인증서를 자신의 인증서를 바꿔치거나 인증서의 공개키를 자신의 공개키로 바꿨다면</p>
+
+<p>이 인증서가 무결성은 어떻게 확인할까요?</p>
+
+<p><br /></p>
+
+<p>앞전에 말했었지요, <strong>클라이언트는 이미 모든 CA리스트의 공개키를 가지고 있다는 것을요</strong></p>
+
+<p>우선 아무개씨 OS가 갖고있는 CA리스트(인증받은 Root CA들)에 있는 놈인지 확인합니다.</p>
+
+<p><img class="image image--hf" src="https://user-images.githubusercontent.com/75003424/121476495-b5defd00-ca01-11eb-8678-fd65dd5b395c.png" /></p>
+
+<p>만약에 이 리스트에 없다면 바로 신뢰할 수 없는 사이트가 되겠습니다.</p>
+
+<p>만약 리스트에 있는경우에는 해당 <strong>CA 기관의 공개키로 서버 인증서의 서명(Digital Signing)을 복호화</strong> 합니다.</p>
+
+<p>(CA는 자신의 비밀키로 인증서를 암호화를 하였으니, 공개키로 복호화가 가능합니다.)
+디지털 서명을 복호화 하면, 인증서 내용을 해시한 값이 나오겠죠?</p>
+
+<p>많이 햇갈릴 수 있지만 CA의 검증 과정을 되짚어 보면 이해하기 한결 쉬우실 겁니다.</p>
+
+<ul>
+  <li>
+    <p><strong>CA의 검증과정에서 서버의 공개키를 해쉬값으로 만든 FingerPrint값이 있었구요.</strong></p>
+  </li>
+  <li>
+    <p><strong>CA의 비공개키로 그 FingerPrint값을 암호화 하여서 Digital Signing을 만들었습니다</strong></p>
+
+    <p>-&gt; 그말은 즉슨 <strong>CA의 공개키로 복호화한 Digital Signing값은 FingerPrint이며!</strong></p>
+
+    <p>-&gt; <strong>해당 서버의 공개키를 해쉬화 한 값</strong>과 일치해야 해야만 한다는 말이지요!</p>
+
+    <p>일치하지 않는다면 인증서가 위조되었다는 말과도 같습니다.</p>
+  </li>
+</ul>
+
+<h3 id="c-암호화-통신하기">c. 암호화 통신하기</h3>
+
+<p><strong>서버의 인증서의 공개키를 해쉬한 값과</strong>,</p>
+
+<p><strong>OS에 존재하는 인증서의 공개키로 해당 서버 인증서의Digital signing</strong>을 복호화한 값이 일치 했다면 믿을만한 서버이기에 통신을 하면되겠죠?</p>
+
+<p>우리는 이미 서버의 공개키를 알고있지요?</p>
+
+<p>통신에 사용할 대칭키를 서버의 공개키로 암호화하여 서버에 보냅니다.</p>
+
+<p>서버는 자신의 비공개키로 이를 복호화하여 이제 더욱 저렴한비용의 대칭키 방식으로 클라이언트와 통신을 할 수가 있겠습니다.</p>
+
+<hr />
+
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-06-10T00:00:00+09:00"><!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+</div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/06/09/Learning-Kubernetes-11.html">[ #11 ] 클러스터 보안 - 2</a></div></div></div>
+
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
 </div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
@@ -906,6 +1203,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script>
     </div>
     <script>(function () {

@@ -280,6 +280,68 @@
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div><meta itemprop="headline" content="TIL"><meta itemprop="author" content="Sanghyuk Jeong"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/06/10/Learning-Kubernetes-12.html"><h2 itemprop="headline" class="item__header">[ #12 ] 클러스터 보안 - 3</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. TLS가 제공하는 이점들
+
+
+  
+    기밀성 (암호화)
+    이전 포스팅에서 공부했던 암호화에 해당하는 항목입니다.
+
+    서버와 주고 받는 데이터가 스니핑👀 되는 것을 방지합니다.
+
+    패킷이 오가는 것을 훔쳐 볼 순 있어도 안전하게 암호화 된 패킷이라 복호화 할 수 없기 떄문에
+
+    데이터는 훔쳐볼 수 없습니다.
+  
+  
+    데이터 무결성
+    통신 도중 데이터가 제 3자에 의해 악의로 변경될 일이 없습니다.
+
+    1번 기밀성과 같은 선상에서 보시면 됩니다.
+
+    서로의 대칭키를 RSA 알고리즘을 통해 안전하게 공유한 후에 암호화하여 통신하기 때문에
+
+    제 3자가 대칭키를...</div><p><a href="/2021/06/10/Learning-Kubernetes-12.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=RootCA">RootCA</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=HTTPS">HTTPS</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=static">static</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SSL">SSL</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=TLS">TLS</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%B3%B4%EC%95%88">보안</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Security">Security</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%8C%80%EC%B9%AD%ED%82%A4">대칭키</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">비대칭키</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=certificate">certificate</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%EC%9D%B8%EC%A6%9D%EC%84%9C">인증서</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 06월 10일</span>
+            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-06-10T00:00:00+09:00">
+    <meta itemprop="keywords" content="RootCA,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키,certificate,인증서"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/06/09/Learning-Kubernetes-11.html"><h2 itemprop="headline" class="item__header">[ #11 ] 클러스터 보안 - 2</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">1. TLS / SSL / HTTPS 란?
 
@@ -575,46 +637,8 @@ $ssh-keygen -t rsa -f ~/.ssh/&lt;KEY_FILE_NAME&gt; -C "acc...</div><p><a href="/
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
             </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
     <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/31/Learning-Kubernetes-05.html"><h2 itemprop="headline" class="item__header">[ #5 ] pod 스케쥴링-2 </h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">nodeSelector
-nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.
-1. 노드에 레이블 붙이기
-
-노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.
-kubectl label nodes &lt;노드 이름&gt; &lt;레이블 키&gt;=&lt;레이블 값&gt;
-
-
-2. pod설정에 nodeSelector 필드 추가하기
-실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면
-
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
-  la...</div><p><a href="/2021/05/31/Learning-Kubernetes-05.html">더보기</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Docker">Docker</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Deployment">Deployment</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Google">Google</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=cloud">cloud</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>전체 글 26개, 4 페이지</p>
+</div><div class="layout--home"><div class="pagination"><p>전체 글 27개, 4 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
