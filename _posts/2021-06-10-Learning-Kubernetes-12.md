@@ -2,7 +2,6 @@
 layout: article
 title: "[ #12 ] 클러스터 보안 - 3"
 tags: RootCA HTTPS static SSL TLS 쿠버네티스 보안 Security 대칭키 비대칭키 certificate 인증서
-comments: true
 ---
 
 ## 1. TLS가 제공하는 이점들 
