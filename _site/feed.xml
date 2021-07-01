@@ -1,5 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-06-11T14:33:29+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
-</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">[ #12 ] 클러스터 보안 - 3</title><link href="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html" rel="alternate" type="text/html" title="[ #12 ] 클러스터 보안 - 3" /><published>2021-06-10T00:00:00+09:00</published><updated>2021-06-10T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12</id><content type="html" xml:base="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html">&lt;h2 id=&quot;1-tls가-제공하는-이점들&quot;&gt;1. TLS가 제공하는 이점들&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-07-01T18:34:52+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+</subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">첫 면접</title><link href="https://shjeong92.github.io/2021/07/01/Interview-01.html" rel="alternate" type="text/html" title="첫 면접" /><published>2021-07-01T00:00:00+09:00</published><updated>2021-07-01T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/07/01/Interview-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/07/01/Interview-01.html">&lt;p&gt;오랜만의 포스팅 입니다.&lt;/p&gt;
+
+&lt;p&gt;저는 이때까지 서류를 붙어본적이 없습니다.&lt;/p&gt;
+
+&lt;p&gt;4월에는 프로그래머스 데브매칭에서 코딩테스트를 치고, 다섯 군데 지원된 서류는 모두 탈락이었습니다.&lt;/p&gt;
+
+&lt;p&gt;서류가 많이 부족했었던 것이겠죠. 남들이 다 가지고 있는 프로젝트 경험, 클라우드 경험, 개발 관련 블로그가 없어서이었던 같았기에 이에 관련된 것을 준비하였는데, 그 과정에서 개발 블로그 작성은 정말 도움이 많이 되었던 것 같습니다.&lt;/p&gt;
+
+&lt;p&gt;우선, 공부한 내용을 다시 복기하면서 그 내용을 더 오래 기억할 수 있었고, 설령 까먹더라도 다시 블로그에 들어오면 빠르게 리마인드가 되었기 때문입니다.&lt;/p&gt;
+
+&lt;p&gt;저는 리액트와 장고를 이용하여 2개의 토이프로젝트 및 CKA 자격증 취득 이후에 다시 백엔드 직군으로 입사지원서를 넣었고, 처음으로 서류들이 합격하는 신기한 일이 생겼습니다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;그리고 오늘은 &lt;strong&gt;첫 면접&lt;/strong&gt;을 보았습니다.&lt;/p&gt;
+
+&lt;p&gt;면접관님께서는 회사에 대해 간단히 소개해 주셨고, 저에게 간단한 자기소개를 부탁하셨습니다.&lt;/p&gt;
+
+&lt;p&gt;어찌나 떨리던지 심장이 터지는 줄 알았습니다.&lt;/p&gt;
+
+&lt;p&gt;그리고 전혀 간단하지 않고 장황한 자기소개를 하였습니다..&lt;/p&gt;
+
+&lt;p&gt;여러 가지 질문들을 받았는데 순서는 뒤죽박죽이지만 나열해 보자면,&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;restful api 란&lt;/li&gt;
+  &lt;li&gt;restful api 에서 관련된 자원을 명시하는 이유&lt;/li&gt;
+  &lt;li&gt;restful 이외의 프로토콜&lt;/li&gt;
+  &lt;li&gt;Covid19 관련 프로젝트 진행중 어려운점은 없었는지&lt;/li&gt;
+  &lt;li&gt;쿠버네티스를 어떻게 이해하고 있는지&lt;/li&gt;
+  &lt;li&gt;Loadbalancing 알고리즘에는 어떠한 것들이 있는지&lt;/li&gt;
+  &lt;li&gt;특정 웹사이트를 들어가면 접속하면 일어나는 일&lt;/li&gt;
+  &lt;li&gt;ssh란 무엇인지, 무엇을 할때 쓰이는지&lt;/li&gt;
+  &lt;li&gt;osi 7계층에대해서 설명할 수 있는지&lt;/li&gt;
+  &lt;li&gt;DNS&lt;/li&gt;
+  &lt;li&gt;쉘은 무엇인지&lt;/li&gt;
+  &lt;li&gt;도스와 윈도우의 차이점은 무엇인지&lt;/li&gt;
+  &lt;li&gt;포트는 무엇인지&lt;/li&gt;
+  &lt;li&gt;etcd 는 무엇인지&lt;/li&gt;
+  &lt;li&gt;key value쌍을 이용한 다른 DB는 무엇이있는지&lt;/li&gt;
+  &lt;li&gt;DB index란&lt;/li&gt;
+  &lt;li&gt;데이터베이스의 구조&lt;/li&gt;
+  &lt;li&gt;네트워크 관련 질문&lt;/li&gt;
+  &lt;li&gt;리눅스 네임스페이스&lt;/li&gt;
+  &lt;li&gt;도커 네트워크관련&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;이번-면접에서-느낀점&quot;&gt;이번 면접에서 느낀점&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;암기하지말고 진짜 이해를 해야합니다.&lt;/li&gt;
+  &lt;li&gt;CS는 정말정말정말정말 중요합니다.&lt;/li&gt;
+  &lt;li&gt;도커,쿠버네티스 이러한 기술을 사용하기 이전에 그에 바탕이되는 기본 개념을 알아야 합니다.&lt;/li&gt;
+  &lt;li&gt;면접 복장은 무조건 정해준대로 입는게 좋습니다.&lt;/li&gt;
+  &lt;li&gt;공부는 끝이 없습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;공부할것&quot;&gt;공부할것!&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;운영체제&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;네트워크&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;데이터베이스&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="backend" /><category term="면접" /><category term="질문" /><summary type="html">오랜만의 포스팅 입니다. 저는 이때까지 서류를 붙어본적이 없습니다. 4월에는 프로그래머스 데브매칭에서 코딩테스트를 치고, 다섯 군데 지원된 서류는 모두 탈락이었습니다. 서류가 많이 부족했었던 것이겠죠. 남들이 다 가지고 있는 프로젝트 경험, 클라우드 경험, 개발 관련 블로그가 없어서이었던 같았기에 이에 관련된 것을 준비하였는데, 그 과정에서 개발 블로그 작성은 정말 도움이 많이 되었던 것 같습니다. 우선, 공부한 내용을 다시 복기하면서 그 내용을 더 오래 기억할 수 있었고, 설령 까먹더라도 다시 블로그에 들어오면 빠르게 리마인드가 되었기 때문입니다. 저는 리액트와 장고를 이용하여 2개의 토이프로젝트 및 CKA 자격증 취득 이후에 다시 백엔드 직군으로 입사지원서를 넣었고, 처음으로 서류들이 합격하는 신기한 일이 생겼습니다. 그리고 오늘은 첫 면접을 보았습니다. 면접관님께서는 회사에 대해 간단히 소개해 주셨고, 저에게 간단한 자기소개를 부탁하셨습니다. 어찌나 떨리던지 심장이 터지는 줄 알았습니다. 그리고 전혀 간단하지 않고 장황한 자기소개를 하였습니다.. 여러 가지 질문들을 받았는데 순서는 뒤죽박죽이지만 나열해 보자면, restful api 란 restful api 에서 관련된 자원을 명시하는 이유 restful 이외의 프로토콜 Covid19 관련 프로젝트 진행중 어려운점은 없었는지 쿠버네티스를 어떻게 이해하고 있는지 Loadbalancing 알고리즘에는 어떠한 것들이 있는지 특정 웹사이트를 들어가면 접속하면 일어나는 일 ssh란 무엇인지, 무엇을 할때 쓰이는지 osi 7계층에대해서 설명할 수 있는지 DNS 쉘은 무엇인지 도스와 윈도우의 차이점은 무엇인지 포트는 무엇인지 etcd 는 무엇인지 key value쌍을 이용한 다른 DB는 무엇이있는지 DB index란 데이터베이스의 구조 네트워크 관련 질문 리눅스 네임스페이스 도커 네트워크관련 이번 면접에서 느낀점 암기하지말고 진짜 이해를 해야합니다. CS는 정말정말정말정말 중요합니다. 도커,쿠버네티스 이러한 기술을 사용하기 이전에 그에 바탕이되는 기본 개념을 알아야 합니다. 면접 복장은 무조건 정해준대로 입는게 좋습니다. 공부는 끝이 없습니다. 공부할것! 운영체제 네트워크 데이터베이스</summary></entry><entry><title type="html">[ #12 ] 클러스터 보안 - 3</title><link href="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html" rel="alternate" type="text/html" title="[ #12 ] 클러스터 보안 - 3" /><published>2021-06-10T00:00:00+09:00</published><updated>2021-06-10T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12</id><content type="html" xml:base="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html">&lt;h2 id=&quot;1-tls가-제공하는-이점들&quot;&gt;1. TLS가 제공하는 이점들&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -1742,7 +1804,121 @@ Last login: Tue Jun  1 03:44:23 2021 from 122.32.103.55
 shjeong920522@master:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="gcloud" /><category term="ssh" /><category term="key-gen" /><category term="rsa" /><category term="config" /><summary type="html">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요. 이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다. key pair 생성하기 #-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음) $ssh-keygen -t rsa -f ~/.ssh/&amp;lt;KEY_FILE_NAME&amp;gt; -C &quot;account@gmail.com&quot; 위와같이 입력하면 RSA key pair가 생성됩니다. ssh-keygen -t rsa -f ~/.ssh/test -C &quot;test@gmail.com&quot; Generating public/private rsa key pair. Enter passphrase (empty for no passphrase): Enter same passphrase again: Your identification has been saved in /Users/sanghyukjeong/.ssh/test. Your public key has been saved in /Users/sanghyukjeong/.ssh/test.pub. The key fingerprint is: SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ test@gmail.com The key&apos;s randomart image is: +---[RSA 3072]----+ |+E+=. ..... | |.o*.o..oo. | |.=.o. .+ | |... ... o. | |o+ ...S | |B.. . B | |*+ . * + | |O.o + | |oOo .o | +----[SHA256]-----+ 이후 cat명령어로 rsa 공개키를 확인할 수 있는데 구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다. $ cat ~/.ssh/test.pub ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk= test@gmail.com key 등록하기 compute엔진 -&amp;gt; 메타데이터 -&amp;gt; SSH 키로 이동후에 항목추가를 클릭하여 공개키를 추가합니다. 키등록이 끝났으니 ssh 접속을 해봅시다 $ ssh -i ~/.ssh/test yourID@your.gcloudExternal.ip Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 03:44:22 UTC 2021 System load: 0.27 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 10.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 10.244.0.1 Processes: 143 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 잘 접속 되는것을 확인할 수 있습니다. 그러나 접속할때마다 저 커맨드를 다 입력하는것은 참 귀찮은일입니다. ip정도는 한번보면 외우시는분이 아니라면요 ㅎㅎ 이제 ssh config파일 설정에대해 알아봅시다 ssh config 설정하여 ssh 접속 간편하게 하기 Linux/Unix서버 접속 계정들을 여러 가지 관리하는 경우, 별도로 메모나 파일에 접속 계정 / 비밀번호 등을 관리하거나 alias에 접속 명령어를 설정하는 번거로움이 있습니다. 하지만 .ssh 경로 밑 config 파일에 계정 정보들을 저장하여 관리하면 정말 편리하게 접속들을 관리할 수 있습니다. 우선 사용자 홈 디렉토리에서 .ssh 폴더로 접근합니다. .ssh 폴더는 ssh 접속을 한 번이라도 했다면, rsa 파일이나 known_hosts 등이 생성되기 때문에 자동으로 생성되는 디렉토리입니다. 홈디렉토리에 있는 .ssh폴더에 들어가서 config 파일을 생성해줍니다. $ cd ~/.ssh $ vim config Host gcloud HostName 10.178.0.3 User shjeong920522 IdentityFile: ~/.ssh/test Port 22 Host: 접속할 정보의 이름입니다. HostName: 접속할 서버의 외부 IP 주소를 입력하세요 User: 접속할 서버의 user 정보입니다. IdentityFile: 인증 키파일이 필요한 경우, 키파일 경로를 설정합니다. 이전 단계에 rsa 키페어 만든거 기억나시죠? Port: ssh 접속 포트입니다. 생략 가능하며, 생략할 경우에 디폴트로 22번 포트로 실생됩니다. 모든 설정이 끝났으니 google cloud에 접속해보겠습니다. # config 에서 Host에 등록한 접속할 정보만 적어주면 접속이되는 마법.... $ ssh gcloud Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 04:05:52 UTC 2021 System load: 0.65 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 12.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 12.244.0.1 Processes: 144 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 11 updates can be applied immediately. To see these additional updates run: apt list --upgradable New release &apos;20.04.2 LTS&apos; available. Run &apos;do-release-upgrade&apos; to upgrade to it. Last login: Tue Jun 1 03:44:23 2021 from 122.32.103.55 shjeong920522@master:~$ 이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.</summary></entry><entry><title type="html">[ #6 ] static pod</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html" rel="alternate" type="text/html" title="[ #6 ] static pod" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html">&lt;h2 id=&quot;static-pods이란&quot;&gt;Static pods이란&lt;/h2&gt;
+&lt;p&gt;이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="gcloud" /><category term="ssh" /><category term="key-gen" /><category term="rsa" /><category term="config" /><summary type="html">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요. 이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다. key pair 생성하기 #-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음) $ssh-keygen -t rsa -f ~/.ssh/&amp;lt;KEY_FILE_NAME&amp;gt; -C &quot;account@gmail.com&quot; 위와같이 입력하면 RSA key pair가 생성됩니다. ssh-keygen -t rsa -f ~/.ssh/test -C &quot;test@gmail.com&quot; Generating public/private rsa key pair. Enter passphrase (empty for no passphrase): Enter same passphrase again: Your identification has been saved in /Users/sanghyukjeong/.ssh/test. Your public key has been saved in /Users/sanghyukjeong/.ssh/test.pub. The key fingerprint is: SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ test@gmail.com The key&apos;s randomart image is: +---[RSA 3072]----+ |+E+=. ..... | |.o*.o..oo. | |.=.o. .+ | |... ... o. | |o+ ...S | |B.. . B | |*+ . * + | |O.o + | |oOo .o | +----[SHA256]-----+ 이후 cat명령어로 rsa 공개키를 확인할 수 있는데 구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다. $ cat ~/.ssh/test.pub ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk= test@gmail.com key 등록하기 compute엔진 -&amp;gt; 메타데이터 -&amp;gt; SSH 키로 이동후에 항목추가를 클릭하여 공개키를 추가합니다. 키등록이 끝났으니 ssh 접속을 해봅시다 $ ssh -i ~/.ssh/test yourID@your.gcloudExternal.ip Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 03:44:22 UTC 2021 System load: 0.27 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 10.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 10.244.0.1 Processes: 143 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 잘 접속 되는것을 확인할 수 있습니다. 그러나 접속할때마다 저 커맨드를 다 입력하는것은 참 귀찮은일입니다. ip정도는 한번보면 외우시는분이 아니라면요 ㅎㅎ 이제 ssh config파일 설정에대해 알아봅시다 ssh config 설정하여 ssh 접속 간편하게 하기 Linux/Unix서버 접속 계정들을 여러 가지 관리하는 경우, 별도로 메모나 파일에 접속 계정 / 비밀번호 등을 관리하거나 alias에 접속 명령어를 설정하는 번거로움이 있습니다. 하지만 .ssh 경로 밑 config 파일에 계정 정보들을 저장하여 관리하면 정말 편리하게 접속들을 관리할 수 있습니다. 우선 사용자 홈 디렉토리에서 .ssh 폴더로 접근합니다. .ssh 폴더는 ssh 접속을 한 번이라도 했다면, rsa 파일이나 known_hosts 등이 생성되기 때문에 자동으로 생성되는 디렉토리입니다. 홈디렉토리에 있는 .ssh폴더에 들어가서 config 파일을 생성해줍니다. $ cd ~/.ssh $ vim config Host gcloud HostName 10.178.0.3 User shjeong920522 IdentityFile: ~/.ssh/test Port 22 Host: 접속할 정보의 이름입니다. HostName: 접속할 서버의 외부 IP 주소를 입력하세요 User: 접속할 서버의 user 정보입니다. IdentityFile: 인증 키파일이 필요한 경우, 키파일 경로를 설정합니다. 이전 단계에 rsa 키페어 만든거 기억나시죠? Port: ssh 접속 포트입니다. 생략 가능하며, 생략할 경우에 디폴트로 22번 포트로 실생됩니다. 모든 설정이 끝났으니 google cloud에 접속해보겠습니다. # config 에서 Host에 등록한 접속할 정보만 적어주면 접속이되는 마법.... $ ssh gcloud Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 04:05:52 UTC 2021 System load: 0.65 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 12.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 12.244.0.1 Processes: 144 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 11 updates can be applied immediately. To see these additional updates run: apt list --upgradable New release &apos;20.04.2 LTS&apos; available. Run &apos;do-release-upgrade&apos; to upgrade to it. Last login: Tue Jun 1 03:44:23 2021 from 122.32.103.55 shjeong920522@master:~$ 이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.</summary></entry><entry><title type="html">[ #5 ] pod 스케쥴링-2</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html" rel="alternate" type="text/html" title="[ #5 ] pod 스케쥴링-2" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">&lt;h2 id=&quot;nodeselector&quot;&gt;nodeSelector&lt;/h2&gt;
+&lt;p&gt;nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.&lt;/p&gt;
+&lt;h3 id=&quot;1-노드에-레이블-붙이기&quot;&gt;1. 노드에 레이블 붙이기&lt;/h3&gt;
+
+&lt;p&gt;노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;레이블 값&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-pod설정에-nodeselector-필드-추가하기&quot;&gt;2. pod설정에 nodeSelector 필드 추가하기&lt;/h3&gt;
+&lt;p&gt;실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;spec아래에 nodeSelector을 추가해줍니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;imagePullPolicy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;IfNotPresent&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;nodeSelector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;#&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;disktype&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssd&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;node-affinity&quot;&gt;node affinity&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;nodeSelector&lt;/strong&gt; 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;nodeAffinity&lt;/strong&gt; 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;또한 &lt;strong&gt;nodeAffinity&lt;/strong&gt; 에는 아래와 같이 두가지 타입이 있습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
+  &lt;li&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다
+두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라
+pod이 스케쥴되는 형태입니다.&lt;/p&gt;
+
+&lt;p&gt;미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서
+affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;예제&quot;&gt;예제&lt;/h3&gt;
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;affinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;nodeAffinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;nodeSelectorTerms&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kubernetes.io/e2e-az-name&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az1&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az2&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;preference&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-key&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-value&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;k8s.gcr.io/pause:2.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다.&lt;/li&gt;
+      &lt;li&gt;두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 &lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 만족하는 노드가 없다면 해당 pod은 pending 상태가
+될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 조건이 맞는 노드로 배정 될 것입니다. &lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;weight&lt;/code&gt; 는 선호도입니다 만약 여러개의 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">nodeSelector nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다. 1. 노드에 레이블 붙이기 노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다. kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;=&amp;lt;레이블 값&amp;gt; 2. pod설정에 nodeSelector 필드 추가하기 실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면 apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx spec아래에 nodeSelector을 추가해줍니다. apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx imagePullPolicy: IfNotPresent nodeSelector: #&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt; disktype: ssd node affinity nodeSelector 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다. nodeAffinity 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다. 또한 nodeAffinity 에는 아래와 같이 두가지 타입이 있습니다. requiredDuringSchedulingIgnoredDuringExecution preferredDuringSchedulingIgnoredDuringExecution 첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다 두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라 pod이 스케쥴되는 형태입니다. 미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서 affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다. 예제 apiVersion: v1 kind: Pod metadata: name: with-node-affinity spec: affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: kubernetes.io/e2e-az-name operator: In values: - e2e-az1 - e2e-az2 preferredDuringSchedulingIgnoredDuringExecution: - weight: 1 preference: matchExpressions: - key: another-node-label-key operator: In values: - another-node-label-value containers: - name: with-node-affinity image: k8s.gcr.io/pause:2.0 Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다. requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우: 조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다. requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우: 첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다. 두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다. preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우: 조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다. 위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 requiredDuringSchedulingIgnoredDuringExecution 을 만족하는 노드가 없다면 해당 pod은 pending 상태가 될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 preferredDuringSchedulingIgnoredDuringExecution 조건이 맞는 노드로 배정 될 것입니다. weight 는 선호도입니다 만약 여러개의 preferredDuringSchedulingIgnoredDuringExecution 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.</summary></entry><entry><title type="html">[ #6 ] static pod</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html" rel="alternate" type="text/html" title="[ #6 ] static pod" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html">&lt;h2 id=&quot;static-pods이란&quot;&gt;Static pods이란&lt;/h2&gt;
 
 &lt;p&gt;제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 &lt;code&gt;kube-apiserver&lt;/code&gt;가 있고, 각 워커노드에는 &lt;code&gt;kubelet&lt;/code&gt; 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. &lt;br /&gt;
 이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다.&lt;/p&gt;
@@ -1878,262 +2054,4 @@ NAME                 READY   STATUS    RESTARTS   AGE
 myapp-pod-worker-1   1/1     Running   0   
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다.
-따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="static" /><category term="pod" /><summary type="html">Static pods이란 제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다. 각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다. 우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다 $ kubectl get nodes -o wide NAME STATUS ROLES AGE VERSION instance-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 master Ready control-plane,master 3d3h v1.21.1 worker-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 worker-2 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 #worker 에 접속하기 $ ssh -i ~/.ssh/rsa-gcp-worker-1 shjeong920522@10.178.0.5 특징 1 kubelet 은 기본적으로 /etc/kubernetes/manifests 파일안의 pod.yaml 을 바라보는데, 이는 kubelet.service 의 config.yaml파일안에 staticPodPath에 정의되어있습니다. 직접 확인해봅시다 우선 아래 커맨드를 입력하여 config.yaml파일의 위치를 알아냅니다 # 모든서비스 확장 | kubelet 정보중에서 | --config 포함하는줄 가져오기 $ ps -ef | grep kubelet | grep &quot;\--config&quot; root 18270 1 1 May28 ? 01:31:14 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.4.1 해당 파일을 확인해 봅시다 $ sudo vi config=/var/lib/kubelet/config.yaml apiVersion: kubelet.config.k8s.io/v1beta1 authentication: anonymous: enabled: false webhook: cacheTTL: 0s enabled: true x509: clientCAFile: /etc/kubernetes/pki/ca.crt authorization: mode: Webhook webhook: cacheAuthorizedTTL: 0s cacheUnauthorizedTTL: 0s cgroupDriver: systemd clusterDNS: - 10.96.0.10 clusterDomain: cluster.local cpuManagerReconcilePeriod: 0s evictionPressureTransitionPeriod: 0s fileCheckFrequency: 0s healthzBindAddress: 127.0.0.1 healthzPort: 10248 httpCheckFrequency: 0s imageMinimumGCAge: 0s kind: KubeletConfiguration logging: {} nodeStatusReportFrequency: 0s nodeStatusUpdateFrequency: 0s resolvConf: /run/systemd/resolve/resolv.conf rotateCertificates: true runtimeRequestTimeout: 0s shutdownGracePeriod: 0s shutdownGracePeriodCriticalPods: 0s staticPodPath: /etc/kubernetes/manifests &amp;lt;------------------------------ staticPodPath 가 설정되어 있는것을 확인할 수 있습니다. streamingConnectionIdleTimeout: 0s syncFrequency: 0s volumeStatsAggPeriod: 0s 위와 같이 파일을 통으로 확인해보아도 되지만 grep명령어를 사용하면 더욱 편히 찾을 수도 있습니다. $ sudo grep static /var/lib/kubelet/config.yaml staticPodPath: /etc/kubernetes/manifests 특징 2 만약 해동 폴더내에 kind: Pod인 yaml 파일이있다면 kubelet이 자동으로 이를 생성하며 static pod의 이름에는 자동으로 해당 노드의 이름이 suffix로 붙습니다. 잘 생성되나 확인해 봅시다. $ cd /etc/kubernetes/manifests $ sudo vi static.yaml 간단한 pod을 해당 볼더에 생성해줍니다. #static.yaml apiVersion: v1 kind: Pod metadata: name: myapp-pod labels: app: myapp type: front-end spec: containers: - name: nginx-container image: nginx 마스터 노드로 이동하여 확인해봅시다. $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 42m static pod를 생성한 노드의 이름인 worker-1 가 Pod이름의 suffix로 붙어있는것을 확인할 수 있습니다. 특징 3 마스터노드에서 kubectl delete 명령어를 사용하더라도 워커노드의 kubelet이 다시 살려냅니다. static pod는 해당 워커노드의 kubelet이 관리하기 떄문입니다. 따라서 해당 pod의 image를 변경하고싶다면 manifest 폴더안의 해당 yaml파일의 이미지를 수정해야하고, 지우려면 해당 yaml파일을 삭제하면 됩니다. 그럼 정말로 다시 시작되는지 마스터노드에서 myapp-pod-worker-1을 삭제해 봅시다 $ kubectl delete pod myapp-pod-worker-1 pod &quot;myapp-pod-worker-1&quot; deleted 지운다음에 바로 확인해보면 $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 0/1 Pending 0 1s kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다. 따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.</summary></entry><entry><title type="html">[ #5 ] pod 스케쥴링-2</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html" rel="alternate" type="text/html" title="[ #5 ] pod 스케쥴링-2" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">&lt;h2 id=&quot;nodeselector&quot;&gt;nodeSelector&lt;/h2&gt;
-&lt;p&gt;nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.&lt;/p&gt;
-&lt;h3 id=&quot;1-노드에-레이블-붙이기&quot;&gt;1. 노드에 레이블 붙이기&lt;/h3&gt;
-
-&lt;p&gt;노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;레이블 값&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;2-pod설정에-nodeselector-필드-추가하기&quot;&gt;2. pod설정에 nodeSelector 필드 추가하기&lt;/h3&gt;
-&lt;p&gt;실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;spec아래에 nodeSelector을 추가해줍니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;imagePullPolicy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;IfNotPresent&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;nodeSelector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;#&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;disktype&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssd&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;node-affinity&quot;&gt;node affinity&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;nodeSelector&lt;/strong&gt; 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;nodeAffinity&lt;/strong&gt; 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다.&lt;/p&gt;
-
-&lt;p&gt;또한 &lt;strong&gt;nodeAffinity&lt;/strong&gt; 에는 아래와 같이 두가지 타입이 있습니다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
-  &lt;li&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다
-두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라
-pod이 스케쥴되는 형태입니다.&lt;/p&gt;
-
-&lt;p&gt;미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서
-affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다.&lt;/p&gt;
-
-&lt;h3 id=&quot;예제&quot;&gt;예제&lt;/h3&gt;
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;affinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;nodeAffinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;nodeSelectorTerms&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kubernetes.io/e2e-az-name&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az1&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az2&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;preference&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-key&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-value&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;k8s.gcr.io/pause:2.0&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다.&lt;/li&gt;
-      &lt;li&gt;두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 &lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 만족하는 노드가 없다면 해당 pod은 pending 상태가
-될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 조건이 맞는 노드로 배정 될 것입니다. &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;weight&lt;/code&gt; 는 선호도입니다 만약 여러개의 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">nodeSelector nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다. 1. 노드에 레이블 붙이기 노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다. kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;=&amp;lt;레이블 값&amp;gt; 2. pod설정에 nodeSelector 필드 추가하기 실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면 apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx spec아래에 nodeSelector을 추가해줍니다. apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx imagePullPolicy: IfNotPresent nodeSelector: #&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt; disktype: ssd node affinity nodeSelector 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다. nodeAffinity 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다. 또한 nodeAffinity 에는 아래와 같이 두가지 타입이 있습니다. requiredDuringSchedulingIgnoredDuringExecution preferredDuringSchedulingIgnoredDuringExecution 첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다 두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라 pod이 스케쥴되는 형태입니다. 미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서 affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다. 예제 apiVersion: v1 kind: Pod metadata: name: with-node-affinity spec: affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: kubernetes.io/e2e-az-name operator: In values: - e2e-az1 - e2e-az2 preferredDuringSchedulingIgnoredDuringExecution: - weight: 1 preference: matchExpressions: - key: another-node-label-key operator: In values: - another-node-label-value containers: - name: with-node-affinity image: k8s.gcr.io/pause:2.0 Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다. requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우: 조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다. requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우: 첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다. 두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다. preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우: 조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다. 위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 requiredDuringSchedulingIgnoredDuringExecution 을 만족하는 노드가 없다면 해당 pod은 pending 상태가 될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 preferredDuringSchedulingIgnoredDuringExecution 조건이 맞는 노드로 배정 될 것입니다. weight 는 선호도입니다 만약 여러개의 preferredDuringSchedulingIgnoredDuringExecution 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.</summary></entry><entry><title type="html">[ #4 ] pod 스케쥴링-1</title><link href="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html" rel="alternate" type="text/html" title="[ #4 ] pod 스케쥴링-1" /><published>2021-05-30T00:00:00+09:00</published><updated>2021-05-30T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html">&lt;h2 id=&quot;taint--toleration&quot;&gt;Taint &amp;amp; Toleration&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;taint: 노드마다 설정가능&lt;/li&gt;
-  &lt;li&gt;toleration: taint를 무시할 수 있음&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;주로 노드를 지정된 역할만 하게할때 사용합니다.
-예를들어 gpu잇는 노드에는 다른 pod들은 올라가지않고 gpu쓰는 pod들만 올라가게 하는등의 상황에 사용할 수 있습니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-taint에는 사용할 수 있는 3가지 옵션이 있습니다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;NoSchedule : toleration이 없으면 pod이 스케쥴되지 않음, 기존 실행되던 pod에는 적용 안됨&lt;/li&gt;
-  &lt;li&gt;PreferNoSchedule : toleration이 없으면 pod을 스케줄링안하려고 하지만 필수는 아님, 클러스터내에 자원이 부족하거나 하면 taint가 걸려있는 노드에서도 pod이 스케줄링될 수 있음&lt;/li&gt;
-  &lt;li&gt;NoExecute : toleration이 없으면 pod이 스케줄되지 않으며 기존에 실행되던 pod도 toleration이 없으면 종료시킴.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;taint 형식은 다음과 같습니다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl taint node &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;nodename&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;key&lt;span class=&quot;o&quot;&gt;}={&lt;/span&gt;value&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;:&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;option&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;하나의 노드에 taint 적용하기&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl taint node worker-1 &lt;span class=&quot;nv&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;value:NoSchedule
-node/worker-1 tainted
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;describe로 잘 적용 되었는지 확인해 봅시다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl describe node worker-1 | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; taint
-Taints:             &lt;span class=&quot;nv&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;value:NoSchedule
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;잘 적용이 되었군요.&lt;/p&gt;
-
-&lt;p&gt;taint의 옵션이 &lt;code&gt;NoSchedule&lt;/code&gt; 이므로 pod에 toleration 필드에 같은 key, value가 없다면 생성되지 않겠죠?
-확인해봅시다.&lt;/p&gt;
-
-&lt;h3 id=&quot;rocket테스트해보기&quot;&gt;:rocket:테스트해보기&lt;/h3&gt;
-&lt;p&gt;Deployment로 pod을 띄어보겠습니다.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;환경&lt;/strong&gt;:&lt;br /&gt;
-실습에 사용한 클러스터는 마스터노드1개 워커노드3개로 구성되었으며,
-&lt;br /&gt;
-이름은 다음과 같고, 워커노드들의 cpu와 ram스팩은 모두 같게 설정하였습니다. &lt;br /&gt;
-taint는 worker-1 노드에 설정하였습니다.
-master&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;worker-1&lt;/li&gt;
-  &lt;li&gt;worker-2&lt;/li&gt;
-  &lt;li&gt;instance-1&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;우선 pod을 세개 생성하는 test-taint.yaml이라는 deployment를 만들어줍니다&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl create deployment test-taint &lt;span class=&quot;nt&quot;&gt;--image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;nginx &lt;span class=&quot;nt&quot;&gt;--replicas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3 &lt;span class=&quot;nt&quot;&gt;--dry-run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;client &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; yaml &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; test-taint.yaml
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;yaml파일을 열어보면 이렇습니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Deployment&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;creationTimestamp&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;null&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test-taint&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test-taint&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;replicas&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;matchLabels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test-taint&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;strategy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{}&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;creationTimestamp&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;null&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test-taint&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;resources&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{}&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;만들어진 yaml파일을 apply 해봅시다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; test-taint.yaml
-deployment.apps/test-taint created
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;pod을 확인해보면 taint를 설정한 node에는 pod이 배정되지 않은것을 확인 할 수 있습니다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get pods &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; wide
-NAME                          READY   STATUS    RESTARTS   AGE    IP           NODE         NOMINATED NODE   READINESS GATES
-test-taint-6bd4977499-2thmv   1/1     Running   0          106s   10.244.3.7   instance-1   &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
-test-taint-6bd4977499-4sccs   1/1     Running   0          106s   10.244.1.6   worker-2     &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
-test-taint-6bd4977499-h4rt8   1/1     Running   0          106s   10.244.3.8   instance-1   &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;이제 이 deployment를 삭제하고 toleration을 적용시킨후 다시 deployment를 apply 해보겠습니다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl delete deployment test-taint
-deployment.apps &lt;span class=&quot;s2&quot;&gt;&quot;test-taint&quot;&lt;/span&gt; deleted
-
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vim test-taint.yaml
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;spec.template.spec 밑에 toleration옵션을 추가해줍니다.&lt;/p&gt;
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;apps/v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Deployment&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;creationTimestamp&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;null&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test-taint&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test-taint&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;replicas&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;matchLabels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test-taint&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;strategy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{}&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;creationTimestamp&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;null&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test-taint&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;tolerations&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;key&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Equal&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;value&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;effect&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;NoSchedule&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;resources&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{}&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;수정된 yaml파일 다시 배포하기:&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; test-taint.yaml
-deployment.apps/test-taint created
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;pod 리스트를 다시 확인해보면 각 1개의노드에 1개의 pod이 생성된걸 확인할 수 있습니다.&lt;/p&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ kubectl get pods -o wide
-NAME                          READY   STATUS    RESTARTS   AGE   IP           NODE         NOMINATED NODE   READINESS GATES
-test-taint-77b85b88c6-8hq5l   1/1     Running   0          43s   10.244.3.9   instance-1   &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
-test-taint-77b85b88c6-957bv   1/1     Running   0          43s   10.244.1.7   worker-2     &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
-test-taint-77b85b88c6-f6xn2   1/1     Running   0          43s   10.244.2.8   worker-1     &amp;lt;none&amp;gt;           &amp;lt;none&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">Taint &amp;amp; Toleration taint: 노드마다 설정가능 toleration: taint를 무시할 수 있음 주로 노드를 지정된 역할만 하게할때 사용합니다. 예를들어 gpu잇는 노드에는 다른 pod들은 올라가지않고 gpu쓰는 pod들만 올라가게 하는등의 상황에 사용할 수 있습니다. taint에는 사용할 수 있는 3가지 옵션이 있습니다. NoSchedule : toleration이 없으면 pod이 스케쥴되지 않음, 기존 실행되던 pod에는 적용 안됨 PreferNoSchedule : toleration이 없으면 pod을 스케줄링안하려고 하지만 필수는 아님, 클러스터내에 자원이 부족하거나 하면 taint가 걸려있는 노드에서도 pod이 스케줄링될 수 있음 NoExecute : toleration이 없으면 pod이 스케줄되지 않으며 기존에 실행되던 pod도 toleration이 없으면 종료시킴. taint 형식은 다음과 같습니다. $ kubectl taint node {nodename} {key}={value}:{option} 하나의 노드에 taint 적용하기 $ kubectl taint node worker-1 key=value:NoSchedule node/worker-1 tainted describe로 잘 적용 되었는지 확인해 봅시다. $ kubectl describe node worker-1 | grep -i taint Taints: key=value:NoSchedule 잘 적용이 되었군요. taint의 옵션이 NoSchedule 이므로 pod에 toleration 필드에 같은 key, value가 없다면 생성되지 않겠죠? 확인해봅시다. :rocket:테스트해보기 Deployment로 pod을 띄어보겠습니다. 환경: 실습에 사용한 클러스터는 마스터노드1개 워커노드3개로 구성되었으며, 이름은 다음과 같고, 워커노드들의 cpu와 ram스팩은 모두 같게 설정하였습니다. taint는 worker-1 노드에 설정하였습니다. master worker-1 worker-2 instance-1 우선 pod을 세개 생성하는 test-taint.yaml이라는 deployment를 만들어줍니다 $ kubectl create deployment test-taint --image=nginx --replicas=3 --dry-run=client -o yaml &amp;gt; test-taint.yaml yaml파일을 열어보면 이렇습니다. kind: Deployment metadata: creationTimestamp: null labels: app: test-taint name: test-taint spec: replicas: 3 selector: matchLabels: app: test-taint strategy: {} template: metadata: creationTimestamp: null labels: app: test-taint spec: containers: - image: nginx name: nginx resources: {} status: {} 만들어진 yaml파일을 apply 해봅시다. $ kubectl apply -f test-taint.yaml deployment.apps/test-taint created pod을 확인해보면 taint를 설정한 node에는 pod이 배정되지 않은것을 확인 할 수 있습니다. $ kubectl get pods -o wide NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES test-taint-6bd4977499-2thmv 1/1 Running 0 106s 10.244.3.7 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-6bd4977499-4sccs 1/1 Running 0 106s 10.244.1.6 worker-2 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-6bd4977499-h4rt8 1/1 Running 0 106s 10.244.3.8 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 이제 이 deployment를 삭제하고 toleration을 적용시킨후 다시 deployment를 apply 해보겠습니다. $ kubectl delete deployment test-taint deployment.apps &quot;test-taint&quot; deleted $ vim test-taint.yaml spec.template.spec 밑에 toleration옵션을 추가해줍니다. apiVersion: apps/v1 kind: Deployment metadata: creationTimestamp: null labels: app: test-taint name: test-taint spec: replicas: 3 selector: matchLabels: app: test-taint strategy: {} template: metadata: creationTimestamp: null labels: app: test-taint spec: tolerations: - key: key operator: Equal value: value effect: NoSchedule containers: - image: nginx name: nginx resources: {} status: {} 수정된 yaml파일 다시 배포하기: $ kubectl apply -f test-taint.yaml deployment.apps/test-taint created pod 리스트를 다시 확인해보면 각 1개의노드에 1개의 pod이 생성된걸 확인할 수 있습니다. $ kubectl get pods -o wide NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES test-taint-77b85b88c6-8hq5l 1/1 Running 0 43s 10.244.3.9 instance-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-77b85b88c6-957bv 1/1 Running 0 43s 10.244.1.7 worker-2 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; test-taint-77b85b88c6-f6xn2 1/1 Running 0 43s 10.244.2.8 worker-1 &amp;lt;none&amp;gt; &amp;lt;none&amp;gt;</summary></entry></feed>
+따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="static" /><category term="pod" /><summary type="html">Static pods이란 제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다. 각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다. 우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다 $ kubectl get nodes -o wide NAME STATUS ROLES AGE VERSION instance-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 master Ready control-plane,master 3d3h v1.21.1 worker-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 worker-2 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 #worker 에 접속하기 $ ssh -i ~/.ssh/rsa-gcp-worker-1 shjeong920522@10.178.0.5 특징 1 kubelet 은 기본적으로 /etc/kubernetes/manifests 파일안의 pod.yaml 을 바라보는데, 이는 kubelet.service 의 config.yaml파일안에 staticPodPath에 정의되어있습니다. 직접 확인해봅시다 우선 아래 커맨드를 입력하여 config.yaml파일의 위치를 알아냅니다 # 모든서비스 확장 | kubelet 정보중에서 | --config 포함하는줄 가져오기 $ ps -ef | grep kubelet | grep &quot;\--config&quot; root 18270 1 1 May28 ? 01:31:14 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.4.1 해당 파일을 확인해 봅시다 $ sudo vi config=/var/lib/kubelet/config.yaml apiVersion: kubelet.config.k8s.io/v1beta1 authentication: anonymous: enabled: false webhook: cacheTTL: 0s enabled: true x509: clientCAFile: /etc/kubernetes/pki/ca.crt authorization: mode: Webhook webhook: cacheAuthorizedTTL: 0s cacheUnauthorizedTTL: 0s cgroupDriver: systemd clusterDNS: - 10.96.0.10 clusterDomain: cluster.local cpuManagerReconcilePeriod: 0s evictionPressureTransitionPeriod: 0s fileCheckFrequency: 0s healthzBindAddress: 127.0.0.1 healthzPort: 10248 httpCheckFrequency: 0s imageMinimumGCAge: 0s kind: KubeletConfiguration logging: {} nodeStatusReportFrequency: 0s nodeStatusUpdateFrequency: 0s resolvConf: /run/systemd/resolve/resolv.conf rotateCertificates: true runtimeRequestTimeout: 0s shutdownGracePeriod: 0s shutdownGracePeriodCriticalPods: 0s staticPodPath: /etc/kubernetes/manifests &amp;lt;------------------------------ staticPodPath 가 설정되어 있는것을 확인할 수 있습니다. streamingConnectionIdleTimeout: 0s syncFrequency: 0s volumeStatsAggPeriod: 0s 위와 같이 파일을 통으로 확인해보아도 되지만 grep명령어를 사용하면 더욱 편히 찾을 수도 있습니다. $ sudo grep static /var/lib/kubelet/config.yaml staticPodPath: /etc/kubernetes/manifests 특징 2 만약 해동 폴더내에 kind: Pod인 yaml 파일이있다면 kubelet이 자동으로 이를 생성하며 static pod의 이름에는 자동으로 해당 노드의 이름이 suffix로 붙습니다. 잘 생성되나 확인해 봅시다. $ cd /etc/kubernetes/manifests $ sudo vi static.yaml 간단한 pod을 해당 볼더에 생성해줍니다. #static.yaml apiVersion: v1 kind: Pod metadata: name: myapp-pod labels: app: myapp type: front-end spec: containers: - name: nginx-container image: nginx 마스터 노드로 이동하여 확인해봅시다. $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 42m static pod를 생성한 노드의 이름인 worker-1 가 Pod이름의 suffix로 붙어있는것을 확인할 수 있습니다. 특징 3 마스터노드에서 kubectl delete 명령어를 사용하더라도 워커노드의 kubelet이 다시 살려냅니다. static pod는 해당 워커노드의 kubelet이 관리하기 떄문입니다. 따라서 해당 pod의 image를 변경하고싶다면 manifest 폴더안의 해당 yaml파일의 이미지를 수정해야하고, 지우려면 해당 yaml파일을 삭제하면 됩니다. 그럼 정말로 다시 시작되는지 마스터노드에서 myapp-pod-worker-1을 삭제해 봅시다 $ kubectl delete pod myapp-pod-worker-1 pod &quot;myapp-pod-worker-1&quot; deleted 지운다음에 바로 확인해보면 $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 0/1 Pending 0 1s kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다. 따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.</summary></entry></feed>
