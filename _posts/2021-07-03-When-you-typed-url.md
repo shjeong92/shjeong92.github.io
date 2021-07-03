@@ -280,7 +280,7 @@ CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이
 
     자세한건  [http://dev.w3.org/csswg/css2/](http://dev.w3.org/csswg/css2/) 와 [http://www.w3.org/Style/CSS/](http://www.w3.org/Style/CSS/)current-work 참조하세요
 
-7. 페이지의 어느 부분을 그룹으로 애니메이션화 할 수 있는지 설명하는 레이어를 만듦. frame/render object는 layer에 할당합니다
+7. 페이지의 어느 부분을 그룹으로 애니메이션화 할 수 있는지 설명하는 레이어를 만듭니다. frame/render object는 layer에 할당합니다
 
 8. 텍스처는 페이지의 각 레이어에 할당합니다
 
