@@ -1,15 +1,29 @@
-<!DOCTYPE html><html lang="ko">
-  <head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #3 ] Dockerfile에서 자주 쓰이는 명령어 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #3 ] Dockerfile에서 자주 쓰이는 명령어 - Hyuk's devlog</title>
 
 <meta name="description" content="Dockerfile 포멧하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.# 주석(Comment)명령어(INSTRUCTION) 인자(arguments)각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/22/Learning-Docker-03.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -254,55 +268,81 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
-      </nav></div>
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
 
               <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
 </aside></div>
 
-              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #3 ] Dockerfile에서 자주 쓰이는 명령어</h1></header></div><meta itemprop="headline" content="[ #3 ] Dockerfile에서 자주 쓰이는 명령어"><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Docker">Docker</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=network">network</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%AA%85%EB%A0%B9%EC%96%B4">명령어</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 22일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-22T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너,명령어"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #3 ] Dockerfile에서 자주 쓰이는 명령어</h1></header></div>
+<meta itemprop="headline" content="[ #3 ] Dockerfile에서 자주 쓰이는 명령어">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=network">network</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%AA%85%EB%A0%B9%EC%96%B4">명령어</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 05월 22일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-05-22T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너,명령어">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p><br /></p>
+<div class="article__content" itemprop="articleBody">
+<p><br></p>
 <h2 id="dockerfile-포멧">Dockerfile 포멧</h2>
 
 <p>하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.</p>
@@ -313,7 +353,7 @@
 
 <p>각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다.</p>
 
-<hr />
+<hr>
 
 <h2 id="from-명령문">FROM 명령문</h2>
 
@@ -337,7 +377,7 @@
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> node:latest</span>
 </code></pre></div></div>
 
-<hr />
+<hr>
 
 <h2 id="workdir-명령문">WORKDIR 명령문</h2>
 <p><code>WORKDIR</code> 명령문은 쉘의 <code>cd</code> 와 같습니다.
@@ -353,7 +393,7 @@
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">WORKDIR</span><span class="s"> /usr/test</span>
 </code></pre></div></div>
 
-<hr />
+<hr>
 
 <h2 id="run-명령문">RUN 명령문</h2>
 
@@ -385,7 +425,7 @@
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nt">-t</span> cmd_test <span class="nb">.</span>
 </code></pre></div></div>
 
-<hr />
+<hr>
 
 <h2 id="entrypoint-명령문">ENTRYPOINT 명령문</h2>
 
@@ -436,7 +476,7 @@
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">EXPOSE</span><span class="s"> 80/udp</span>
 </code></pre></div></div>
 
-<hr />
+<hr>
 
 <h2 id="copyadd-명령문">COPY/ADD 명령문</h2>
 
@@ -457,7 +497,7 @@
 일반 파일이외에도 압축파일이나 네트워크 상의 파일도 사용할 수 있습니다. 공식문서에 의하면, 이러한 특수경우가 아닐경우 <code>COPY</code> 를 사용하는것이
 권장됩니다.</p>
 
-<hr />
+<hr>
 
 <h2 id="env-명령문">ENV 명령문</h2>
 
@@ -475,7 +515,7 @@
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ENV</span><span class="s"> DB_PASS 1234</span>
 </code></pre></div></div>
 
-<hr />
+<hr>
 
 <h2 id="arg-명령문">ARG 명령문</h2>
 
@@ -484,7 +524,7 @@
 </code></pre></div></div>
 
 <p><code>ARG</code> 명령문은 <code>docker build</code> 커맨드로 이미지를 빌드 할때, <code>--build-arg</code> 옵션을 추가하여 넘길 수 있는 인자를 정의하기 위해 사용합니다.
-<br />
+<br>
 예를 들어, Dockerfile에 다음과 같이 ARG 명령문으로 port를 인자로 선언해주면,</p>
 
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ARG</span><span class="s"> port</span>
@@ -506,12 +546,26 @@
 <div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CMD</span><span class="s"> start.sh -h 127.0.0.1 -p ${port}</span>
 </code></pre></div></div>
 
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-22T00:00:00+09:00"><!-- start custom article footer snippet -->
+</div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-05-22T00:00:00+09:00">
+<!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/05/20/Learning-Docker-02.html">[ #2 ] Docker 네트워크 사용하기 </a></div><div class="next"><span>다음</span><a href="/2021/05/26/Learning-Kubernetes-01.html">[ #1 ] Kubernetes의 구조</a></div></div></div>
+<div class="article__section-navigator clearfix">
+<div class="previous">
+<span>이전</span><a href="/2021/05/20/Learning-Docker-02.html">[ #2 ] Docker 네트워크 사용하기 </a>
+</div>
+<div class="next">
+<span>다음</span><a href="/2021/05/26/Learning-Kubernetes-01.html">[ #1 ] Kubernetes의 구조</a>
+</div>
+</div>
+</div>
 
 </div>
 
@@ -540,30 +594,39 @@
   });
 })();
 </script>
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div>
+<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div></div>
+<div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main"><div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a></ul>
+      </a>
+</li></ul>
 </div>
 </div>
-    </div><div class="site-info mt-2">
+    </div>
+<div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
-        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div></div>
-    </div><script>(function() {
+</div>
+</div>
+    </div>
+<script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -627,7 +690,8 @@
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -719,7 +783,7 @@
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
+        <input type="text">
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -843,7 +907,8 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div></div>
+</div>
+</div>
 
 
 <script>(function() {
@@ -1154,4 +1219,3 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 </script>
   </body>
 </html>
-

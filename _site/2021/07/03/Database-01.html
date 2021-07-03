@@ -1,15 +1,29 @@
-<!DOCTYPE html><html lang="ko">
-  <head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #1 ] MySQL의 구조 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #1 ] MySQL의 구조 - Hyuk's devlog</title>
 
 <meta name="description" content="이때까지는 데이터베이스를 단순히 사용만 해왔었는데요, 알고 제대로 써야겠다고 생각하여 기초부터 공부해려고 합니다.본 포스팅은 유튜브 생활코딩님의 데이터베이스 강좌를 보고 정리한 내용입니다.1. MySQL의 구조관계형 데이터베이스는 엑셀과 같은 스프레드시트에 데이터를 저장합니다 즉 ...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/07/03/Database-01.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="canonical" href="https://shjeong92.github.io/2021/07/03/Database-01.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -254,43 +268,69 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
-      </nav></div>
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
 
               <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
 </aside></div>
 
-              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #1 ] MySQL의 구조</h1></header></div><meta itemprop="headline" content="[ #1 ] MySQL의 구조"><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Database">Database</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=MySQL">MySQL</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 07월 03일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-07-03T00:00:00+09:00">
-    <meta itemprop="keywords" content="Database,MySQL"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #1 ] MySQL의 구조</h1></header></div>
+<meta itemprop="headline" content="[ #1 ] MySQL의 구조">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Database">Database</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=MySQL">MySQL</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 03일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-07-03T00:00:00+09:00">
+    <meta itemprop="keywords" content="Database,MySQL">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>이때까지는 데이터베이스를 단순히 사용만 해왔었는데요, 알고 제대로 써야겠다고 생각하여 기초부터 공부해려고 합니다.</p>
+<div class="article__content" itemprop="articleBody">
+<p>이때까지는 데이터베이스를 단순히 사용만 해왔었는데요, 알고 제대로 써야겠다고 생각하여 기초부터 공부해려고 합니다.</p>
 
 <p>본 포스팅은 유튜브 <a href="https://www.youtube.com/channel/UCvc8kv-i5fvFTJBFAk6n1SA">생활코딩</a>님의 데이터베이스 강좌를 보고 정리한 내용입니다.</p>
 
@@ -316,7 +356,7 @@ MySql에서는 서로 연관된 표들을 그루핑해서 연관되어있지 않
 
 <p>그림으로 보면 아래와 같습니다.</p>
 
-<p><img src="https://user-images.githubusercontent.com/75003424/124347638-a594f900-dc20-11eb-863a-00c4aa3ea5e3.png" alt="mysql구조" /></p>
+<p><img src="https://user-images.githubusercontent.com/75003424/124347638-a594f900-dc20-11eb-863a-00c4aa3ea5e3.png" alt="mysql구조"></p>
 
 <h3 id="2-db-사용의-장점">2. DB 사용의 장점</h3>
 <p>데이터베이스는 자체적인 안전 체계가 있기에 데이터를 안전하게 보관할 수 있습니다</p>
@@ -327,15 +367,18 @@ MySql에서는 서로 연관된 표들을 그루핑해서 연관되어있지 않
 <p>brew를 통해서 처음 mysql을 설치하면 root에 password가 설정되어있지 않은데 이를 설정해봅시다</p>
 <ol>
   <li>먼저 MySQL은 멈춰있어야 합니다. 아래 커맨드를 입력해 종료해 줍시다.
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>brew services stop mysql
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>brew services stop mysql
 </code></pre></div>    </div>
   </li>
   <li>그다음 mysql을 안전모드로 실행합니다.
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>mysqld_safe <span class="nt">--skip-grant-tables</span>
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>mysqld_safe <span class="nt">--skip-grant-tables</span>
 </code></pre></div>    </div>
   </li>
   <li>터미널을 하나 더 열고 password를 초기화해줍니다.
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql -u root
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>mysql -u root
 UPDATE mysql.user SET authentication_string=null 
 WHERE User='root';
 FLUSH PRIVILEGES;
@@ -343,23 +386,39 @@ exit;
 </code></pre></div>    </div>
   </li>
   <li>마지막으로 새로운 비밀번호를 설정해주면 끝입니다.
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql -u root
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>mysql -u root
 ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'yourpasswd';
 </code></pre></div>    </div>
   </li>
   <li>비밀번호와 함께 서버접속 하기
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>mysql <span class="nt">-u</span> root <span class="nt">-p</span>
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>mysql <span class="nt">-u</span> root <span class="nt">-p</span>
 Enter password: &lt;yourpassword&gt;
 </code></pre></div>    </div>
   </li>
 </ol>
 
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-07-03T00:00:00+09:00"><!-- start custom article footer snippet -->
+</div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-07-03T00:00:00+09:00">
+<!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/07/01/Interview-01.html">첫 면접</a></div><div class="next"><span>다음</span><a href="/2021/07/03/When-you-typed-url.html">브라우저에 URL을 입력했을 때 일어나는 일들</a></div></div></div>
+<div class="article__section-navigator clearfix">
+<div class="previous">
+<span>이전</span><a href="/2021/07/01/Interview-01.html">첫 면접</a>
+</div>
+<div class="next">
+<span>다음</span><a href="/2021/07/03/Database-02.html">[ #2 ] 스키마의 사용</a>
+</div>
+</div>
+</div>
 
 </div>
 
@@ -388,30 +447,39 @@ Enter password: &lt;yourpassword&gt;
   });
 })();
 </script>
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div>
+<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div></div>
+<div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main"><div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a></ul>
+      </a>
+</li></ul>
 </div>
 </div>
-    </div><div class="site-info mt-2">
+    </div>
+<div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
-        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div></div>
-    </div><script>(function() {
+</div>
+</div>
+    </div>
+<script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -475,7 +543,8 @@ Enter password: &lt;yourpassword&gt;
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -567,7 +636,7 @@ Enter password: &lt;yourpassword&gt;
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
+        <input type="text">
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -691,7 +760,8 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div></div>
+</div>
+</div>
 
 
 <script>(function() {
@@ -1002,4 +1072,3 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 </script>
   </body>
 </html>
-

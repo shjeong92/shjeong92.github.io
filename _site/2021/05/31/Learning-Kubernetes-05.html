@@ -1,15 +1,29 @@
-<!DOCTYPE html><html lang="ko">
-  <head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #5 ] pod 스케쥴링-2  - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #5 ] pod 스케쥴링-2  - Hyuk's devlog</title>
 
-<meta name="description" content="nodeSelectornodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.1. 노드에 레이블 붙이기노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.kubectl label nodes &lt;노드 이름&...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="nodeSelectornodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.1. 노드에 레이블 붙이기노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.kubectl label nodes &lt;노드 이름&amp;...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -254,55 +268,81 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
-      </nav></div>
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
 
               <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
 </aside></div>
 
-              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #5 ] pod 스케쥴링-2 </h1></header></div><meta itemprop="headline" content="[ #5 ] pod 스케쥴링-2 "><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Docker">Docker</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Deployment">Deployment</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Google">Google</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=cloud">cloud</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #5 ] pod 스케쥴링-2 </h1></header></div>
+<meta itemprop="headline" content="[ #5 ] pod 스케쥴링-2 ">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Replicasets">Replicasets</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Deployment">Deployment</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Google">Google</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=cloud">cloud</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h2 id="nodeselector">nodeSelector</h2>
+<div class="article__content" itemprop="articleBody">
+<h2 id="nodeselector">nodeSelector</h2>
 <p>nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.</p>
 <h3 id="1-노드에-레이블-붙이기">1. 노드에 레이블 붙이기</h3>
 
@@ -345,7 +385,7 @@
 
 <h2 id="node-affinity">node affinity</h2>
 
-<p><strong>nodeSelector</strong> 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.<br /></p>
+<p><strong>nodeSelector</strong> 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.<br></p>
 
 <p><strong>nodeAffinity</strong> 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다.</p>
 
@@ -395,18 +435,21 @@ affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합
 <p>Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다.</p>
 
 <ul>
-  <li><strong>requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우</strong>:
+  <li>
+<strong>requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우</strong>:
     <ul>
       <li>조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다.</li>
     </ul>
   </li>
-  <li><strong>requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우</strong>:
+  <li>
+<strong>requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우</strong>:
     <ul>
       <li>첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다.</li>
       <li>두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다.</li>
     </ul>
   </li>
-  <li><strong>preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우</strong>:
+  <li>
+<strong>preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우</strong>:
     <ul>
       <li>조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다.</li>
     </ul>
@@ -414,15 +457,29 @@ affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합
 </ul>
 
 <p>위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 <strong>requiredDuringSchedulingIgnoredDuringExecution</strong> 을 만족하는 노드가 없다면 해당 pod은 pending 상태가
-될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 <strong>preferredDuringSchedulingIgnoredDuringExecution</strong> 조건이 맞는 노드로 배정 될 것입니다. <br /></p>
+될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 <strong>preferredDuringSchedulingIgnoredDuringExecution</strong> 조건이 맞는 노드로 배정 될 것입니다. <br></p>
 
 <p><code>weight</code> 는 선호도입니다 만약 여러개의 <strong>preferredDuringSchedulingIgnoredDuringExecution</strong> 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.</p>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-31T00:00:00+09:00"><!-- start custom article footer snippet -->
+</div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-05-31T00:00:00+09:00">
+<!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/05/30/Learning-Kubernetes-04.html">[ #4 ] pod 스케쥴링-1 </a></div><div class="next"><span>다음</span><a href="/2021/05/31/Learning-Kubernetes-06.html">[ #6 ] static pod</a></div></div></div>
+<div class="article__section-navigator clearfix">
+<div class="previous">
+<span>이전</span><a href="/2021/05/30/Learning-Kubernetes-04.html">[ #4 ] pod 스케쥴링-1 </a>
+</div>
+<div class="next">
+<span>다음</span><a href="/2021/05/31/Learning-Kubernetes-06.html">[ #6 ] static pod</a>
+</div>
+</div>
+</div>
 
 </div>
 
@@ -451,30 +508,39 @@ affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합
   });
 })();
 </script>
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div>
+<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div></div>
+<div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main"><div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a></ul>
+      </a>
+</li></ul>
 </div>
 </div>
-    </div><div class="site-info mt-2">
+    </div>
+<div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
-        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div></div>
-    </div><script>(function() {
+</div>
+</div>
+    </div>
+<script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -538,7 +604,8 @@ affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -630,7 +697,7 @@ affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
+        <input type="text">
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -754,7 +821,8 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div></div>
+</div>
+</div>
 
 
 <script>(function() {
@@ -1065,4 +1133,3 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 </script>
   </body>
 </html>
-

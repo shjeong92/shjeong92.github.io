@@ -1,15 +1,29 @@
-<!DOCTYPE html><html lang="ko">
-  <head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #4 ] pod 스케쥴링-1  - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #4 ] pod 스케쥴링-1  - Hyuk's devlog</title>
 
 <meta name="description" content="Taint &amp; Toleration  taint: 노드마다 설정가능  toleration: taint를 무시할 수 있음주로 노드를 지정된 역할만 하게할때 사용합니다.예를들어 gpu잇는 노드에는 다른 pod들은 올라가지않고 gpu쓰는 pod들만 올라가게 하는등의 상황에 사용할 ...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/30/Learning-Kubernetes-04.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -356,7 +370,7 @@ node/worker-1 tainted
 </code></pre></div></div>
 
 <p>describe로 잘 적용 되었는지 확인해 봅시다.</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl describe node worker-1 | <span class="nb">grep</span> <span class="nt">-i</span> taint
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="se">\$</span> kubectl describe node worker-1 | <span class="nb">grep</span> <span class="nt">-i</span> taint
 Taints:             <span class="nv">key</span><span class="o">=</span>value:NoSchedule
 </code></pre></div></div>
 <p>잘 적용이 되었군요.</p>
@@ -1147,4 +1161,3 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 </script>
   </body>
 </html>
-

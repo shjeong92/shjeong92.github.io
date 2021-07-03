@@ -1,15 +1,29 @@
-<!DOCTYPE html><html lang="ko">
-  <head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #8 ] 클러스터 유지보수 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #8 ] 클러스터 유지보수 - Hyuk's devlog</title>
 
 <meta name="description" content="오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다.쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다.그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="canonical" href="https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -404,9 +418,9 @@ static pod을 생성한 yaml파일 자체를 수정한다고 했었죠?</p>
 <p>static pod의 위치를 찾는것 부터 복습해봅시다</p>
 
 <p>우선 config.yaml파일의 위치를 찾아줍니다.</p>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ps <span class="nt">-ef</span> | <span class="nb">grep </span>kubelet | <span class="nb">grep</span> <span class="s2">"</span><span class="se">\-</span><span class="s2">-config"</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="se">\$</span> ps <span class="nt">-ef</span> | <span class="nb">grep </span>kubelet | <span class="nb">grep</span> <span class="se">\"\-</span><span class="nt">-config</span><span class="se">\"</span>
 
-root     10476     1  3 May28 ?        05:09:26 /usr/bin/kubelet <span class="nt">--bootstrap-kubeconfig</span><span class="o">=</span>/etc/kubernetes/bootstrap-kubelet.conf <span class="nt">--kubeconfig</span><span class="o">=</span>/etc/kubernetes/kubelet.conf <span class="nt">--config</span><span class="o">=</span>/var/lib/kubelet/config.yaml <span class="nt">--network-plugin</span><span class="o">=</span>cni <span class="nt">--pod-infra-container-image</span><span class="o">=</span>k8s.gcr.io/pause:3.4.1
+root     10476     1  3 May28 ?        05\:09\:26 /usr/bin/kubelet <span class="nt">--bootstrap-kubeconfig</span><span class="o">=</span>/etc/kubernetes/bootstrap-kubelet.conf <span class="nt">--kubeconfig</span><span class="o">=</span>/etc/kubernetes/kubelet.conf <span class="nt">--config</span><span class="o">=</span>/var/lib/kubelet/config.yaml <span class="nt">--network-plugin</span><span class="o">=</span>cni <span class="nt">--pod-infra-container-image</span><span class="o">=</span>k8s.gcr.io/pause:3.4.1
 </code></pre></div></div>
 
 <p>config.yaml파일 내에서 staticpath를 찾아냅시다</p>
@@ -432,9 +446,9 @@ staticPodPath: /etc/kubernetes/manifests
   <span class="na">annotations</span><span class="pi">:</span>
     <span class="s">kubernetes.io/config.hash</span><span class="pi">:</span> <span class="s">47cace34a635d6f3e305eee20e0e7b30</span>
     <span class="s">kubernetes.io/config.mirror</span><span class="pi">:</span> <span class="s">47cace34a635d6f3e305eee20e0e7b30</span>
-    <span class="s">kubernetes.io/config.seen</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2021-05-28T03:40:42.961803243Z"</span>
+    <span class="s">kubernetes.io/config.seen</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2021-05-28T03\:40\:42.961803243Z"</span>
     <span class="s">kubernetes.io/config.source</span><span class="pi">:</span> <span class="s">file</span>
-  <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2021-05-28T03:40:55Z"</span>
+  <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2021-05-28T03\:40\:55Z"</span>
   <span class="na">labels</span><span class="pi">:</span>
     <span class="na">component</span><span class="pi">:</span> <span class="s">kube-controller-manager</span>
     <span class="na">tier</span><span class="pi">:</span> <span class="s">control-plane</span>
@@ -600,7 +614,7 @@ apt-mark hold kubeadm
 
 <span class="c">#버전 확인해주기</span>
 <span class="nv">$ </span>kubeadm version
-kubeadm version: &amp;version.Info<span class="o">{</span>Major:<span class="s2">"1"</span>, Minor:<span class="s2">"21"</span>, GitVersion:<span class="s2">"v1.21.1"</span>, GitCommit:<span class="s2">"5e58841cce77d4bc13713ad2b91fa0d961e69192"</span>, GitTreeState:<span class="s2">"clean"</span>, BuildDate:<span class="s2">"2021-05-12T14:17:27Z"</span>, GoVersion:<span class="s2">"go1.16.4"</span>, Compiler:<span class="s2">"gc"</span>, Platform:<span class="s2">"linux/amd64"</span><span class="o">}</span>
+kubeadm version: &amp;version.Info<span class="o">{</span>Major:<span class="s2">"1"</span>, Minor:<span class="s2">"21"</span>, GitVersion:<span class="s2">"v1.21.1"</span>, GitCommit:<span class="s2">"5e58841cce77d4bc13713ad2b91fa0d961e69192"</span>, GitTreeState:<span class="s2">"clean"</span>, BuildDate:<span class="s2">"2021-05-12T14\:17\:27Z"</span>, GoVersion:<span class="s2">"go1.16.4"</span>, Compiler:<span class="s2">"gc"</span>, Platform:<span class="s2">"linux/amd64"</span><span class="o">}</span>
 </code></pre></div></div>
 
 <p><strong>apt-mark unhold</strong>와 <strong>apt-mark hold</strong> 해주는 이유는 kubeadm을 업그레이드하면 설치시 kubelet과 같은 다른 구성 요소가 기본적으로 최신 버전 으로 자동으로 업그레이드되기 때문입니다. (kubernetes는 여러버전을 한꺼번에 업그레이드 권장하지 않기때문입니다!) 이를 해결하기 위해 보류를 사용하여 패키지를 보류 된 것으로 표시하여 패키지가 자동으로 설치, 업그레이드 또는 제거되지 않도록합니다.</p>
@@ -1404,4 +1418,3 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 </script>
   </body>
 </html>
-

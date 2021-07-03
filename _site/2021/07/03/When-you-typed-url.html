@@ -1,15 +1,29 @@
-<!DOCTYPE html><html lang="ko">
-  <head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>브라우저에 URL을 입력했을 때 일어나는 일들 - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>브라우저에 URL을 입력했을 때 일어나는 일들 - Hyuk's devlog</title>
 
 <meta name="description" content="이번 포스트 에서는 브라우저에 www.naver.com을 입력해보고 어떠한 일이 일어나는지 과정을 알아보겠습니다.1. 브라우저의 URL 파싱URL을 입력받은 부라우저는 먼저 해당 URL의 구조를 해석합니다.  어떤 프로토콜을 사용할지  어느 도메인으로 보낼지  어떤 포트로 보낼지해...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/07/03/When-you-typed-url.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="canonical" href="https://shjeong92.github.io/2021/07/03/When-you-typed-url.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -254,47 +268,73 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
-      </nav></div>
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
 
               <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
 </aside></div>
 
-              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>브라우저에 URL을 입력했을 때 일어나는 일들</h1></header></div><meta itemprop="headline" content="브라우저에 URL을 입력했을 때 일어나는 일들"><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80">브라우저</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 07월 03일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-07-03T00:00:00+09:00">
-    <meta itemprop="keywords" content="네트워크,브라우저"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>브라우저에 URL을 입력했을 때 일어나는 일들</h1></header></div>
+<meta itemprop="headline" content="브라우저에 URL을 입력했을 때 일어나는 일들">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80">브라우저</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 03일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-07-03T00:00:00+09:00">
+    <meta itemprop="keywords" content="네트워크,브라우저">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>이번 포스트 에서는 브라우저에 <em>www.naver.com</em>을 입력해보고 어떠한 일이 일어나는지 과정을 알아보겠습니다.</p>
+<div class="article__content" itemprop="articleBody">
+<p>이번 포스트 에서는 브라우저에 <em>www.naver.com</em>을 입력해보고 어떠한 일이 일어나는지 과정을 알아보겠습니다.</p>
 
 <h3 id="1-브라우저의-url-파싱">1. 브라우저의 URL 파싱</h3>
 
-<p><img src="https://user-images.githubusercontent.com/75003424/124287483-0671f200-db8b-11eb-9498-e17442d62bb7.png" alt="URL" /></p>
+<p><img src="https://user-images.githubusercontent.com/75003424/124287483-0671f200-db8b-11eb-9498-e17442d62bb7.png" alt="URL"></p>
 
 <p>URL을 입력받은 부라우저는 먼저 해당 URL의 구조를 해석합니다.</p>
 <ul>
@@ -319,7 +359,7 @@
 
 <p><strong>DNS 서버로 요청하는 과정</strong></p>
 
-<p><img src="https://user-images.githubusercontent.com/75003424/124294979-4b018b80-db93-11eb-9b92-8b44d6763a8b.gif" alt="dns" /></p>
+<p><img src="https://user-images.githubusercontent.com/75003424/124294979-4b018b80-db93-11eb-9b92-8b44d6763a8b.gif" alt="dns"></p>
 
 <ol>
   <li>PC는 미리 설정되어 있는 Local DNS에게 IP 주소를 물어봅니다.</li>
@@ -352,16 +392,16 @@
 </ul>
 
 <p><code class="language-plaintext highlighter-rouge">ARP Request</code></p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sender MAC: interface:mac:address:here
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sender MAC: interface\:mac\:address:here
 Sender IP: interface.ip.goes.here
-Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)
+Target MAC: FF\:FF\:FF\:FF\:FF:FF (Broadcast)
 Target IP: target.ip.goes.here
 </code></pre></div></div>
 
 <p><code class="language-plaintext highlighter-rouge">ARP Reply</code></p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sender MAC: target:mac:address:here
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sender MAC: target\:mac\:address:here
 Sender IP: target.ip.goes.here
-Target MAC: interface:mac:address:here
+Target MAC: interface\:mac\:address:here
 Target IP: interface.ip.goes.here
 </code></pre></div></div>
 
@@ -374,7 +414,7 @@ Target IP: interface.ip.goes.here
 
 <h3 id="5-대상과-tcp-통신을-통해-socket열기">5. 대상과 TCP 통신을 통해 Socket열기</h3>
 
-<p><img src="https://user-images.githubusercontent.com/75003424/124304948-607cb280-db9f-11eb-93c4-008c1425cda2.png" alt="3wayhswithtls" /></p>
+<p><img src="https://user-images.githubusercontent.com/75003424/124304948-607cb280-db9f-11eb-93c4-008c1425cda2.png" alt="3wayhswithtls"></p>
 
 <p>HTTPS 프로토콜을 사용하므로
 3-way handshake를 통하여 소켓을열고</p>
@@ -497,7 +537,7 @@ Connection: close
   <li>렌더링: DOM 트리 생성 -&gt; 트리 렌더링 -&gt; 렌더링 된 트리 배치 -&gt; 렌더링 된 트리 색칠</li>
 </ul>
 
-<p><img src="https://user-images.githubusercontent.com/75003424/124343524-07e10000-dc07-11eb-8c50-0e692fd76465.png" alt="rendering" /></p>
+<p><img src="https://user-images.githubusercontent.com/75003424/124343524-07e10000-dc07-11eb-8c50-0e692fd76465.png" alt="rendering"></p>
 
 <p>웹 브라우저의 기능은 서버에서 요청하고 브라우저 창에 표시하여 선택한 웹 리소스를 표시하는 것입니다. 리소스는 일반적으로 HTML문서이지만 PDF, 이미지 또는 다른 유형의 콘텐츠일 수도 있습니다. 자원의 위치는 URI(Uniform Resource Identifier)를 사용하여 사용자가 지정합니다.</p>
 
@@ -574,9 +614,9 @@ Connection: close
   </li>
 </ul>
 
-<p>일반적인 파싱 기술을 쓸 수 없으니, 브라우저는 임의의 파서를 활용해 HTML을 파싱합니다. 파싱 알고리즘은 토큰화와 트리생성의 단계로 이루워 져있습니다.</p>
+<p>일반적인 파싱 기술을 쓸 수 없으니, 브라우저는 임의의 파서를 활용해 HTML을 파싱합니다. 파싱 알고리즘은 아래와 같이 <strong>토큰화와 트리생성</strong>의 단계로 이루워 져있습니다.</p>
 
-<p><img src="https://user-images.githubusercontent.com/75003424/124343711-b174c100-dc08-11eb-819f-98ddc4f021c2.png" alt="parser" /></p>
+<p><img src="https://user-images.githubusercontent.com/75003424/124343711-b174c100-dc08-11eb-819f-98ddc4f021c2.png" alt="parser"></p>
 
 <p>자세한 정보는 <a href="https://www.w3.org/TR/2011/WD-html5-20110405/parsing.html#parsing">이곳</a>에서 확인가능합니다.</p>
 
@@ -648,12 +688,21 @@ CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이
 </ul>
 
 <p>렌더링이 완료된 후 브라우저는 Javascript 실행을 통해 DOM과 CSSOM이 변경 될 수 있는데 레이아웃이 수정 되는 경우 페이지 렌더링 및 페인팅을 다시 수행합니다.</p>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-07-03T00:00:00+09:00"><!-- start custom article footer snippet -->
+</div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-07-03T00:00:00+09:00">
+<!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/07/03/Database-01.html">[ #1 ] MySQL의 구조</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous">
+<span>이전</span><a href="/2021/07/03/Database-03.html">[ #3 ] SQL과 테이블의 구조</a>
+</div></div>
+</div>
 
 </div>
 
@@ -682,30 +731,39 @@ CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이
   });
 })();
 </script>
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div>
+<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div></div>
+<div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main"><div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a></ul>
+      </a>
+</li></ul>
 </div>
 </div>
-    </div><div class="site-info mt-2">
+    </div>
+<div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
-        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div></div>
-    </div><script>(function() {
+</div>
+</div>
+    </div>
+<script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -769,7 +827,8 @@ CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -861,7 +920,7 @@ CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
+        <input type="text">
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -985,7 +1044,8 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div></div>
+</div>
+</div>
 
 
 <script>(function() {
@@ -1296,4 +1356,3 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 </script>
   </body>
 </html>
-

@@ -5,10 +5,10 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>깃헙 history를 주물러봅시다 - Hyuk's devlog</title>
+<title>[ #3 ] SQL과 테이블의 구조 - Hyuk's devlog</title>
 
-<meta name="description" content="서론때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/14/Github-01.html">
+<meta name="description" content="SQL이란StructuredQueryLanguage의 약자이며 아래와 같은 특징을 가집니다.특징  SQL은 어떤 컴퓨터 언어보다 쉽습니다.  관계형 데이터베이스라는 카테고리에 속하는 제품들이 공통적으로 데이터베이스서버를 제어할 때 쓰이는 표준화된 언어이기에 매우 중요합니다.-&amp;gt...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/07/03/Database-03.html">
 <link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
 <!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
@@ -306,144 +306,313 @@
 <!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>깃헙 history를 주물러봅시다</h1></header></div>
-<meta itemprop="headline" content="깃헙 history를 주물러봅시다">
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #3 ] SQL과 테이블의 구조</h1></header></div>
+<meta itemprop="headline" content="[ #3 ] SQL과 테이블의 구조">
 <div class="article__info clearfix">
 <ul class="left-col menu">
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Github">Github</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Database">Database</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Commit">Commit</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SVN">SVN</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=history">history</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=modify">modify</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=MySQL">MySQL</a>
             </li>
 </ul>
 <ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 03일</span>
             </li></ul>
 </div>
 <meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
-    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify">
+<meta itemprop="datePublished" content="2021-07-03T00:00:00+09:00">
+    <meta itemprop="keywords" content="Database,MySQL">
 <div class="js-article-content">
 <div class="layout--article">
 <!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody">
-<h2 id="서론">서론</h2>
+<h3 id="sql이란">SQL이란</h3>
 
-<p>때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.</p>
+<p><strong>S</strong>tructured</p>
 
-<p>얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Gitguardian에 sign한적도 없는데 실수로 민감한 정보를 올릴때마다 Alert 메일을 보내옵니다.</p>
+<p><strong>Q</strong>uery</p>
 
-<hr>
+<p><strong>L</strong>anguage</p>
 
-<p>과거에 저는 새로운 커밋으로 덮으면 과거 기록은 못 보는줄 알고 얼른 비밀번호를 환경변수로 바꾼후 다시 푸시 했었습니다. 하지만 commits history를 보면 비밀번호에 관한정보는 그대로 담겨있었고 history 수정 방법을 몰라 쌓아왔던 잔디를 포기하며 새로운 repo를 파서 다시 푸시했었습니다. 잔디들을 잃는 고통은 뼈를깎는 고통과 같았지만 어쩔 수 없었습니다.</p>
+<p>의 약자이며 아래와 같은 특징을 가집니다.</p>
 
-<hr>
+<h4 id="특징">특징</h4>
+<ol>
+  <li>SQL은 어떤 컴퓨터 언어보다 쉽습니다.</li>
+  <li>관계형 데이터베이스라는 카테고리에 속하는 제품들이 공통적으로 데이터베이스서버를 제어할 때 쓰이는 표준화된 언어이기에 매우 중요합니다.</li>
+</ol>
 
-<p>하지만 이번에는 얘기가 달랐습니다. <br>
-이 2주동안 진행한 개인 프로젝트였는데 14일치의 잔디(총 50+ commits) 들을 통으로 없애기는 정말 싫었고, history를 수정할 방법을 찾고 말겠다고 다짐후 결국 찾았습니다. <br></p>
-
-<p>이 글을 본 여러분들은 잔디를 잃지않고도 누출된 비밀정보의 history를 마음대로 주무를 수 있을 것입니다.</p>
-
-<h2 id="1-bgf-repo-cleaner-설치">1. BGF Repo-Cleaner 설치</h2>
-
-<p>아래의 링크로 이동하여 해당 파일을 다운로드받으세요
-만약 자바가 설치되어있지않다면 자바 또한 설치해주세요.</p>
-
-<p><a href="https://rtyley.github.io/bfg-repo-cleaner/">BGF Repo-Cleaner</a> 다운로드하기</p>
-
-<p>Download 폴더안에 파일이 있을겁니다</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#.zshrc</span>
-<span class="nb">alias </span><span class="nv">bfg</span><span class="o">=</span><span class="s1">'java -jar ~/Downloads/bfg-1.14.0.jar'</span>
-</code></pre></div></div>
-
-<p>추후에도 편하게 쓰기위해 alias를 설정해줍니다.</p>
-
-<h2 id="2-히스토리를-변경하고자하는-폴더로-들어갑니다">2. 히스토리를 변경하고자하는 폴더로 들어갑니다.</h2>
-
-<p>git init을 했던 위치로 이동하면되는 겁니다.</p>
-
-<p>터미널에 ls -a 했을때
-.git 이 보이면 모든 준비가 끝이났습니다.</p>
-
-<h2 id="3-여러가지-옵션">3. 여러가지 옵션.</h2>
-
-<h3 id="option-1">option 1.</h3>
-
-<p>만약 HelloWorld.txt에 관한 모든 커밋 히스토리를 없애고싶다면 
-터미널에</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>bfg <span class="nt">--delete-files</span> HelloWorld.txt .git 
-</code></pre></div></div>
-<p>뭔가 여러줄뜰거에요. 끝나고나면</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git reflog expire <span class="nt">--expire</span><span class="o">=</span>now <span class="nt">--all</span> <span class="o">&amp;&amp;</span> git gc <span class="nt">--prune</span><span class="o">=</span>now <span class="nt">--aggressive</span>
-</code></pre></div></div>
-<p>입력해서 원하지않는 모든 dirty data를 삭제할거에요
-그 다음,</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git push <span class="nt">-f</span> &lt;remote-repo&gt; &lt;localbranchname&gt;
-</code></pre></div></div>
-<p>입력하여 리모트 리포로 하드 푸시해줍니다.</p>
-
-<p>최신의(오류를 모드 제거했다고 가정함으로)커밋을 제외한 모든 히스토리에서 해당파일정보는 보이지 않을거에요.</p>
-
-<h3 id="option-2">option 2.</h3>
-
-<p>파일에관한 히스토리는 모두유지하면서 원하는 정보만 가리고싶을때에는 이 방법을 이용하세요.</p>
+<p>-&gt; 가성비가 뛰어난 언어</p>
 
 <hr>
 
-<p>#settings.py</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="s">'itsmyaccesskeyid'</span>
-<span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="s">'itsmysecretaccesskey'</span>
-</code></pre></div></div>
+<h3 id="table의-구조">Table의 구조</h3>
 
-<p>이방법을 쓰면 모든 히스토리에 있는 모든 ‘itsmyaccesskeyid’ 나 ‘itsmysecretaccesskey’ 를 아래와 같이 ***REMOVED*** 로 바꾸거나 원하는대로 바꿔줄 수 도있습니다.</p>
+<p><img src="https://user-images.githubusercontent.com/75003424/124349489-37edca80-dc2a-11eb-8d12-e06ccb15b158.png" alt="table"></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="o">***</span><span class="n">REMOVED</span><span class="o">***</span>
-<span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="o">***</span><span class="n">REMOVED</span><span class="o">***</span>
-</code></pre></div></div>
+<p><strong>row</strong>: 데이터 그자체</p>
 
-<p>먼저 replacements.txt를 만들어봅시다 (.git 이 위치한 폴더에)
-여기에도 여러가지 옵션이있고, 정규표현식도 이용할 수 도 있지만 간단한 옵션들만 설명하겠습니다.</p>
+<p><strong>column</strong>: 데이터의 구조</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#replacements.txt
-</span><span class="n">itsmyaccesskeyid</span>                           <span class="c1"># itsmyaccesskeyid 를 '***REMOVED***' 로 바꿔줍니다 (default)
-</span><span class="n">itsmysecretaccesskey</span><span class="o">==&gt;</span><span class="n">examplePass</span>         <span class="c1"># itsmysecretaccesskey 를 'examplePass' 로 바꿔줍니다.
-</span><span class="n">PASSWORD3</span><span class="o">==&gt;</span>                               <span class="c1"># PASSWORD 를 '' 로 바꿔줍니다.
+<hr>
+
+<h3 id="mysql-data-타입">MySQL Data 타입</h3>
+
+<p>MySQL에서 쓸 수 있는 데이터 타입은 아래의 표와 같습니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">
+<center>형태</center>
+</th>
+      <th style="text-align: left">
+<center>데이터형</center>
+</th>
+      <th style="text-align: left">
+<center>범위</center>
+</th>
+      <th style="text-align: left">
+<center>크기</center>
+</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center" rowspan="8">숫자형
+<br><br><br><br><br><br><br>
+</td>
+      <td style="text-align: left">TINYINT</td>
+      <td style="text-align: left">-128 ~ 128,  0 ~ 255</td>
+      <td style="text-align: left">1 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">SMALLINT</td>
+      <td style="text-align: left">-32768 ~ 32767 , 0 ~ 65535</td>
+      <td style="text-align: left">2 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">MEDIUMINT</td>
+      <td style="text-align: left">-8388608 ~ 8388607, 0 ~ 16777215</td>
+      <td style="text-align: left">3 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">INT, INTEGER</td>
+      <td style="text-align: left">-2147483648 ~ 2147483647, 0 ~ 4294967295</td>
+      <td style="text-align: left">4 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">BIGINT</td>
+      <td style="text-align: left">-9223372036854775808 ~ 9223372036854775807 ,<br> 0 ~ 18446744073709551615</td>
+      <td style="text-align: left">8 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">FLOAT</td>
+      <td style="text-align: left">-3.402823466E+38 ~ -1.175494351E-38 ,<br> 1.175494351E-38 ~ 3.402823466E+38</td>
+      <td style="text-align: left">4 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">DOUBLE [PRECISION], REAL</td>
+      <td style="text-align: left">1.7976931348623157E+308 ~ -2.2250738585072014E-308 ,<br> 0 ~ 2.2250738585072014E-308</td>
+      <td style="text-align: left">8 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">DECIMAL(M,D), NUMERIC(M,D)</td>
+      <td style="text-align: left">데이터 베이스 설정 및 시스템에 따라 다름</td>
+      <td style="text-align: left">가변적 크기</td>
+    </tr>
+    <tr>
+      <td style="text-align: center" rowspan="5">날짜형
+<br><br><br><br>
+</td>
+      <td style="text-align: left">DATE</td>
+      <td style="text-align: left">‘1000-01-01’ ~ ‘9999-12-31’</td>
+      <td style="text-align: left">3 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">TIME</td>
+      <td style="text-align: left">‘-838:59:59’ ~ ‘838:59:59’</td>
+      <td style="text-align: left">3 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">DATETIME</td>
+      <td style="text-align: left">‘1000-01-01 00:00:00’ <br>~ ‘9999-12-31 23:59:59’</td>
+      <td style="text-align: left">8 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">TIMESTAMP</td>
+      <td style="text-align: left">‘1970-01-01 00:00:01’ <br>~ ‘2038-01-19 03:14:07’</td>
+      <td style="text-align: left">4 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">YEAR</td>
+      <td style="text-align: left">1901 ~ 2155</td>
+      <td style="text-align: left">1 Byte</td>
+    </tr>
+    <tr>
+      <td style="text-align: center" rowspan="9">문자(열)형
+<br><br><br><br><br><br><br><br>
+</td>
+      <td style="text-align: left">CHAR(M)</td>
+      <td style="text-align: left">1~ 255 개의 문자</td>
+      <td style="text-align: left">M &lt;= 255</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">ByteBINARY(M)</td>
+      <td style="text-align: left">1 ~ 255 개의 문자</td>
+      <td style="text-align: left">M Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">VARCHAR(M),<br>VARBINARY(M)</td>
+      <td style="text-align: left">1 ~ 255 개의 문자</td>
+      <td style="text-align: left">M Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">TINYBLOB, TINYTEXT</td>
+      <td style="text-align: left">최대 2^8</td>
+      <td style="text-align: left">입력된 길이 만큼</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">BLOB, TEXT</td>
+      <td style="text-align: left">최대 2^16입</td>
+      <td style="text-align: left">력된 길이 만큼</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">MEDIUMBLOB, MEDIUMTEXT</td>
+      <td style="text-align: left">최대 2^24</td>
+      <td style="text-align: left">입력된 길이 만큼</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">LONGBLOB, LONGTEXT</td>
+      <td style="text-align: left">최대 2^32</td>
+      <td style="text-align: left">입력된 길이 만큼</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">ENUM</td>
+      <td style="text-align: left">최대 65525 개</td>
+      <td style="text-align: left">1 ~ 2 Byte</td>
+    </tr>
+    <tr>
+      
+      <td style="text-align: left">SET</td>
+      <td style="text-align: left">최대 64 개의 셋</td>
+      <td style="text-align: left">1 ~ 8 Byte</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">무조건 큰 범위의 큰 값을 사용하게되면 편하긴 하겠지만, 그만큼 저장공간을 차지하며, 느려질 수도 있기에 적절히 알맞은 타입을 선택해야합니다.</code></p>
+
+<hr>
+
+<h3 id="여러가지-제약조건">여러가지 제약조건</h3>
+<p>테이블을 작성할때에 컬럼별로 다양한 제약조건을 작성할 수 있는데 아래와 같은 제약 조건들이 있습니다.</p>
+
+<ul>
+  <li>
+<strong>NOT NULL</strong> : 해당컬럼은 비어있을 수 없습니다.
+    <ul>
+      <li>EX) VALUE1 VARCHAR2(10) NOT NULL</li>
+    </ul>
+  </li>
+  <li>
+<strong>NULL</strong> : 해당 컬럼은 비어있어도 상관 없습니다.
+    <ul>
+      <li>EX) VALUE1 VARCHAR2(10) NULL
+<br>
+</li>
+    </ul>
+  </li>
+  <li>
+<strong>AUTO_INCREMENT</strong> : 값이 생성될때마다 값을 자동으로 1씩 증가시켜 줍니다.
+    <ul>
+      <li>EX) id INT(11) INCREMENT
+<br>
+</li>
+    </ul>
+  </li>
+  <li>
+<strong>UNIQUE</strong> : NULL은 허용하지만 중복은 불가능합니다.
+    <ul>
+      <li>EX) VALUE2 VARCHAR2(10) UNIQUE
+<br>
+</li>
+    </ul>
+  </li>
+  <li>
+<strong>PRIMARY KEY</strong> : NULL, 중복 둘다 불가능합니다.
+    <ul>
+      <li>EX) VALUE3 VARCHAR2(10) PRIMARY KEY</li>
+      <li>EX) PRIMARY KEY id (이미 생성된 컬럼에한해서)
+<br>
+</li>
+    </ul>
+  </li>
+  <li>
+<strong>FOREIGN KEY</strong> : NULL가능, 다른 테이블의 PRIMARY KEY여야 하고 해당 테이블의 컬럼에 삽입되지 않은 값은 사용 불가능합니다.
+<br>
+</li>
+  <li>
+<strong>CHECK</strong> : 특정 범위 혹은 특정 값만 들어올 수 있게 합니다.
+    <ul>
+      <li>EX) VALUE5 VARCHAR2(10) CHECK(VALUE5 BETWEEN 1 AND 10)</li>
+      <li>EX) VALUE6 VARCHAR2(10) CHECK(VALUE6 IN (‘A’, ‘B’)) 
+<br>
+</li>
+    </ul>
+  </li>
+  <li>
+<strong>DEFAULT</strong> : NULL 값이 들어올 시 지전된 값을 삽입합니다.
+    <ul>
+      <li>EX) VALUE7 VARCHAR2(10) DEFAULT ‘홍길동’</li>
+    </ul>
+  </li>
+</ul>
+
+<hr>
+
+<h3 id="table-생성해보기">Table 생성해보기</h3>
+
+<p>아래와 같이 스프레드 시트에있는 테이블을
+mysql에서 만들어 보겠습니다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/75003424/124349491-3a502480-dc2a-11eb-8ad3-9b70c53ced83.png" alt="dataonssheet"></p>
+
+<div class="language-s highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CREATE</span><span class="w"> </span><span class="n">TABLE</span><span class="w"> </span><span class="n">topic</span><span class="p">(</span><span class="w">
+  </span><span class="n">id</span><span class="w"> </span><span class="n">INT</span><span class="p">(</span><span class="m">11</span><span class="p">)</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="kc">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="n">VARCHAR</span><span class="p">(</span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w">
+  </span><span class="n">description</span><span class="w"> </span><span class="n">TEXT</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w">
+  </span><span class="n">created</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w">
+  </span><span class="n">author</span><span class="w"> </span><span class="n">VARCHAR</span><span class="p">(</span><span class="m">15</span><span class="p">)</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w">
+  </span><span class="n">profile</span><span class="w"> </span><span class="n">VARCHAR</span><span class="p">(</span><span class="m">200</span><span class="p">)</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w">
+  </span><span class="n">PRIMARY</span><span class="w"> </span><span class="n">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w">
+</span><span class="p">);</span><span class="w">
 </span></code></pre></div></div>
-
-<p>귀찮다 싶으시면 그냥 txt파일 하나만들고, 민감한정보 모두를 나열해주시면됩니다. (변수명이 아닌 정보 그자체를 나열해야합니다)</p>
-
-<p>자 이제 모든 정보를 지울 준비가 완료되었습니다.</p>
-
-<p>터미널에</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>bfg <span class="nt">--replace-text</span> replacements.txt .git
-</code></pre></div></div>
-<p>입력후 엔터쳐주세요</p>
-
-<p>그다음 option1 과 마찬가지로</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git reflog expire <span class="nt">--expire</span><span class="o">=</span>now <span class="nt">--all</span> <span class="o">&amp;&amp;</span> git gc <span class="nt">--prune</span><span class="o">=</span>now <span class="nt">--aggressive</span>
-</code></pre></div></div>
-<p>입력해서 원하지않는 모든 dirty data를 삭제후</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git push <span class="nt">-f</span> &lt;remote-repo&gt; &lt;localbranchname&gt;
-</code></pre></div></div>
-<p>입력하여 리모트 리포로 하드 푸시해줍니다.</p>
 </div>
 <section class="article__sharing d-print-none"></section><div class="d-print-none">
-<footer class="article__footer"><meta itemprop="dateModified" content="2021-05-14T00:00:00+09:00">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-07-03T00:00:00+09:00">
 <!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
@@ -454,10 +623,10 @@
 </div></footer>
 <div class="article__section-navigator clearfix">
 <div class="previous">
-<span>이전</span><a href="/2021/04/29/Learning-React-10.html">[ #10 ] useContext hook</a>
+<span>이전</span><a href="/2021/07/03/Database-02.html">[ #2 ] 스키마의 사용</a>
 </div>
 <div class="next">
-<span>다음</span><a href="/2021/05/19/Learning-Docker-01.html">[ #1 ] Docker 기본 익히기 </a>
+<span>다음</span><a href="/2021/07/03/When-you-typed-url.html">브라우저에 URL을 입력했을 때 일어나는 일들</a>
 </div>
 </div>
 </div>

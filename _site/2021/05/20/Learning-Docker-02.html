@@ -1,15 +1,29 @@
-<!DOCTYPE html><html lang="ko">
-  <head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #2 ] Docker 네트워크 사용하기  - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #2 ] Docker 네트워크 사용하기  - Hyuk's devlog</title>
 
 <meta name="description" content="Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.네트워크 조회...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/20/Learning-Docker-02.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -254,52 +268,78 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
-      <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
       <div class="header__title">
-        <div class="header__brand"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
 <style type="text/css">
 	.st0{fill:#515151;}
 </style>
 <path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
-	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"/>
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
 </svg>
 <a title="Your Site Description
-" href="/">Hyuk's devlog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/archive.html">아카이브</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
-      </nav></div>
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
 
               <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
 </aside></div>
 
-              <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #2 ] Docker 네트워크 사용하기 </h1></header></div><meta itemprop="headline" content="[ #2 ] Docker 네트워크 사용하기 "><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Docker">Docker</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=network">network</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
-            </li></ul></div><meta itemprop="author" content="Sanghyuk Jeong"/><meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #2 ] Docker 네트워크 사용하기 </h1></header></div>
+<meta itemprop="headline" content="[ #2 ] Docker 네트워크 사용하기 ">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=network">network</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.</p>
+<div class="article__content" itemprop="articleBody">
+<p>Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.</p>
 
 <h2 id="네트워크-조회">네트워크 조회</h2>
 
@@ -324,7 +364,8 @@ b1545defe462   bridge           bridge    <span class="nb">local
   <li>overlay 네트워크는 여러 호스트에 분산되어 돌아가는 컨테이너들 간에 네트워킹을 위해서 사용됩니다.</li>
   <li>none 네트워크는 네트워크를 사용하지 않는다는 것입니다.</li>
   <li>container 네트워크는 다른 컨테이너의 네트워크 환경 공유를위해 쓰입니다.
-<code>--net container: (containerIdOrName)  </code></li>
+<code>--net container: (containerIdOrName)  </code>
+</li>
 </ul>
 
 <h2 id="네트워크-생성">네트워크 생성</h2>
@@ -353,7 +394,7 @@ f984d450d39e   none             null      <span class="nb">local</span>
     <span class="o">{</span>
         <span class="s2">"Name"</span>: <span class="s2">"new"</span>,
         <span class="s2">"Id"</span>: <span class="s2">"56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7"</span>,
-        <span class="s2">"Created"</span>: <span class="s2">"2021-05-20T11:38:23.716924633Z"</span>,
+        <span class="s2">"Created"</span>: <span class="s2">"2021-05-20T11\:38\:23.716924633Z"</span>,
         <span class="s2">"Scope"</span>: <span class="s2">"local"</span>,
         <span class="s2">"Driver"</span>: <span class="s2">"bridge"</span>,
         <span class="s2">"EnableIPv6"</span>: <span class="nb">false</span>,
@@ -402,7 +443,7 @@ c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473
       <span class="s2">"c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473"</span>: <span class="o">{</span>
           <span class="s2">"Name"</span>: <span class="s2">"sample"</span>,
           <span class="s2">"EndpointID"</span>: <span class="s2">"8e3585999080257814d644b79484041fd7b517fe467dcd21c55175922cce69cf"</span>,
-          <span class="s2">"MacAddress"</span>: <span class="s2">"02:42:ac:11:00:02"</span>,
+          <span class="s2">"MacAddress"</span>: <span class="s2">"02\:42\:ac\:11\:00:02"</span>,
           <span class="s2">"IPv4Address"</span>: <span class="s2">"172.17.0.2/16"</span>,
           <span class="s2">"IPv6Address"</span>: <span class="s2">""</span>
       <span class="o">}</span>
@@ -426,7 +467,7 @@ sample컨테이너를 new 네트워크에 연결후 확인해 보겠습니다.</
             <span class="s2">"c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473"</span>: <span class="o">{</span>
                 <span class="s2">"Name"</span>: <span class="s2">"sample"</span>,
                 <span class="s2">"EndpointID"</span>: <span class="s2">"6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080"</span>,
-                <span class="s2">"MacAddress"</span>: <span class="s2">"02:42:c0:a8:60:02"</span>,
+                <span class="s2">"MacAddress"</span>: <span class="s2">"02\:42\:c0\:a8\:60:02"</span>,
                 <span class="s2">"IPv4Address"</span>: <span class="s2">"192.168.96.2/20"</span>,
                 <span class="s2">"IPv6Address"</span>: <span class="s2">""</span>
             <span class="o">}</span>
@@ -472,14 +513,14 @@ sample컨테이너를 new 네트워크에 연결후 확인해 보겠습니다.</
         <span class="s2">"6db6d2deb04abc6c5c15e85159c9525ec602951640b1df10e655709301f4583c"</span>: <span class="o">{</span>
             <span class="s2">"Name"</span>: <span class="s2">"sample2"</span>,
             <span class="s2">"EndpointID"</span>: <span class="s2">"68c44b54a118ab3f54ea29aff5a6bbb1431668d40b4f1cc22807525592ca362b"</span>,
-            <span class="s2">"MacAddress"</span>: <span class="s2">"02:42:c0:a8:60:03"</span>,
+            <span class="s2">"MacAddress"</span>: <span class="s2">"02\:42\:c0\:a8\:60:03"</span>,
             <span class="s2">"IPv4Address"</span>: <span class="s2">"192.168.96.3/20"</span>,
             <span class="s2">"IPv6Address"</span>: <span class="s2">""</span>
         <span class="o">}</span>,
         <span class="s2">"c5f06e4ce41c43262d1743a7505bcb6715c316047fe9c5d1c7ed0702f3111473"</span>: <span class="o">{</span>
             <span class="s2">"Name"</span>: <span class="s2">"sample"</span>,
             <span class="s2">"EndpointID"</span>: <span class="s2">"6c538f7675a1552238adc0a36ec659aa9adc4312404db46cb66160fad2404080"</span>,
-            <span class="s2">"MacAddress"</span>: <span class="s2">"02:42:c0:a8:60:02"</span>,
+            <span class="s2">"MacAddress"</span>: <span class="s2">"02\:42\:c0\:a8\:60:02"</span>,
             <span class="s2">"IPv4Address"</span>: <span class="s2">"192.168.96.2/20"</span>,
             <span class="s2">"IPv6Address"</span>: <span class="s2">""</span>
         <span class="o">}</span>
@@ -507,7 +548,7 @@ PING sample2 <span class="o">(</span>192.168.96.3<span class="o">)</span>: 56 da
 <h2 id="네트워크-삭제">네트워크 삭제</h2>
 
 <p>마지막으로 <code>docker network rm</code>커맨드를 사용하여 <code>new</code> 네트워크를 삭제해보겠습니다.
-<br /><br />
+<br><br>
 에러가 뜨면서 삭제가 되질 않습니다</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker network <span class="nb">rm </span>new
 Error response from daemon: error <span class="k">while </span>removing network: network new <span class="nb">id </span>56aabbc93d48529886e50a1c86bdd328c8ccbe770630711abe14babaac50eff7 has active endpoints
@@ -531,12 +572,26 @@ b1545defe462   bridge           bridge    <span class="nb">local
 </code></pre></div></div>
 <p>성공적으로 삭제되었습니다.</p>
 
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2021-05-20T00:00:00+09:00"><!-- start custom article footer snippet -->
+</div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-05-20T00:00:00+09:00">
+<!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a></div>
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>이전</span><a href="/2021/05/19/Learning-Docker-01.html">[ #1 ] Docker 기본 익히기 </a></div><div class="next"><span>다음</span><a href="/2021/05/22/Learning-Docker-03.html">[ #3 ] Dockerfile에서 자주 쓰이는 명령어</a></div></div></div>
+<div class="article__section-navigator clearfix">
+<div class="previous">
+<span>이전</span><a href="/2021/05/19/Learning-Docker-01.html">[ #1 ] Docker 기본 익히기 </a>
+</div>
+<div class="next">
+<span>다음</span><a href="/2021/05/22/Learning-Docker-03.html">[ #3 ] Dockerfile에서 자주 쓰이는 명령어</a>
+</div>
+</div>
+</div>
 
 </div>
 
@@ -565,30 +620,39 @@ b1545defe462   bridge           bridge    <span class="nb">local
   });
 })();
 </script>
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div>
+<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div></div>
+<div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
-  <div class="main"><div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sanghyuk Jeong"><meta itemprop="url" content="/"><div class="footer__author-links"><div class="author-links">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>
-      </a></ul>
+      </a>
+</li></ul>
 </div>
 </div>
-    </div><div class="site-info mt-2">
+    </div>
+<div class="site-info mt-2">
       <div>© Hyuk's devlog 2021,
-        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
-        title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
   </div>
 </footer>
-</div></div>
-    </div><script>(function() {
+</div>
+</div>
+    </div>
+<script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -652,7 +716,8 @@ b1545defe462   bridge           bridge    <span class="nb">local
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -744,7 +809,7 @@ b1545defe462   bridge           bridge    <span class="nb">local
     <div class="search-bar">
       <div class="search-box js-search-box">
         <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
+        <input type="text">
         <div class="search-box__icon-clear js-icon-clear">
           <a><i class="fas fa-times"></i></a>
         </div>
@@ -868,7 +933,8 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
   });
 });
 </script>
-</div></div>
+</div>
+</div>
 
 
 <script>(function() {
@@ -1179,4 +1245,3 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 </script>
   </body>
 </html>
-

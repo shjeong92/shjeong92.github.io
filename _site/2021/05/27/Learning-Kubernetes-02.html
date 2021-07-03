@@ -1,15 +1,29 @@
-<!DOCTYPE html><html lang="ko">
-  <head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>[ #2 ] Kubernetes 설치 및 환경 구성하기  - Hyuk's devlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #2 ] Kubernetes 설치 및 환경 구성하기  - Hyuk's devlog</title>
 
 <meta name="description" content="minikube를 이용하면 정말 간단하게 로컬머신에 테스트환경을 구성할 수 있었습니다 또한 kubectl 커맨드에 친숙해지는데 잘 활용했었지요, 하지만 이는 싱글 노드 클러스트이고, 다른 노드를 추가할 수 없습니다. 그 말은 즉 진또배기 쿠버네티스를 체험할 수 없는것이며 모는 기능...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/05/27/Learning-Kubernetes-02.html"><link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="canonical" href="https://shjeong92.github.io/2021/05/27/Learning-Kubernetes-02.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -460,14 +474,14 @@ ifconfig <span class="nt">-a</span>
 
 <h2 id="iptables-설정하기">iptables 설정하기</h2>
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#br_netfilter모듈 로드되었는지 확인하기</span>
-<span class="nv">$ </span>lsmod | <span class="nb">grep </span>br_netfilter
+<span class="se">\$</span> lsmod | <span class="nb">grep </span>br<span class="se">\_</span>netfilter
 <span class="c"># 아무정보도 뜨지않는다.</span>
 <span class="nv">$ </span>
 
 <span class="c">#명시적으로 br_netfilter 로드하기</span>
 <span class="nv">$ </span><span class="nb">sudo </span>modprobe br_netfilter
 <span class="c">#다시 확인하면 br_netfilter이 로드된걸 볼수 있어요.</span>
-<span class="nv">$ </span>lsmod | <span class="nb">grep </span>br_netfilter
+<span class="se">\$</span> lsmod | <span class="nb">grep </span>br<span class="se">\_</span>netfilter
 br_netfilter           28672  0
 bridge                176128  1 br_netfilter
 
@@ -476,11 +490,11 @@ bridge                176128  1 br_netfilter
 <p>리눅스 노드의 iptables가 브리지된 트래픽을 올바르게 보기 위한 요구 사항으로, sysctl 구성에서 net.bridge.bridge-nf-call-iptables 가 1로 설정되어 있는지 확인해야 합니다. 
 다음3개의 스크립트를 실행해주시면,</p>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/modules-load.d/k8s.conf
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="se">\$</span> <span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/modules-load.d/k8s.conf
 br_netfilter
 </span><span class="no">EOF
 
-</span><span class="nv">$ </span><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/sysctl.d/k8s.conf
+</span><span class="se">\$</span> <span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 </span><span class="no">EOF
@@ -585,7 +599,7 @@ net.bridge.bridge-nf-call-iptables = 1
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Executing docker install script, commit: 7cae5f8b0decc17d6571f9f52eb840fbc13b2737</span>
 + sh <span class="nt">-c</span> apt-get update <span class="nt">-qq</span> <span class="o">&gt;</span>/dev/null
 + sh <span class="nt">-c</span> <span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nt">-qq</span> apt-transport-https ca-certificates curl <span class="o">&gt;</span>/dev/null
-+ sh <span class="nt">-c</span> curl <span class="nt">-fsSL</span> <span class="s2">"https://download.docker.com/linux/ubuntu/gpg"</span> | apt-key add <span class="nt">-qq</span> - <span class="o">&gt;</span>/dev/null
++ sh <span class="nt">-c</span> curl <span class="nt">-fsSL</span> <span class="se">\"</span>https://download.docker.com/linux/ubuntu/gpg<span class="se">\"</span> | apt-key add <span class="nt">-qq</span> - <span class="o">&gt;</span>/dev/null
 Warning: apt-key output should not be parsed <span class="o">(</span>stdout is not a terminal<span class="o">)</span>
 + sh <span class="nt">-c</span> <span class="nb">echo</span> <span class="s2">"deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"</span> <span class="o">&gt;</span> /etc/apt/sources.list.d/docker.list
 + sh <span class="nt">-c</span> apt-get update <span class="nt">-qq</span> <span class="o">&gt;</span>/dev/null
@@ -599,7 +613,7 @@ Client: Docker Engine - Community
  API version:       1.41
  Go version:        go1.13.15
  Git commit:        370c289
- Built:             Fri Apr  9 22:46:01 2021
+ Built:             Fri Apr  9 22\:46\:01 2021
  OS/Arch:           linux/amd64
  Context:           default
  Experimental:      <span class="nb">true
@@ -610,7 +624,7 @@ Client: Docker Engine - Community
   API version:      1.41 <span class="o">(</span>minimum version 1.12<span class="o">)</span>
   Go version:       go1.13.15
   Git commit:       8728dd2
-  Built:            Fri Apr  9 22:44:13 2021
+  Built:            Fri Apr  9 22\:44\:13 2021
   OS/Arch:          linux/amd64
   Experimental:     <span class="nb">false
  </span>containerd:
@@ -655,7 +669,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo mkdir</span> /etc/docker
 
-<span class="nv">$ </span><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/docker/daemon.json
+<span class="se">\$</span> <span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> | sudo tee /etc/docker/daemon.json
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
   "log-driver": "json-file",
@@ -691,7 +705,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 <span class="c"># 쿠버네티스 apt 리포지터리를 추가하기.</span>
 <span class="c"># *apt리포는 apt 도구로 읽을 수있는 deb 패키지 및 메타 데이터 파일이 포함 된 네트워크 서버 또는 로컬 디렉토리입니다*</span>
-<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"</span> | <span class="nb">sudo tee</span> /etc/apt/sources.list.d/kubernetes.list
+<span class="se">\$</span> <span class="nb">echo</span> <span class="se">\"</span>deb <span class="se">\[</span>signed-by<span class="o">=</span>/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main<span class="se">\"</span> | <span class="nb">sudo tee</span> /etc/apt/sources.list.d/kubernetes.list
 
 <span class="c"># apt 패키지 색인을 업데이트 후 kubeadm, kubelet 및 kubectl다운로드 한다음, 버전 고정시키기.</span>
 <span class="nv">$ </span><span class="nb">sudo </span>apt-get update
@@ -735,8 +749,8 @@ Pod 네트워크가 호스트 네트워크와 겹치면 문제가 발생할 수 
 
 cni0: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1410
         inet 10.244.0.1  netmask 255.255.255.0  broadcast 10.244.0.255
-        inet6 fe80::44f7:e3ff:fe0e:7d15  prefixlen 64  scopeid 0x20&lt;<span class="nb">link</span><span class="o">&gt;</span>
-        ether 46:f7:e3:0e:7d:15  txqueuelen 1000  <span class="o">(</span>Ethernet<span class="o">)</span>
+        inet6 fe80:\:44f7\:e3ff\:fe0e\:7d15  prefixlen 64  scopeid 0x20&lt;<span class="nb">link</span><span class="o">&gt;</span>
+        ether 46\:f7\:e3\:0e\:7d:15  txqueuelen 1000  <span class="o">(</span>Ethernet<span class="o">)</span>
         RX packets 48997  bytes 4021971 <span class="o">(</span>4.0 MB<span class="o">)</span>
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 54114  bytes 4910238 <span class="o">(</span>4.9 MB<span class="o">)</span>
@@ -744,7 +758,7 @@ cni0: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,
 
 docker0: <span class="nv">flags</span><span class="o">=</span>4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu 1500
         inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
-        ether 02:42:29:4d:09:4f  txqueuelen 0  <span class="o">(</span>Ethernet<span class="o">)</span>
+        ether 02\:42\:29\:4d\:09:4f  txqueuelen 0  <span class="o">(</span>Ethernet<span class="o">)</span>
         RX packets 0  bytes 0 <span class="o">(</span>0.0 B<span class="o">)</span>
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 <span class="o">(</span>0.0 B<span class="o">)</span>
@@ -752,8 +766,8 @@ docker0: <span class="nv">flags</span><span class="o">=</span>4099&lt;UP,BROADCA
 
 ens4: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1460
         inet 10.178.0.2  netmask 255.255.255.255  broadcast 0.0.0.0
-        inet6 fe80::4001:aff:feb2:2  prefixlen 64  scopeid 0x20&lt;<span class="nb">link</span><span class="o">&gt;</span>
-        ether 42:01:0a:b2:00:02  txqueuelen 1000  <span class="o">(</span>Ethernet<span class="o">)</span>
+        inet6 fe80:\:4001\:aff\:feb2\:2  prefixlen 64  scopeid 0x20&lt;<span class="nb">link</span><span class="o">&gt;</span>
+        ether 42\:01\:0a\:b2\:00:02  txqueuelen 1000  <span class="o">(</span>Ethernet<span class="o">)</span>
         RX packets 456862  bytes 219264003 <span class="o">(</span>219.2 MB<span class="o">)</span>
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 291537  bytes 122783503 <span class="o">(</span>122.7 MB<span class="o">)</span>
@@ -1605,4 +1619,3 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 </script>
   </body>
 </html>
-
