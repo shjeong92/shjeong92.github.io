@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-07-03T14:23:56+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-07-03T17:33:35+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
 </subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">브라우저에 URL을 입력했을 때 일어나는 일들</title><link href="https://shjeong92.github.io/2021/07/03/When-you-typed-url.html" rel="alternate" type="text/html" title="브라우저에 URL을 입력했을 때 일어나는 일들" /><published>2021-07-03T00:00:00+09:00</published><updated>2021-07-03T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/07/03/When-you-typed-url</id><content type="html" xml:base="https://shjeong92.github.io/2021/07/03/When-you-typed-url.html">&lt;p&gt;이번 포스트 에서는 브라우저에 &lt;em&gt;www.naver.com&lt;/em&gt;을 입력해보고 어떠한 일이 일어나는지 과정을 알아보겠습니다.&lt;/p&gt;
 
 &lt;h3 id=&quot;1-브라우저의-url-파싱&quot;&gt;1. 브라우저의 URL 파싱&lt;/h3&gt;
@@ -327,7 +327,7 @@ CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이
     &lt;p&gt;자세한건  &lt;a href=&quot;http://dev.w3.org/csswg/css2/&quot;&gt;http://dev.w3.org/csswg/css2/&lt;/a&gt; 와 &lt;a href=&quot;http://www.w3.org/Style/CSS/&quot;&gt;http://www.w3.org/Style/CSS/&lt;/a&gt;current-work 참조하세요&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;페이지의 어느 부분을 그룹으로 애니메이션화 할 수 있는지 설명하는 레이어를 만듦. frame/render object는 layer에 할당합니다&lt;/p&gt;
+    &lt;p&gt;페이지의 어느 부분을 그룹으로 애니메이션화 할 수 있는지 설명하는 레이어를 만듭니다. frame/render object는 layer에 할당합니다&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;텍스처는 페이지의 각 레이어에 할당합니다&lt;/p&gt;
@@ -356,7 +356,131 @@ CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;렌더링이 완료된 후 브라우저는 Javascript 실행을 통해 DOM과 CSSOM이 변경 될 수 있는데 레이아웃이 수정 되는 경우 페이지 렌더링 및 페인팅을 다시 수행합니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="네트워크" /><category term="브라우저" /><summary type="html">이번 포스트 에서는 브라우저에 www.naver.com을 입력해보고 어떠한 일이 일어나는지 과정을 알아보겠습니다. 1. 브라우저의 URL 파싱 URL을 입력받은 부라우저는 먼저 해당 URL의 구조를 해석합니다. 어떤 프로토콜을 사용할지 어느 도메인으로 보낼지 어떤 포트로 보낼지 해석하게 되는것입니다. 명시적으로 포트를 선언하지 않아도 브라우저에서는 설정된 기본값을 이용하여 요청하게되는데요, HTTP 라면 80번 포트를, HTTPS의 경우 443번 포트를 기본 값으로 요청하는 것입니다. 2. HSTS 목록 조회 HSTS(HTTP Strict transport security), HTTP를 허용하지 않고 HTTPS를 사용하는 연결만 허용하는 기능입니다. 만약 HTTP로 요청이 왔다면 HTTP 응답 헤더에 “Strict Transport Security”라는 필드를 포함하여 응답하고 이를 확인한 브라우저는 해당 서버에 요청할 때 HTTPS만을 통해 통신하게 됩니다. 그리고 자신의 HSTS캐시에 해당 URL을 저장하는데 이를 HSTS 목록이라고 부릅니다. 이를 통해 브라우저에서는 이 HSTS 목록 조회를 통해 해당 요청을 HTTPS로 보낼지 판단합니다. HSTS목록에 해당 URL이 존재한다면 명시적으로 HTTP를 통해 요청한다 해도 브라우저가 이를 HTTPS로 요청합니다. 3. URL을 IP주소로 변환 www.google.com 이라는 주소로는 컴퓨터끼리 통신할 수 없습니다. 이를 인터넷 상에서 컴퓨터가 읽을 수 있는 IP주소로 변환해야 서로 통신이 가능하게 됩니다. 우선 브라우저에서는 자신의 로컬 hosts 파일과 브라우저 캐시에 해당 URL이 존재하는지 확인합니다. 존재하지 않는다면 도메인 주소를 IP주소로 변환해주는 DNS(Domain Name System) 서버에 요청하여 해당 URL을 IP주소로 변환합니다. DNS 서버로 요청하는 과정 PC는 미리 설정되어 있는 Local DNS에게 IP 주소를 물어봅니다. 만약 Local DNS에 호스트 네임에 대한 정보가 없을 경우 각 Local DNS에 설정된 Root DNS에 질의를 시작합니다. Root DNS는 전세계에 13대가 구축되어 있으며, 우리나라에는 Root DNS 가 없지만, 3대의 미러 서버가 설정되어 있다고 합니다. Root DNS에도 호스트에 대한 정보가 없으면, 다른 DNS 서버에게 질의할 수 있도록 요청합니다. Local DNS는 .com을 관리하는 DNS에게 호스트 네임에 대한 질의를 요청하고 요청한 결과가 없을 경우 다시 질의할 다른 DNS 서버의 주소를 알려줍니다. Local DNS는 google.com을 관리하는 DNS에게 호스트 네임에 대한 질의를 요청하고 결과가 있을 경우 IP주소에 대한 결과를 반환합니다. Local DNS는 ‘www.naver.com’에 대한 IP 주소를 캐싱하고, 클라이언트에게 전달합니다. Recursive Query : Local DNS 서버가 여러 DNS 서버를 차례대로 Root DNS 서버 -&amp;gt; com DNS 서버(Top level Domain) -&amp;gt; naver.com DNS 서버(Secondary Level Domain) 질의해서 답을 찾아가는 과정 4. ARP 프로세스 ARP (주소 결정 프로토콜, Address Resolution Protocol) 브로드캐스트를 보내기 위해서는 네트워크 스택 라이브러리가 검색할 목적지 IP의 주소를 알아야 합니다. 또, ARP 브로드캐스트를 보내는 데 사용하는 인터페이스의 MAC 주소 역시 알아야 합니다. 항목이 ARP 캐시에 있을때 가장 먼저, ARP 캐시가 목적지 IP의 ARP 항목을 가지고 있는지 점검합니다. 만약 캐시에 있다면 라이브러리 함수는 다음의 형태로 결과를 리턴합니다: 목적지 IP = MAC. 항목이 ARP 캐시에 없을때 라우트 테이블을 검색해서 목적지 IP 주소가 로컬 라우트 테이블의 서브넷에 존재하는지 봅니다. 존재한다면, 라이브러리가 그 서브넷에 속하는 인터페이스를 활용합니다. 없다면, 라이브러리는 우리 기본 게이트웨이의 서브넷에 속하는 인터페이스를 활용합니다. 선택된 네트워크 인터페이스의 MAC 주소가 검색이 됩니다. 네트워크 라이브러리는 Data Link Layer(OSI Layer 2) 에 ARP요청을 보냅니다. ARP Request Sender MAC: interface:mac:address:here Sender IP: interface.ip.goes.here Target MAC: FF:FF:FF:FF:FF:FF (Broadcast) Target IP: target.ip.goes.here ARP Reply Sender MAC: target:mac:address:here Sender IP: target.ip.goes.here Target MAC: interface:mac:address:here Target IP: interface.ip.goes.here 이제 네트워크 라이브러리는 우리 DNS 서버나 DNS 프로세스를 재개할 수 있는 기본 게이트웨이 중 하나의 IP 주소를 갖고 있습니다 53번 포트는 DNS 서버에 UDP 요청을 보내기 위해 열려 있습니다 (만약 응답 크기가 너무 크다면, TCP가 대신 사용되구요). 로컬/ISP의 DNS 서버가 해당 정보를 갖고 있지 않다면, 재귀적인 탐색이 수행되고 SOA(Service-oriented architecture)가 도달해서 결과값이 되돌아올 때까지 DNS 서버 리스트를 타고 올라갑니다 5. 대상과 TCP 통신을 통해 Socket열기 HTTPS 프로토콜을 사용하므로 3-way handshake를 통하여 소켓을열고 TLS handshake 과정이 추가됩니다. TCP socket 생성 TCP 연결을 통해 클라이언트는 실행 중인 TLS protocol의 버전, 사용가능한 암호 세트, 사용할 수 있는 TLS 옵션 목록 등을 평문으로 보냅니다. 84ms : 서버는 통신할 때 사용 할 TLS의 버전을 선택하고, 클라이언트가 제공한 목록에서 암호 조합을 결정하고 인증서를 첨부해서 클라이언트에 보냅니다. 선택적으로 서버는 다른 TLS 확장에 대한 클라이언트 인증서 및 매개 변수에 대해 요청을 보낼 수도 있습니다. 양측이 공통된 버전과 암호를 협상 할 수 있고, 클라이언트가 서버에서 제공한 인증서에 만족하면, 클라이언트는 RSA 또는 Diffie-hellman 키 교환을 시작합니다. 이 교환은 이어지는 세션에서 사용할 대칭키를 설정합니다. 서버는 클라이언트가 전송한 키 교환 매개변수를 처리하고 MAC address을 확인하여 메시지 무결성을 검사하고 암호화 된 Finished message를 클라이언트에 전송합니다. 클라이언트를 협상 된 대칭키를 사용해 message 암호를 해독하고 MAC address를 확인해서 모두 정상이면 터널이 설정되고 통신을 시작합니다. TLS에 대해서는 이곳에 자세히 정리해 놓았습니다. 6. HTTP 프로토콜 구글이 만든 웹 브라우저라면, 페이지를 가져오기 위해 HTTP 요청을 보내는 대신, 서버에게 HTTP에서 SPDY로 “업그레이드”할 것을 협상해봅니다. SPDY란 구글은 더 빠른 Web을 실현하기 위해 Latency 관점에서 HTTP를 고속화한 SPDY(스피디) 라 불리는 새로운 프로토콜을 구현했습니다. SPDY는 HTTP를 대치하는 프로토콜이 아니고 HTTP를 통한 전송을 재 정의하는 형태로 구현 되어있습니다. SPDY는 실제로 HTTP/1.1에 비해 상당한 성능 향상과 효율성을 보여줬고 이는 HTTP/2 초안의 참고 규격이 되었다고 합니다. 만약 클라이언트가 SPDY를 지원하지 않고 HTTP만 쓴다면, 서버에 다으과 같은 요청을 보냅니다 GET / HTTP/1.1 Host: google.com Connection: close [other headers] [other headers] 부분은 HTTP 사양에 따라 콜론으로 구분되고 각각 새 줄로 나뉘는 일련의 키-값 쌍을 나타냅니다. (이 부분은 사용된 브라우저가 HTTP 스펙을 벗어나는 어떠한 버그도 없을 때를 가정해요. 웹 브라우저가 HTTP/1.1 을 쓴다는 것도 마찬가지인데, 그렇지 않을 경우엔 Host 헤더가 요청에 포함되지 않고 GET 요청에 명시된 버전이 HTTP/1.0 혹은 HTTP/0.9 일 수도 있습니다. ) HTTP/1.1은 송신자측에서 응답을 받은 직후에 연결이 끊어질 것이라는 신호를 보내기 위해 “close”라는 연결 옵션을 정의합니다. 아래의 예처럼 말이죠. Connection: close 영구 접속을 허용하지 않는 HTTP/1.1 어플리케이션은 반드시 “close” 연결 옵션을 모든 메시지에 포함해야 합니다. 요청과 헤더를 보낸 후에, 웹 브라우저는 하나의 빈 줄을 서버에 보내 요청 내용이 모두 보내졌음을 알립니다. 서버는 요청의 상태를 나타내는 코드와 다음과 같은 형태로 응답합니다. 200 OK [response headers] 이다음에 www.naver.com의 HTML컨텐츠를 payload에 실어서 보냅니다. 그 이후 서버는 연결을 종료할 수도있고, 클라이언트가 보낸 헤더가 요청한 경우 추가 요청을 위해 연결을 유지 할 수도 있습니다. 만약 웹 브라우저가 보낸 HTTP header에 웹 브라우저가 캐시한 파일의 버전이 마지막 검색이후 수정되지 않았으면(HTTP header의 ETag 값으로 확인) 서버에선 다음과 같이 응답합니다 304 Not Modified [response headers] 이 응답에서는 payload 가 없고 웹브라우저는 캐시에서 HTML을 검색합니다. HTML을 파싱한 후 웹 브라우저와 서버는 GET / HTTP/1.1요청이 아닌 HTML페이지에서 참조하는 모든 자원(Image, CSS, favicon.ico 등)에 대해 이 프로세스를 반복합니다. 만약 HTML이 다른 Domain의 resource를 참조하는 경우 웹 브라우저는 다른 도메인을 확인하는 단계(3번 단계)로 돌아가고 해당 도메인에 대해 모든 단계를 수행하고, Host 요청의 header는 해당 서버의 이름으로 설정됩니다. 7. HTTP 서버의 응답 HTTPD (HTTP 데몬) 서버는 서버측에서 요청/응답을 처리하는 친구입니다. 대표적으로 자주 쓰이는 nginx 가 있습니다. HTTPD (HTTP 데몬) 서버는 요청을 다음과 같은 파라미터들로 분리합니다. HTTP method(GET, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, HEAD 중 하나). 주소창에 URL을 직접 입력한 경우에는 GET 이겠죠 도메인, (naver.com). 요청된 경로/페이지 - (www.naver.com은 홈페이지입니다, 즉 특정 경로와 페이지가 없기에 기본경로인 ‘/’가 들어갑니다) 서버는 naver.com에 해당하는 가상 호스트가 서버에 설정되어 있는지 확인합니다. 서버는 naver.com이 GET 요청을 받아들일 수 있는지 봅니다. 서버는 해당 클라이언트에게 이 메소드가 허용되는지 봅니다 (IP, 인증, 기타 등등을 통하여). 만약에 서버에 rewrite 설정이 되어있다면 해당하는 경로로 다시 요청을 하게됩니다. (www로 시작하지 않는것을 www로 가게하거나 아래와 같이 http로 들어온 모든요청을 https로 rewrite 하기도 하죠) server { listen 80; server_name my.domain.com; rewrite ^(.*) https://$host$1 permanent; } server { listen 443; server_name my.domain.com; # ..... } 서버는 요청에 해당하는 콘텐츠를 가져오고, 기본경로인 “/” 이므로 이 경우 index파일을 해석합니다. 서버는 가져온 파일을 핸들러를 통해 분석하여 결과를 클라이언트로 보냅니다. 8. 브라우저 안에서 일어나는 일들 서버가 브라우저에 (HTML, CSS, JS, 이미지, …)을 제공하면 브라우저는 아래 프로세서를 수행합니다. 파싱 - HTML, CSS, JS 렌더링: DOM 트리 생성 -&amp;gt; 트리 렌더링 -&amp;gt; 렌더링 된 트리 배치 -&amp;gt; 렌더링 된 트리 색칠 웹 브라우저의 기능은 서버에서 요청하고 브라우저 창에 표시하여 선택한 웹 리소스를 표시하는 것입니다. 리소스는 일반적으로 HTML문서이지만 PDF, 이미지 또는 다른 유형의 콘텐츠일 수도 있습니다. 자원의 위치는 URI(Uniform Resource Identifier)를 사용하여 사용자가 지정합니다. 브라우저가 HTML파일을 해석하고 표시하는 방법은 HTML 및 CSS 사양에 지정되어 있습나다. 이 사양은 웹 표준 단체인 W3C(World Wide Web Consortium)에서 관리합니다. 브라우저의 일반적인 User Interface 요소 URI를 입력하기 위한 주소표시줄 뒤로 및 앞으로 버튼 북마크 버튼 새로고침 및 중지 버튼 홈페이지 이동 버튼 브라우저의 구성요소들 유저 인터페이스: 유저 인터페이스는 주소창, 뒤로/앞으로 버튼, 즐겨찾기 메뉴 등등을 포함합니다. 당신이 요청한 페이지를 보는 창을 제외한 브라우저의 모든 부분이죠. 브라우저 엔진: 브라우저 엔진은 UI와 렌더링 엔진 사이에 일어나는 일을 통제합니다. 렌더링 엔진: 렌더링 엔진은 요청된 내용을 보여주는 부분을 책임집니다. 예를 들어 만약 요청된 내용이 HTML이면, 렌더링 엔진은 HTML과 CSS를 분석하고, 처리된 내용을 화면에 띄워줍니다. 네트워킹: 네트워킹은 HTTP와 같은 네트워크 요청을, 플랫폼별로 다른 구현체를 활용해 플랫폼-독립적인 인터페이스 뒤에서 처리하죠. UI 백엔드: UI 백엔드는 콤보박스나 창 같은 기본적인 위젯을 그리는 데 쓰입니다. 이 백엔드는 플랫폼에 구애받지 않는 포괄적인 인터페이스를 노출시킵니다. 내부적으로는 운영 체제의 유저 인터페이스 메소드들을 활용하면서요. JavaScript 엔진: JavaScript 엔진은 JavaScript 코드를 분석하고 실행하는 데 활용됩니다. 데이터 저장소: 데이터 저장소는 유지가 되는 계층입니다. 브라우저가 쿠키같은 갖가지 종류의 데이터를 저장해둬야 할 수도 있거든요. 브라우저는 또 localStorage와 sessionStorage, IndexedDB, WebSQL, 파일시스템과 같은 저장 메커니즘을 지원합니다. HTML 파싱 렌더링 엔진은 네트워킹 계층에서 요청한 문서의 내용을 받아오기 시작합니다. 문서는 보통 8KB 단위로 전송됩니다. HTML 파서의 주된 역할은 HTML 마크업을 파스 트리로 분석해내는 겁니다. 이렇게 나온 트리 (“파스 트리 parse tree”) 는 DOM 요소와 속성 노드의 트리입니다. DOM은 Document Object Mode의 줄임말이고요. 이 친구는 HTML 문서와 HTML 요소를 JavaScript 같은 외부 요소와 이어주는 인터페이스의 객체 표현 방식입니다. 이 트리의 루트는 “Document” 객체입니다. 스크립트를 통한 모든 조작보다 앞서, DOM은 마크업과 거의 일대일인 관계를 갖습니다. 파싱 알고리즘 HTML은 일반적인 탑-다운이나 바텀-업 방식의 파서로는 분석할 수 없습니다. 그 이유는 아래오 같습니다. 관대한 언어적 특성. 브라우저는 흔히 알려진, 잘못된 HTML들을 지원하기 위해 전통적으로 에러를 용인해왔다는 사실. 파싱 과정은 재진입 가능하다는 것입니다. 다른 언어에서, 소스는 파싱 과정에서 변하지 않지만, HTML에서는, 동적 코드 (예를 들어 document.write() 호출을 담고 있는 스크립트 요소) 가 추가적인 토큰을 추가할 수도 있어서, 파싱 과정이 실제로 입력값을 바꿉니다. 일반적인 파싱 기술을 쓸 수 없으니, 브라우저는 임의의 파서를 활용해 HTML을 파싱합니다. 파싱 알고리즘은 토큰화와 트리생성의 단계로 이루워 져있습니다. 자세한 정보는 이곳에서 확인가능합니다. 파싱이 끝난후의 동작 브라우저가 페이지에 링크돼있는 외부 자원 (CSS, 이미지, JavaScript 파일, 기타 등등) 을 가져오기 시작합니다. 이 단계에서 브라우저는 해당 문서가 상호작용 중이라는 표시를 해두고 “deferred” 모드에 있는 스크립트를 파싱하기 시작합니다: 반드시 문서를 분석한 후에 실행되어야 하는 것들이죠. 문서의 상태는 “complete” 으로 설정되고 “load” 이벤트가 발생됩니다. HTML 페이지에 “Invalid Syntax”에러는 존재하지 않습니다. 브라우저가 어떠한 내용이든 고치고 넘어갑니다. CSS 분석 &amp;lt;style&amp;gt; 태그 내용과, style 속성값으로 되어있는 CSS 파일들을 “CSS lexical and syntax grammar” 를 활용해 파싱합니다. 각각의 CSS 파일은 Stylesheet object 로 파싱되는데, 여기서 각 객체는 selector 및 CSS 문법에 해당하는 객체들과 함께 CSS 규칙들을 담고 있습니다. CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이나 바텀-업도 가능합니다. 페이지 렌더링 DOM 노드를 탐색하고 각 노드에 대한 CSS 값을 계산하여 “Frame tree” 또는 “Render tree”를 만듭니다. 자식 노드의 width와 수평 margin, border, padding 을 합해서 Frame tree의 아래쪽에 있는 각 노드의 기본 너비를 계산합니다. 각 노드의 사용 가능한 너비를 자식 노드에 할당하여 각 노드의 실제 width 값 계산합니다. 텍스트 배치를 적용하고 하위 노드의 height와 margin, border, padding을 합해 각 노드의 높이를 상향식으로 계산합니다. 위에서 계산 된 정보를 사용해서 각 노드의 좌표를 계산합니다. float, absolutely, relatively 와 같은 속성이 사용되었을 경우 더 복잡한 단계가 수행 됩니다. 자세한건 http://dev.w3.org/csswg/css2/ 와 http://www.w3.org/Style/CSS/current-work 참조하세요 페이지의 어느 부분을 그룹으로 애니메이션화 할 수 있는지 설명하는 레이어를 만듦. frame/render object는 layer에 할당합니다 텍스처는 페이지의 각 레이어에 할당합니다 각 frame/render object를 통해서 각 레이어 별로 그리기 명령을 실행합니다. 위의 모든 단계를 웹페이지가 렌더링 된 마지막 시간에 계산 된 값을 재사용 할 수 있으므로 점진적 변경은 작업이 덜 필요합니다. 페이지 레이어는 합성 프로세스로 보내져 browser chrome, iframe, addon panels과 같은 시각적인 레이어와 결합됩니다. 최종 레이어 위치가 계산되고 Direct3D / OpenGL을 통해 합성 명령이 실행된다. GPU 명령 버퍼는 비동기 렌더링을 위해 GPU로 출력되고 frame은 window server로 전송됩니다. GPU 렌더링 렌더링 프로세스 동안 graphical computing layers는 CPU 또는 GPU를 사용할 수 있습니다. graphical rendering 계산에 GPU를 사용하는 경우 그래픽 소프트웨어 레이어에서 작업을 여러조각으로 분할하여 렌더링 프로세스에 필요한 부동 소수점 계산을 위해 GPU 대용량 병렬 처리를 사용 할 수 있습니다. 렌더링이 완료된 후 브라우저는 Javascript 실행을 통해 DOM과 CSSOM이 변경 될 수 있는데 레이아웃이 수정 되는 경우 페이지 렌더링 및 페인팅을 다시 수행합니다.</summary></entry><entry><title type="html">[ #12 ] 클러스터 보안 - 3</title><link href="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html" rel="alternate" type="text/html" title="[ #12 ] 클러스터 보안 - 3" /><published>2021-06-10T00:00:00+09:00</published><updated>2021-06-10T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12</id><content type="html" xml:base="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html">&lt;h2 id=&quot;1-tls가-제공하는-이점들&quot;&gt;1. TLS가 제공하는 이점들&lt;/h2&gt;
+&lt;p&gt;렌더링이 완료된 후 브라우저는 Javascript 실행을 통해 DOM과 CSSOM이 변경 될 수 있는데 레이아웃이 수정 되는 경우 페이지 렌더링 및 페인팅을 다시 수행합니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="네트워크" /><category term="브라우저" /><summary type="html">이번 포스트 에서는 브라우저에 www.naver.com을 입력해보고 어떠한 일이 일어나는지 과정을 알아보겠습니다. 1. 브라우저의 URL 파싱 URL을 입력받은 부라우저는 먼저 해당 URL의 구조를 해석합니다. 어떤 프로토콜을 사용할지 어느 도메인으로 보낼지 어떤 포트로 보낼지 해석하게 되는것입니다. 명시적으로 포트를 선언하지 않아도 브라우저에서는 설정된 기본값을 이용하여 요청하게되는데요, HTTP 라면 80번 포트를, HTTPS의 경우 443번 포트를 기본 값으로 요청하는 것입니다. 2. HSTS 목록 조회 HSTS(HTTP Strict transport security), HTTP를 허용하지 않고 HTTPS를 사용하는 연결만 허용하는 기능입니다. 만약 HTTP로 요청이 왔다면 HTTP 응답 헤더에 “Strict Transport Security”라는 필드를 포함하여 응답하고 이를 확인한 브라우저는 해당 서버에 요청할 때 HTTPS만을 통해 통신하게 됩니다. 그리고 자신의 HSTS캐시에 해당 URL을 저장하는데 이를 HSTS 목록이라고 부릅니다. 이를 통해 브라우저에서는 이 HSTS 목록 조회를 통해 해당 요청을 HTTPS로 보낼지 판단합니다. HSTS목록에 해당 URL이 존재한다면 명시적으로 HTTP를 통해 요청한다 해도 브라우저가 이를 HTTPS로 요청합니다. 3. URL을 IP주소로 변환 www.google.com 이라는 주소로는 컴퓨터끼리 통신할 수 없습니다. 이를 인터넷 상에서 컴퓨터가 읽을 수 있는 IP주소로 변환해야 서로 통신이 가능하게 됩니다. 우선 브라우저에서는 자신의 로컬 hosts 파일과 브라우저 캐시에 해당 URL이 존재하는지 확인합니다. 존재하지 않는다면 도메인 주소를 IP주소로 변환해주는 DNS(Domain Name System) 서버에 요청하여 해당 URL을 IP주소로 변환합니다. DNS 서버로 요청하는 과정 PC는 미리 설정되어 있는 Local DNS에게 IP 주소를 물어봅니다. 만약 Local DNS에 호스트 네임에 대한 정보가 없을 경우 각 Local DNS에 설정된 Root DNS에 질의를 시작합니다. Root DNS는 전세계에 13대가 구축되어 있으며, 우리나라에는 Root DNS 가 없지만, 3대의 미러 서버가 설정되어 있다고 합니다. Root DNS에도 호스트에 대한 정보가 없으면, 다른 DNS 서버에게 질의할 수 있도록 요청합니다. Local DNS는 .com을 관리하는 DNS에게 호스트 네임에 대한 질의를 요청하고 요청한 결과가 없을 경우 다시 질의할 다른 DNS 서버의 주소를 알려줍니다. Local DNS는 google.com을 관리하는 DNS에게 호스트 네임에 대한 질의를 요청하고 결과가 있을 경우 IP주소에 대한 결과를 반환합니다. Local DNS는 ‘www.naver.com’에 대한 IP 주소를 캐싱하고, 클라이언트에게 전달합니다. Recursive Query : Local DNS 서버가 여러 DNS 서버를 차례대로 Root DNS 서버 -&amp;gt; com DNS 서버(Top level Domain) -&amp;gt; naver.com DNS 서버(Secondary Level Domain) 질의해서 답을 찾아가는 과정 4. ARP 프로세스 ARP (주소 결정 프로토콜, Address Resolution Protocol) 브로드캐스트를 보내기 위해서는 네트워크 스택 라이브러리가 검색할 목적지 IP의 주소를 알아야 합니다. 또, ARP 브로드캐스트를 보내는 데 사용하는 인터페이스의 MAC 주소 역시 알아야 합니다. 항목이 ARP 캐시에 있을때 가장 먼저, ARP 캐시가 목적지 IP의 ARP 항목을 가지고 있는지 점검합니다. 만약 캐시에 있다면 라이브러리 함수는 다음의 형태로 결과를 리턴합니다: 목적지 IP = MAC. 항목이 ARP 캐시에 없을때 라우트 테이블을 검색해서 목적지 IP 주소가 로컬 라우트 테이블의 서브넷에 존재하는지 봅니다. 존재한다면, 라이브러리가 그 서브넷에 속하는 인터페이스를 활용합니다. 없다면, 라이브러리는 우리 기본 게이트웨이의 서브넷에 속하는 인터페이스를 활용합니다. 선택된 네트워크 인터페이스의 MAC 주소가 검색이 됩니다. 네트워크 라이브러리는 Data Link Layer(OSI Layer 2) 에 ARP요청을 보냅니다. ARP Request Sender MAC: interface:mac:address:here Sender IP: interface.ip.goes.here Target MAC: FF:FF:FF:FF:FF:FF (Broadcast) Target IP: target.ip.goes.here ARP Reply Sender MAC: target:mac:address:here Sender IP: target.ip.goes.here Target MAC: interface:mac:address:here Target IP: interface.ip.goes.here 이제 네트워크 라이브러리는 우리 DNS 서버나 DNS 프로세스를 재개할 수 있는 기본 게이트웨이 중 하나의 IP 주소를 갖고 있습니다 53번 포트는 DNS 서버에 UDP 요청을 보내기 위해 열려 있습니다 (만약 응답 크기가 너무 크다면, TCP가 대신 사용되구요). 로컬/ISP의 DNS 서버가 해당 정보를 갖고 있지 않다면, 재귀적인 탐색이 수행되고 SOA(Service-oriented architecture)가 도달해서 결과값이 되돌아올 때까지 DNS 서버 리스트를 타고 올라갑니다 5. 대상과 TCP 통신을 통해 Socket열기 HTTPS 프로토콜을 사용하므로 3-way handshake를 통하여 소켓을열고 TLS handshake 과정이 추가됩니다. TCP socket 생성 TCP 연결을 통해 클라이언트는 실행 중인 TLS protocol의 버전, 사용가능한 암호 세트, 사용할 수 있는 TLS 옵션 목록 등을 평문으로 보냅니다. 84ms : 서버는 통신할 때 사용 할 TLS의 버전을 선택하고, 클라이언트가 제공한 목록에서 암호 조합을 결정하고 인증서를 첨부해서 클라이언트에 보냅니다. 선택적으로 서버는 다른 TLS 확장에 대한 클라이언트 인증서 및 매개 변수에 대해 요청을 보낼 수도 있습니다. 양측이 공통된 버전과 암호를 협상 할 수 있고, 클라이언트가 서버에서 제공한 인증서에 만족하면, 클라이언트는 RSA 또는 Diffie-hellman 키 교환을 시작합니다. 이 교환은 이어지는 세션에서 사용할 대칭키를 설정합니다. 서버는 클라이언트가 전송한 키 교환 매개변수를 처리하고 MAC address을 확인하여 메시지 무결성을 검사하고 암호화 된 Finished message를 클라이언트에 전송합니다. 클라이언트를 협상 된 대칭키를 사용해 message 암호를 해독하고 MAC address를 확인해서 모두 정상이면 터널이 설정되고 통신을 시작합니다. TLS에 대해서는 이곳에 자세히 정리해 놓았습니다. 6. HTTP 프로토콜 구글이 만든 웹 브라우저라면, 페이지를 가져오기 위해 HTTP 요청을 보내는 대신, 서버에게 HTTP에서 SPDY로 “업그레이드”할 것을 협상해봅니다. SPDY란 구글은 더 빠른 Web을 실현하기 위해 Latency 관점에서 HTTP를 고속화한 SPDY(스피디) 라 불리는 새로운 프로토콜을 구현했습니다. SPDY는 HTTP를 대치하는 프로토콜이 아니고 HTTP를 통한 전송을 재 정의하는 형태로 구현 되어있습니다. SPDY는 실제로 HTTP/1.1에 비해 상당한 성능 향상과 효율성을 보여줬고 이는 HTTP/2 초안의 참고 규격이 되었다고 합니다. 만약 클라이언트가 SPDY를 지원하지 않고 HTTP만 쓴다면, 서버에 다으과 같은 요청을 보냅니다 GET / HTTP/1.1 Host: google.com Connection: close [other headers] [other headers] 부분은 HTTP 사양에 따라 콜론으로 구분되고 각각 새 줄로 나뉘는 일련의 키-값 쌍을 나타냅니다. (이 부분은 사용된 브라우저가 HTTP 스펙을 벗어나는 어떠한 버그도 없을 때를 가정해요. 웹 브라우저가 HTTP/1.1 을 쓴다는 것도 마찬가지인데, 그렇지 않을 경우엔 Host 헤더가 요청에 포함되지 않고 GET 요청에 명시된 버전이 HTTP/1.0 혹은 HTTP/0.9 일 수도 있습니다. ) HTTP/1.1은 송신자측에서 응답을 받은 직후에 연결이 끊어질 것이라는 신호를 보내기 위해 “close”라는 연결 옵션을 정의합니다. 아래의 예처럼 말이죠. Connection: close 영구 접속을 허용하지 않는 HTTP/1.1 어플리케이션은 반드시 “close” 연결 옵션을 모든 메시지에 포함해야 합니다. 요청과 헤더를 보낸 후에, 웹 브라우저는 하나의 빈 줄을 서버에 보내 요청 내용이 모두 보내졌음을 알립니다. 서버는 요청의 상태를 나타내는 코드와 다음과 같은 형태로 응답합니다. 200 OK [response headers] 이다음에 www.naver.com의 HTML컨텐츠를 payload에 실어서 보냅니다. 그 이후 서버는 연결을 종료할 수도있고, 클라이언트가 보낸 헤더가 요청한 경우 추가 요청을 위해 연결을 유지 할 수도 있습니다. 만약 웹 브라우저가 보낸 HTTP header에 웹 브라우저가 캐시한 파일의 버전이 마지막 검색이후 수정되지 않았으면(HTTP header의 ETag 값으로 확인) 서버에선 다음과 같이 응답합니다 304 Not Modified [response headers] 이 응답에서는 payload 가 없고 웹브라우저는 캐시에서 HTML을 검색합니다. HTML을 파싱한 후 웹 브라우저와 서버는 GET / HTTP/1.1요청이 아닌 HTML페이지에서 참조하는 모든 자원(Image, CSS, favicon.ico 등)에 대해 이 프로세스를 반복합니다. 만약 HTML이 다른 Domain의 resource를 참조하는 경우 웹 브라우저는 다른 도메인을 확인하는 단계(3번 단계)로 돌아가고 해당 도메인에 대해 모든 단계를 수행하고, Host 요청의 header는 해당 서버의 이름으로 설정됩니다. 7. HTTP 서버의 응답 HTTPD (HTTP 데몬) 서버는 서버측에서 요청/응답을 처리하는 친구입니다. 대표적으로 자주 쓰이는 nginx 가 있습니다. HTTPD (HTTP 데몬) 서버는 요청을 다음과 같은 파라미터들로 분리합니다. HTTP method(GET, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, HEAD 중 하나). 주소창에 URL을 직접 입력한 경우에는 GET 이겠죠 도메인, (naver.com). 요청된 경로/페이지 - (www.naver.com은 홈페이지입니다, 즉 특정 경로와 페이지가 없기에 기본경로인 ‘/’가 들어갑니다) 서버는 naver.com에 해당하는 가상 호스트가 서버에 설정되어 있는지 확인합니다. 서버는 naver.com이 GET 요청을 받아들일 수 있는지 봅니다. 서버는 해당 클라이언트에게 이 메소드가 허용되는지 봅니다 (IP, 인증, 기타 등등을 통하여). 만약에 서버에 rewrite 설정이 되어있다면 해당하는 경로로 다시 요청을 하게됩니다. (www로 시작하지 않는것을 www로 가게하거나 아래와 같이 http로 들어온 모든요청을 https로 rewrite 하기도 하죠) server { listen 80; server_name my.domain.com; rewrite ^(.*) https://$host$1 permanent; } server { listen 443; server_name my.domain.com; # ..... } 서버는 요청에 해당하는 콘텐츠를 가져오고, 기본경로인 “/” 이므로 이 경우 index파일을 해석합니다. 서버는 가져온 파일을 핸들러를 통해 분석하여 결과를 클라이언트로 보냅니다. 8. 브라우저 안에서 일어나는 일들 서버가 브라우저에 (HTML, CSS, JS, 이미지, …)을 제공하면 브라우저는 아래 프로세서를 수행합니다. 파싱 - HTML, CSS, JS 렌더링: DOM 트리 생성 -&amp;gt; 트리 렌더링 -&amp;gt; 렌더링 된 트리 배치 -&amp;gt; 렌더링 된 트리 색칠 웹 브라우저의 기능은 서버에서 요청하고 브라우저 창에 표시하여 선택한 웹 리소스를 표시하는 것입니다. 리소스는 일반적으로 HTML문서이지만 PDF, 이미지 또는 다른 유형의 콘텐츠일 수도 있습니다. 자원의 위치는 URI(Uniform Resource Identifier)를 사용하여 사용자가 지정합니다. 브라우저가 HTML파일을 해석하고 표시하는 방법은 HTML 및 CSS 사양에 지정되어 있습나다. 이 사양은 웹 표준 단체인 W3C(World Wide Web Consortium)에서 관리합니다. 브라우저의 일반적인 User Interface 요소 URI를 입력하기 위한 주소표시줄 뒤로 및 앞으로 버튼 북마크 버튼 새로고침 및 중지 버튼 홈페이지 이동 버튼 브라우저의 구성요소들 유저 인터페이스: 유저 인터페이스는 주소창, 뒤로/앞으로 버튼, 즐겨찾기 메뉴 등등을 포함합니다. 당신이 요청한 페이지를 보는 창을 제외한 브라우저의 모든 부분이죠. 브라우저 엔진: 브라우저 엔진은 UI와 렌더링 엔진 사이에 일어나는 일을 통제합니다. 렌더링 엔진: 렌더링 엔진은 요청된 내용을 보여주는 부분을 책임집니다. 예를 들어 만약 요청된 내용이 HTML이면, 렌더링 엔진은 HTML과 CSS를 분석하고, 처리된 내용을 화면에 띄워줍니다. 네트워킹: 네트워킹은 HTTP와 같은 네트워크 요청을, 플랫폼별로 다른 구현체를 활용해 플랫폼-독립적인 인터페이스 뒤에서 처리하죠. UI 백엔드: UI 백엔드는 콤보박스나 창 같은 기본적인 위젯을 그리는 데 쓰입니다. 이 백엔드는 플랫폼에 구애받지 않는 포괄적인 인터페이스를 노출시킵니다. 내부적으로는 운영 체제의 유저 인터페이스 메소드들을 활용하면서요. JavaScript 엔진: JavaScript 엔진은 JavaScript 코드를 분석하고 실행하는 데 활용됩니다. 데이터 저장소: 데이터 저장소는 유지가 되는 계층입니다. 브라우저가 쿠키같은 갖가지 종류의 데이터를 저장해둬야 할 수도 있거든요. 브라우저는 또 localStorage와 sessionStorage, IndexedDB, WebSQL, 파일시스템과 같은 저장 메커니즘을 지원합니다. HTML 파싱 렌더링 엔진은 네트워킹 계층에서 요청한 문서의 내용을 받아오기 시작합니다. 문서는 보통 8KB 단위로 전송됩니다. HTML 파서의 주된 역할은 HTML 마크업을 파스 트리로 분석해내는 겁니다. 이렇게 나온 트리 (“파스 트리 parse tree”) 는 DOM 요소와 속성 노드의 트리입니다. DOM은 Document Object Mode의 줄임말이고요. 이 친구는 HTML 문서와 HTML 요소를 JavaScript 같은 외부 요소와 이어주는 인터페이스의 객체 표현 방식입니다. 이 트리의 루트는 “Document” 객체입니다. 스크립트를 통한 모든 조작보다 앞서, DOM은 마크업과 거의 일대일인 관계를 갖습니다. 파싱 알고리즘 HTML은 일반적인 탑-다운이나 바텀-업 방식의 파서로는 분석할 수 없습니다. 그 이유는 아래오 같습니다. 관대한 언어적 특성. 브라우저는 흔히 알려진, 잘못된 HTML들을 지원하기 위해 전통적으로 에러를 용인해왔다는 사실. 파싱 과정은 재진입 가능하다는 것입니다. 다른 언어에서, 소스는 파싱 과정에서 변하지 않지만, HTML에서는, 동적 코드 (예를 들어 document.write() 호출을 담고 있는 스크립트 요소) 가 추가적인 토큰을 추가할 수도 있어서, 파싱 과정이 실제로 입력값을 바꿉니다. 일반적인 파싱 기술을 쓸 수 없으니, 브라우저는 임의의 파서를 활용해 HTML을 파싱합니다. 파싱 알고리즘은 토큰화와 트리생성의 단계로 이루워 져있습니다. 자세한 정보는 이곳에서 확인가능합니다. 파싱이 끝난후의 동작 브라우저가 페이지에 링크돼있는 외부 자원 (CSS, 이미지, JavaScript 파일, 기타 등등) 을 가져오기 시작합니다. 이 단계에서 브라우저는 해당 문서가 상호작용 중이라는 표시를 해두고 “deferred” 모드에 있는 스크립트를 파싱하기 시작합니다: 반드시 문서를 분석한 후에 실행되어야 하는 것들이죠. 문서의 상태는 “complete” 으로 설정되고 “load” 이벤트가 발생됩니다. HTML 페이지에 “Invalid Syntax”에러는 존재하지 않습니다. 브라우저가 어떠한 내용이든 고치고 넘어갑니다. CSS 분석 &amp;lt;style&amp;gt; 태그 내용과, style 속성값으로 되어있는 CSS 파일들을 “CSS lexical and syntax grammar” 를 활용해 파싱합니다. 각각의 CSS 파일은 Stylesheet object 로 파싱되는데, 여기서 각 객체는 selector 및 CSS 문법에 해당하는 객체들과 함께 CSS 규칙들을 담고 있습니다. CSS 파서는 특정한 파서 생성기가 사용됐을 경우에 탑-다운이나 바텀-업도 가능합니다. 페이지 렌더링 DOM 노드를 탐색하고 각 노드에 대한 CSS 값을 계산하여 “Frame tree” 또는 “Render tree”를 만듭니다. 자식 노드의 width와 수평 margin, border, padding 을 합해서 Frame tree의 아래쪽에 있는 각 노드의 기본 너비를 계산합니다. 각 노드의 사용 가능한 너비를 자식 노드에 할당하여 각 노드의 실제 width 값 계산합니다. 텍스트 배치를 적용하고 하위 노드의 height와 margin, border, padding을 합해 각 노드의 높이를 상향식으로 계산합니다. 위에서 계산 된 정보를 사용해서 각 노드의 좌표를 계산합니다. float, absolutely, relatively 와 같은 속성이 사용되었을 경우 더 복잡한 단계가 수행 됩니다. 자세한건 http://dev.w3.org/csswg/css2/ 와 http://www.w3.org/Style/CSS/current-work 참조하세요 페이지의 어느 부분을 그룹으로 애니메이션화 할 수 있는지 설명하는 레이어를 만듭니다. frame/render object는 layer에 할당합니다 텍스처는 페이지의 각 레이어에 할당합니다 각 frame/render object를 통해서 각 레이어 별로 그리기 명령을 실행합니다. 위의 모든 단계를 웹페이지가 렌더링 된 마지막 시간에 계산 된 값을 재사용 할 수 있으므로 점진적 변경은 작업이 덜 필요합니다. 페이지 레이어는 합성 프로세스로 보내져 browser chrome, iframe, addon panels과 같은 시각적인 레이어와 결합됩니다. 최종 레이어 위치가 계산되고 Direct3D / OpenGL을 통해 합성 명령이 실행된다. GPU 명령 버퍼는 비동기 렌더링을 위해 GPU로 출력되고 frame은 window server로 전송됩니다. GPU 렌더링 렌더링 프로세스 동안 graphical computing layers는 CPU 또는 GPU를 사용할 수 있습니다. graphical rendering 계산에 GPU를 사용하는 경우 그래픽 소프트웨어 레이어에서 작업을 여러조각으로 분할하여 렌더링 프로세스에 필요한 부동 소수점 계산을 위해 GPU 대용량 병렬 처리를 사용 할 수 있습니다. 렌더링이 완료된 후 브라우저는 Javascript 실행을 통해 DOM과 CSSOM이 변경 될 수 있는데 레이아웃이 수정 되는 경우 페이지 렌더링 및 페인팅을 다시 수행합니다.</summary></entry><entry><title type="html">[ #1 ] MySQL의 구조</title><link href="https://shjeong92.github.io/2021/07/03/Database-01.html" rel="alternate" type="text/html" title="[ #1 ] MySQL의 구조" /><published>2021-07-03T00:00:00+09:00</published><updated>2021-07-03T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/07/03/Database-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/07/03/Database-01.html">&lt;p&gt;이때까지는 데이터베이스를 단순히 사용만 해왔었는데요, 알고 제대로 써야겠다고 생각하여 기초부터 공부해려고 합니다.&lt;/p&gt;
+
+&lt;p&gt;본 포스팅은 유튜브 &lt;a href=&quot;https://www.youtube.com/channel/UCvc8kv-i5fvFTJBFAk6n1SA&quot;&gt;생활코딩&lt;/a&gt;님의 데이터베이스 강좌를 보고 정리한 내용입니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;1-mysql의-구조&quot;&gt;1. MySQL의 구조&lt;/h3&gt;
+&lt;p&gt;관계형 데이터베이스는 엑셀과 같은 스프레드시트에 데이터를 저장합니다 즉 표에 정보가 저장된다는 말인데요.&lt;/p&gt;
+
+&lt;p&gt;표(Table)가 많아진다면?&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;정리될 필요성이 생김(파일에서 디렉토리가 필요한 상황이 생기는것과 같음)
+MySql에서는 서로 연관된 표들을 그루핑해서 연관되어있지 않은 표들과 구분짓는 폴더가있는데 이를 database라 칭합니다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Schema(database)는 표들을 그루핑할때 사용되는 일종의 폴더와 같습니다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Schema 는 서로 연관된 데이터들을 그루핑 해준다는 것을 기억해줍시다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;반면에 PostgreSQL에서는 이를 Mysql에서의 database는 Schema라고 불리우며 PostgreSQL 에서 database는 schema의 상위 개념입니다. Postgres에서의 database는 Mysql 에서는 database server과 같습니다. 헷갈릴 수 있으니 유의합시다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그림으로 보면 아래와 같습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/75003424/124347638-a594f900-dc20-11eb-863a-00c4aa3ea5e3.png&quot; alt=&quot;mysql구조&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;2-db-사용의-장점&quot;&gt;2. DB 사용의 장점&lt;/h3&gt;
+&lt;p&gt;데이터베이스는 자체적인 안전 체계가 있기에 데이터를 안전하게 보관할 수 있습니다&lt;/p&gt;
+
+&lt;p&gt;권한 기능이 있어, MySQL에 여러사람들을 등록할 수 있고 특정 롤을 지정해줄 수 있습니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-mysql-서버-접속&quot;&gt;3. MySQL 서버 접속&lt;/h3&gt;
+&lt;p&gt;brew를 통해서 처음 mysql을 설치하면 root에 password가 설정되어있지 않은데 이를 설정해봅시다&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;먼저 MySQL은 멈춰있어야 합니다. 아래 커맨드를 입력해 종료해 줍시다.
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew services stop mysql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;그다음 mysql을 안전모드로 실행합니다.
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;mysqld_safe &lt;span class=&quot;nt&quot;&gt;--skip-grant-tables&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;터미널을 하나 더 열고 password를 초기화해줍니다.
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mysql -u root
+UPDATE mysql.user SET authentication_string=null 
+WHERE User=&apos;root&apos;;
+FLUSH PRIVILEGES;
+exit;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;마지막으로 새로운 비밀번호를 설정해주면 끝입니다.
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mysql -u root
+ALTER USER &apos;root&apos;@&apos;localhost&apos; IDENTIFIED WITH caching_sha2_password BY &apos;yourpasswd&apos;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;비밀번호와 함께 서버접속 하기
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mysql &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; root &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;
+Enter password: &amp;lt;yourpassword&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Database" /><category term="MySQL" /><summary type="html">이때까지는 데이터베이스를 단순히 사용만 해왔었는데요, 알고 제대로 써야겠다고 생각하여 기초부터 공부해려고 합니다. 본 포스팅은 유튜브 생활코딩님의 데이터베이스 강좌를 보고 정리한 내용입니다. 1. MySQL의 구조 관계형 데이터베이스는 엑셀과 같은 스프레드시트에 데이터를 저장합니다 즉 표에 정보가 저장된다는 말인데요. 표(Table)가 많아진다면? 정리될 필요성이 생김(파일에서 디렉토리가 필요한 상황이 생기는것과 같음) MySql에서는 서로 연관된 표들을 그루핑해서 연관되어있지 않은 표들과 구분짓는 폴더가있는데 이를 database라 칭합니다. Schema(database)는 표들을 그루핑할때 사용되는 일종의 폴더와 같습니다. Schema 는 서로 연관된 데이터들을 그루핑 해준다는 것을 기억해줍시다. 반면에 PostgreSQL에서는 이를 Mysql에서의 database는 Schema라고 불리우며 PostgreSQL 에서 database는 schema의 상위 개념입니다. Postgres에서의 database는 Mysql 에서는 database server과 같습니다. 헷갈릴 수 있으니 유의합시다. 그림으로 보면 아래와 같습니다. 2. DB 사용의 장점 데이터베이스는 자체적인 안전 체계가 있기에 데이터를 안전하게 보관할 수 있습니다 권한 기능이 있어, MySQL에 여러사람들을 등록할 수 있고 특정 롤을 지정해줄 수 있습니다. 3. MySQL 서버 접속 brew를 통해서 처음 mysql을 설치하면 root에 password가 설정되어있지 않은데 이를 설정해봅시다 먼저 MySQL은 멈춰있어야 합니다. 아래 커맨드를 입력해 종료해 줍시다. $ brew services stop mysql 그다음 mysql을 안전모드로 실행합니다. $ sudo mysqld_safe --skip-grant-tables 터미널을 하나 더 열고 password를 초기화해줍니다. mysql -u root UPDATE mysql.user SET authentication_string=null WHERE User=&apos;root&apos;; FLUSH PRIVILEGES; exit; 마지막으로 새로운 비밀번호를 설정해주면 끝입니다. mysql -u root ALTER USER &apos;root&apos;@&apos;localhost&apos; IDENTIFIED WITH caching_sha2_password BY &apos;yourpasswd&apos;; 비밀번호와 함께 서버접속 하기 $ mysql -u root -p Enter password: &amp;lt;yourpassword&amp;gt;</summary></entry><entry><title type="html">첫 면접</title><link href="https://shjeong92.github.io/2021/07/01/Interview-01.html" rel="alternate" type="text/html" title="첫 면접" /><published>2021-07-01T00:00:00+09:00</published><updated>2021-07-01T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/07/01/Interview-01</id><content type="html" xml:base="https://shjeong92.github.io/2021/07/01/Interview-01.html">&lt;p&gt;오랜만의 포스팅 입니다.&lt;/p&gt;
+
+&lt;p&gt;저는 이때까지 서류를 붙어본적이 없습니다.&lt;/p&gt;
+
+&lt;p&gt;4월에는 프로그래머스 데브매칭에서 코딩테스트를 치고, 다섯 군데 지원된 서류는 모두 탈락이었습니다.&lt;/p&gt;
+
+&lt;p&gt;서류가 많이 부족했었던 것이겠죠. 남들이 다 가지고 있는 프로젝트 경험, 클라우드 경험, 개발 관련 블로그가 없어서이었던 같았기에 이에 관련된 것을 준비하였는데, 그 과정에서 개발 블로그 작성은 정말 도움이 많이 되었던 것 같습니다.&lt;/p&gt;
+
+&lt;p&gt;우선, 공부한 내용을 다시 복기하면서 그 내용을 더 오래 기억할 수 있었고, 설령 까먹더라도 다시 블로그에 들어오면 빠르게 리마인드가 되었기 때문입니다.&lt;/p&gt;
+
+&lt;p&gt;저는 리액트와 장고를 이용하여 2개의 토이프로젝트 및 CKA 자격증 취득 이후에 다시 백엔드 직군으로 입사지원서를 넣었고, 처음으로 서류들이 합격하는 신기한 일이 생겼습니다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;그리고 오늘은 &lt;strong&gt;첫 면접&lt;/strong&gt;을 보았습니다.&lt;/p&gt;
+
+&lt;p&gt;면접관님께서는 회사에 대해 간단히 소개해 주셨고, 저에게 간단한 자기소개를 부탁하셨습니다.&lt;/p&gt;
+
+&lt;p&gt;어찌나 떨리던지 심장이 터지는 줄 알았습니다.&lt;/p&gt;
+
+&lt;p&gt;그리고 전혀 간단하지 않고 장황한 자기소개를 하였습니다..&lt;/p&gt;
+
+&lt;p&gt;여러 가지 질문들을 받았는데 순서는 뒤죽박죽이지만 나열해 보자면,&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;restful api 란&lt;/li&gt;
+  &lt;li&gt;restful api 에서 관련된 자원을 명시하는 이유&lt;/li&gt;
+  &lt;li&gt;restful 이외의 프로토콜&lt;/li&gt;
+  &lt;li&gt;Covid19 관련 프로젝트 진행중 어려운점은 없었는지&lt;/li&gt;
+  &lt;li&gt;쿠버네티스를 어떻게 이해하고 있는지&lt;/li&gt;
+  &lt;li&gt;Loadbalancing 알고리즘에는 어떠한 것들이 있는지&lt;/li&gt;
+  &lt;li&gt;특정 웹사이트를 들어가면 접속하면 일어나는 일&lt;/li&gt;
+  &lt;li&gt;ssh란 무엇인지, 무엇을 할때 쓰이는지&lt;/li&gt;
+  &lt;li&gt;osi 7계층에대해서 설명할 수 있는지&lt;/li&gt;
+  &lt;li&gt;DNS&lt;/li&gt;
+  &lt;li&gt;쉘은 무엇인지&lt;/li&gt;
+  &lt;li&gt;도스와 윈도우의 차이점은 무엇인지&lt;/li&gt;
+  &lt;li&gt;포트는 무엇인지&lt;/li&gt;
+  &lt;li&gt;etcd 는 무엇인지&lt;/li&gt;
+  &lt;li&gt;key value쌍을 이용한 다른 DB는 무엇이있는지, 어떠한 차이점이있고 언제 쓰이는지&lt;/li&gt;
+  &lt;li&gt;DB index란&lt;/li&gt;
+  &lt;li&gt;데이터베이스의 구조&lt;/li&gt;
+  &lt;li&gt;네트워크 관련 질문&lt;/li&gt;
+  &lt;li&gt;리눅스 네임스페이스&lt;/li&gt;
+  &lt;li&gt;도커 네트워크관련&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;이번-면접에서-느낀점&quot;&gt;이번 면접에서 느낀점&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;암기하지말고 진짜 이해를 해야합니다.&lt;/li&gt;
+  &lt;li&gt;CS지식 공부 너무너무너무 중요합니다.&lt;/li&gt;
+  &lt;li&gt;도커,쿠버네티스 이러한 기술을 사용하기 이전에 그에 바탕이되는 기본 개념을 알아야 합니다.&lt;/li&gt;
+  &lt;li&gt;면접 복장은 무조건 정해준대로 입는게 좋습니다.&lt;/li&gt;
+  &lt;li&gt;공부는 끝이 없습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;공부할것&quot;&gt;공부할것!&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;운영체제&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;네트워크&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;데이터베이스&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="backend" /><category term="면접" /><category term="질문" /><summary type="html">오랜만의 포스팅 입니다. 저는 이때까지 서류를 붙어본적이 없습니다. 4월에는 프로그래머스 데브매칭에서 코딩테스트를 치고, 다섯 군데 지원된 서류는 모두 탈락이었습니다. 서류가 많이 부족했었던 것이겠죠. 남들이 다 가지고 있는 프로젝트 경험, 클라우드 경험, 개발 관련 블로그가 없어서이었던 같았기에 이에 관련된 것을 준비하였는데, 그 과정에서 개발 블로그 작성은 정말 도움이 많이 되었던 것 같습니다. 우선, 공부한 내용을 다시 복기하면서 그 내용을 더 오래 기억할 수 있었고, 설령 까먹더라도 다시 블로그에 들어오면 빠르게 리마인드가 되었기 때문입니다. 저는 리액트와 장고를 이용하여 2개의 토이프로젝트 및 CKA 자격증 취득 이후에 다시 백엔드 직군으로 입사지원서를 넣었고, 처음으로 서류들이 합격하는 신기한 일이 생겼습니다. 그리고 오늘은 첫 면접을 보았습니다. 면접관님께서는 회사에 대해 간단히 소개해 주셨고, 저에게 간단한 자기소개를 부탁하셨습니다. 어찌나 떨리던지 심장이 터지는 줄 알았습니다. 그리고 전혀 간단하지 않고 장황한 자기소개를 하였습니다.. 여러 가지 질문들을 받았는데 순서는 뒤죽박죽이지만 나열해 보자면, restful api 란 restful api 에서 관련된 자원을 명시하는 이유 restful 이외의 프로토콜 Covid19 관련 프로젝트 진행중 어려운점은 없었는지 쿠버네티스를 어떻게 이해하고 있는지 Loadbalancing 알고리즘에는 어떠한 것들이 있는지 특정 웹사이트를 들어가면 접속하면 일어나는 일 ssh란 무엇인지, 무엇을 할때 쓰이는지 osi 7계층에대해서 설명할 수 있는지 DNS 쉘은 무엇인지 도스와 윈도우의 차이점은 무엇인지 포트는 무엇인지 etcd 는 무엇인지 key value쌍을 이용한 다른 DB는 무엇이있는지, 어떠한 차이점이있고 언제 쓰이는지 DB index란 데이터베이스의 구조 네트워크 관련 질문 리눅스 네임스페이스 도커 네트워크관련 이번 면접에서 느낀점 암기하지말고 진짜 이해를 해야합니다. CS지식 공부 너무너무너무 중요합니다. 도커,쿠버네티스 이러한 기술을 사용하기 이전에 그에 바탕이되는 기본 개념을 알아야 합니다. 면접 복장은 무조건 정해준대로 입는게 좋습니다. 공부는 끝이 없습니다. 공부할것! 운영체제 네트워크 데이터베이스</summary></entry><entry><title type="html">[ #12 ] 클러스터 보안 - 3</title><link href="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html" rel="alternate" type="text/html" title="[ #12 ] 클러스터 보안 - 3" /><published>2021-06-10T00:00:00+09:00</published><updated>2021-06-10T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12</id><content type="html" xml:base="https://shjeong92.github.io/2021/06/10/Learning-Kubernetes-12.html">&lt;h2 id=&quot;1-tls가-제공하는-이점들&quot;&gt;1. TLS가 제공하는 이점들&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -2099,254 +2223,4 @@ Last login: Tue Jun  1 03:44:23 2021 from 122.32.103.55
 shjeong920522@master:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="gcloud" /><category term="ssh" /><category term="key-gen" /><category term="rsa" /><category term="config" /><summary type="html">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요. 이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다. key pair 생성하기 #-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음) $ssh-keygen -t rsa -f ~/.ssh/&amp;lt;KEY_FILE_NAME&amp;gt; -C &quot;account@gmail.com&quot; 위와같이 입력하면 RSA key pair가 생성됩니다. ssh-keygen -t rsa -f ~/.ssh/test -C &quot;test@gmail.com&quot; Generating public/private rsa key pair. Enter passphrase (empty for no passphrase): Enter same passphrase again: Your identification has been saved in /Users/sanghyukjeong/.ssh/test. Your public key has been saved in /Users/sanghyukjeong/.ssh/test.pub. The key fingerprint is: SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ test@gmail.com The key&apos;s randomart image is: +---[RSA 3072]----+ |+E+=. ..... | |.o*.o..oo. | |.=.o. .+ | |... ... o. | |o+ ...S | |B.. . B | |*+ . * + | |O.o + | |oOo .o | +----[SHA256]-----+ 이후 cat명령어로 rsa 공개키를 확인할 수 있는데 구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다. $ cat ~/.ssh/test.pub ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk= test@gmail.com key 등록하기 compute엔진 -&amp;gt; 메타데이터 -&amp;gt; SSH 키로 이동후에 항목추가를 클릭하여 공개키를 추가합니다. 키등록이 끝났으니 ssh 접속을 해봅시다 $ ssh -i ~/.ssh/test yourID@your.gcloudExternal.ip Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 03:44:22 UTC 2021 System load: 0.27 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 10.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 10.244.0.1 Processes: 143 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 잘 접속 되는것을 확인할 수 있습니다. 그러나 접속할때마다 저 커맨드를 다 입력하는것은 참 귀찮은일입니다. ip정도는 한번보면 외우시는분이 아니라면요 ㅎㅎ 이제 ssh config파일 설정에대해 알아봅시다 ssh config 설정하여 ssh 접속 간편하게 하기 Linux/Unix서버 접속 계정들을 여러 가지 관리하는 경우, 별도로 메모나 파일에 접속 계정 / 비밀번호 등을 관리하거나 alias에 접속 명령어를 설정하는 번거로움이 있습니다. 하지만 .ssh 경로 밑 config 파일에 계정 정보들을 저장하여 관리하면 정말 편리하게 접속들을 관리할 수 있습니다. 우선 사용자 홈 디렉토리에서 .ssh 폴더로 접근합니다. .ssh 폴더는 ssh 접속을 한 번이라도 했다면, rsa 파일이나 known_hosts 등이 생성되기 때문에 자동으로 생성되는 디렉토리입니다. 홈디렉토리에 있는 .ssh폴더에 들어가서 config 파일을 생성해줍니다. $ cd ~/.ssh $ vim config Host gcloud HostName 10.178.0.3 User shjeong920522 IdentityFile: ~/.ssh/test Port 22 Host: 접속할 정보의 이름입니다. HostName: 접속할 서버의 외부 IP 주소를 입력하세요 User: 접속할 서버의 user 정보입니다. IdentityFile: 인증 키파일이 필요한 경우, 키파일 경로를 설정합니다. 이전 단계에 rsa 키페어 만든거 기억나시죠? Port: ssh 접속 포트입니다. 생략 가능하며, 생략할 경우에 디폴트로 22번 포트로 실생됩니다. 모든 설정이 끝났으니 google cloud에 접속해보겠습니다. # config 에서 Host에 등록한 접속할 정보만 적어주면 접속이되는 마법.... $ ssh gcloud Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 04:05:52 UTC 2021 System load: 0.65 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 12.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 12.244.0.1 Processes: 144 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 11 updates can be applied immediately. To see these additional updates run: apt list --upgradable New release &apos;20.04.2 LTS&apos; available. Run &apos;do-release-upgrade&apos; to upgrade to it. Last login: Tue Jun 1 03:44:23 2021 from 122.32.103.55 shjeong920522@master:~$ 이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.</summary></entry><entry><title type="html">[ #5 ] pod 스케쥴링-2</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html" rel="alternate" type="text/html" title="[ #5 ] pod 스케쥴링-2" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-05.html">&lt;h2 id=&quot;nodeselector&quot;&gt;nodeSelector&lt;/h2&gt;
-&lt;p&gt;nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다.&lt;/p&gt;
-&lt;h3 id=&quot;1-노드에-레이블-붙이기&quot;&gt;1. 노드에 레이블 붙이기&lt;/h3&gt;
-
-&lt;p&gt;노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;레이블 값&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;2-pod설정에-nodeselector-필드-추가하기&quot;&gt;2. pod설정에 nodeSelector 필드 추가하기&lt;/h3&gt;
-&lt;p&gt;실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;spec아래에 nodeSelector을 추가해줍니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;imagePullPolicy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;IfNotPresent&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;nodeSelector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;#&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;disktype&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssd&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;node-affinity&quot;&gt;node affinity&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;nodeSelector&lt;/strong&gt; 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다.&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;nodeAffinity&lt;/strong&gt; 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다.&lt;/p&gt;
-
-&lt;p&gt;또한 &lt;strong&gt;nodeAffinity&lt;/strong&gt; 에는 아래와 같이 두가지 타입이 있습니다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
-  &lt;li&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다
-두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라
-pod이 스케쥴되는 형태입니다.&lt;/p&gt;
-
-&lt;p&gt;미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서
-affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다.&lt;/p&gt;
-
-&lt;h3 id=&quot;예제&quot;&gt;예제&lt;/h3&gt;
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;affinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;nodeAffinity&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;nodeSelectorTerms&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kubernetes.io/e2e-az-name&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az1&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;e2e-az2&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;preference&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;matchExpressions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-key&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;In&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;another-node-label-value&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;with-node-affinity&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;k8s.gcr.io/pause:2.0&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다.&lt;/li&gt;
-      &lt;li&gt;두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 &lt;strong&gt;requiredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 만족하는 노드가 없다면 해당 pod은 pending 상태가
-될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 조건이 맞는 노드로 배정 될 것입니다. &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;weight&lt;/code&gt; 는 선호도입니다 만약 여러개의 &lt;strong&gt;preferredDuringSchedulingIgnoredDuringExecution&lt;/strong&gt; 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="Google" /><category term="cloud" /><summary type="html">nodeSelector nodeSelector 는 파드를 특정 레이블이 있는 노드로 제한하는 매우 간단한 방법을 제공합니다. 1. 노드에 레이블 붙이기 노드에 레이블을 붙여서 추후 pod을 원하는 노드에 할당할때 사용할 수 있습니다. kubectl label nodes &amp;lt;노드 이름&amp;gt; &amp;lt;레이블 키&amp;gt;=&amp;lt;레이블 값&amp;gt; 2. pod설정에 nodeSelector 필드 추가하기 실행하고자 하는 파드의 설정 파일을 가져오고, 이처럼 nodeSelector 섹션을 추가합니다. 아래의 예를 들어보면 apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx spec아래에 nodeSelector을 추가해줍니다. apiVersion: v1 kind: Pod metadata: name: nginx labels: env: test spec: containers: - name: nginx image: nginx imagePullPolicy: IfNotPresent nodeSelector: #&amp;lt;레이블 키&amp;gt;: &amp;lt;레이블 값&amp;gt; disktype: ssd node affinity nodeSelector 을 사용했을때는 매칭 조건이 레이블에 key=value, key와 value가 일치했을때 pod을 노드에 있었습니다. nodeAffinity 는 operator로 Equal, In, NotIn, Exists, DoseNotExist 를 사용할 수 있어, 더 여러가지 제약을 정의 할 수 있습니다. 또한 nodeAffinity 에는 아래와 같이 두가지 타입이 있습니다. requiredDuringSchedulingIgnoredDuringExecution preferredDuringSchedulingIgnoredDuringExecution 첫번째 타입은 파드가 노드에 스케줄되려면 규칙을 만족해야만 하는것이고, 없다면 pod는 pending 상태가 됩니다 두번째 타입은 선호하는 선호하는 또다른 키와 벨류, 연산자를 추가할 수 있는데요, 첫번째 조건을 만족하는 노드가 여러개 있을경우에, 두번째 조건의 weight(선호도) 점수에따라 pod이 스케쥴되는 형태입니다. 미래에는 requiredDuringSchedulingRequiredDuringExecution 라는 새로운 타입이 나올것이라고 합니다, 앞서 소개드린 두 타입은 이미 pod이 스케줄 되었을때 node의 label이 바뀌거나 없어지면서 affinity의 조건과 맞지 않더라도 이미 배정되었음으로 무시합니다. 하지만 미래에 나올 새로운 타입은 이미 배정받은 pod이라도 노드의 label이 삭제,변경되면 조건에 맞지 않는 pod을 중지 시키는 타입 이라고합니다. 예제 apiVersion: v1 kind: Pod metadata: name: with-node-affinity spec: affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: kubernetes.io/e2e-az-name operator: In values: - e2e-az1 - e2e-az2 preferredDuringSchedulingIgnoredDuringExecution: - weight: 1 preference: matchExpressions: - key: another-node-label-key operator: In values: - another-node-label-value containers: - name: with-node-affinity image: k8s.gcr.io/pause:2.0 Node affinity는 여러 affinity를 동시에 적용할 수 있는데요 저는 아래와 같은 경우에 대해 실험해 보았습니다. requiredDuringSchedulingIgnoredDuringExecution 만 적용했을 경우: 조건을 만족하는 노드가 없을경우 pod는 스케쥴되지않고 pending상태가 됩니다. requiredDuringSchedulingIgnoredDuringExecution 과 preferredDuringSchedulingIgnoredDuringExecution 를 동시에 적용할경우: 첫번째 조건을 을 만족하는 노드가 여러개 있을때 두번째 조건을 만족하는 노드가 있다면 두번째 조건을 만족하는 노드에 pod가 배치됩니다. 두번째 조건만을 만족하는 경우에는 pod는 스케쥴링되지 않고 pending 상태가 됩니다. preferredDuringSchedulingIgnoredDuringExecution 만 적용할 경우: 조건을 만족하는 노드가 있을경우 해당 노드에 스케쥴링되고, 조건을 만족하는 노드가 없다면 랜덤으로 스케쥴 되었습니다. 위의 예제에서는 두 개의 Affinity가 정의되어 있는데요 만약 노드들중 requiredDuringSchedulingIgnoredDuringExecution 을 만족하는 노드가 없다면 해당 pod은 pending 상태가 될것이며, 해당 조건을 만족하는 노드가 여러개일 경우 preferredDuringSchedulingIgnoredDuringExecution 조건이 맞는 노드로 배정 될 것입니다. weight 는 선호도입니다 만약 여러개의 preferredDuringSchedulingIgnoredDuringExecution 을 적용하였을때에는 weight이 높은 노드에 스케쥴됩니다.</summary></entry><entry><title type="html">[ #6 ] static pod</title><link href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html" rel="alternate" type="text/html" title="[ #6 ] static pod" /><published>2021-05-31T00:00:00+09:00</published><updated>2021-05-31T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06</id><content type="html" xml:base="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html">&lt;h2 id=&quot;static-pods이란&quot;&gt;Static pods이란&lt;/h2&gt;
-
-&lt;p&gt;제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 &lt;code&gt;kube-apiserver&lt;/code&gt;가 있고, 각 워커노드에는 &lt;code&gt;kubelet&lt;/code&gt; 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. &lt;br /&gt;
-이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다.&lt;/p&gt;
-
-&lt;p&gt;각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다.&lt;/p&gt;
-
-&lt;p&gt;우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get nodes &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; wide
-NAME         STATUS   ROLES                  AGE    VERSION
-instance-1   Ready    &amp;lt;none&amp;gt;                 3d3h   v1.21.1
-master       Ready    control-plane,master   3d3h   v1.21.1
-worker-1     Ready    &amp;lt;none&amp;gt;                 3d3h   v1.21.1
-worker-2     Ready    &amp;lt;none&amp;gt;                 3d3h   v1.21.1
-
-&lt;span class=&quot;c&quot;&gt;#worker 에 접속하기&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; ~/.ssh/rsa-gcp-worker-1 shjeong920522@10.178.0.5
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;특징-1&quot;&gt;특징 1&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;kubelet&lt;/strong&gt; 은 기본적으로 /etc/kubernetes/manifests 파일안의 pod.yaml 을 바라보는데, 이는 kubelet.service 의 config.yaml파일안에 staticPodPath에 정의되어있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;직접 확인해봅시다&lt;/p&gt;
-
-&lt;p&gt;우선 아래 커맨드를 입력하여 config.yaml파일의 위치를 알아냅니다&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 모든서비스 확장 | kubelet 정보중에서 | --config 포함하는줄 가져오기&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ps &lt;span class=&quot;nt&quot;&gt;-ef&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;kubelet | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\-&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;-config&quot;&lt;/span&gt;
-root     18270     1  1 May28 ?        01:31:14 /usr/bin/kubelet &lt;span class=&quot;nt&quot;&gt;--bootstrap-kubeconfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/etc/kubernetes/bootstrap-kubelet.conf &lt;span class=&quot;nt&quot;&gt;--kubeconfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/etc/kubernetes/kubelet.conf &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/var/lib/kubelet/config.yaml &lt;span class=&quot;nt&quot;&gt;--network-plugin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;cni &lt;span class=&quot;nt&quot;&gt;--pod-infra-container-image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;k8s.gcr.io/pause:3.4.1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;해당 파일을 확인해 봅시다&lt;/p&gt;
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s&quot;&gt;$ sudo vi config=/var/lib/kubelet/config.yaml&lt;/span&gt;
-
-&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kubelet.config.k8s.io/v1beta1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;anonymous&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;webhook&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;cacheTTL&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;x509&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;clientCAFile&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/etc/kubernetes/pki/ca.crt&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;authorization&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Webhook&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;webhook&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;cacheAuthorizedTTL&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;cacheUnauthorizedTTL&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;cgroupDriver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;systemd&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;clusterDNS&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;10.96.0.10&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;clusterDomain&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cluster.local&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;cpuManagerReconcilePeriod&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;evictionPressureTransitionPeriod&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;fileCheckFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;healthzBindAddress&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;127.0.0.1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;healthzPort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10248&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;httpCheckFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;imageMinimumGCAge&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;KubeletConfiguration&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;logging&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{}&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;nodeStatusReportFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;nodeStatusUpdateFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;resolvConf&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/run/systemd/resolve/resolv.conf&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;rotateCertificates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;runtimeRequestTimeout&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;shutdownGracePeriod&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;shutdownGracePeriodCriticalPods&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;staticPodPath&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/etc/kubernetes/manifests        &amp;lt;------------------------------ staticPodPath 가 설정되어 있는것을 확인할 수 있습니다.&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;streamingConnectionIdleTimeout&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;syncFrequency&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;volumeStatsAggPeriod&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0s&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;위와 같이 파일을 통으로 확인해보아도 되지만 grep명령어를 사용하면 더욱 편히 찾을 수도 있습니다.&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo grep &lt;/span&gt;static /var/lib/kubelet/config.yaml
-staticPodPath: /etc/kubernetes/manifests
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;특징-2&quot;&gt;특징 2&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;만약 해동 폴더내에 kind: Pod인 yaml 파일이있다면 kubelet이 자동으로 이를 생성하며 static pod의 이름에는 자동으로 해당 노드의 이름이 suffix로 붙습니다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;잘 생성되나 확인해 봅시다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /etc/kubernetes/manifests
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vi static.yaml
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;간단한 pod을 해당 볼더에 생성해줍니다.&lt;/p&gt;
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#static.yaml&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Pod&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;myapp-pod&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;myapp&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;front-end&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx-container&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;마스터&lt;/strong&gt; 노드로 이동하여 확인해봅시다.&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get pods
-NAME                 READY   STATUS    RESTARTS   AGE
-myapp-pod-worker-1   1/1     Running   0          42m
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;static pod를 생성한 노드의 이름인 worker-1 가 Pod이름의 suffix로 붙어있는것을 확인할 수 있습니다.&lt;/p&gt;
-
-&lt;h3 id=&quot;특징-3&quot;&gt;특징 3&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;마스터노드에서 kubectl delete 명령어를 사용하더라도 워커노드의 kubelet이 다시 살려냅니다. static pod는 해당 워커노드의 kubelet이 관리하기 떄문입니다.
-따라서 해당 pod의 image를 변경하고싶다면 manifest 폴더안의 해당 yaml파일의 이미지를 수정해야하고, 지우려면 해당 yaml파일을 삭제하면 됩니다.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;그럼 정말로 다시 시작되는지 마스터노드에서 &lt;strong&gt;myapp-pod-worker-1&lt;/strong&gt;을 삭제해 봅시다&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl delete pod myapp-pod-worker-1
-pod &lt;span class=&quot;s2&quot;&gt;&quot;myapp-pod-worker-1&quot;&lt;/span&gt; deleted
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;지운다음에 바로 확인해보면&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get pods
-NAME                 READY   STATUS    RESTARTS   AGE
-myapp-pod-worker-1   0/1     Pending   0          1s
-
-kubectl get pods
-NAME                 READY   STATUS    RESTARTS   AGE
-myapp-pod-worker-1   1/1     Running   0   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다.
-따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="Docker" /><category term="Kubernetes" /><category term="Replicasets" /><category term="Deployment" /><category term="static" /><category term="pod" /><summary type="html">Static pods이란 제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다. 각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다. 우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다 $ kubectl get nodes -o wide NAME STATUS ROLES AGE VERSION instance-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 master Ready control-plane,master 3d3h v1.21.1 worker-1 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 worker-2 Ready &amp;lt;none&amp;gt; 3d3h v1.21.1 #worker 에 접속하기 $ ssh -i ~/.ssh/rsa-gcp-worker-1 shjeong920522@10.178.0.5 특징 1 kubelet 은 기본적으로 /etc/kubernetes/manifests 파일안의 pod.yaml 을 바라보는데, 이는 kubelet.service 의 config.yaml파일안에 staticPodPath에 정의되어있습니다. 직접 확인해봅시다 우선 아래 커맨드를 입력하여 config.yaml파일의 위치를 알아냅니다 # 모든서비스 확장 | kubelet 정보중에서 | --config 포함하는줄 가져오기 $ ps -ef | grep kubelet | grep &quot;\--config&quot; root 18270 1 1 May28 ? 01:31:14 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.4.1 해당 파일을 확인해 봅시다 $ sudo vi config=/var/lib/kubelet/config.yaml apiVersion: kubelet.config.k8s.io/v1beta1 authentication: anonymous: enabled: false webhook: cacheTTL: 0s enabled: true x509: clientCAFile: /etc/kubernetes/pki/ca.crt authorization: mode: Webhook webhook: cacheAuthorizedTTL: 0s cacheUnauthorizedTTL: 0s cgroupDriver: systemd clusterDNS: - 10.96.0.10 clusterDomain: cluster.local cpuManagerReconcilePeriod: 0s evictionPressureTransitionPeriod: 0s fileCheckFrequency: 0s healthzBindAddress: 127.0.0.1 healthzPort: 10248 httpCheckFrequency: 0s imageMinimumGCAge: 0s kind: KubeletConfiguration logging: {} nodeStatusReportFrequency: 0s nodeStatusUpdateFrequency: 0s resolvConf: /run/systemd/resolve/resolv.conf rotateCertificates: true runtimeRequestTimeout: 0s shutdownGracePeriod: 0s shutdownGracePeriodCriticalPods: 0s staticPodPath: /etc/kubernetes/manifests &amp;lt;------------------------------ staticPodPath 가 설정되어 있는것을 확인할 수 있습니다. streamingConnectionIdleTimeout: 0s syncFrequency: 0s volumeStatsAggPeriod: 0s 위와 같이 파일을 통으로 확인해보아도 되지만 grep명령어를 사용하면 더욱 편히 찾을 수도 있습니다. $ sudo grep static /var/lib/kubelet/config.yaml staticPodPath: /etc/kubernetes/manifests 특징 2 만약 해동 폴더내에 kind: Pod인 yaml 파일이있다면 kubelet이 자동으로 이를 생성하며 static pod의 이름에는 자동으로 해당 노드의 이름이 suffix로 붙습니다. 잘 생성되나 확인해 봅시다. $ cd /etc/kubernetes/manifests $ sudo vi static.yaml 간단한 pod을 해당 볼더에 생성해줍니다. #static.yaml apiVersion: v1 kind: Pod metadata: name: myapp-pod labels: app: myapp type: front-end spec: containers: - name: nginx-container image: nginx 마스터 노드로 이동하여 확인해봅시다. $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 42m static pod를 생성한 노드의 이름인 worker-1 가 Pod이름의 suffix로 붙어있는것을 확인할 수 있습니다. 특징 3 마스터노드에서 kubectl delete 명령어를 사용하더라도 워커노드의 kubelet이 다시 살려냅니다. static pod는 해당 워커노드의 kubelet이 관리하기 떄문입니다. 따라서 해당 pod의 image를 변경하고싶다면 manifest 폴더안의 해당 yaml파일의 이미지를 수정해야하고, 지우려면 해당 yaml파일을 삭제하면 됩니다. 그럼 정말로 다시 시작되는지 마스터노드에서 myapp-pod-worker-1을 삭제해 봅시다 $ kubectl delete pod myapp-pod-worker-1 pod &quot;myapp-pod-worker-1&quot; deleted 지운다음에 바로 확인해보면 $ kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 0/1 Pending 0 1s kubectl get pods NAME READY STATUS RESTARTS AGE myapp-pod-worker-1 1/1 Running 0 pending상태에 있다가 running으로 바뀌는 것을 확인할 수 있습니다. 따라서 static pod을 지우고싶으면 해당 노드로 가서 해당 yaml파일을 삭제하는 방법뿐입니다.</summary></entry></feed>
+&lt;p&gt;이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="gcloud" /><category term="ssh" /><category term="key-gen" /><category term="rsa" /><category term="config" /><summary type="html">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요. 이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다. key pair 생성하기 #-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음) $ssh-keygen -t rsa -f ~/.ssh/&amp;lt;KEY_FILE_NAME&amp;gt; -C &quot;account@gmail.com&quot; 위와같이 입력하면 RSA key pair가 생성됩니다. ssh-keygen -t rsa -f ~/.ssh/test -C &quot;test@gmail.com&quot; Generating public/private rsa key pair. Enter passphrase (empty for no passphrase): Enter same passphrase again: Your identification has been saved in /Users/sanghyukjeong/.ssh/test. Your public key has been saved in /Users/sanghyukjeong/.ssh/test.pub. The key fingerprint is: SHA256:6TjvkM1IFHeI5ywCVgt8DFJpqiK+K4SZO4eTuBcEHkQ test@gmail.com The key&apos;s randomart image is: +---[RSA 3072]----+ |+E+=. ..... | |.o*.o..oo. | |.=.o. .+ | |... ... o. | |o+ ...S | |B.. . B | |*+ . * + | |O.o + | |oOo .o | +----[SHA256]-----+ 이후 cat명령어로 rsa 공개키를 확인할 수 있는데 구글 클라우드 인스턴스에 이 키를 등록하기위해 복사 해놓습니다. $ cat ~/.ssh/test.pub ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDIlHiLTIM6oCQtjILfmIaTZv6j37J0kZNNjIgK0dFOxSYnMgXirh8gbRqFQY7kMWXZwAo82akxyTAP65GcjsqR+L1RarkKlYA7/lj7rvAf2VMJXy0X6yCbGo3yHcPGEoWLlsOgeYZDAk3Wld/hGdBWKXX4404iUQygjWbIircQ6BNZBb14nbhJK+pLWXMB7TmaRvtDsumBAko0shkA5g6y1oNGdpGBsUTQHk+rqQhqZElP9hgXp71qGhTO0V11kH41n0beReBoi9YngrpJtu6b4h1Ttm4N7CpCU5rUW38i5s71aInLuPolCDXlA8b6qVtBqg6dQ6/IgNQgQFRpwIkcf4v0EHKygcdm+QM25x3VAx1XC51gqHxhdU71/24EiUw0EW3cIvER6150aZF3PiAe5odstk9vx4L/1Vtu1GySQ2Qz8LcK1J3lawh3i8yaobVPUOIOxGDhme+tRMuyy16PhumtxSI5SeSwoIhYEIZtHKHFHKztNGV6m5aNSLZwzbk= test@gmail.com key 등록하기 compute엔진 -&amp;gt; 메타데이터 -&amp;gt; SSH 키로 이동후에 항목추가를 클릭하여 공개키를 추가합니다. 키등록이 끝났으니 ssh 접속을 해봅시다 $ ssh -i ~/.ssh/test yourID@your.gcloudExternal.ip Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 03:44:22 UTC 2021 System load: 0.27 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 10.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 10.244.0.1 Processes: 143 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 잘 접속 되는것을 확인할 수 있습니다. 그러나 접속할때마다 저 커맨드를 다 입력하는것은 참 귀찮은일입니다. ip정도는 한번보면 외우시는분이 아니라면요 ㅎㅎ 이제 ssh config파일 설정에대해 알아봅시다 ssh config 설정하여 ssh 접속 간편하게 하기 Linux/Unix서버 접속 계정들을 여러 가지 관리하는 경우, 별도로 메모나 파일에 접속 계정 / 비밀번호 등을 관리하거나 alias에 접속 명령어를 설정하는 번거로움이 있습니다. 하지만 .ssh 경로 밑 config 파일에 계정 정보들을 저장하여 관리하면 정말 편리하게 접속들을 관리할 수 있습니다. 우선 사용자 홈 디렉토리에서 .ssh 폴더로 접근합니다. .ssh 폴더는 ssh 접속을 한 번이라도 했다면, rsa 파일이나 known_hosts 등이 생성되기 때문에 자동으로 생성되는 디렉토리입니다. 홈디렉토리에 있는 .ssh폴더에 들어가서 config 파일을 생성해줍니다. $ cd ~/.ssh $ vim config Host gcloud HostName 10.178.0.3 User shjeong920522 IdentityFile: ~/.ssh/test Port 22 Host: 접속할 정보의 이름입니다. HostName: 접속할 서버의 외부 IP 주소를 입력하세요 User: 접속할 서버의 user 정보입니다. IdentityFile: 인증 키파일이 필요한 경우, 키파일 경로를 설정합니다. 이전 단계에 rsa 키페어 만든거 기억나시죠? Port: ssh 접속 포트입니다. 생략 가능하며, 생략할 경우에 디폴트로 22번 포트로 실생됩니다. 모든 설정이 끝났으니 google cloud에 접속해보겠습니다. # config 에서 Host에 등록한 접속할 정보만 적어주면 접속이되는 마법.... $ ssh gcloud Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1043-gcp x86_64) * Documentation: https://help.ubuntu.com * Management: https://landscape.canonical.com * Support: https://ubuntu.com/advantage System information as of Tue Jun 1 04:05:52 UTC 2021 System load: 0.65 Users logged in: 0 Usage of /: 14.2% of 28.90GB IP address for ens4: 12.178.0.2 Memory usage: 44% IP address for docker0: 172.17.0.1 Swap usage: 0% IP address for cni0: 12.244.0.1 Processes: 144 * Super-optimized for small spaces - read how we shrank the memory footprint of MicroK8s to make it the smallest full K8s around. https://ubuntu.com/blog/microk8s-memory-optimisation 11 updates can be applied immediately. To see these additional updates run: apt list --upgradable New release &apos;20.04.2 LTS&apos; available. Run &apos;do-release-upgrade&apos; to upgrade to it. Last login: Tue Jun 1 03:44:23 2021 from 122.32.103.55 shjeong920522@master:~$ 이렇게 한번 설정해 놓으면 외부 ip포트 확인하러 gcloud 콘솔에 접속하지 않아도되고, 정말 간편하게 ssh 접속을 할 수 있습니다.</summary></entry></feed>
