@@ -313,6 +313,48 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/07/04/Database-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] MySQL CRUD operation</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">이전 포스팅에서는 MySQL에서 table을 만들어 봤엇는데요.
+
+이번 포스팅에서는 해당 테이블에 데이터를 생성, 조회, 업데이트, 삭제를 해보겠습니다.
+
+CREATE
+우선 데이터를 삽입하기에 앞서서 테이블에 어떠한 attribute가 있는지 모를 수 있는데
+이때 아래와 같은 명령어를 사용하면 확인할 수 있습니다.
+
+명령어
+DESC &lt;table이름&gt;
+
+
+예제
+
+
+
+데이터 삽입명령어
+INSERT INTO &lt;table이름&gt; (table컬럼명1 , table컬럼명2, table컬럼명3 , ...) values
+
+('컬럼명1 에들어갈 값','컬럼명2 에들어갈 값', '컬럼명3 에들어갈 값', ...)...</div>
+<p><a href="/2021/07/04/Database-04.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Database">Database</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=MySQL">MySQL</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 04일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-07-04T00:00:00+09:00">
+    <meta itemprop="keywords" content="Database,MySQL">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/07/03/When-you-typed-url.html"><h2 itemprop="headline" class="item__header">브라우저에 URL을 입력했을 때 일어나는 일들</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">이번 포스트 에서는 브라우저에 www.naver.com을 입력해보고 어떠한 일이 일어나는지 과정을 알아보겠습니다.
@@ -688,61 +730,11 @@ TLS(Transport Layer Socket)
 <meta itemprop="datePublished" content="2021-06-09T00:00:00+09:00">
     <meta itemprop="keywords" content="Kubernetes,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/07/Learning-Kubernetes-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] 클러스터 보안 - 1</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">기본적인 인증 수단에는 Static Password File을 통한 방법과, Static Token File을 이용한 방법이 있습니다.
-
-1 - Static Password File
-
-아래의 유저정보가 담긴 csv파일을 통하여 인증 할 수 있습니다.
-#user-details.csv
-password123,username1,userId1
-password133,username2,userId2
-password113,username3,userId3 
-
-
-kubeadm으로 클러스터를 구성하였으면 
-그러기 위해선 staticpodpath위치에 kube-apiserver.yaml 이 존재하는데, 아래와같이 실행 옵션을 추가해주면...</div>
-<p><a href="/2021/06/07/Learning-Kubernetes-10.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=maintenance">maintenance</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=strategy">strategy</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 07일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-07T00:00:00+09:00">
-    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 32개, 4 페이지</p>
+<p>전체 글 33개, 5 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><div class="button button--secondary button--circle disabled">
@@ -759,6 +751,9 @@ kubeadm으로 클러스터를 구성하였으면
               </li>
 <li>
                 <a class="button button--secondary button--circle" href="/page4"><span>4</span></a>
+              </li>
+<li>
+                <a class="button button--secondary button--circle" href="/page5"><span>5</span></a>
               </li>
 <li><a class="button button--secondary button--circle" href="/page2">
             <i class="fas fa-angle-right"></i>

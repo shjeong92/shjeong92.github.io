@@ -313,6 +313,44 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/04/29/Learning-React-09.html"><h2 itemprop="headline" class="item__header">[ #9 ] useEffect hook</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">1. useEffect
+
+useEffect란?
+
+useEffect는 기본적으로 몇가지 조건에 의해 작동하게 됩니다. 
+
+조건 1.
+
+페이지가 처음 렌더링 되고난 후 useEffect 내의 함수는 무조건 한번 실행되고 봅니다.
+
+useEffect(() =&gt; {
+    function doSomething(){
+        console.log("something")
+    }
+    doSomething();
+    
+})
+
+조건 2.
+만약에 useEffect의 2번재 파라미터값이 없다면 이는 해당 컴포넌트가 렌더링 될 때마다 실행됩니다.
+두번째 파라미터는 watch 값들의 목록입니다 만약 값이 변경되면 us...</div>
+<p><a href="/2021/04/29/Learning-React-09.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
+            </li></ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
+    <meta itemprop="keywords" content="React">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/04/28/Learning-React-08.html"><h2 itemprop="headline" class="item__header">[ #8 ] Portal, useRef</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">1. Portal을 사용하기.
@@ -539,44 +577,11 @@ const Expenses = ...</div>
 <meta itemprop="datePublished" content="2021-04-25T00:00:00+09:00">
     <meta itemprop="keywords" content="React">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/24/Learning-React-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Props란? </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. props
-오늘은 props 에 대하여 배웠다.
-custom component에 값들을 전송할때 해당 태그안에 객체이름=value식으로 보낼 수 있으며
-해당 컴포넌트에서는 보내어진 모든 객체들을 하나의 객체안에 몽땅 넣어서 전달한다.
-
-Card.js 라는 Wrapper 컴포넌트를 만들면서 자세히 설명하도록 하겠다.
-
-
-App.js
-ExpensesItem 으로 expenses 객체 전달하기.
-import ExpenseItems from "./components/ExpenseItems";
-import './App.css';
-function App() {
-  const expenses = [
-    {
-      ...</div>
-<p><a href="/2021/04/24/Learning-React-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 24일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-24T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 32개, 4 페이지</p>
+<p>전체 글 33개, 5 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><a class="button button--secondary button--circle" href="/page3">
@@ -594,9 +599,12 @@ function App() {
 <li>
               <div class="button button--primary button--circle focus"><span>4</span></div>
             </li>
-<li><div class="button button--secondary button--circle disabled">
+<li>
+                <a class="button button--secondary button--circle" href="/page5"><span>5</span></a>
+              </li>
+<li><a class="button button--secondary button--circle" href="/page5">
             <i class="fas fa-angle-right"></i>
-          </div></li>
+          </a></li>
 </ul>
     </div>
   </div></div>
