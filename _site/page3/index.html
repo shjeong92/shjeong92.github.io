@@ -313,6 +313,48 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/05/31/Learning-Kubernetes-06.html"><h2 itemprop="headline" class="item__header">[ #6 ] static pod</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">Static pods이란
+
+제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 
+이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다.
+
+각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다.
+
+우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다...</div>
+<p><a href="/2021/05/31/Learning-Kubernetes-06.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Replicasets">Replicasets</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Deployment">Deployment</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
+    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/05/31/Learning-Kubernetes-05.html"><h2 itemprop="headline" class="item__header">[ #5 ] pod 스케쥴링-2 </h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">nodeSelector
@@ -651,46 +693,11 @@ b1545defe462   bridge           bridge    local
 <meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
     <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/19/Learning-Docker-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Docker 기본 익히기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Image vs Container
-
-도커 이미지
-도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.
-
-도커 컨테이너
-도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
-컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.
-
-허브로부터 이미지 받아오기
-docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다.
-$ docker pull &lt;image&gt;
-
-
-
-이미지 실행하기
-
-docker run 커맨드를 사용하여 원하는 이미지를 실...</div>
-<p><a href="/2021/05/19/Learning-Docker-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 35개, 5 페이지</p>
+<p>전체 글 36개, 5 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><a class="button button--secondary button--circle" href="/page2">
