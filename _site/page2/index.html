@@ -313,6 +313,72 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/06/09/Learning-Kubernetes-11.html"><h2 itemprop="headline" class="item__header">[ #11 ] 클러스터 보안 - 2</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">1. TLS / SSL / HTTPS 란?
+
+SSL(Secure Socket Layer)
+SSL은 웹사이트와 브라우저(혹은, 두 서버) 사이에 전송된 데이터를 암호화하여 인터넷 연결 보안을 유지하는 표준 기술입니다.
+
+이는 해커가 개인 정보 및 금융 정보를 포함한 전송되는 모든 정보를 열람하거나 훔치는 것을 방지합니다.
+
+쉽게 말하자면, 네트워크 통신을 할 때 보안을 제공하기 위해 설계된 암호 규약이며, TCP/IP 네트워크를 사용하는 통신에 적용됩니다.
+
+
+  
+    SSL의 구조
+
+    
+  
+
+
+TLS(Transport Layer Socket)
+
+이름은 SSL 과 다르지만 사실 둘은 같다고 합니다. TLS...</div>
+<p><a href="/2021/06/09/Learning-Kubernetes-11.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=HTTPS">HTTPS</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SSL">SSL</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=TLS">TLS</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B3%B4%EC%95%88">보안</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Security">Security</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8C%80%EC%B9%AD%ED%82%A4">대칭키</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">비대칭키</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 06월 09일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-06-09T00:00:00+09:00">
+    <meta itemprop="keywords" content="Kubernetes,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/06/07/Learning-Kubernetes-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] 클러스터 보안 - 1</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">기본적인 인증 수단에는 Static Password File을 통한 방법과, Static Token File을 이용한 방법이 있습니다.
@@ -676,61 +742,11 @@ metadata:
 <meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
     <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/30/Learning-Kubernetes-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] pod 스케쥴링-1 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Taint &amp; Toleration
-
-
-  taint: 노드마다 설정가능
-  toleration: taint를 무시할 수 있음
-
-
-주로 노드를 지정된 역할만 하게할때 사용합니다.
-예를들어 gpu잇는 노드에는 다른 pod들은 올라가지않고 gpu쓰는 pod들만 올라가게 하는등의 상황에 사용할 수 있습니다.
-
-
-taint에는 사용할 수 있는 3가지 옵션이 있습니다.
-
-
-  NoSchedule : toleration이 없으면 pod이 스케쥴되지 않음, 기존 실행되던 pod에는 적용 안됨
-  PreferNoSchedule : toleration이 없으면 pod을 스케줄링안하려고 하지만 필수는 아님, 클러스터내에 자원이...</div>
-<p><a href="/2021/05/30/Learning-Kubernetes-04.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Deployment">Deployment</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Google">Google</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=cloud">cloud</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 30일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-30T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 33개, 5 페이지</p>
+<p>전체 글 34개, 5 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><a class="button button--secondary button--circle" href="/">

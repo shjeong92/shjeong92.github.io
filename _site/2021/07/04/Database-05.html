@@ -5,10 +5,10 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>[ #2 ] MySQL - 스키마의 사용 - Hyuk's devlog</title>
+<title>[ #5 ] 관계형 DB의 필요성 - Hyuk's devlog</title>
 
-<meta name="description" content="1. 데이터베이스(스키마) 생성문법CREATE DATABASE &lt;DB이름&gt;예제mysql&gt; CREATE DATABASE opentutorials;Query OK, 1 row affected (0.01 sec)2. 데이터베이스(스키마) 삭제문법DROP DATABASE ...">
-<link rel="canonical" href="https://shjeong92.github.io/2021/07/03/Database-02.html">
+<meta name="description" content="mysql&gt; SELECT * from topic;+----+------------+-------------------+---------------------+----------+---------------------------+| id | title      | descrip...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/07/04/Database-05.html">
 <link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
 <!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
@@ -306,8 +306,8 @@
 <!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #2 ] MySQL - 스키마의 사용</h1></header></div>
-<meta itemprop="headline" content="[ #2 ] MySQL - 스키마의 사용">
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #5 ] 관계형 DB의 필요성</h1></header></div>
+<meta itemprop="headline" content="[ #5 ] 관계형 DB의 필요성">
 <div class="article__info clearfix">
 <ul class="left-col menu">
 <li>
@@ -317,80 +317,121 @@
               <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=MySQL">MySQL</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Schema">Schema</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=RDBMS">RDBMS</a>
             </li>
 </ul>
 <ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 07월 03일</span>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 04일</span>
             </li></ul>
 </div>
 <meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-07-03T00:00:00+09:00">
-    <meta itemprop="keywords" content="Database,MySQL,Schema">
+<meta itemprop="datePublished" content="2021-07-04T00:00:00+09:00">
+    <meta itemprop="keywords" content="Database,MySQL,RDBMS">
 <div class="js-article-content">
 <div class="layout--article">
 <!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody">
-<h3 id="1-데이터베이스스키마-생성">1. 데이터베이스(스키마) 생성</h3>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">from</span> <span class="n">topic</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+----------+---------------------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">title</span>      <span class="o">|</span> <span class="n">description</span>       <span class="o">|</span> <span class="n">created</span>             <span class="o">|</span> <span class="n">author</span>   <span class="o">|</span> <span class="n">profile</span>                   <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+----------+---------------------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="n">MySQL</span>      <span class="o">|</span> <span class="n">MySQL</span> <span class="k">is</span> <span class="p">...</span>      <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">03</span> <span class="mi">23</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span><span class="mi">45</span> <span class="o">|</span> <span class="n">sanghyuk</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">2</span> <span class="o">|</span> <span class="n">ORACLE</span>     <span class="o">|</span> <span class="n">ORACLE</span> <span class="k">is</span> <span class="p">...</span>     <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">24</span><span class="p">:</span><span class="mi">59</span> <span class="o">|</span> <span class="n">sanghyuk</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span> <span class="k">SQL</span> <span class="n">server</span> <span class="o">|</span> <span class="k">SQL</span> <span class="n">server</span> <span class="k">is</span> <span class="p">...</span> <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">29</span> <span class="o">|</span> <span class="n">john</span> <span class="n">doe</span> <span class="o">|</span> <span class="k">database</span> <span class="n">administrator</span>    <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span> <span class="n">PostgreSQL</span> <span class="o">|</span> <span class="n">postgreSQL</span> <span class="k">is</span> <span class="p">...</span> <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">26</span><span class="p">:</span><span class="mi">27</span> <span class="o">|</span> <span class="n">Joe</span>      <span class="o">|</span> <span class="k">data</span> <span class="n">scientist</span><span class="p">,</span> <span class="n">developer</span> <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">5</span> <span class="o">|</span> <span class="n">MongoDB</span>    <span class="o">|</span> <span class="n">MongoDB</span> <span class="k">is</span> <span class="p">...</span>    <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">04</span> <span class="mi">09</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">25</span> <span class="o">|</span> <span class="n">sanghyuk</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+----------+---------------------------+</span>
+</code></pre></div></div>
+
+<p>위 테이블을 보면 저자들에 대한 정보가 중복되는것을 확인할 수 있는데요,</p>
+
+<p>테이블에 데이터가 중복해서 들어가 있는경우</p>
+
+<ul>
+  <li>중요한 신호</li>
+  <li>개선할 것이 있다라는 증거
+입니다.</li>
+</ul>
+
+<p>행이 1억개라고 생각하고 천만개 데이터가 중복된다면 여러가지 문제가 생깁니다. 그리고 그데이터가 엄청난 크기의 데이터라면 더 큰 문제가 되겠죠.</p>
+
+<p>또한 위 테이블 같은 경우에는 이름과 프로필이 같을경우에 그 사람이 같은사람인지 다른사람인지 판별할 방법이 없기도 하죠</p>
+
+<p>이를 해결하기위해 저자에 관련된 부분과 토픽을 테이블에서 아래와 같이 분리시켜 줍니다.</p>
+
+<h4 id="topic-테이블">topic 테이블</h4>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">topic</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+-----------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">title</span>      <span class="o">|</span> <span class="n">description</span>       <span class="o">|</span> <span class="n">created</span>             <span class="o">|</span> <span class="n">author</span><span class="err">\</span><span class="n">_id</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+-----------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="n">MySQL</span>      <span class="o">|</span> <span class="n">MySQL</span> <span class="k">is</span><span class="p">...</span>       <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">12</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">11</span> <span class="o">|</span>         <span class="mi">1</span> <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">2</span> <span class="o">|</span> <span class="n">Oracle</span>     <span class="o">|</span> <span class="n">Oracle</span> <span class="k">is</span> <span class="p">...</span>     <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">03</span> <span class="mi">13</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">10</span> <span class="o">|</span>         <span class="mi">1</span> <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span> <span class="k">SQL</span> <span class="n">Server</span> <span class="o">|</span> <span class="k">SQL</span> <span class="n">Server</span> <span class="k">is</span> <span class="p">...</span> <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">20</span> <span class="mi">11</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">10</span> <span class="o">|</span>         <span class="mi">2</span> <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span> <span class="n">PostgreSQL</span> <span class="o">|</span> <span class="n">PostgreSQL</span> <span class="k">is</span> <span class="p">...</span> <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">23</span> <span class="mi">01</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">03</span> <span class="o">|</span>         <span class="mi">3</span> <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">5</span> <span class="o">|</span> <span class="n">MongoDB</span>    <span class="o">|</span> <span class="n">MongoDB</span> <span class="k">is</span> <span class="p">...</span>    <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">30</span> <span class="mi">12</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">03</span> <span class="o">|</span>         <span class="mi">1</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+-----------+</span>
+</code></pre></div></div>
+
+<h4 id="author-테이블">author 테이블</h4>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">author</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+--------+---------------------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">name</span>   <span class="o">|</span> <span class="n">profile</span>                   <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+--------+---------------------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="n">egoing</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">2</span> <span class="o">|</span> <span class="n">duru</span>   <span class="o">|</span> <span class="k">database</span> <span class="n">administrator</span>    <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span> <span class="n">taeho</span>  <span class="o">|</span> <span class="k">data</span> <span class="n">scientist</span><span class="p">,</span> <span class="n">developer</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+--------+---------------------------+</span>
+</code></pre></div></div>
+
+<p>중복을 없애주고, 동일명, 동일 프로필의 경우도 알아낼 수 있어 좋긴한데, 
+첫번재 테이블 처럼 모든 정보를 볼 수가 없습니다.</p>
+
+<p>하지만 이는 데이터를 조회할때 관계형 데이터베이스의 꽃인 JOIN 쿼리를 활용하여 이전에 보이던 것처럼 바꿀 수 있습니다.</p>
 
 <h4 id="문법">문법</h4>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE DATABASE &lt;DB이름&gt;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">table1</span><span class="o">&gt;</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="o">&lt;</span><span class="n">table2</span><span class="o">&gt;</span> <span class="k">ON</span> <span class="o">&lt;</span><span class="n">table1</span><span class="err">데이터</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">table2</span><span class="err">데이터</span><span class="o">&gt;</span><span class="p">;</span>
 </code></pre></div></div>
 
-<h4 id="예제">예제</h4>
+<p>여기서 ON 절에는 어떻게 두 테이블을 조인할 것인가에 대한 조건을 담아주는 절인데, topic 의 author_id와 author 테이블의 id를 맵핑하면 되겠죠.</p>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; CREATE DATABASE opentutorials<span class="p">;</span>
-Query OK, 1 row affected <span class="o">(</span>0.01 sec<span class="o">)</span>
+<h4 id="실습">실습</h4>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">topic</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">author</span> <span class="k">ON</span> <span class="n">topic</span><span class="p">.</span><span class="n">author_id</span> <span class="o">=</span> <span class="n">author</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+-----------+------+--------+---------------------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">title</span>      <span class="o">|</span> <span class="n">description</span>       <span class="o">|</span> <span class="n">created</span>             <span class="o">|</span> <span class="n">author</span><span class="err">\</span><span class="n">_id</span> <span class="o">|</span> <span class="n">id</span>   <span class="o">|</span> <span class="n">name</span>   <span class="o">|</span> <span class="n">profile</span>                   <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+-----------+------+--------+---------------------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="n">MySQL</span>      <span class="o">|</span> <span class="n">MySQL</span> <span class="k">is</span><span class="p">...</span>       <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">12</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">11</span> <span class="o">|</span>         <span class="mi">1</span> <span class="o">|</span>    <span class="mi">1</span> <span class="o">|</span> <span class="n">egoing</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">2</span> <span class="o">|</span> <span class="n">Oracle</span>     <span class="o">|</span> <span class="n">Oracle</span> <span class="k">is</span> <span class="p">...</span>     <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">03</span> <span class="mi">13</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">10</span> <span class="o">|</span>         <span class="mi">1</span> <span class="o">|</span>    <span class="mi">1</span> <span class="o">|</span> <span class="n">egoing</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span> <span class="k">SQL</span> <span class="n">Server</span> <span class="o">|</span> <span class="k">SQL</span> <span class="n">Server</span> <span class="k">is</span> <span class="p">...</span> <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">20</span> <span class="mi">11</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">10</span> <span class="o">|</span>         <span class="mi">2</span> <span class="o">|</span>    <span class="mi">2</span> <span class="o">|</span> <span class="n">duru</span>   <span class="o">|</span> <span class="k">database</span> <span class="n">administrator</span>    <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span> <span class="n">PostgreSQL</span> <span class="o">|</span> <span class="n">PostgreSQL</span> <span class="k">is</span> <span class="p">...</span> <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">23</span> <span class="mi">01</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">03</span> <span class="o">|</span>         <span class="mi">3</span> <span class="o">|</span>    <span class="mi">3</span> <span class="o">|</span> <span class="n">taeho</span>  <span class="o">|</span> <span class="k">data</span> <span class="n">scientist</span><span class="p">,</span> <span class="n">developer</span> <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">5</span> <span class="o">|</span> <span class="n">MongoDB</span>    <span class="o">|</span> <span class="n">MongoDB</span> <span class="k">is</span> <span class="p">...</span>    <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">30</span> <span class="mi">12</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">03</span> <span class="o">|</span>         <span class="mi">1</span> <span class="o">|</span>    <span class="mi">1</span> <span class="o">|</span> <span class="n">egoing</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+-----------+------+--------+---------------------------+</span>
 </code></pre></div></div>
 
-<h3 id="2-데이터베이스스키마-삭제">2. 데이터베이스(스키마) 삭제</h3>
+<p>제일 처음 다 합쳐져 있던 테이블과 얼추 비슷한데, author_id와 id부분이 거슬리네요.
+원하는 컬럼만 보고싶을때는 SELECT절에 원하는 컬럼을 적어주면되겠죠?</p>
 
-<h4 id="문법-1">문법</h4>
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DROP DATABASE &lt;DB이름&gt;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">t</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">description</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">created</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">profile</span> 
+<span class="k">FROM</span> <span class="n">topic</span> <span class="n">t</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">author</span> <span class="n">a</span> 
+<span class="k">ON</span> <span class="n">t</span><span class="p">.</span><span class="n">author_id</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+--------+---------------------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">title</span>      <span class="o">|</span> <span class="n">description</span>       <span class="o">|</span> <span class="n">created</span>             <span class="o">|</span> <span class="n">name</span>   <span class="o">|</span> <span class="n">profile</span>                   <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+--------+---------------------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="n">MySQL</span>      <span class="o">|</span> <span class="n">MySQL</span> <span class="k">is</span><span class="p">...</span>       <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">12</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">11</span> <span class="o">|</span> <span class="n">egoing</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">2</span> <span class="o">|</span> <span class="n">Oracle</span>     <span class="o">|</span> <span class="n">Oracle</span> <span class="k">is</span> <span class="p">...</span>     <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">03</span> <span class="mi">13</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">10</span> <span class="o">|</span> <span class="n">egoing</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">3</span> <span class="o">|</span> <span class="k">SQL</span> <span class="n">Server</span> <span class="o">|</span> <span class="k">SQL</span> <span class="n">Server</span> <span class="k">is</span> <span class="p">...</span> <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">20</span> <span class="mi">11</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">10</span> <span class="o">|</span> <span class="n">duru</span>   <span class="o">|</span> <span class="k">database</span> <span class="n">administrator</span>    <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">4</span> <span class="o">|</span> <span class="n">PostgreSQL</span> <span class="o">|</span> <span class="n">PostgreSQL</span> <span class="k">is</span> <span class="p">...</span> <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">23</span> <span class="mi">01</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">03</span> <span class="o">|</span> <span class="n">taeho</span>  <span class="o">|</span> <span class="k">data</span> <span class="n">scientist</span><span class="p">,</span> <span class="n">developer</span> <span class="o">|</span>
+<span class="o">|</span>  <span class="mi">5</span> <span class="o">|</span> <span class="n">MongoDB</span>    <span class="o">|</span> <span class="n">MongoDB</span> <span class="k">is</span> <span class="p">...</span>    <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">30</span> <span class="mi">12</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">03</span> <span class="o">|</span> <span class="n">egoing</span> <span class="o">|</span> <span class="n">developer</span>                 <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+------------+-------------------+---------------------+--------+---------------------------+</span>
 </code></pre></div></div>
 
-<h4 id="예제-1">예제</h4>
+<p>유의할 점은 선택한 컬럼이 어떤테이블에서 올건지에 대한점을 정해줘야 한다는 점입니다.
+이때 조금더 간결하기 위해서 FROM절에서 ALIAS설정을 해주면 조금더 편하죠 topic AS t 라고 해줘도되고 한칸띄우고 t를 적어줘도 무방합니다.</p>
 
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; DROP DATABASE opentutorials<span class="p">;</span>
-Query OK, 0 rows affected <span class="o">(</span>0.01 sec<span class="o">)</span>
-</code></pre></div></div>
-
-<h3 id="3-데이터베이스스키마-리스트-확인하기">3. 데이터베이스(스키마) 리스트 확인하기</h3>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; SHOW DATABASES<span class="p">;</span>
-+--------------------+
-| Database           |
-+--------------------+
-| information<span class="se">\_</span>schema |
-| mysql              |
-| opentutorials      |
-| performance<span class="se">\_</span>schema |
-| sys                |
-+--------------------+
-5 rows <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.00 sec<span class="o">)</span>
-</code></pre></div></div>
-
-<p>아까 생성한 opentutorials를 확인할 수 있습니다.</p>
-
-<h3 id="4-데이터베이스스키마-사용하기">4. 데이터베이스(스키마) 사용하기</h3>
-
-<h4 id="문법-2">문법</h4>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>USE &lt;DB이름&gt;<span class="p">;</span>
-</code></pre></div></div>
-
-<h4 id="예제-2">예제</h4>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; USE opentutorials<span class="p">;</span>
-Database changed
-</code></pre></div></div>
-
-<p>이렇게 해주면 opentutorials에 있는 tables에 대하여 명령어를 실행할 수 있습니다.</p>
 </div>
 <section class="article__sharing d-print-none"></section><div class="d-print-none">
-<footer class="article__footer"><meta itemprop="dateModified" content="2021-07-03T00:00:00+09:00">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-07-04T00:00:00+09:00">
 <!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
@@ -399,14 +440,9 @@ Database changed
 <i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
 </div>
 </div></footer>
-<div class="article__section-navigator clearfix">
-<div class="previous">
-<span>이전</span><a href="/2021/07/03/Database-01.html">[ #1 ] MySQL - 구조</a>
-</div>
-<div class="next">
-<span>다음</span><a href="/2021/07/03/Database-03.html">[ #3 ] MySQL - SQL과 테이블의 구조</a>
-</div>
-</div>
+<div class="article__section-navigator clearfix"><div class="previous">
+<span>이전</span><a href="/2021/07/04/Database-04.html">[ #4 ] MySQL - CRUD operation</a>
+</div></div>
 </div>
 
 </div>

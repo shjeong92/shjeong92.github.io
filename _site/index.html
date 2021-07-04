@@ -313,7 +313,37 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/07/04/Database-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] MySQL CRUD operation</h2></a></header>
+          <header><a href="/2021/07/04/Database-05.html"><h2 itemprop="headline" class="item__header">[ #5 ] 관계형 DB의 필요성</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">mysql&gt; SELECT * from topic;
++----+------------+-------------------+---------------------+----------+---------------------------+
+| id | title      | description       | created             | author   | profile                   |
++----+------------+-------------------+---------------------+----------+---------------------------+
+|  1 | MySQL ...</div>
+<p><a href="/2021/07/04/Database-05.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Database">Database</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=MySQL">MySQL</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=RDBMS">RDBMS</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 04일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-07-04T00:00:00+09:00">
+    <meta itemprop="keywords" content="Database,MySQL,RDBMS">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/07/04/Database-04.html"><h2 itemprop="headline" class="item__header">[ #4 ] MySQL - CRUD operation</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">이전 포스팅에서는 MySQL에서 table을 만들어 봤엇는데요.
 
@@ -397,7 +427,7 @@ HSTS(HTTP Strict transport security), HTTP를...</div>
     <meta itemprop="keywords" content="네트워크,브라우저">
 </div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/07/03/Database-03.html"><h2 itemprop="headline" class="item__header">[ #3 ] SQL과 테이블의 구조</h2></a></header>
+          <header><a href="/2021/07/03/Database-03.html"><h2 itemprop="headline" class="item__header">[ #3 ] MySQL - SQL과 테이블의 구조</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">SQL이란
 
@@ -464,7 +494,7 @@ MySQL에서 쓸 수 있는 데이터 타입은 아래의 표와 같습니다.
     <meta itemprop="keywords" content="Database,MySQL">
 </div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/07/03/Database-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] 스키마의 사용</h2></a></header>
+          <header><a href="/2021/07/03/Database-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] MySQL - 스키마의 사용</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">1. 데이터베이스(스키마) 생성
 
@@ -518,9 +548,9 @@ mysql&gt; SHOW DATABASES;
     <meta itemprop="keywords" content="Database,MySQL,Schema">
 </div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/07/03/Database-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] MySQL의 구조</h2></a></header>
+          <header><a href="/2021/07/03/Database-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] MySQL - 구조</h2></a></header>
           <div class="item__description">
-<div class="article__content" itemprop="description articleBody">이때까지는 데이터베이스를 단순히 사용만 해왔었는데요, 알고 제대로 써야겠다고 생각하여 기초부터 공부해려고 합니다.
+<div class="article__content" itemprop="description articleBody">이때까지는 데이터베이스를 장고에서 제공하는 ORM을 통해서만 사용 해왔었는데요, 알고 제대로 써야겠다고 생각하여 기초부터 공부해려고 합니다.
 
 본 포스팅은 유튜브 생활코딩님의 데이터베이스 강좌를 보고 정리한 내용입니다.
 
@@ -534,7 +564,7 @@ mysql&gt; SHOW DATABASES;
 MySql에서는 서로 연관된 표들을 그루핑해서 연관되어있지 않은 표들과 구분짓는 폴더가있는데 이를 database라 칭합니다.
   
   
-    Schema(database)는 ...</div>
+    Sch...</div>
 <p><a href="/2021/07/03/Database-01.html">더보기</a></p>
 </div>
 <div class="article__info clearfix">
@@ -664,77 +694,11 @@ MySql에서는 서로 연관된 표들을 그루핑해서 연관되어있지 않
 <meta itemprop="datePublished" content="2021-06-10T00:00:00+09:00">
     <meta itemprop="keywords" content="RootCA,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키,certificate,인증서">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/09/Learning-Kubernetes-11.html"><h2 itemprop="headline" class="item__header">[ #11 ] 클러스터 보안 - 2</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. TLS / SSL / HTTPS 란?
-
-SSL(Secure Socket Layer)
-SSL은 웹사이트와 브라우저(혹은, 두 서버) 사이에 전송된 데이터를 암호화하여 인터넷 연결 보안을 유지하는 표준 기술입니다.
-
-이는 해커가 개인 정보 및 금융 정보를 포함한 전송되는 모든 정보를 열람하거나 훔치는 것을 방지합니다.
-
-쉽게 말하자면, 네트워크 통신을 할 때 보안을 제공하기 위해 설계된 암호 규약이며, TCP/IP 네트워크를 사용하는 통신에 적용됩니다.
-
-
-  
-    SSL의 구조
-
-    
-  
-
-
-TLS(Transport Layer Socket)
-
-이름은 SSL 과 다르지만 사실 둘은 같다고 합니다. TLS...</div>
-<p><a href="/2021/06/09/Learning-Kubernetes-11.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=HTTPS">HTTPS</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SSL">SSL</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=TLS">TLS</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B3%B4%EC%95%88">보안</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Security">Security</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8C%80%EC%B9%AD%ED%82%A4">대칭키</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">비대칭키</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 09일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-09T00:00:00+09:00">
-    <meta itemprop="keywords" content="Kubernetes,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 33개, 5 페이지</p>
+<p>전체 글 34개, 5 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><div class="button button--secondary button--circle disabled">
