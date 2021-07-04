@@ -5,11 +5,10 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>TIL - Hyuk's devlog</title>
+<title>[ #6 ] MySQL - 인터넷과 데이터베이스 - Hyuk's devlog</title>
 
-<meta name="description" content="Your Site Description
-">
-<link rel="canonical" href="https://shjeong92.github.io/page2/">
+<meta name="description" content="첫번째 포스트에서 말하지 않고 넘어간 부분이 있습니다.바로 데이터베이스 서버입니다.저는 brew를 사용하여 MySQL을 설치하였는데 MySQL은 두개의 프로그램을 동시에 설치해 줍니다. 하나는 database client 이고 다른 하나는 database server입니다.실습을 ...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/07/04/Database-06.html">
 <link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
 <!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
@@ -270,7 +269,7 @@
   <body>
     <div class="root" data-is-touch="false">
       <div class="layout--page js-page-root">
-<div class="page__main js-page-main page__viewport cell cell--auto">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
       <div class="page__main-inner">
 <div class="page__header d-print-none">
@@ -300,510 +299,155 @@
 </div>
 <div class="page__content"><div class="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto">
 <!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div>
-<meta itemprop="headline" content="TIL">
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #6 ] MySQL - 인터넷과 데이터베이스</h1></header></div>
+<meta itemprop="headline" content="[ #6 ] MySQL - 인터넷과 데이터베이스">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Database">Database</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=MySQL">MySQL</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=RDBMS">RDBMS</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 04일</span>
+            </li></ul>
+</div>
 <meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-07-04T00:00:00+09:00">
+    <meta itemprop="keywords" content="Database,MySQL,RDBMS">
 <div class="js-article-content">
-<div class="layout--articles">
-<div class="article-list items items--divided">
-<article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/10/Learning-Kubernetes-12.html"><h2 itemprop="headline" class="item__header">[ #12 ] 클러스터 보안 - 3</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. TLS가 제공하는 이점들
+<div class="layout--article">
+<!-- start custom article top snippet -->
 
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody">
+<p><a href="https://shjeong92.github.io/2021/07/03/Database-01.html">첫번째 포스트</a>에서 말하지 않고 넘어간 부분이 있습니다.</p>
 
-  
-    기밀성 (암호화)
-    이전 포스팅에서 공부했던 암호화에 해당하는 항목입니다.
+<p>바로 데이터베이스 서버입니다.</p>
 
-    서버와 주고 받는 데이터가 스니핑👀 되는 것을 방지합니다.
+<p><img src="https://user-images.githubusercontent.com/75003424/124372989-a7ff5d80-dcc9-11eb-89ca-3825e5387e26.png" alt="dbserver"></p>
 
-    패킷이 오가는 것을 훔쳐 볼 순 있어도 안전하게 암호화 된 패킷이라 복호화 할 수 없기 떄문에
+<p>저는 brew를 사용하여 MySQL을 설치하였는데 MySQL은 두개의 프로그램을 동시에 설치해 줍니다. 하나는 <strong>database client</strong> 이고 다른 하나는 <strong>database server</strong>입니다.</p>
 
-    데이터는 훔쳐볼 수 없습니다.
-  
-  
-    데이터 무결성
-    통신 도중 데이터가 제 3자에 의해 악의로 변경될 일이 없습니다.
+<p>실습을 하면서 <strong>database server</strong>를 직접 다루는 것처럼 느낄 수 있지만 사실은 
+데이터베이스 서버는 직접 다룰 수 없습니다.</p>
 
-    1번 기밀성과 같은 선상에서 보시면 됩니다.
+<p>어떠한 경우에서든 데이터베이스 클라이언트를 사용해야하는데요.</p>
 
-    서로의 대칭키를 RSA 알고리즘을 통해 안전하게 공유한 후에 암호화하여 통신하기 때문에
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql <span class="nt">-u</span> root <span class="nt">-p</span>
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span><span class="nb">.</span>
+Your MySQL connection <span class="nb">id </span>is 23
+Server version: 8.0.25 Homebrew
 
-    제 3자가 대칭키를...</div>
-<p><a href="/2021/06/10/Learning-Kubernetes-12.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=RootCA">RootCA</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=HTTPS">HTTPS</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SSL">SSL</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=TLS">TLS</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B3%B4%EC%95%88">보안</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Security">Security</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8C%80%EC%B9%AD%ED%82%A4">대칭키</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">비대칭키</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=certificate">certificate</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%9D%B8%EC%A6%9D%EC%84%9C">인증서</a>
-            </li>
+Copyright <span class="o">(</span>c<span class="o">)</span> 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type <span class="s1">'help;'</span> or <span class="s1">'\h'</span> <span class="k">for </span>help. Type <span class="s1">'\c'</span> to clear the current input statement.
+
+mysql&gt; 
+
+</code></pre></div></div>
+
+<p>Welcome to the MySQL monitor이라고 되어있는게 보이죠.</p>
+
+<p><img src="https://user-images.githubusercontent.com/75003424/124373149-be59e900-dcca-11eb-8cea-6a444aa0a7c1.png" alt="dbserver"></p>
+
+<p>이 MySQL monitor 가 database client중의 하나였던 것이고, MySQL을 만든 사람들이 서버에 접속할 수 있도록 기본적으로 제공하는 클라이언트가 MySQL 모니터인 것입니다. 그리고 이는 CLI(Command Line Interface)를 통해서 database server을 제어하는 프로그램인 것입니다.</p>
+
+<p>또한, 클라이언트 종류는 생각보다 다양합니다.</p>
+<ul>
+  <li>MySQL Workbench</li>
+  <li>Sequel Pro</li>
+  <li>HeidiSQL</li>
+  <li>phpMyAdmin</li>
+  <li>Toad for MySQL</li>
+  <li>MySQL-Front</li>
+  <li>Neor Profile SQL</li>
+  <li>…</li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 10일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-10T00:00:00+09:00">
-    <meta itemprop="keywords" content="RootCA,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키,certificate,인증서">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/09/Learning-Kubernetes-11.html"><h2 itemprop="headline" class="item__header">[ #11 ] 클러스터 보안 - 2</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. TLS / SSL / HTTPS 란?
 
-SSL(Secure Socket Layer)
-SSL은 웹사이트와 브라우저(혹은, 두 서버) 사이에 전송된 데이터를 암호화하여 인터넷 연결 보안을 유지하는 표준 기술입니다.
-
-이는 해커가 개인 정보 및 금융 정보를 포함한 전송되는 모든 정보를 열람하거나 훔치는 것을 방지합니다.
-
-쉽게 말하자면, 네트워크 통신을 할 때 보안을 제공하기 위해 설계된 암호 규약이며, TCP/IP 네트워크를 사용하는 통신에 적용됩니다.
-
-
-  
-    SSL의 구조
-
-    
-  
-
-
-TLS(Transport Layer Socket)
-
-이름은 SSL 과 다르지만 사실 둘은 같다고 합니다. TLS...</div>
-<p><a href="/2021/06/09/Learning-Kubernetes-11.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=HTTPS">HTTPS</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SSL">SSL</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=TLS">TLS</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B3%B4%EC%95%88">보안</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Security">Security</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8C%80%EC%B9%AD%ED%82%A4">대칭키</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">비대칭키</a>
-            </li>
+<p>MySQL monitor의 장점</p>
+<ul>
+  <li>컴퓨터의 자원을 최대한 일 자체에 쓰기 위해서 GUI를 지원하지 않는경우(일반적인 클라우드 서버도 모두 CLI이기도 하죠)가 많은 반면에 MySQL monitor은 어디서든지 지원한다는 장점이 있습니다.</li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 09일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-09T00:00:00+09:00">
-    <meta itemprop="keywords" content="Kubernetes,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/07/Learning-Kubernetes-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] 클러스터 보안 - 1</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">기본적인 인증 수단에는 Static Password File을 통한 방법과, Static Token File을 이용한 방법이 있습니다.
 
-1 - Static Password File
-
-아래의 유저정보가 담긴 csv파일을 통하여 인증 할 수 있습니다.
-#user-details.csv
-password123,username1,userId1
-password133,username2,userId2
-password113,username3,userId3 
-
-
-kubeadm으로 클러스터를 구성하였으면 
-그러기 위해선 staticpodpath위치에 kube-apiserver.yaml 이 존재하는데, 아래와같이 실행 옵션을 추가해주면...</div>
-<p><a href="/2021/06/07/Learning-Kubernetes-10.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=maintenance">maintenance</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=strategy">strategy</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
-            </li>
+<p>MySQL monitor의 단점</p>
+<ul>
+  <li>명령어 기반이기에 명령어를 기억해야 한다는점</li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 07일</span>
-            </li></ul>
+
+<p>MySQL에서 공식적으로 제공하는 <strong>mysqlworkbench</strong>라는 프로그램이 있는데 이는 GUI(Graphical User Interface)기반 프로그램으로 엘셀을 다루듯이 database서버와 소통할 수 있습니다.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Database의 <strong>서버</strong>와 <strong>클라이언트</strong>의 존재를 알았다면 더 엄청난 것도 할 수 있는것을 알 수 있습니다. <br> 데이터베이스 서버에 데이터를 저장하고, 전세계에 있는 수만은 데이터베이 클라이언트 들이 데이터베이스 서버를 중심으로 데이터를 넣고 빼는것이 가능해지는 것입니다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>이번 포스팅은 여기서 마무리하고,
+다음 포스팅에서는
+<strong>mysqlworkbench</strong> 에 대해서 다뤄보겠습니다.</p>
 </div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-07T00:00:00+09:00">
-    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update">
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-07-04T00:00:00+09:00">
+<!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/04/Learning-Kubernetes-09.html"><h2 itemprop="headline" class="item__header">[ #9 ] 클러스터 백업 &amp; 복구</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">이번 포스트에서는 ETCD database를 이용한 클러스터 백업 및 복구 방법에 대해서 다뤄보겠습니다.
-
-etcd란
-
-etcd는 모든 클러스터 데이터에 대한 Kubernetes의 백업 저장소로 사용되는 일관되고 가용성이 높은 키 값 저장소입니다
-
-그리고 ETCD는 각 마스터노드에 존재하고, key=value의 데이터는 마스터 노드의 /var/lib/etcd 에 저장됩니다.
-
-ETCD는 built in 스냅샷 solution을 가지고 있는데요 이를통해 현재 실행중인 모든 리소스의 정보를 백업하고, 복구할 수 있습니다.
-
-STEP1 - etcd가 설치되어 있지 않을경우 설치합니다.
-
-제 쿠버네티 클러스터는 1 개의 ...</div>
-<p><a href="/2021/06/04/Learning-Kubernetes-09.html">더보기</a></p>
+</div></footer>
+<div class="article__section-navigator clearfix"><div class="previous">
+<span>이전</span><a href="/2021/07/04/Database-05.html">[ #5 ] MySQL - 관계형 DB의 필요성</a>
+</div></div>
 </div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=maintenance">maintenance</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=strategy">strategy</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 04일</span>
-            </li></ul>
+
 </div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-04T00:00:00+09:00">
-    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/03/Learning-Kubernetes-08.html"><h2 itemprop="headline" class="item__header">[ #8 ] 클러스터 유지보수</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다.
 
-쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다.
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
 
-그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요?
-
-
-  master node의 kube-contoller-manager에는 pod-eviction-timeout이 존재합니다
-
-
-컨디션
-
-각 노드에는 아래와 같이 여러가지 condition이 존재합니다
-
-
-  
-    
-      노드 컨디션
-      설명
-    
-  
-  
-    
-      Ready
-      노드가 상...</div>
-<p><a href="/2021/06/03/Learning-Kubernetes-08.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=maintenance">maintenance</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=strategy">strategy</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 03일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-03T00:00:00+09:00">
-    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/02/Learning-Kubernetes-07.html"><h2 itemprop="headline" class="item__header">[ #7 ] 배포 전략</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">쿠버네티스에는아래 그림과 같이 두가지 배포방법이 있습니다
-
-
-
-Recreate
-Recreate 방식은 이전버전 A를 종료시킨후 신규버전 B를 롤아웃 시키는 방식입니다.
-
-pros
-
-  가장 쉬운 배포방법
-  클라우드 리소스 비요이 적음
-
-
-cons
-
-  A가 중지되고 B가 배포되기전까지 서비스가 중단되어 사용자에게 악영향을 줌
-
-
-Rolling Update
-
-  
-    기존서버를 순차적으로 중지시키며 순차적으로 업그레이드 시키는 방식으로, kubernetes에서 spec.strategy.type을 지정하지 않으면 기본적으로 RollingUpdate를 사용합니다.
-  
-  
-    처음 쿠버네티스에 입문하였을때 r...</div>
-<p><a href="/2021/06/02/Learning-Kubernetes-07.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Deployment">Deployment</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=strategy">strategy</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=rolling">rolling</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 02일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-02T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod,strategy,쿠버네티스,rolling,update">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/01/Handling-ssh-config.html"><h2 itemprop="headline" class="item__header">ssh config 설정으로 간편하게 ssh접속하기</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">최근 몇일간 kubernetes를 공부하면서 구글 클라우드에 ssh접속을 하는일이 잦았는데요, 접속 할 때마다 구글 클라우드에 접속해서 인스턴스의 외부 IP를 확인 하여야하고 긴 ssh 접속문을 쓰는게 귀찮았는데 알고보니 이를 간편하게 해주는 설정이 있더군요.
-
-이 글에선 맥에서 GCP에 접속하기 위한 RSA key pair를 생성하는 부분부터 ssh config 설정하는법을 다루겠습니다.
-
-key pair 생성하기
-
-#-t 암호화타입 -f key pair 저장할 위치 -C 주석(보통 사용자 로그인ID를 적음)
-$ssh-keygen -t rsa -f ~/.ssh/&lt;KEY_FILE_NAME&gt; -C "acc...</div>
-<p><a href="/2021/06/01/Handling-ssh-config.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=gcloud">gcloud</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=ssh">ssh</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=key-gen">key-gen</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=rsa">rsa</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=config">config</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 01일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-01T00:00:00+09:00">
-    <meta itemprop="keywords" content="gcloud,ssh,key-gen,rsa,config">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/31/Learning-Kubernetes-06.html"><h2 itemprop="headline" class="item__header">[ #6 ] static pod</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Static pods이란
-
-제일 처음에 kubernetes의 구조에서 공부했을때 마스터노드에 kube-apiserver가 있고, 각 워커노드에는 kubelet 이 존재하며 마스터노드의 kube-apiserver의 명령에따라 pod을 지우거나 삭제하거나 했었죠. 
-이번 시간에는 마스터 노드의 kube-scheduler의 영향을 받지 않는 Static pod 에 대해서 알아보겠습니다.
-
-각 워커노드에 존재하는 kubelet 또한 pod이 죽거나 에러가 발생했을떄 아래의 방법으로 다시 살릴 수 있습니다.
-
-우선 static pod을 생성할 노드를 선택하여 ssh 접속해줍니다. 저는 worker-1에 접속하도록 하겠습니다...</div>
-<p><a href="/2021/05/31/Learning-Kubernetes-06.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Deployment">Deployment</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 31일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-31T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod">
-</div>
-      </article>
-</div>
-</div>
-<div class="layout--home"><div class="pagination">
-<p>전체 글 35개, 5 페이지</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap">
-<li><a class="button button--secondary button--circle" href="/">
-            <i class="fas fa-angle-left"></i>
-          </a></li>
-<li>
-              <a class="button button--secondary button--circle" href="/"><span>1</span></a>
-            </li>
-<li>
-              <div class="button button--primary button--circle focus"><span>2</span></div>
-            </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page3"><span>3</span></a>
-              </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page4"><span>4</span></a>
-              </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page5"><span>5</span></a>
-              </li>
-<li><a class="button button--secondary button--circle" href="/page3">
-            <i class="fas fa-angle-right"></i>
-          </a></li>
-</ul>
-    </div>
-  </div></div>
-<script>/*(function () {
-
-})();*/
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
 </div>
 <section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
@@ -1355,6 +999,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script>
     </div>
     <script>(function () {

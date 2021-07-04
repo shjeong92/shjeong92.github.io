@@ -313,7 +313,48 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/07/04/Database-05.html"><h2 itemprop="headline" class="item__header">[ #5 ] 관계형 DB의 필요성</h2></a></header>
+          <header><a href="/2021/07/04/Database-06.html"><h2 itemprop="headline" class="item__header">[ #6 ] MySQL - 인터넷과 데이터베이스</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">첫번째 포스트에서 말하지 않고 넘어간 부분이 있습니다.
+
+바로 데이터베이스 서버입니다.
+
+
+
+저는 brew를 사용하여 MySQL을 설치하였는데 MySQL은 두개의 프로그램을 동시에 설치해 줍니다. 하나는 database client 이고 다른 하나는 database server입니다.
+
+실습을 하면서 database server를 직접 다루는 것처럼 느낄 수 있지만 사실은 
+데이터베이스 서버는 직접 다룰 수 없습니다.
+
+어떠한 경우에서든 데이터베이스 클라이언트를 사용해야하는데요.
+
+mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands e...</div>
+<p><a href="/2021/07/04/Database-06.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Database">Database</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=MySQL">MySQL</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=RDBMS">RDBMS</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 04일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-07-04T00:00:00+09:00">
+    <meta itemprop="keywords" content="Database,MySQL,RDBMS">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/07/04/Database-05.html"><h2 itemprop="headline" class="item__header">[ #5 ] MySQL - 관계형 DB의 필요성</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">mysql&gt; SELECT * from topic;
 +----+------------+-------------------+---------------------+----------+---------------------------+
@@ -620,85 +661,11 @@ MySql에서는 서로 연관된 표들을 그루핑해서 연관되어있지 않
 <meta itemprop="datePublished" content="2021-07-01T00:00:00+09:00">
     <meta itemprop="keywords" content="backend,면접,질문">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/10/Learning-Kubernetes-12.html"><h2 itemprop="headline" class="item__header">[ #12 ] 클러스터 보안 - 3</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. TLS가 제공하는 이점들
-
-
-  
-    기밀성 (암호화)
-    이전 포스팅에서 공부했던 암호화에 해당하는 항목입니다.
-
-    서버와 주고 받는 데이터가 스니핑👀 되는 것을 방지합니다.
-
-    패킷이 오가는 것을 훔쳐 볼 순 있어도 안전하게 암호화 된 패킷이라 복호화 할 수 없기 떄문에
-
-    데이터는 훔쳐볼 수 없습니다.
-  
-  
-    데이터 무결성
-    통신 도중 데이터가 제 3자에 의해 악의로 변경될 일이 없습니다.
-
-    1번 기밀성과 같은 선상에서 보시면 됩니다.
-
-    서로의 대칭키를 RSA 알고리즘을 통해 안전하게 공유한 후에 암호화하여 통신하기 때문에
-
-    제 3자가 대칭키를...</div>
-<p><a href="/2021/06/10/Learning-Kubernetes-12.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=RootCA">RootCA</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=HTTPS">HTTPS</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SSL">SSL</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=TLS">TLS</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B3%B4%EC%95%88">보안</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Security">Security</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8C%80%EC%B9%AD%ED%82%A4">대칭키</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">비대칭키</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=certificate">certificate</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%9D%B8%EC%A6%9D%EC%84%9C">인증서</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 10일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-10T00:00:00+09:00">
-    <meta itemprop="keywords" content="RootCA,HTTPS,static,SSL,TLS,쿠버네티스,보안,Security,대칭키,비대칭키,certificate,인증서">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 34개, 5 페이지</p>
+<p>전체 글 35개, 5 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><div class="button button--secondary button--circle disabled">
