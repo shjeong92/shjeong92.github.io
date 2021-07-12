@@ -313,6 +313,60 @@
 <div class="layout--articles">
 <div class="article-list items items--divided">
 <article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/2021/07/03/Database-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] MySQL - 스키마의 사용</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">1. 데이터베이스(스키마) 생성
+
+문법
+CREATE DATABASE &lt;DB이름&gt;
+
+
+예제
+
+mysql&gt; CREATE DATABASE opentutorials;
+Query OK, 1 row affected (0.01 sec)
+
+
+2. 데이터베이스(스키마) 삭제
+
+문법
+DROP DATABASE &lt;DB이름&gt;
+
+
+예제
+
+mysql&gt; DROP DATABASE opentutorials;
+Query OK, 0 rows affected (0.01 sec)
+
+
+3. 데이터베이스(스키마) 리스트 확인하기
+
+mysql&gt; SHOW DATABASES;
++--------------------+
+| Da...</div>
+<p><a href="/2021/07/03/Database-02.html">더보기</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Database">Database</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=MySQL">MySQL</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Schema">Schema</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 03일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-07-03T00:00:00+09:00">
+    <meta itemprop="keywords" content="Database,MySQL,Schema">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/2021/07/03/Database-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] MySQL - 구조</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">이때까지는 데이터베이스를 장고에서 제공하는 ORM을 통해서만 사용 해왔었는데요, 알고 제대로 써야겠다고 생각하여 기초부터 공부해려고 합니다.
@@ -687,82 +741,11 @@ STEP1 - etcd가 설치되어 있지 않을경우 설치합니다.
 <meta itemprop="datePublished" content="2021-06-03T00:00:00+09:00">
     <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/06/02/Learning-Kubernetes-07.html"><h2 itemprop="headline" class="item__header">[ #7 ] 배포 전략</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">쿠버네티스에는아래 그림과 같이 두가지 배포방법이 있습니다
-
-
-
-Recreate
-Recreate 방식은 이전버전 A를 종료시킨후 신규버전 B를 롤아웃 시키는 방식입니다.
-
-pros
-
-  가장 쉬운 배포방법
-  클라우드 리소스 비요이 적음
-
-
-cons
-
-  A가 중지되고 B가 배포되기전까지 서비스가 중단되어 사용자에게 악영향을 줌
-
-
-Rolling Update
-
-  
-    기존서버를 순차적으로 중지시키며 순차적으로 업그레이드 시키는 방식으로, kubernetes에서 spec.strategy.type을 지정하지 않으면 기본적으로 RollingUpdate를 사용합니다.
-  
-  
-    처음 쿠버네티스에 입문하였을때 r...</div>
-<p><a href="/2021/06/02/Learning-Kubernetes-07.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Replicasets">Replicasets</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Deployment">Deployment</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=strategy">strategy</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=rolling">rolling</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 06월 02일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-06-02T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,Kubernetes,Replicasets,Deployment,static,pod,strategy,쿠버네티스,rolling,update">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>전체 글 37개, 5 페이지</p>
+<p>전체 글 38개, 5 페이지</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><a class="button button--secondary button--circle" href="/">

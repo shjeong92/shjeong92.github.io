@@ -423,8 +423,8 @@
 
 <h5 id="페이지와-프레임간의-관계">페이지와 프레임간의 관계</h5>
 <ul>
-  <li>Vitual Memory의 page가 하나의 frame을 할당 받으면, 물리 메모리에 위치하게 된다.</li>
-  <li>프레임을 할당 받지 못한 페이지들은 외부 저장장치에 저장되며, 이때도 프레임과 같은 크기 단위로 관리된다.</li>
+  <li>Vitual Memory의 page가 하나의 frame을 할당 받으면, 물리 메모리에 위치하게 됨.</li>
+  <li>프레임을 할당 받지 못한 페이지들은 외부 저장장치에 저장되며, 이때도 프레임과 같은 크기 단위로 관리됨.</li>
 </ul>
 
 <h5 id="페이지-테이블page-table">페이지 테이블(Page Table)</h5>
@@ -498,14 +498,14 @@ Page Table : 물리 주소와 연관시킬 수 있는 페이지가 저장되어 
   <li>Protection : 읽기만 가능한 경우 0, 읽기 쓰기 모두 가능한 경우 1</li>
   <li>Reference : 참조 비트 (최근 참조 됐는지 판단하여 페이지 교체 알고리즘을 적용 시킬 수 있음)</li>
   <li>Caching : 해당 페이지를 캐싱할지 선택</li>
-  <li>Dirty (or modified bit) : 오염 또는 수정 여부를 판단하는 비트로, 페이지 내용이 변경됐음을 알려 페이지 교체시 하드 디스크에 다시 기록하게 한다.</li>
+  <li>Dirty (or modified bit) : 오염 또는 수정 여부를 판단하는 비트로, 페이지 내용이 변경됐음을 알려 페이지 교체시 하드 디스크에 다시 기록하게 합니다.</li>
 </ul>
 
 <h3 id="요구-페이징demand-paging과-페이지-부재page-fault">요구 페이징(Demand Paging)과 페이지 부재(Page Fault)</h3>
 
 <ul>
   <li>요구 페이징(Demand Pagin) : 요청할 때 해당 페이지를 메모리로 가져오는 것</li>
-  <li>페이지 부재(Page Fault) : 요청한 페이지가 메모리에 존재하지 않는 경우를 말한다. (캐시 미스와 비슷?)</li>
+  <li>페이지 부재(Page Fault) : 요청한 페이지가 메모리에 존재하지 않는 경우를 말합니다. (캐시 미스와 비슷?)</li>
 </ul>
 
 <p>설명</p>
@@ -526,9 +526,6 @@ ex) FIFO, LRU, LFU, NUR 등의 알고리즘이 있습니다.</p>
 <p>잦은 페이지 부재로 인해 페이지를 교체 하는 시간이 많아져 CPU처리율이 저하되는 현상.
 메모리 부족, 부적절한 페이지 교체 등이 원인이 될 수 있음.
 cach hit rate와 관련있음.</p>
-
-<!-- 
-![vm05](https://user-images.githubusercontent.com/75003424/124723869-6e875600-df46-11eb-8498-dcde8d43ff1a.png) -->
 </div>
 <section class="article__sharing d-print-none"></section><div class="d-print-none">
 <footer class="article__footer"><meta itemprop="dateModified" content="2021-07-07T00:00:00+09:00">
@@ -540,9 +537,14 @@ cach hit rate와 관련있음.</p>
 <i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
 </div>
 </div></footer>
-<div class="article__section-navigator clearfix"><div class="previous">
+<div class="article__section-navigator clearfix">
+<div class="previous">
 <span>이전</span><a href="/2021/07/05/OS-01.html">[ #1 ] 운영체제 - 커널 &amp; 쉘</a>
-</div></div>
+</div>
+<div class="next">
+<span>다음</span><a href="/2021/07/12/REST.html">RESTful API에 관하여</a>
+</div>
+</div>
 </div>
 
 </div>

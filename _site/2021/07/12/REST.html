@@ -5,11 +5,10 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>TIL - Hyuk's devlog</title>
+<title>RESTful API에 관하여 - Hyuk's devlog</title>
 
-<meta name="description" content="Your Site Description
-">
-<link rel="canonical" href="https://shjeong92.github.io/page4/">
+<meta name="description" content="본 포스트는 “그런 REST API로 괜찮은가”라는 이응준님의 발표를 보고 정리한 내용입니다.최근 여러 면접에서 RESTful API가 무엇이라고 생각하는가? 에 대한 질문은 어딜 가던지 물어보았습니다 구글링을 통해서 얻은 답을 했었는데 이게 다가 아닌것 같은 느낌.. 그러다가 지...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/07/12/REST.html">
 <link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
 <!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
@@ -270,7 +269,7 @@
   <body>
     <div class="root" data-is-touch="false">
       <div class="layout--page js-page-root">
-<div class="page__main js-page-main page__viewport cell cell--auto">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
 
       <div class="page__main-inner">
 <div class="page__header d-print-none">
@@ -300,365 +299,212 @@
 </div>
 <div class="page__content"><div class="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto">
 <!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>TIL</h1></header></div>
-<meta itemprop="headline" content="TIL">
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>RESTful API에 관하여</h1></header></div>
+<meta itemprop="headline" content="RESTful API에 관하여">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=REST">REST</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=RESTful">RESTful</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=API">API</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=HTTP">HTTP</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SOAP">SOAP</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 07월 12일</span>
+            </li></ul>
+</div>
 <meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-07-12T00:00:00+09:00">
+    <meta itemprop="keywords" content="REST,RESTful,API,HTTP,SOAP">
 <div class="js-article-content">
-<div class="layout--articles">
-<div class="article-list items items--divided">
-<article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/22/Learning-Docker-03.html"><h2 itemprop="headline" class="item__header">[ #3 ] Dockerfile에서 자주 쓰이는 명령어</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Dockerfile 포멧
+<div class="layout--article">
+<!-- start custom article top snippet -->
 
-하나의 Dockerfile은 기본적으로 다음과 같은 구조를 가진 여러 개의 명령문으로 구성되어 있습니다.
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody">
+<p>본 포스트는 <a href="https://www.youtube.com/watch?v=RP_f5dMoHFc">“그런 REST API로 괜찮은가”</a>라는 이응준님의 발표를 보고 정리한 내용입니다.</p>
 
-# 주석(Comment)
-명령어(INSTRUCTION) 인자(arguments)
+<p>최근 여러 면접에서 RESTful API가 무엇이라고 생각하는가? 에 대한 질문은 어딜 가던지 물어보았습니다 
+구글링을 통해서 얻은 답을 했었는데 이게 다가 아닌것 같은 느낌.. 그러다가 지인한테 RESTful API가 뭐라고생각하냐고 물으면 뭐라 답할것인가 물었더니 이 영상을 추천해 주시더군요 ㅎㅎㅎ RESTful API의 탄생배경부터 로이필딩에 관한 이야기까지 정말 재미있게 봤습니다.</p>
 
+<h3 id="rest란">REST란</h3>
 
-각 구문은 명령어와 인자로 이루워져있고, 명령어는 소문자로 쓸수도 있지만 네이밍 컨벤션을 따라서 명령어는 대문자로만 작성하는게 좋습니다.
+<p><strong>RE</strong>presentational</p>
 
+<p><strong>S</strong>tate</p>
 
+<p><strong>T</strong>ransfer</p>
 
-FROM 명령문
+<p>의 약자라고 하는데요, 이것만 봐선 도무지 뭔지 모르겠네요..</p>
 
-FROM &lt;이미지&gt;
-FROM &lt;이미지&gt;:&lt;태그&gt;
+<h3 id="rest의-출현-계기">REST의 출현 계기</h3>
 
+<p>REST는 웹으로 부터 시작되었습니다. www가 팀 버너스 리에 의해 탄생 되었는데요. 하나의 고민이 있었죠</p>
 
-FROM명령문은 base image를 지정해주기 위해서 사용합니다. 하나의 Docker image는 base 이미지로부터 시작해서 새로운 이미지를 중첩해서 여...</div>
-<p><a href="/2021/05/22/Learning-Docker-03.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=network">network</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%AA%85%EB%A0%B9%EC%96%B4">명령어</a>
-            </li>
+<h4 id="팀-버너스리의-고민1991">팀 버너스리의 고민(1991)</h4>
+
+<p><strong><em>어떻게 인터넷에서 정보를 공유할 것인가?</em></strong></p>
+
+<ul>
+  <li>
+<strong>모든 정보들을 하이퍼 텍스트로 연결</strong>
+    <ul>
+      <li>표현방식: HTML</li>
+      <li>식별자: URI</li>
+      <li>전송 방법: HTTP</li>
+    </ul>
+  </li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 22일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-22T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너,명령어">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/20/Learning-Docker-02.html"><h2 itemprop="headline" class="item__header">[ #2 ] Docker 네트워크 사용하기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Docker 컨테이너는 서로 격리되어 있기 때문에 따로 설정을 하지 않는다면 컨테이너간 통신을 할 수 없습니다. 하지만 네트워크 연결을 통해서 서로 통신 할 수 있게 됩니다. 이번 글에서는 컨테이너간 통신을 도와주는 Docker 네트워크에 대하여 작성하도록 하겠습니다.
 
-네트워크 조회
+<h4 id="http10-1994-1996">HTTP/1.0 (1994-1996)</h4>
 
-docker network ls 커맨드를 사용하면 현재 생성되어 있는 Docker 네트워크 목록을 조회할 수 있습니다.
-$ docker network ls
-NETWORK ID     NAME             DRIVER    SCOPE
-b1545defe462   bridge           bridge    local
-2ff...</div>
-<p><a href="/2021/05/20/Learning-Docker-02.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=network">network</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%8F%84%EC%BB%A4">도커</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">네트워크</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">컨테이너</a>
-            </li>
+<p><strong>로이필딩</strong>이 HTTP개발에 참여하였고</p>
+
+<p><strong><em>어떻게 웹을 망가 뜨리지 않고 HTTP를 진보시킬까?</em></strong> 라는 고민을 하였는데요,</p>
+
+<p>로이는 고민 끝에 HTTP Object Model이라는 것을 만들었습니다. 이는 4년 후 “Representational State Transfer: An Architectural Style for Distributed Hypermedia interaction”에서 REST를 최초로 공개 하였는데요. 이후 2년 후, “Architectural Styles and the Design of Network-based Software Architectures”을 박사 논문으로 발표하게 되었고, 이 박사 논문이 바로 그 REST라는 것을 정의한느 논문입니다.</p>
+
+<h4 id="api1998">API(1998)</h4>
+<p>그런 한편, API라는 것이 있는데요. 98년에 마이크로소프트에서 원격으로 다른 시스템에 메소드를 호출할 수 있는 XML-RPC( 1998) 프로토콜을 만들었습니다.</p>
+
+<p>이는 곧 SOAP이라는 이름으로 바뀌고, <strong>Salesforce</strong>라는 회사가 인터넷에서 최초로 공개하게 되었는데 장사가 잘 되지 않았죠. 
+당시 SOAP을 사용해서 api를 만들었는데 단순한 요청임에도 아래와 같이 상당히 복잡한 것을 알 수 있습니다.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">&lt;</span>?xml version="1.0", encoding="utf-8"&gt;
+<span class="nt">&lt;soapenv:Envelope</span> <span class="na">xmlns:soapenv=</span><span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span>
+  <span class="na">xmlns:urn=</span><span class="s">"urn:enterprise.soap.sforce.com"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;soapenv:Header&gt;</span>
+    <span class="nt">&lt;urn:SessionHeader&gt;</span>
+      <span class="nt">&lt;urn:sessionId&gt;&lt;b&gt;</span>QwWsHJyTPW.1pd0_jXlNKOSU<span class="nt">&lt;/b&gt;&lt;/urn:sessionId&gt;</span>
+    <span class="nt">&lt;/urn:SessionHeader&gt;</span>
+  <span class="nt">&lt;/soapenv:Header&gt;</span>
+  <span class="nt">&lt;soapenv:Body&gt;</span>
+      <span class="nt">&lt;urn:fieldList&gt;&lt;b&gt;</span>Id, Name, Website<span class="nt">&lt;/b&gt;&lt;/urn:fieldList&gt;</span>
+      <span class="nt">&lt;urn:sObjectType&gt;&lt;b&gt;</span>Account<span class="nt">&lt;/b&gt;&lt;/urn:sObjectType&gt;</span>
+      <span class="c">&lt;!--Zero or more repetitions:--&gt;</span>
+      <span class="nt">&lt;urn:ids&gt;&lt;b&gt;</span>001D000000HS2Su<span class="nt">&lt;/b&gt;&lt;/urn:ids&gt;</span>
+      <span class="nt">&lt;urn:ids&gt;&lt;b&gt;</span>001D000000HRzKD<span class="nt">&lt;/b&gt;&lt;/urn:ids&gt;</span>
+    <span class="nt">&lt;/urn:retrieve&gt;</span>
+  <span class="nt">&lt;/soapenv:Body&gt;</span>
+<span class="nt">&lt;/soapenv:Envelope&gt;</span>
+</code></pre></div></div>
+
+<p>너무 복잡하여 <strong>Salesforce</strong>의 api는 많이 쓰이지 않게 됩니다. 그리고 <strong>flickr</strong>에서 SOAP을 사용하여 API를 발표하는데 아래와 훨씬 간단해 졌습니다.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;s:Envelope</span> <span class="na">xmlns:s=</span><span class="s">"http://www.w3.org/2001/06/soap-envelope&gt;"</span>
+  <span class="err">&lt;s.Body</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;s.Fault&gt;</span>
+      <span class="nt">&lt;faultcode&gt;</span>flickr.error.[error-code]<span class="nt">&lt;/faultcode&gt;</span>
+      <span class="nt">&lt;faultstring&gt;</span>[error-message]<span class="nt">&lt;/faultstring&gt;</span>
+      <span class="nt">&lt;faultactor&gt;</span>http://www.flickr.com/services/soap/<span class="nt">&lt;/faultactor&gt;</span>
+      <span class="nt">&lt;details&gt;</span>Please see http://flickr.com/services/docs/ for more details<span class="nt">&lt;/details&gt;</span>
+    <span class="nt">&lt;/s.Fault&gt;</span>
+  <span class="nt">&lt;/s.Body&gt;</span>
+<span class="nt">&lt;/s:Envelope&gt;</span>
+</code></pre></div></div>
+
+<p>그 이후 로이 필딩이 논문을 바탕으로 REST를 발표하는데</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;rsp</span> <span class="na">stat=</span><span class="s">"fail"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;err</span> <span class="na">code=</span><span class="s">"[error-code]"</span> <span class="na">msg=</span><span class="s">"[error-message]"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/rsp&gt;</span>
+</code></pre></div></div>
+
+<p>딱 보더라도 훨씬 짧고, SOAP에 비해서 단순하며 규칙도 적으며 쉽다고 느끼게 되었습니다.
+많은 사람들이 SOAP에서 REST로 갈아타게 됩니다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/75003424/125241701-bdf2cb00-e326-11eb-9314-9e8085d2417d.png" alt="rest-graph"></p>
+
+<p>또한, 2006년에 AWS가 자사 API의 사용량의 85%가 REST임을 밝혔고,</p>
+
+<p>2010년에 Salesforce.com또한 REST API를 추가했습니다.</p>
+
+<p>이렇게 WWW의 API가 REST로 정착이 되나 싶었지만…</p>
+
+<h4 id="cmis2008">CMIS(2008)</h4>
+<ul>
+  <li>IBM, 마이크로소프트등의 기업들이 함께 작업했고, REST를 지원한다고 발표했으나</li>
+  <li>REST를 만든 장본인 로이필딩은 <strong>“CMIS에는 REST가 없다”</strong> 라고 말을했죠</li>
 </ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 20일</span>
-            </li></ul>
+
+<h4 id="microsoft-rest-api-guidelines2016">Microsoft REST API Guidelines(2016)</h4>
+
+<p>2016년에는 MS에서 API 가이드라인을 만들었는데요
+uri는 https://{serviceRoot}/{collection}/{id} 형식이어야한다
+GET, PUT, DELETE, POST, HEAD, PATCH, OPTIONS를 지원해야한다
+API 버저닝은 Major.minor로 하고 uri에 버전 정보를 포함시킨다.</p>
+
+<p>제가 개념으로 알고 있었던 REST API인.. 내막은 몰랐던것인데</p>
+
+<p>로이 필딩은 여기다대고 <strong>“이것 또한 REST 아님!”</strong> 이라고 트위터에 적었고,
+블로그에 <code class="language-plaintext highlighter-rouge">"REST APIs must be hypertext-driven"</code>이라고 적었으며, 
+<code class="language-plaintext highlighter-rouge">"the best practice for versioning an API is: “Don’t”</code>을 덧 붙였죠.</p>
+
+<p>사람들이(저를 포함) 알고 있던 REST API와 제작자인 로이의 REST API는 너무나도 다르네요!</p>
+
+<p>무엇이 문제였고, 왜 이런 차이가 났는지 알아봅시다.</p>
+
+<h3 id="rest-api란">REST API란?</h3>
 </div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-20T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker,network,도커,네트워크,컨테이너">
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-07-12T00:00:00+09:00">
+<!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/19/Learning-Docker-01.html"><h2 itemprop="headline" class="item__header">[ #1 ] Docker 기본 익히기 </h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Image vs Container
-
-도커 이미지
-도커 컨테이너를 구성하는 파일 시스템과 실행할 어플리케이션 설정을 하나로 합친 것으로, 컨테이너를 생성하는 템플릿 역할을 합니다.
-
-도커 컨테이너
-도커 이미지를 실행 함으로써 생성되며, 파일 시스템과 어플리케이션이 구체화되어 실행되는 상태입니다.
-컨테이너 내부 에플리케이션과 소통하기위해 5000번 Port로 바인딩 돼어 있습니다.
-
-허브로부터 이미지 받아오기
-docker pull 커맨드를 사용하여 도커허브에서 이미지를 받아올 수 있습니다.
-$ docker pull &lt;image&gt;
-
-
-
-이미지 실행하기
-
-docker run 커맨드를 사용하여 원하는 이미지를 실...</div>
-<p><a href="/2021/05/19/Learning-Docker-01.html">더보기</a></p>
+</div></footer>
+<div class="article__section-navigator clearfix"><div class="previous">
+<span>이전</span><a href="/2021/07/07/OS-02.html">[ #2 ] 운영체제 - 가상메모리</a>
+</div></div>
 </div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Docker">Docker</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 19일</span>
-            </li></ul>
+
 </div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-19T00:00:00+09:00">
-    <meta itemprop="keywords" content="Docker">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/05/14/Github-01.html"><h2 itemprop="headline" class="item__header">깃헙 history를 주물러봅시다</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">서론
 
-때는 2021년 5월13일. Ecommerce-react-django 프로젝트를 완성후 배포테스트를 위해  작업중 각종 비밀번호를 하드코딩해서 넣었었는데 commit 할때에 환경변수로 바꿨다고 생각하였으나 저장되지않아 aws rds db비밀번호, aws_access_key_id와 aws_secret_access_key를 있는 그대로 커밋후 리모트에 푸시해버렸습니다.
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
 
-얼마 지나지 않아서 Gitguardian 한테 중요한 정보가 노출되었다고 메일이 왔습니다 Gitguardian은 git에서 운영하는건줄 알았는데 아니었습니다. 이 친구들은 github유저의 모든 푸시데이터를 감시하는건지 어쩐지 모르겠지만 Git...</div>
-<p><a href="/2021/05/14/Github-01.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Github">Github</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Commit">Commit</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=SVN">SVN</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=history">history</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=modify">modify</a>
-            </li>
-</ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 05월 14일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-05-14T00:00:00+09:00">
-    <meta itemprop="keywords" content="Github,Commit,SVN,history,modify">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/29/Learning-React-10.html"><h2 itemprop="headline" class="item__header">[ #10 ] useContext hook</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">useContext
-
-useContext란 무엇인가?
-
-이때까지 부모 컴포넌트에서 자식컴포넌트에 정보를 전달할때 props를 통하여 전달 했었습니다.
-
-A(부모) =&gt; B =&gt; C = &gt; D 순으로 nested 되어있을경우 부모로부터 D로 데이터를 전송하려면 B, C, D 순으로 전달했었죠.
-
-나중에 props의 이름을 까먹거나하면 정말 헷갈렸었는데 이번에 useContext 사용하는 법을 배우고 신세계가 열렸습니다.
-
-<img class="emoji" title=":star2:" alt=":star2:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f31f.png" height="20" width="20">useContext를 이용하면 B, C를 거치지 않고 A =&gt; D로 직행으로 원하는 데이터를 전송할 수 있습니다!
-useContext 어떻게 사용할까요? - 1
-
-...</div>
-<p><a href="/2021/04/29/Learning-React-10.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/29/Learning-React-09.html"><h2 itemprop="headline" class="item__header">[ #9 ] useEffect hook</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. useEffect
-
-useEffect란?
-
-useEffect는 기본적으로 몇가지 조건에 의해 작동하게 됩니다. 
-
-조건 1.
-
-페이지가 처음 렌더링 되고난 후 useEffect 내의 함수는 무조건 한번 실행되고 봅니다.
-
-useEffect(() =&gt; {
-    function doSomething(){
-        console.log("something")
-    }
-    doSomething();
-    
-})
-
-조건 2.
-만약에 useEffect의 2번재 파라미터값이 없다면 이는 해당 컴포넌트가 렌더링 될 때마다 실행됩니다.
-두번째 파라미터는 watch 값들의 목록입니다 만약 값이 변경되면 us...</div>
-<p><a href="/2021/04/29/Learning-React-09.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 29일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-29T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/28/Learning-React-08.html"><h2 itemprop="headline" class="item__header">[ #8 ] Portal, useRef</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">1. Portal을 사용하기.
-
-//index.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import './index.css';
-import App from './App';
-
-ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
-
-modal, overlayed popup같은 경우는 따로 분리해서 보여주는게 맞다고 합니다. 하지만 어떻게 그렇게 할 수 있을까요?.
-
-//index.html
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-  &lt;he...</div>
-<p><a href="/2021/04/28/Learning-React-08.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 28일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-28T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/2021/04/27/Learning-React-07.html"><h2 itemprop="headline" class="item__header">[ #7 ] 3 ways to fullfill jsx's requirement</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">JSX requirement
-
-import React from 'react'
-
-const AddUser = () =&gt; {
-  return (
-    &lt;div&gt;이건&lt;/div&gt;
-    &lt;div&gt;에러나요&lt;/div&gt;
-  )
-}
-
-export default AddUser
-
-
-리액트 jsx는 오직 하나의 html element만을 return할 수 있습니다.  
-따라서 위의 코드는 에러를 뿜어냅니다.
-
-
-
-이를 수정하기 위해선 이 두태그를 하나의 div로 감싸줘야 합니다.
-
-import React from "react";
-
-const AddUser = () =&gt; {
-  r...</div>
-<p><a href="/2021/04/27/Learning-React-07.html">더보기</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=React">React</a>
-            </li></ul>
-<ul class="right-col menu"><li>
-<i class="far fa-calendar-alt"></i> <span>2021년 04월 27일</span>
-            </li></ul>
-</div>
-<meta itemprop="author" content="Sanghyuk Jeong">
-<meta itemprop="datePublished" content="2021-04-27T00:00:00+09:00">
-    <meta itemprop="keywords" content="React">
-</div>
-      </article>
-</div>
-</div>
-<div class="layout--home"><div class="pagination">
-<p>전체 글 38개, 5 페이지</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap">
-<li><a class="button button--secondary button--circle" href="/page3">
-            <i class="fas fa-angle-left"></i>
-          </a></li>
-<li>
-              <a class="button button--secondary button--circle" href="/"><span>1</span></a>
-            </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page2"><span>2</span></a>
-              </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page3"><span>3</span></a>
-              </li>
-<li>
-              <div class="button button--primary button--circle focus"><span>4</span></div>
-            </li>
-<li>
-                <a class="button button--secondary button--circle" href="/page5"><span>5</span></a>
-              </li>
-<li><a class="button button--secondary button--circle" href="/page5">
-            <i class="fas fa-angle-right"></i>
-          </a></li>
-</ul>
-    </div>
-  </div></div>
-<script>/*(function () {
-
-})();*/
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
 </div>
 <section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
@@ -1210,6 +1056,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script>
     </div>
     <script>(function () {
