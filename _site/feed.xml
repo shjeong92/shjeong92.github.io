@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-07-12T16:01:50+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://shjeong92.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shjeong92.github.io/" rel="alternate" type="text/html" hreflang="ko" /><updated>2021-07-12T23:27:49+09:00</updated><id>https://shjeong92.github.io/feed.xml</id><title type="html">Hyuk’s devlog</title><subtitle>Your Site Description
 </subtitle><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><entry><title type="html">RESTful API에 관하여</title><link href="https://shjeong92.github.io/2021/07/12/REST.html" rel="alternate" type="text/html" title="RESTful API에 관하여" /><published>2021-07-12T00:00:00+09:00</published><updated>2021-07-12T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/07/12/REST</id><content type="html" xml:base="https://shjeong92.github.io/2021/07/12/REST.html">&lt;p&gt;본 포스트는 &lt;a href=&quot;https://www.youtube.com/watch?v=RP_f5dMoHFc&quot;&gt;“그런 REST API로 괜찮은가”&lt;/a&gt;라는 이응준님의 발표를 보고 정리한 내용입니다.&lt;/p&gt;
 
 &lt;p&gt;최근 여러 면접에서 RESTful API가 무엇이라고 생각하는가? 에 대한 질문은 어딜 가던지 물어보았습니다 
@@ -120,7 +120,585 @@ API 버저닝은 Major.minor로 하고 uri에 버전 정보를 포함시킨다.&
 
 &lt;p&gt;무엇이 문제였고, 왜 이런 차이가 났는지 알아봅시다.&lt;/p&gt;
 
-&lt;h3 id=&quot;rest-api란&quot;&gt;REST API란?&lt;/h3&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="REST" /><category term="RESTful" /><category term="API" /><category term="HTTP" /><category term="SOAP" /><summary type="html">본 포스트는 “그런 REST API로 괜찮은가”라는 이응준님의 발표를 보고 정리한 내용입니다. 최근 여러 면접에서 RESTful API가 무엇이라고 생각하는가? 에 대한 질문은 어딜 가던지 물어보았습니다 구글링을 통해서 얻은 답을 했었는데 이게 다가 아닌것 같은 느낌.. 그러다가 지인한테 RESTful API가 뭐라고생각하냐고 물으면 뭐라 답할것인가 물었더니 이 영상을 추천해 주시더군요 ㅎㅎㅎ RESTful API의 탄생배경부터 로이필딩에 관한 이야기까지 정말 재미있게 봤습니다. REST란 REpresentational State Transfer 의 약자라고 하는데요, 이것만 봐선 도무지 뭔지 모르겠네요.. REST의 출현 계기 REST는 웹으로 부터 시작되었습니다. www가 팀 버너스 리에 의해 탄생 되었는데요. 하나의 고민이 있었죠 팀 버너스리의 고민(1991) 어떻게 인터넷에서 정보를 공유할 것인가? 모든 정보들을 하이퍼 텍스트로 연결 표현방식: HTML 식별자: URI 전송 방법: HTTP HTTP/1.0 (1994-1996) 로이필딩이 HTTP개발에 참여하였고 어떻게 웹을 망가 뜨리지 않고 HTTP를 진보시킬까? 라는 고민을 하였는데요, 로이는 고민 끝에 HTTP Object Model이라는 것을 만들었습니다. 이는 4년 후 “Representational State Transfer: An Architectural Style for Distributed Hypermedia interaction”에서 REST를 최초로 공개 하였는데요. 이후 2년 후, “Architectural Styles and the Design of Network-based Software Architectures”을 박사 논문으로 발표하게 되었고, 이 박사 논문이 바로 그 REST라는 것을 정의한느 논문입니다. API(1998) 그런 한편, API라는 것이 있는데요. 98년에 마이크로소프트에서 원격으로 다른 시스템에 메소드를 호출할 수 있는 XML-RPC( 1998) 프로토콜을 만들었습니다. 이는 곧 SOAP이라는 이름으로 바뀌고, Salesforce라는 회사가 인터넷에서 최초로 공개하게 되었는데 장사가 잘 되지 않았죠. 당시 SOAP을 사용해서 api를 만들었는데 단순한 요청임에도 아래와 같이 상당히 복잡한 것을 알 수 있습니다. &amp;lt;?xml version=&quot;1.0&quot;, encoding=&quot;utf-8&quot;&amp;gt; &amp;lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:urn=&quot;urn:enterprise.soap.sforce.com&quot;&amp;gt; &amp;lt;soapenv:Header&amp;gt; &amp;lt;urn:SessionHeader&amp;gt; &amp;lt;urn:sessionId&amp;gt;&amp;lt;b&amp;gt;QwWsHJyTPW.1pd0_jXlNKOSU&amp;lt;/b&amp;gt;&amp;lt;/urn:sessionId&amp;gt; &amp;lt;/urn:SessionHeader&amp;gt; &amp;lt;/soapenv:Header&amp;gt; &amp;lt;soapenv:Body&amp;gt; &amp;lt;urn:fieldList&amp;gt;&amp;lt;b&amp;gt;Id, Name, Website&amp;lt;/b&amp;gt;&amp;lt;/urn:fieldList&amp;gt; &amp;lt;urn:sObjectType&amp;gt;&amp;lt;b&amp;gt;Account&amp;lt;/b&amp;gt;&amp;lt;/urn:sObjectType&amp;gt; &amp;lt;!--Zero or more repetitions:--&amp;gt; &amp;lt;urn:ids&amp;gt;&amp;lt;b&amp;gt;001D000000HS2Su&amp;lt;/b&amp;gt;&amp;lt;/urn:ids&amp;gt; &amp;lt;urn:ids&amp;gt;&amp;lt;b&amp;gt;001D000000HRzKD&amp;lt;/b&amp;gt;&amp;lt;/urn:ids&amp;gt; &amp;lt;/urn:retrieve&amp;gt; &amp;lt;/soapenv:Body&amp;gt; &amp;lt;/soapenv:Envelope&amp;gt; 너무 복잡하여 Salesforce의 api는 많이 쓰이지 않게 됩니다. 그리고 flickr에서 SOAP을 사용하여 API를 발표하는데 아래와 훨씬 간단해 졌습니다. &amp;lt;s:Envelope xmlns:s=&quot;http://www.w3.org/2001/06/soap-envelope&amp;gt;&quot; &amp;lt;s.Body&amp;gt; &amp;lt;s.Fault&amp;gt; &amp;lt;faultcode&amp;gt;flickr.error.[error-code]&amp;lt;/faultcode&amp;gt; &amp;lt;faultstring&amp;gt;[error-message]&amp;lt;/faultstring&amp;gt; &amp;lt;faultactor&amp;gt;http://www.flickr.com/services/soap/&amp;lt;/faultactor&amp;gt; &amp;lt;details&amp;gt;Please see http://flickr.com/services/docs/ for more details&amp;lt;/details&amp;gt; &amp;lt;/s.Fault&amp;gt; &amp;lt;/s.Body&amp;gt; &amp;lt;/s:Envelope&amp;gt; 그 이후 로이 필딩이 논문을 바탕으로 REST를 발표하는데 &amp;lt;rsp stat=&quot;fail&quot;&amp;gt; &amp;lt;err code=&quot;[error-code]&quot; msg=&quot;[error-message]&quot;/&amp;gt; &amp;lt;/rsp&amp;gt; 딱 보더라도 훨씬 짧고, SOAP에 비해서 단순하며 규칙도 적으며 쉽다고 느끼게 되었습니다. 많은 사람들이 SOAP에서 REST로 갈아타게 됩니다. 또한, 2006년에 AWS가 자사 API의 사용량의 85%가 REST임을 밝혔고, 2010년에 Salesforce.com또한 REST API를 추가했습니다. 이렇게 WWW의 API가 REST로 정착이 되나 싶었지만… CMIS(2008) IBM, 마이크로소프트등의 기업들이 함께 작업했고, REST를 지원한다고 발표했으나 REST를 만든 장본인 로이필딩은 “CMIS에는 REST가 없다” 라고 말을했죠 Microsoft REST API Guidelines(2016) 2016년에는 MS에서 API 가이드라인을 만들었는데요 uri는 https://{serviceRoot}/{collection}/{id} 형식이어야한다 GET, PUT, DELETE, POST, HEAD, PATCH, OPTIONS를 지원해야한다 API 버저닝은 Major.minor로 하고 uri에 버전 정보를 포함시킨다. 제가 개념으로 알고 있었던 REST API인.. 내막은 몰랐던것인데 로이 필딩은 여기다대고 “이것 또한 REST 아님!” 이라고 트위터에 적었고, 블로그에 &quot;REST APIs must be hypertext-driven&quot;이라고 적었으며, &quot;the best practice for versioning an API is: “Don’t”을 덧 붙였죠. 사람들이(저를 포함) 알고 있던 REST API와 제작자인 로이의 REST API는 너무나도 다르네요! 무엇이 문제였고, 왜 이런 차이가 났는지 알아봅시다. REST API란?</summary></entry><entry><title type="html">[ #2 ] 운영체제 - 가상메모리</title><link href="https://shjeong92.github.io/2021/07/07/OS-02.html" rel="alternate" type="text/html" title="[ #2 ] 운영체제 - 가상메모리" /><published>2021-07-07T00:00:00+09:00</published><updated>2021-07-07T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/07/07/OS-02</id><content type="html" xml:base="https://shjeong92.github.io/2021/07/07/OS-02.html">&lt;h3 id=&quot;가상-메모리란&quot;&gt;가상 메모리란?&lt;/h3&gt;
+&lt;h3 id=&quot;rest-api란&quot;&gt;REST API란?&lt;/h3&gt;
+
+&lt;p&gt;REST API -&amp;gt; REST 아키텍처를 따르는 스타일 -&amp;gt; &lt;strong&gt;제약 조건의 집합&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;모든 조건을 따라야 REST API인것이죠&lt;/p&gt;
+
+&lt;p&gt;그래서 REST는 아키텍쳐 스타일면서 하이브리드 아키텍처 스타일이라고 말합니다.
+아키텍처 스타일이면서, 동시에 아키텍처 스타일이 집합이기 때문입니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;rest를-구성하는-스타일&quot;&gt;REST를 구성하는 스타일&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Client - Server&lt;/li&gt;
+  &lt;li&gt;Stateless&lt;/li&gt;
+  &lt;li&gt;Cache&lt;/li&gt;
+  &lt;li&gt;Layered System&lt;/li&gt;
+  &lt;li&gt;Code-on-Demand (optional)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Uniform Interface&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;대체로 REST라고 부르는 것들은 위의 조건을 대부분 지키고 있습니다. 왜냐하면 HTTP만 잘 따라도 Client-Server, Stateless, Cache, Layered System은 다 지킬 수 있기 때문인데, Code-on-Demand는 서버에서 코드를 클라이언트로 보내서 실행할 수 있어야 한다는 것을 의미, 즉 자바스크립트를 의미하며, 필수는 아닙니다.&lt;/p&gt;
+
+&lt;p&gt;하지만 로이가 REST가 아니라고 말하는 것들은 Uniform Interface를 만족하지 못하는 것이 대부분 입니다. Uniform Interface 역시 아키텍처 스타일이기 때문에 안에 뭐가 들어있는지 보도록 하겠습니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;uniform-interface의-제약조건&quot;&gt;Uniform Interface의 제약조건&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Identification of resources&lt;/li&gt;
+  &lt;li&gt;Manipulation of resources through representations&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Self-descriptive messages&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Hypermedia as the engine of application sate(HATEOAS)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;dentification of resources은 URI로 리소스가 식별되면 된다는 것이고, Manipulation of resources through representations는 representation 전송을 통해서 리소스를 조작해야된댜는 것입니다. 즉, 리소스를 만들거나 삭제, 수정할 때 http 메시지에 그 표현을 전송해야된다는 것이죠. 위 2가지 조건은 대부분 잘 지켜지고 있습니다.&lt;/p&gt;
+
+&lt;p&gt;하지만 문제는 아래의 2가지 입니다. 이 두가지 조건 때문에 우리가 부르는 REST API는 REST API가 아니게 되는것 입니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;self-descriptive-messages&quot;&gt;Self-descriptive messages&lt;/h4&gt;
+
+&lt;p&gt;메세지는 스스로를 설명해야함.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GET / HTTP/1.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;단순히 루트를 얻어오는 GET 요청인데요, 이 HTTP 요청 메시지는 뭔가 빠져 있어서 Self-descriptive 하지 못합니다.&lt;/p&gt;
+
+&lt;p&gt;우선 목적지가 빠져있는데,&lt;/p&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;www.example.org&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;이 요청이 www.example.org 라는 도메인으로 간다라는 목적지가 빠져있기 때문에 이런 경우는 Self-descriptive하지 않다고 합니다.&lt;/p&gt;
+
+&lt;p&gt;또한, 이런 것도 생각해볼 수 있습니다. 200 OK 응답 메시지이며, JSON 본문이 있습니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;op&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;remove&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;path&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/a/b/c&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;이렇게 되면 당연히 Self-descriptive 하지 않는데요, 그 이유는 이걸 클라이언트가 해석하려고 하면, 어떤 문법으로 작성된 것인지 모르기 때문에 해석에 실패합니다. 그렇기 때문에 Content-Type 헤더가 반드시 들어가야 합니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;op&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;remove&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;path&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/a/b/c&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;자 컨텐츠 헤더가 추가되어서 이제 대괄호 중괄호 및 키와 값을 파싱할 수 있게 되었습니다.&lt;/p&gt;
+
+&lt;p&gt;하지만 아직까지도 Self-descriptive하다고 볼 수는 없습니다.
+왜냐하면 op값과, path값이 무엇을 의미하는지 알 수 없기 때문입니다.&lt;/p&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;patch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;op&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;remove&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;path&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/a/b/c&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;이렇게 명시를 하면 완전해진다. 이 응답은 json-patch+json이라는 미디어 타입으로 정의된 메시지이기 때문에 json-patch라는 명세를 찾아가서 이해한 다음, 이 메시지를 해석을 하면 그제서야 올바르게 메시지의 의미를 이해할 수 있게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;이처럼 Self-descriptive message라는 것은 메시지를 봤을 때 메시지의 내용으로 온전히 해석이 다 가능해야된다는 것입니다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;하지만 오늘날의 REST API는 상당히 이를 만족하지 못하고 있습니다. 대부분 미디어 타입에는 그냥 json(제가 작성한것 앱 또한 마찬가지..)이라고만 되어있고 이를 어떻게 해석해야되는지는 명시가 되어있지 않습니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;hateoas&quot;&gt;HATEOAS&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;애플리케이션의 상태는 Hyperlink를 이용해 전이되어야 함&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/75003424/125241702-be8b6180-e326-11eb-8cfd-e20a313c0cb7.png&quot; alt=&quot;HATEOAS&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;위와 같은 사이트가 있다고 가정해봅시다.&lt;/p&gt;
+
+&lt;p&gt;루트 -&amp;gt; 글목록보기(GET) -&amp;gt; 글 쓰기(GET) -&amp;gt; 글 저장(POST) -&amp;gt; 생성된 글 보기(GET) -&amp;gt; 목록 보기(GET)&lt;/p&gt;
+
+&lt;p&gt;이렇게 상태를 전이하는 것을 애플리케이션 상태 전이라고 하고, 이 상태 전이마다 항상 해당 페이지에 있던 링크를 따라가면서 전이했기 때문에 HATEOAS를 만족한다고 할 수 있습니다. 말 그대로, 하이퍼 링크를 통한 전이가 된다는 점이 이를 만족 한다는 것이죠.&lt;/p&gt;
+
+&lt;p&gt;HTML의 경우 HATEOAS를 만족하는데,&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: text/html
+
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt; &amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt; &amp;lt;a href=&quot;/test&quot;&amp;gt; test &amp;lt;/a&amp;gt; &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;a태그&lt;/strong&gt;를 통해서 그 다음 상태로 전이가 가능하기 떄문에 만족한다고 할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;그렇다면 JSON으로는 어떻게 표현하면 될까요?&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP/1.1 200 OK
+Content-Type: application/json
+Link: &amp;lt;/articles/1&amp;gt;; rel=&quot;previous&quot;,
+			&amp;lt;/articles/3&amp;gt;; rel=&quot;next&quot;;
+
+{
+	&quot;title&quot;: &quot;The second article&quot;,
+	&quot;contents&quot;: &quot;blah blah...&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Link라는 헤더가 있는데, 이것이 바로 이 리소스와 하이퍼링크로 연결되어 있는 다른 리소스를 가르킬 수 있는 기능을 제공해줍니다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;여기서 어떤 1개의 페이지를 표현 했는데, 이전페이지를 /articles/1, 다음 페이지는 /articles/3에 있다는 정보를 표현해준 것이지요.&lt;/p&gt;
+
+&lt;h4 id=&quot;uniform-interface가-중요한-이유&quot;&gt;Uniform Interface가 중요한 이유&lt;/h4&gt;
+
+&lt;h5 id=&quot;1-독립적-진화&quot;&gt;1. 독립적 진화&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;서버와 클라이언트가 각각 독립적으로 진화한다.&lt;/li&gt;
+  &lt;li&gt;서버의 기능이 변경되어도 클라이언트를 업데이트할 필요가 없다.&lt;/li&gt;
+  &lt;li&gt;REST를 만든 계기 : “How do I imporve HTTP without breaking the Web”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;독립적으로 진화한다면 어떻게 될까요?&lt;/p&gt;
+
+&lt;p&gt;만약에 서버의 기능이 바뀌었다면?.&lt;/p&gt;
+
+&lt;p&gt;새로운 API가 추가되고 기존 API가 변경/삭제되고 URI가 바뀌고 변동이 있어도, 클라이언트가 바뀌지 않아도 된다. (이점을 만족하는 애플리케이션이 거의 없음)&lt;/p&gt;
+
+&lt;p&gt;이게 바로 REST를 만들게 된 계기입니다. 로이 필딩이 초반에 http 1.0을 만들 당시 고민했던 것, “웹을 망가뜨리지 않고 어떻게 수정할 것인가?”에 대한 결과가 REST였다고 했다. ~&lt;del&gt;uri로 자원을 명시하고 어쩌고 저쩌고를 떠나서 말이죠&lt;/del&gt;&lt;/p&gt;
+
+&lt;p&gt;그렇기 때문에 REST가 목적하는 바가 독립적인 진화입니다. 이를 달성하기 위해서는 Unifrom Interface가 필수적이기기에, 이를 만족하지 못하면 REST라고 부를 수 없는 것입니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;아주-rest한-사례&quot;&gt;아주 REST한 사례&lt;/h4&gt;
+
+&lt;p&gt;REST를 아주 잘 지키고 있는 사례는 바로 웹 입니다.&lt;/p&gt;
+
+&lt;p&gt;그 이유로는&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;웹 페이지를 변경했다고 웹 브라우저를 업데이트할 필요는 없습니다.&lt;/li&gt;
+  &lt;li&gt;웹 브라우저를 업데이트 했다고 웹 페이지를 변경할 필요도 없습니다.&lt;/li&gt;
+  &lt;li&gt;HTTP 명세가 변경되어도 웹은 잘 작동합니다.&lt;/li&gt;
+  &lt;li&gt;HTML 명세가 변경되어도 웹은 잘 작동합니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;우리가 들어가는 웹 페이지가 변경되었다고 해서 그 웹 페이지를 접근할 때 웹 브라우저를 업데이트 할 필요 없지요 그냥 잘 들어가집니다.&lt;/p&gt;
+
+&lt;p&gt;반대로 크롬을 업데이트 했다고 해서, 웹 페이지에 안들어가지는 것도 아닙니다.&lt;/p&gt;
+
+&lt;p&gt;심지어 HTTP 명세가 바뀌어도 그렇다. 2014년 HTTP 2.0이 나오고 여러가지 웹 페이지들이 HTTP 2.0을 적용한다. 하지만 적용을 하지 않은 사이트들도 여전히 잘 됩니다.&lt;/p&gt;
+
+&lt;p&gt;HTML 5.0이 HTML 5.2로 바뀌어도 똑같이 잘 됩니다.&lt;/p&gt;
+
+&lt;p&gt;오래된 버전의 브라우저 에서는 페이지가 좀 깨지기는 할 수 있지만 모든 기능이 동작 합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;우리가 만든 모바일 앱은 많은 문제가 있습니다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;아래와 같은 문제이지요
+&lt;img src=&quot;https://user-images.githubusercontent.com/75003424/125241703-be8b6180-e326-11eb-915c-6b982a9358e4.png&quot; alt=&quot;prob&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;이것은 무슨 이야기일까요? 앱이 강제 업데이트 하는 경우가 있는데, 서버가 기능이 변경되어 있을경우 클라이언트가 그것을 지원해주는데 한계가 있을 때 업데이트를 진행하는 것입니다. 그런데 이게 되게 잦다는 것이죠.&lt;/p&gt;
+
+&lt;p&gt;분명히 웹에서는 이런 경우가 잘 없습니다. 왜냐하면 무중단 배포가 가능하기 때문입니다.  하지만 모바일 앱에서는 자주 있는 일이에요. 제가 예전에 게임 어플리케이션을 앱스토어 및 구글 플레이스토어에 등록한 적이있는데 검수과정에서 reject되는 경우도 있었고 그냥 통과되는경우도 있었는데요, 이 기간이 생각보다 길기 떄문입니다.&lt;/p&gt;
+
+&lt;p&gt;다르게 말하자면 우리가 만든 모바일 앱 클라이언트와 서버가 REST 아키텍처 스타일을 따르고 있지 않다고 말할 수 있는거겠죠?&lt;/p&gt;
+
+&lt;p&gt;웹은 어떻게 이렇게 가능하게 했을까요? 많은 사람이 피땀흘려 노력을 했기에 가능했던 것입니다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;W3C Working group에서 html을 만들고&lt;/li&gt;
+  &lt;li&gt;IEFT Working groups에서 http를 만들고&lt;/li&gt;
+  &lt;li&gt;웹 서버/브라우저 개발자들이 많은 토론을 하며 노력을 했습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;HTML5 첫 초안에서 권고안이 나오는데 무려 6년 
+HTTP/1.1 명세 개정판 작업하는데 7년
+HTTP/1.1에 새로운 기능이 추가 되었겠지 라고 생각 할 수 있지만 아닙니다. 새로운 기능은 하나도 없었고, 문서를 다듬기만 하는데 7년이 걸렸습니다. 절대로 하위 호환을 깨드리지 않기 위해 정말 깊은 토론의 결과였던 것입니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;상호운용성interoperability에-대한-집착&quot;&gt;상호운용성(interoperability)에 대한 집착&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Referer → 오타지만 안 고침&lt;/li&gt;
+  &lt;li&gt;charset → 잘못 지은 이름이지만 안 고침&lt;/li&gt;
+  &lt;li&gt;HTTP 상태 코드 418(I’m a teapot) 포기&lt;/li&gt;
+  &lt;li&gt;HTTP/0.9 아직도 지원(크롬, 파이어폭스)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;25년전 Referer 오타를 냈습니다 r이 하나 빠졌죠. 하지만 이를 고치지 못했습니다. 이를 고치는 순간 웹이 깨지기 때문이었죠. 또 charset이란 이름은 잘못 지었습니다. 원래 encoding이라고 이름을 지어야하는 데 그때 encoding 개념이 부족하여, character set이랑 같은 줄 알고 지었다. 하지만 그대로 두었습니다. 이름을 고치면 상호 운용성이 깨지기 때문이죠&lt;/p&gt;
+
+&lt;p&gt;또한, http 상태 코드가 하나씩 추가되다가 418번을 추가할 때가 되었는데, 문제가 생겼습니다. 만우절 때 만들었던 이상한 spec의 HTCPCP 상태 코드가 있는데, 이것은 http가 아니라서 무시를 해도 됐었습니다. 하지만 수많은 node.js와 같은 서버들의 http 서버 구현체들이 http 상태 코드로 구현을 해버렸죠. 그래서 처음에는 http 의장이 프로젝트마다 돌아다니면서 418 지원을 제거해야된다는 이슈를 올렸는데 맹비난을 받고 포기했다고 합니다. 그래서 418은 http 상태코드에서 영구 결번으로 만들게 되었다고 하죠. 이미 그런 구현체가 존재하고, 잘못 구현체들과 상호 운용성을 지켜주기 위해(안그러면 웹이 깨지기때문에) 이러한 결정을 한것입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;크롬&lt;/strong&gt;에서는 HTTP 버전이 올라가면서 예전 버전을 빼려고 시도했지만 몇몇 프록시에서 오작동 하는 것이 발견되어서 HTTP/0.9를 유지하게 되었던 사례도 있습니다.&lt;/p&gt;
+
+&lt;p&gt;그래서 이렇게 많은 사람들이 상호 운용성에 대한 노력 덕분에 독립적으로 진화될 수 있었던 것입니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;7-rest가-웹의-독립적-진화에-도움을-주었을까요&quot;&gt;7) REST가 웹의 독립적 진화에 도움을 주었을까요?&lt;/h4&gt;
+
+&lt;p&gt;네 맞습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Host 헤더 추가&lt;/li&gt;
+  &lt;li&gt;길이 제한 다루는 방법 명시 (414 URI Too Long 등)&lt;/li&gt;
+  &lt;li&gt;URI에서 리소스의 정의가 추상적으로 변경: “문서의 위치” → “식별하고자 하는 무언가”&lt;/li&gt;
+  &lt;li&gt;HTTP/1.1 명세 최신판에서 REST에 대한 언급이 들어감 → representaion의 개념도 있음 → 로이 필더 : HTTP와 URI 명세 저자 중 1명 ㅋㅋㅋ 당연히 영향을 줄 수 박에 없겠죠?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;rest-는-성공했을까요&quot;&gt;REST 는 성공했을까요?&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;REST는 웹의 독립적 진화를 위해 만들어짐.&lt;/li&gt;
+  &lt;li&gt;그리고 웹은 독립적으로 진화하고 있습니다 → 성공!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;그런데-rest-api는&quot;&gt;그런데 REST API는?&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;REST API는 REST 아키텍처 스타일을 따라야 한다.&lt;/li&gt;
+  &lt;li&gt;하지만 오늘날 스스로 REST API라고 하는 API들의 대부분이 REST 아키텍처 스타일을 따르지 않는다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;rest-api도-제약-조건들을-다-지켜야-하는건가요&quot;&gt;REST API도 제약 조건들을 다 지켜야 하는건가요?&lt;/h5&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;An API that provides network-based access to resources via uniform interface of self-descriptive messages containing hypertext to indicate potential state transition might be part of an overall system that is a RESTful application. - Roy T. Fielding
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;REST API라고 하는 것은 하이퍼 텍스트를 포함한 self-descriptive 메시지의 uniform interface를 통해 리소스에 접근하는 API라고 강조는데요&lt;/p&gt;
+
+&lt;p&gt;제작자가 그렇다면 그런것이죠! ㅎㅎㅎ&lt;/p&gt;
+
+&lt;h5 id=&quot;원격-api가-꼭-rest-api여야-하는걸까요&quot;&gt;원격 API가 꼭 REST API여야 하는걸까요?&lt;/h5&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;REST emphasizes evolvability sustain on uncontrollable system. If you think you have control over the system or aren&apos;t interested in evolvability, don&apos;t waste your time arguing about REST. - Roy T. Fielding
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;시스템 전체를 통제할 수 있다고 생각하거나, 진화에 관심이 없다면, REST에 대해 따지느라 시간을 허비하지 마라. - 로이 필딩&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;시스템 전체를 통제할 수 있을경우&lt;/strong&gt; → 회사에서 서버 개발자인데, 클라이언트 개발자를 통제 가능할 때 or 클라이언트, 서버를 다 만들 수 있을 때&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;진화에 관심이 없을경우&lt;/strong&gt;→ 매일 업데이트 해서 유저들에게 불만을 들어도 난 상관이 없음&lt;/p&gt;
+
+&lt;p&gt;하지만 우리는 시스템 전체를 통제할 수 없기도 하고, 개발자로서 진화에 관심을 두어야 하기에 REST를 따라야 합니다.&lt;/p&gt;
+
+&lt;h5 id=&quot;그럼-이제-어떻게-해야할까요&quot;&gt;그럼 이제 어떻게 해야할까요?&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;REST API를 구현하고 REST API라고 부른다.&lt;/li&gt;
+  &lt;li&gt;REST API 구현을 포기하고 HTTP API라고 부른다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;REST API가 아니지만 REST API라고 부른다. (대부분 앱들의 현재 상태)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;I am getting frustrated by the number of people calling any HTTP-base interface a REST API... Please try to adhere to them or choose some other buzzword for your API.&quot; - Roy T. Fielding
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;로이필딩이 화가났죠 ㅎㅎ 3번을 계속 이행하면 답글을 달러 올지도 모른다고하네요 요즘도 활발히 활동 중이라고합니다…&lt;/p&gt;
+
+&lt;h4 id=&quot;rest하게-api를-구현하는-방법들&quot;&gt;REST하게 API를 구현하는 방법들&lt;/h4&gt;
+
+&lt;h5 id=&quot;왜-api는-rest가-잘-안될까요&quot;&gt;왜 API는 REST가 잘 안될까요?&lt;/h5&gt;
+&lt;p&gt;우선 웹하고 비교했을때 웹은 왜 RESTful해지기가 힘든지 봅시다.
+&lt;img src=&quot;https://user-images.githubusercontent.com/75003424/125241705-bf23f800-e326-11eb-8ad6-81a67ec382a0.png&quot; alt=&quot;restful-1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;커뮤니케이션이 좀 다르죠? HTTP API는 사람이 아닌 기계가 해석합니다. 그러다 보니 미디어 타입이 다르지요 Json이나 XML같이 기계가 의미를 이해할 수 있는 포맷을 쓰게 된다.&lt;/p&gt;
+
+&lt;p&gt;그렇다면 문제의 원인이 &lt;strong&gt;미디어 타입&lt;/strong&gt;이라고 볼 수 있겠죠?&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/75003424/125241705-bf23f800-e326-11eb-8ad6-81a67ec382a0.png&quot; alt=&quot;restful-2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;self-descriptive&lt;/strong&gt; 측면에서 보면 JSON은 불완전합니다. 하지만 문법은 정의되어 있습니다. 어떻게 파싱하고 array를 어떻게 해석해라 까지는 말이죠. 안에 들어갈 수 있는 key-value에 대한 의미는 아무것도 정의되어 있지 않습니다.&lt;/p&gt;
+
+&lt;p&gt;즉, 문법은 해석 가능하지만 의미를 해석하려면 별도로 문서(API 문서 등)가 필요합니다.&lt;/p&gt;
+
+&lt;p&gt;HTML과 JSON을 비교해보면&lt;/p&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example.org&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://todos/1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;회사&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;가기&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://todos/2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;집에&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;가기&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HTML → Self-descriptive
+    &lt;ol&gt;
+      &lt;li&gt;응답 메시지의 Content-Type을 보고 미디어 타입이 text/html 확인&lt;/li&gt;
+      &lt;li&gt;HTTP 명세에 미디어 타입은 IANA에 등록되어 있다고 함 → IANA에서 text/html 명세 찾음&lt;/li&gt;
+      &lt;li&gt;IANA에 따르면 text/html 명세는 http://www.w3.org/TR/html 이므로 링크를 찾아가 명세 해석&lt;/li&gt;
+      &lt;li&gt;명세에 모든 태그의 해석 방법이 있으므로 이를 해석, 사용자에게 보여줄 수 있음&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Success!&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;HTML → HATEOAS
+    &lt;ol&gt;
+      &lt;li&gt;a 태그를 이용해 표현된 링크를 통해 다음 상태로 전이될 수 있으므로 만족&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Success!&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example.org&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;회사 가기&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;집에 가기&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;JSON → self-descriptive
+    &lt;ol&gt;
+      &lt;li&gt;응답 메시지의 Content-Type을 보고 미디어 타입이 application/json 확인&lt;/li&gt;
+      &lt;li&gt;HTTP 명세에 미디어 타입은 IANA에 등록되어 있다고 함 → IANA에서 application/json 명세 찾음&lt;/li&gt;
+      &lt;li&gt;IANA에 따르면 application/json 명세는 draft-ietf-jsonvis-rfc7159bis-04 이므로 링크를 찾아가 명세 해석&lt;/li&gt;
+      &lt;li&gt;명세에 JSON 문서 파싱 방법이 명시 → 성공적으로 파싱, 그러나 “id”가 무엇을 의미하고, “title”이 무엇을 의미하는지 알 방법 없음.&lt;/li&gt;
+      &lt;li&gt;FAIL&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;JSON → HATEOAS
+    &lt;ol&gt;
+      &lt;li&gt;다음 상태로 전이할 링크가 없음.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;FAIL&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;2-그런데-self-descriptive-hateoas가-어떻게-독립적인-진화에-도움이-될까요&quot;&gt;2. 그런데 self-descriptive, HATEOAS가 어떻게 독립적인 진화에 도움이 될까요?&lt;/h5&gt;
+
+&lt;p&gt;&lt;strong&gt;self-descriptive → 확장 가능한 커뮤니케이션&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;서버나 클라이언트가 변경되더라도 오고가는 메시지는 언제나 self-descriptive 하므로 언제나 해석이 가능합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;HATEOAS → 애플리케이션 상태 전이의 late binding&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;어디서 어디로 전이가 가능한지 미리 결정하지 않고 어떤 상태로 전이가 완료 되어야 그 다음 전이될 수 있는 상태 결정 ⇒ &lt;strong&gt;링크는 동적으로 변경될 수 있음&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;그럼-rest-api로-바꿔봅시다&quot;&gt;그럼 REST API로 바꿔봅시다.&lt;/h3&gt;
+
+&lt;h4 id=&quot;self-descriptive&quot;&gt;&lt;strong&gt;Self-descriptive&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Media type 정의&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;미디어 타입을 하나 정의&lt;/li&gt;
+      &lt;li&gt;미디어 타입 문서 작성 → “id”, “title”의 의미 정의&lt;/li&gt;
+      &lt;li&gt;IANA에 미디어 타입을 등록. 이때 만든 문서를 미디어 타입의 명세로 등록&lt;/li&gt;
+      &lt;li&gt;이제 이 메시지를 보는 사람은 명세를 찾아갈 수 있음 → 메세시지 의미   e .온전히 해석 가능&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Success&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example.org&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vnd.todos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~~~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;회사 가기&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;집에 가기&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;단점&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;-&amp;gt; 매번 media type을 정의해야함&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Profile 이용하기&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;a. “id”, “title” 의미 정의한 명세 작성&lt;/p&gt;
+
+    &lt;p&gt;b. Link 헤더에 profile relation으로 명세 링크&lt;/p&gt;
+
+    &lt;p&gt;c. 이제 메시지를 보는 사람은 명세를 찾아갈 수 있음 → 의미 해석 가능&lt;/p&gt;
+
+    &lt;p&gt;d. &lt;strong&gt;Success&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example.org&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;https&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;://&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exmaple.org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;docs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;회사 가기&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;집에 가기&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;단점&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;클라이언트가 Link 헤더(RFC5988)와 profile(RFC 6906)을 이해해야함.&lt;/li&gt;
+  &lt;li&gt;Content negotiation 불가&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h4 id=&quot;hateoas-1&quot;&gt;&lt;strong&gt;HATEOAS&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;data에 다양한 방법으로 하이퍼링크 표현&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example.org&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;https&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;://&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exmaple.org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;docs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;link&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://exmplae.org/todos/1, 
+		&quot;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;: &quot;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;회사&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;가기&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;
+	},
+	{
+		&quot;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;: &quot;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;https&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;://&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exmplae.org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;회사 가기&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;또는&lt;/p&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example.org&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;https&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;://&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exmaple.org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;docs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;todo&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://example.org/todos/{id}&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;회사 가기&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;집에 가기&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;단점&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;단점 : 링크를 표현하는 방법을 직접 정의해야함&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;data에 다양한 방법으로 하이퍼링크 표현&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example.org&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vnd.api&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;https&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;://&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exmaple.org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;docs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;todo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;attributes&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;회사 가기&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://example.org/todos/1&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;todo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;attributes&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;집에 가기&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://example.org/todos/2&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;단점&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;기존의 API를 많이 고쳐야함. (침투적)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;HTTP 헤더로 → Link, Location 등&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-s highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;POST&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;점심 약속&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;204&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;No&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Content&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Location&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;todos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;collection&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;HATEOAS를 만족하고자 할경우 &lt;strong&gt;data, 헤더 모두 사용하면 좋음&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;media-type-등록은-필수인가요&quot;&gt;Media type 등록은 필수인가요?&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;NO!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;A REST API should be entered with no prior knowledge beyond the initial URI (bookmark) and set of standardized media types that are appropriate for the intended audience(i.e., expected to be understood by any client that might user the API). — Roy. T. Fielding
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;의도한 저자가 이해할 수만 있다면 상관 없는데요.&lt;/p&gt;
+
+&lt;p&gt;예를 들면 사내에서만 쓰는 API고 이를 이해하고 있다면 굳이 등록하지 않아도 된다고 합니다.&lt;/p&gt;
+
+&lt;h5 id=&quot;등록의-장점&quot;&gt;등록의 장점&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;사전에 알고 있지 않은 사람도 누구나 쉽게 사용할 수 있게 됨&lt;/li&gt;
+  &lt;li&gt;이름 충돌을 피할 수 있음&lt;/li&gt;
+  &lt;li&gt;등록이 별로 어렵지 않다(어려워 보이지만..)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;마무리&quot;&gt;마무리&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;오늘날 대부분 “REST API”는 사실 REST를 따르고 있지 않음.&lt;/li&gt;
+  &lt;li&gt;REST의 제약 조건 중 특히 self-descriptive와 HATEOAS를 잘 만족하지 못함.&lt;/li&gt;
+  &lt;li&gt;REST 긴 시간에 걸쳐(수십년) 진화하는 웹 애플리케이션을 위한 것.&lt;/li&gt;
+  &lt;li&gt;REST를 따를 것인지는 API 설계하는 이들이 스스로 판단하여 결정.&lt;/li&gt;
+  &lt;li&gt;REST를 따르겠다면 Self-decriptive와 HATEOAS를 만족시켜야함.
+    &lt;ul&gt;
+      &lt;li&gt;Self-decriptiv는 custom media type, profile link relation으로 만족 가능.&lt;/li&gt;
+      &lt;li&gt;HATEOAS는 HTTP 헤더나 본문에 링크를 담아 만족 가능.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;REST를 따르지 않겠다면, “REST를 만족하지 않는 REST API”를 뭐라고 부를지 결정할것
+    &lt;ul&gt;
+      &lt;li&gt;HTTP API라고 부를 수도 있고&lt;/li&gt;
+      &lt;li&gt;그냥 이대로 REST API라고 부를 수도 → 로이형이 싫어함(답글 달러 올수도있음! ㅋㅋㅋㅋ)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;긴 글 읽느라 고생하셨습니다.&lt;/p&gt;
+
+&lt;p&gt;이해가 힘들경우에 이응준님의 동영상 한편을 보시는걸 강력하게 추천 드립니다!&lt;/p&gt;</content><author><name>Sanghyuk Jeong</name><email>shjeong920522@gmail.com</email></author><category term="REST" /><category term="RESTful" /><category term="API" /><category term="HTTP" /><category term="SOAP" /><summary type="html">본 포스트는 “그런 REST API로 괜찮은가”라는 이응준님의 발표를 보고 정리한 내용입니다. 최근 여러 면접에서 RESTful API가 무엇이라고 생각하는가? 에 대한 질문은 어딜 가던지 물어보았습니다 구글링을 통해서 얻은 답을 했었는데 이게 다가 아닌것 같은 느낌.. 그러다가 지인한테 RESTful API가 뭐라고생각하냐고 물으면 뭐라 답할것인가 물었더니 이 영상을 추천해 주시더군요 ㅎㅎㅎ RESTful API의 탄생배경부터 로이필딩에 관한 이야기까지 정말 재미있게 봤습니다. REST란 REpresentational State Transfer 의 약자라고 하는데요, 이것만 봐선 도무지 뭔지 모르겠네요.. REST의 출현 계기 REST는 웹으로 부터 시작되었습니다. www가 팀 버너스 리에 의해 탄생 되었는데요. 하나의 고민이 있었죠 팀 버너스리의 고민(1991) 어떻게 인터넷에서 정보를 공유할 것인가? 모든 정보들을 하이퍼 텍스트로 연결 표현방식: HTML 식별자: URI 전송 방법: HTTP HTTP/1.0 (1994-1996) 로이필딩이 HTTP개발에 참여하였고 어떻게 웹을 망가 뜨리지 않고 HTTP를 진보시킬까? 라는 고민을 하였는데요, 로이는 고민 끝에 HTTP Object Model이라는 것을 만들었습니다. 이는 4년 후 “Representational State Transfer: An Architectural Style for Distributed Hypermedia interaction”에서 REST를 최초로 공개 하였는데요. 이후 2년 후, “Architectural Styles and the Design of Network-based Software Architectures”을 박사 논문으로 발표하게 되었고, 이 박사 논문이 바로 그 REST라는 것을 정의한느 논문입니다. API(1998) 그런 한편, API라는 것이 있는데요. 98년에 마이크로소프트에서 원격으로 다른 시스템에 메소드를 호출할 수 있는 XML-RPC( 1998) 프로토콜을 만들었습니다. 이는 곧 SOAP이라는 이름으로 바뀌고, Salesforce라는 회사가 인터넷에서 최초로 공개하게 되었는데 장사가 잘 되지 않았죠. 당시 SOAP을 사용해서 api를 만들었는데 단순한 요청임에도 아래와 같이 상당히 복잡한 것을 알 수 있습니다. &amp;lt;?xml version=&quot;1.0&quot;, encoding=&quot;utf-8&quot;&amp;gt; &amp;lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:urn=&quot;urn:enterprise.soap.sforce.com&quot;&amp;gt; &amp;lt;soapenv:Header&amp;gt; &amp;lt;urn:SessionHeader&amp;gt; &amp;lt;urn:sessionId&amp;gt;&amp;lt;b&amp;gt;QwWsHJyTPW.1pd0_jXlNKOSU&amp;lt;/b&amp;gt;&amp;lt;/urn:sessionId&amp;gt; &amp;lt;/urn:SessionHeader&amp;gt; &amp;lt;/soapenv:Header&amp;gt; &amp;lt;soapenv:Body&amp;gt; &amp;lt;urn:fieldList&amp;gt;&amp;lt;b&amp;gt;Id, Name, Website&amp;lt;/b&amp;gt;&amp;lt;/urn:fieldList&amp;gt; &amp;lt;urn:sObjectType&amp;gt;&amp;lt;b&amp;gt;Account&amp;lt;/b&amp;gt;&amp;lt;/urn:sObjectType&amp;gt; &amp;lt;!--Zero or more repetitions:--&amp;gt; &amp;lt;urn:ids&amp;gt;&amp;lt;b&amp;gt;001D000000HS2Su&amp;lt;/b&amp;gt;&amp;lt;/urn:ids&amp;gt; &amp;lt;urn:ids&amp;gt;&amp;lt;b&amp;gt;001D000000HRzKD&amp;lt;/b&amp;gt;&amp;lt;/urn:ids&amp;gt; &amp;lt;/urn:retrieve&amp;gt; &amp;lt;/soapenv:Body&amp;gt; &amp;lt;/soapenv:Envelope&amp;gt; 너무 복잡하여 Salesforce의 api는 많이 쓰이지 않게 됩니다. 그리고 flickr에서 SOAP을 사용하여 API를 발표하는데 아래와 훨씬 간단해 졌습니다. &amp;lt;s:Envelope xmlns:s=&quot;http://www.w3.org/2001/06/soap-envelope&amp;gt;&quot; &amp;lt;s.Body&amp;gt; &amp;lt;s.Fault&amp;gt; &amp;lt;faultcode&amp;gt;flickr.error.[error-code]&amp;lt;/faultcode&amp;gt; &amp;lt;faultstring&amp;gt;[error-message]&amp;lt;/faultstring&amp;gt; &amp;lt;faultactor&amp;gt;http://www.flickr.com/services/soap/&amp;lt;/faultactor&amp;gt; &amp;lt;details&amp;gt;Please see http://flickr.com/services/docs/ for more details&amp;lt;/details&amp;gt; &amp;lt;/s.Fault&amp;gt; &amp;lt;/s.Body&amp;gt; &amp;lt;/s:Envelope&amp;gt; 그 이후 로이 필딩이 논문을 바탕으로 REST를 발표하는데 &amp;lt;rsp stat=&quot;fail&quot;&amp;gt; &amp;lt;err code=&quot;[error-code]&quot; msg=&quot;[error-message]&quot;/&amp;gt; &amp;lt;/rsp&amp;gt; 딱 보더라도 훨씬 짧고, SOAP에 비해서 단순하며 규칙도 적으며 쉽다고 느끼게 되었습니다. 많은 사람들이 SOAP에서 REST로 갈아타게 됩니다. 또한, 2006년에 AWS가 자사 API의 사용량의 85%가 REST임을 밝혔고, 2010년에 Salesforce.com또한 REST API를 추가했습니다. 이렇게 WWW의 API가 REST로 정착이 되나 싶었지만… CMIS(2008) IBM, 마이크로소프트등의 기업들이 함께 작업했고, REST를 지원한다고 발표했으나 REST를 만든 장본인 로이필딩은 “CMIS에는 REST가 없다” 라고 말을했죠 Microsoft REST API Guidelines(2016) 2016년에는 MS에서 API 가이드라인을 만들었는데요 uri는 https://{serviceRoot}/{collection}/{id} 형식이어야한다 GET, PUT, DELETE, POST, HEAD, PATCH, OPTIONS를 지원해야한다 API 버저닝은 Major.minor로 하고 uri에 버전 정보를 포함시킨다. 제가 개념으로 알고 있었던 REST API인.. 내막은 몰랐던것인데 로이 필딩은 여기다대고 “이것 또한 REST 아님!” 이라고 트위터에 적었고, 블로그에 &quot;REST APIs must be hypertext-driven&quot;이라고 적었으며, &quot;the best practice for versioning an API is: “Don’t”을 덧 붙였죠. 사람들이(저를 포함) 알고 있던 REST API와 제작자인 로이의 REST API는 너무나도 다르네요! 무엇이 문제였고, 왜 이런 차이가 났는지 알아봅시다. REST API란? REST API -&amp;gt; REST 아키텍처를 따르는 스타일 -&amp;gt; 제약 조건의 집합 모든 조건을 따라야 REST API인것이죠 그래서 REST는 아키텍쳐 스타일면서 하이브리드 아키텍처 스타일이라고 말합니다. 아키텍처 스타일이면서, 동시에 아키텍처 스타일이 집합이기 때문입니다. REST를 구성하는 스타일 Client - Server Stateless Cache Layered System Code-on-Demand (optional) Uniform Interface 대체로 REST라고 부르는 것들은 위의 조건을 대부분 지키고 있습니다. 왜냐하면 HTTP만 잘 따라도 Client-Server, Stateless, Cache, Layered System은 다 지킬 수 있기 때문인데, Code-on-Demand는 서버에서 코드를 클라이언트로 보내서 실행할 수 있어야 한다는 것을 의미, 즉 자바스크립트를 의미하며, 필수는 아닙니다. 하지만 로이가 REST가 아니라고 말하는 것들은 Uniform Interface를 만족하지 못하는 것이 대부분 입니다. Uniform Interface 역시 아키텍처 스타일이기 때문에 안에 뭐가 들어있는지 보도록 하겠습니다. Uniform Interface의 제약조건 Identification of resources Manipulation of resources through representations Self-descriptive messages Hypermedia as the engine of application sate(HATEOAS) dentification of resources은 URI로 리소스가 식별되면 된다는 것이고, Manipulation of resources through representations는 representation 전송을 통해서 리소스를 조작해야된댜는 것입니다. 즉, 리소스를 만들거나 삭제, 수정할 때 http 메시지에 그 표현을 전송해야된다는 것이죠. 위 2가지 조건은 대부분 잘 지켜지고 있습니다. 하지만 문제는 아래의 2가지 입니다. 이 두가지 조건 때문에 우리가 부르는 REST API는 REST API가 아니게 되는것 입니다. Self-descriptive messages 메세지는 스스로를 설명해야함. GET / HTTP/1.1 단순히 루트를 얻어오는 GET 요청인데요, 이 HTTP 요청 메시지는 뭔가 빠져 있어서 Self-descriptive 하지 못합니다. 우선 목적지가 빠져있는데, GET / HTTp/1.1 Host: www.example.org 이 요청이 www.example.org 라는 도메인으로 간다라는 목적지가 빠져있기 때문에 이런 경우는 Self-descriptive하지 않다고 합니다. 또한, 이런 것도 생각해볼 수 있습니다. 200 OK 응답 메시지이며, JSON 본문이 있습니다. HTTP/1.1 200 OK [ { &quot;op&quot;: &quot;remove&quot;, &quot;path&quot;: &quot;/a/b/c&quot; } ] 이렇게 되면 당연히 Self-descriptive 하지 않는데요, 그 이유는 이걸 클라이언트가 해석하려고 하면, 어떤 문법으로 작성된 것인지 모르기 때문에 해석에 실패합니다. 그렇기 때문에 Content-Type 헤더가 반드시 들어가야 합니다. HTTP/1.1 200 OK Content-Type: application/json [ { &quot;op&quot;: &quot;remove&quot;, &quot;path&quot;: &quot;/a/b/c&quot; } ] 자 컨텐츠 헤더가 추가되어서 이제 대괄호 중괄호 및 키와 값을 파싱할 수 있게 되었습니다. 하지만 아직까지도 Self-descriptive하다고 볼 수는 없습니다. 왜냐하면 op값과, path값이 무엇을 의미하는지 알 수 없기 때문입니다. HTTP/1.1 200 OK Content-Type: application/json-patch+json [ { &quot;op&quot;: &quot;remove&quot;, &quot;path&quot;: &quot;/a/b/c&quot; } ] 이렇게 명시를 하면 완전해진다. 이 응답은 json-patch+json이라는 미디어 타입으로 정의된 메시지이기 때문에 json-patch라는 명세를 찾아가서 이해한 다음, 이 메시지를 해석을 하면 그제서야 올바르게 메시지의 의미를 이해할 수 있게 됩니다. 이처럼 Self-descriptive message라는 것은 메시지를 봤을 때 메시지의 내용으로 온전히 해석이 다 가능해야된다는 것입니다. 하지만 오늘날의 REST API는 상당히 이를 만족하지 못하고 있습니다. 대부분 미디어 타입에는 그냥 json(제가 작성한것 앱 또한 마찬가지..)이라고만 되어있고 이를 어떻게 해석해야되는지는 명시가 되어있지 않습니다. HATEOAS 애플리케이션의 상태는 Hyperlink를 이용해 전이되어야 함 위와 같은 사이트가 있다고 가정해봅시다. 루트 -&amp;gt; 글목록보기(GET) -&amp;gt; 글 쓰기(GET) -&amp;gt; 글 저장(POST) -&amp;gt; 생성된 글 보기(GET) -&amp;gt; 목록 보기(GET) 이렇게 상태를 전이하는 것을 애플리케이션 상태 전이라고 하고, 이 상태 전이마다 항상 해당 페이지에 있던 링크를 따라가면서 전이했기 때문에 HATEOAS를 만족한다고 할 수 있습니다. 말 그대로, 하이퍼 링크를 통한 전이가 된다는 점이 이를 만족 한다는 것이죠. HTML의 경우 HATEOAS를 만족하는데, HTTP/1.1 200 OK Content-Type: text/html &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;a href=&quot;/test&quot;&amp;gt; test &amp;lt;/a&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; a태그를 통해서 그 다음 상태로 전이가 가능하기 떄문에 만족한다고 할 수 있습니다. 그렇다면 JSON으로는 어떻게 표현하면 될까요? HTTP/1.1 200 OK Content-Type: application/json Link: &amp;lt;/articles/1&amp;gt;; rel=&quot;previous&quot;, &amp;lt;/articles/3&amp;gt;; rel=&quot;next&quot;; { &quot;title&quot;: &quot;The second article&quot;, &quot;contents&quot;: &quot;blah blah...&quot; } Link라는 헤더가 있는데, 이것이 바로 이 리소스와 하이퍼링크로 연결되어 있는 다른 리소스를 가르킬 수 있는 기능을 제공해줍니다. 여기서 어떤 1개의 페이지를 표현 했는데, 이전페이지를 /articles/1, 다음 페이지는 /articles/3에 있다는 정보를 표현해준 것이지요. Uniform Interface가 중요한 이유 1. 독립적 진화 서버와 클라이언트가 각각 독립적으로 진화한다. 서버의 기능이 변경되어도 클라이언트를 업데이트할 필요가 없다. REST를 만든 계기 : “How do I imporve HTTP without breaking the Web” 독립적으로 진화한다면 어떻게 될까요? 만약에 서버의 기능이 바뀌었다면?. 새로운 API가 추가되고 기존 API가 변경/삭제되고 URI가 바뀌고 변동이 있어도, 클라이언트가 바뀌지 않아도 된다. (이점을 만족하는 애플리케이션이 거의 없음) 이게 바로 REST를 만들게 된 계기입니다. 로이 필딩이 초반에 http 1.0을 만들 당시 고민했던 것, “웹을 망가뜨리지 않고 어떻게 수정할 것인가?”에 대한 결과가 REST였다고 했다. ~uri로 자원을 명시하고 어쩌고 저쩌고를 떠나서 말이죠 그렇기 때문에 REST가 목적하는 바가 독립적인 진화입니다. 이를 달성하기 위해서는 Unifrom Interface가 필수적이기기에, 이를 만족하지 못하면 REST라고 부를 수 없는 것입니다. 아주 REST한 사례 REST를 아주 잘 지키고 있는 사례는 바로 웹 입니다. 그 이유로는 웹 페이지를 변경했다고 웹 브라우저를 업데이트할 필요는 없습니다. 웹 브라우저를 업데이트 했다고 웹 페이지를 변경할 필요도 없습니다. HTTP 명세가 변경되어도 웹은 잘 작동합니다. HTML 명세가 변경되어도 웹은 잘 작동합니다. 우리가 들어가는 웹 페이지가 변경되었다고 해서 그 웹 페이지를 접근할 때 웹 브라우저를 업데이트 할 필요 없지요 그냥 잘 들어가집니다. 반대로 크롬을 업데이트 했다고 해서, 웹 페이지에 안들어가지는 것도 아닙니다. 심지어 HTTP 명세가 바뀌어도 그렇다. 2014년 HTTP 2.0이 나오고 여러가지 웹 페이지들이 HTTP 2.0을 적용한다. 하지만 적용을 하지 않은 사이트들도 여전히 잘 됩니다. HTML 5.0이 HTML 5.2로 바뀌어도 똑같이 잘 됩니다. 오래된 버전의 브라우저 에서는 페이지가 좀 깨지기는 할 수 있지만 모든 기능이 동작 합니다. 우리가 만든 모바일 앱은 많은 문제가 있습니다. 아래와 같은 문제이지요 이것은 무슨 이야기일까요? 앱이 강제 업데이트 하는 경우가 있는데, 서버가 기능이 변경되어 있을경우 클라이언트가 그것을 지원해주는데 한계가 있을 때 업데이트를 진행하는 것입니다. 그런데 이게 되게 잦다는 것이죠. 분명히 웹에서는 이런 경우가 잘 없습니다. 왜냐하면 무중단 배포가 가능하기 때문입니다. 하지만 모바일 앱에서는 자주 있는 일이에요. 제가 예전에 게임 어플리케이션을 앱스토어 및 구글 플레이스토어에 등록한 적이있는데 검수과정에서 reject되는 경우도 있었고 그냥 통과되는경우도 있었는데요, 이 기간이 생각보다 길기 떄문입니다. 다르게 말하자면 우리가 만든 모바일 앱 클라이언트와 서버가 REST 아키텍처 스타일을 따르고 있지 않다고 말할 수 있는거겠죠? 웹은 어떻게 이렇게 가능하게 했을까요? 많은 사람이 피땀흘려 노력을 했기에 가능했던 것입니다. W3C Working group에서 html을 만들고 IEFT Working groups에서 http를 만들고 웹 서버/브라우저 개발자들이 많은 토론을 하며 노력을 했습니다. HTML5 첫 초안에서 권고안이 나오는데 무려 6년 HTTP/1.1 명세 개정판 작업하는데 7년 HTTP/1.1에 새로운 기능이 추가 되었겠지 라고 생각 할 수 있지만 아닙니다. 새로운 기능은 하나도 없었고, 문서를 다듬기만 하는데 7년이 걸렸습니다. 절대로 하위 호환을 깨드리지 않기 위해 정말 깊은 토론의 결과였던 것입니다. 상호운용성(interoperability)에 대한 집착 Referer → 오타지만 안 고침 charset → 잘못 지은 이름이지만 안 고침 HTTP 상태 코드 418(I’m a teapot) 포기 HTTP/0.9 아직도 지원(크롬, 파이어폭스) 25년전 Referer 오타를 냈습니다 r이 하나 빠졌죠. 하지만 이를 고치지 못했습니다. 이를 고치는 순간 웹이 깨지기 때문이었죠. 또 charset이란 이름은 잘못 지었습니다. 원래 encoding이라고 이름을 지어야하는 데 그때 encoding 개념이 부족하여, character set이랑 같은 줄 알고 지었다. 하지만 그대로 두었습니다. 이름을 고치면 상호 운용성이 깨지기 때문이죠 또한, http 상태 코드가 하나씩 추가되다가 418번을 추가할 때가 되었는데, 문제가 생겼습니다. 만우절 때 만들었던 이상한 spec의 HTCPCP 상태 코드가 있는데, 이것은 http가 아니라서 무시를 해도 됐었습니다. 하지만 수많은 node.js와 같은 서버들의 http 서버 구현체들이 http 상태 코드로 구현을 해버렸죠. 그래서 처음에는 http 의장이 프로젝트마다 돌아다니면서 418 지원을 제거해야된다는 이슈를 올렸는데 맹비난을 받고 포기했다고 합니다. 그래서 418은 http 상태코드에서 영구 결번으로 만들게 되었다고 하죠. 이미 그런 구현체가 존재하고, 잘못 구현체들과 상호 운용성을 지켜주기 위해(안그러면 웹이 깨지기때문에) 이러한 결정을 한것입니다. 크롬에서는 HTTP 버전이 올라가면서 예전 버전을 빼려고 시도했지만 몇몇 프록시에서 오작동 하는 것이 발견되어서 HTTP/0.9를 유지하게 되었던 사례도 있습니다. 그래서 이렇게 많은 사람들이 상호 운용성에 대한 노력 덕분에 독립적으로 진화될 수 있었던 것입니다. 7) REST가 웹의 독립적 진화에 도움을 주었을까요? 네 맞습니다. Host 헤더 추가 길이 제한 다루는 방법 명시 (414 URI Too Long 등) URI에서 리소스의 정의가 추상적으로 변경: “문서의 위치” → “식별하고자 하는 무언가” HTTP/1.1 명세 최신판에서 REST에 대한 언급이 들어감 → representaion의 개념도 있음 → 로이 필더 : HTTP와 URI 명세 저자 중 1명 ㅋㅋㅋ 당연히 영향을 줄 수 박에 없겠죠? REST 는 성공했을까요? REST는 웹의 독립적 진화를 위해 만들어짐. 그리고 웹은 독립적으로 진화하고 있습니다 → 성공! 그런데 REST API는? REST API는 REST 아키텍처 스타일을 따라야 한다. 하지만 오늘날 스스로 REST API라고 하는 API들의 대부분이 REST 아키텍처 스타일을 따르지 않는다. REST API도 제약 조건들을 다 지켜야 하는건가요? &quot;An API that provides network-based access to resources via uniform interface of self-descriptive messages containing hypertext to indicate potential state transition might be part of an overall system that is a RESTful application. - Roy T. Fielding REST API라고 하는 것은 하이퍼 텍스트를 포함한 self-descriptive 메시지의 uniform interface를 통해 리소스에 접근하는 API라고 강조는데요 제작자가 그렇다면 그런것이죠! ㅎㅎㅎ 원격 API가 꼭 REST API여야 하는걸까요? &quot;REST emphasizes evolvability sustain on uncontrollable system. If you think you have control over the system or aren&apos;t interested in evolvability, don&apos;t waste your time arguing about REST. - Roy T. Fielding 시스템 전체를 통제할 수 있다고 생각하거나, 진화에 관심이 없다면, REST에 대해 따지느라 시간을 허비하지 마라. - 로이 필딩 시스템 전체를 통제할 수 있을경우 → 회사에서 서버 개발자인데, 클라이언트 개발자를 통제 가능할 때 or 클라이언트, 서버를 다 만들 수 있을 때 진화에 관심이 없을경우→ 매일 업데이트 해서 유저들에게 불만을 들어도 난 상관이 없음 하지만 우리는 시스템 전체를 통제할 수 없기도 하고, 개발자로서 진화에 관심을 두어야 하기에 REST를 따라야 합니다. 그럼 이제 어떻게 해야할까요? REST API를 구현하고 REST API라고 부른다. REST API 구현을 포기하고 HTTP API라고 부른다. REST API가 아니지만 REST API라고 부른다. (대부분 앱들의 현재 상태) &quot;I am getting frustrated by the number of people calling any HTTP-base interface a REST API... Please try to adhere to them or choose some other buzzword for your API.&quot; - Roy T. Fielding 로이필딩이 화가났죠 ㅎㅎ 3번을 계속 이행하면 답글을 달러 올지도 모른다고하네요 요즘도 활발히 활동 중이라고합니다… REST하게 API를 구현하는 방법들 왜 API는 REST가 잘 안될까요? 우선 웹하고 비교했을때 웹은 왜 RESTful해지기가 힘든지 봅시다. 커뮤니케이션이 좀 다르죠? HTTP API는 사람이 아닌 기계가 해석합니다. 그러다 보니 미디어 타입이 다르지요 Json이나 XML같이 기계가 의미를 이해할 수 있는 포맷을 쓰게 된다. 그렇다면 문제의 원인이 미디어 타입이라고 볼 수 있겠죠? self-descriptive 측면에서 보면 JSON은 불완전합니다. 하지만 문법은 정의되어 있습니다. 어떻게 파싱하고 array를 어떻게 해석해라 까지는 말이죠. 안에 들어갈 수 있는 key-value에 대한 의미는 아무것도 정의되어 있지 않습니다. 즉, 문법은 해석 가능하지만 의미를 해석하려면 별도로 문서(API 문서 등)가 필요합니다. HTML과 JSON을 비교해보면 GET /todos HTTP/1.1 Host: example.org HTTP/1.1 200 OK Content-Type: text/html &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;a href=&quot;https://todos/1&quot;&amp;gt; 회사 가기 &amp;lt;/a&amp;gt; &amp;lt;a href=&quot;https://todos/2&quot;&amp;gt; 집에 가기 &amp;lt;/a&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; HTML → Self-descriptive 응답 메시지의 Content-Type을 보고 미디어 타입이 text/html 확인 HTTP 명세에 미디어 타입은 IANA에 등록되어 있다고 함 → IANA에서 text/html 명세 찾음 IANA에 따르면 text/html 명세는 http://www.w3.org/TR/html 이므로 링크를 찾아가 명세 해석 명세에 모든 태그의 해석 방법이 있으므로 이를 해석, 사용자에게 보여줄 수 있음 Success! HTML → HATEOAS a 태그를 이용해 표현된 링크를 통해 다음 상태로 전이될 수 있으므로 만족 Success! GET /todos HTTP/1.1 Host: example.org HTTP/1.1 200 OK Content-Type: application/json [ {&quot;id&quot;: 1, &quot;title&quot;: &quot;회사 가기&quot;}, {&quot;id&quot;: 2, &quot;title&quot;: &quot;집에 가기&quot;} ] JSON → self-descriptive 응답 메시지의 Content-Type을 보고 미디어 타입이 application/json 확인 HTTP 명세에 미디어 타입은 IANA에 등록되어 있다고 함 → IANA에서 application/json 명세 찾음 IANA에 따르면 application/json 명세는 draft-ietf-jsonvis-rfc7159bis-04 이므로 링크를 찾아가 명세 해석 명세에 JSON 문서 파싱 방법이 명시 → 성공적으로 파싱, 그러나 “id”가 무엇을 의미하고, “title”이 무엇을 의미하는지 알 방법 없음. FAIL JSON → HATEOAS 다음 상태로 전이할 링크가 없음. FAIL 2. 그런데 self-descriptive, HATEOAS가 어떻게 독립적인 진화에 도움이 될까요? self-descriptive → 확장 가능한 커뮤니케이션 서버나 클라이언트가 변경되더라도 오고가는 메시지는 언제나 self-descriptive 하므로 언제나 해석이 가능합니다. HATEOAS → 애플리케이션 상태 전이의 late binding 어디서 어디로 전이가 가능한지 미리 결정하지 않고 어떤 상태로 전이가 완료 되어야 그 다음 전이될 수 있는 상태 결정 ⇒ 링크는 동적으로 변경될 수 있음 그럼 REST API로 바꿔봅시다. Self-descriptive Media type 정의 미디어 타입을 하나 정의 미디어 타입 문서 작성 → “id”, “title”의 의미 정의 IANA에 미디어 타입을 등록. 이때 만든 문서를 미디어 타입의 명세로 등록 이제 이 메시지를 보는 사람은 명세를 찾아갈 수 있음 → 메세시지 의미 e .온전히 해석 가능 Success GET /todos HTTP/1.1 Host: example.org HTTP/1.1 200 OK Content-Type: application/vnd.todos+json ~~~s [ {&quot;id&quot;: 1, &quot;title&quot;: &quot;회사 가기&quot;}, {&quot;id&quot;: 2, &quot;title&quot;: &quot;집에 가기&quot;} ] 단점 -&amp;gt; 매번 media type을 정의해야함 Profile 이용하기 a. “id”, “title” 의미 정의한 명세 작성 b. Link 헤더에 profile relation으로 명세 링크 c. 이제 메시지를 보는 사람은 명세를 찾아갈 수 있음 → 의미 해석 가능 d. Success GET /todos HTTP/1.1 Host: example.org HTTP/1.1 200 OK Content-Type: application/json Link: &amp;lt;https://exmaple.org/docs/todos&amp;gt;; rel=&quot;profile&quot; [ {&quot;id&quot;: 1, &quot;title&quot;: &quot;회사 가기&quot;}, {&quot;id&quot;: 2, &quot;title&quot;: &quot;집에 가기&quot;} ] 단점 클라이언트가 Link 헤더(RFC5988)와 profile(RFC 6906)을 이해해야함. Content negotiation 불가 HATEOAS data에 다양한 방법으로 하이퍼링크 표현 GET /todos HTTP/1.1 Host: example.org HTTP/1.1 200 OK Content-Type: application/json Link: &amp;lt;https://exmaple.org/docs/todos&amp;gt;; rel=&quot;profile&quot; [ { &quot;link&quot;: &quot;https://exmplae.org/todos/1, &quot;title&quot;: &quot;회사 가기&quot; }, { &quot;link&quot;: &quot;https://exmplae.org/todos/2, &quot;title&quot;: &quot;회사 가기&quot; }, ] 또는 GET /todos HTTP/1.1 Host: example.org HTTP/1.1 200 OK Content-Type: application/json Link: &amp;lt;https://exmaple.org/docs/todos&amp;gt;; rel=&quot;profile&quot; { &quot;links&quot; : { &quot;todo&quot; : &quot;https://example.org/todos/{id}&quot; }, &quot;data&quot;: [{ &quot;id&quot;: 1, &quot;title&quot;: &quot;회사 가기&quot; }, { &quot;id&quot;: 2, &quot;title&quot;: &quot;집에 가기&quot; }] } 단점 단점 : 링크를 표현하는 방법을 직접 정의해야함 data에 다양한 방법으로 하이퍼링크 표현 GET /todos HTTP/1.1 Host: example.org HTTP/1.1 200 OK Content-Type: application/vnd.api+json Link: &amp;lt;https://exmaple.org/docs/todos&amp;gt;; rel=&quot;profile&quot; { &quot;data&quot;: [{ &quot;type&quot;: &quot;todo&quot;, &quot;id&quot;: 1, &quot;attributes&quot;: {&quot;title&quot;: &quot;회사 가기&quot;}, &quot;links&quot; : { &quot;self&quot;: &quot;https://example.org/todos/1&quot; },{ &quot;type&quot;: &quot;todo&quot;, &quot;id&quot;: 2, &quot;attributes&quot;: {&quot;title&quot;: &quot;집에 가기&quot;}, &quot;links&quot; : { &quot;self&quot;: &quot;https://example.org/todos/2&quot; }] } 단점 기존의 API를 많이 고쳐야함. (침투적) HTTP 헤더로 → Link, Location 등 POST /todos HTTP/1.1 Content-Type: application/json { &quot;title&quot;: &quot;점심 약속&quot; } HTTP/1.1 204 No Content Location: /todos/1 Link: &amp;lt;/todos/&amp;gt;, rel=&quot;collection&quot; HATEOAS를 만족하고자 할경우 data, 헤더 모두 사용하면 좋음 Media type 등록은 필수인가요? NO! &quot;A REST API should be entered with no prior knowledge beyond the initial URI (bookmark) and set of standardized media types that are appropriate for the intended audience(i.e., expected to be understood by any client that might user the API). — Roy. T. Fielding 의도한 저자가 이해할 수만 있다면 상관 없는데요. 예를 들면 사내에서만 쓰는 API고 이를 이해하고 있다면 굳이 등록하지 않아도 된다고 합니다. 등록의 장점 사전에 알고 있지 않은 사람도 누구나 쉽게 사용할 수 있게 됨 이름 충돌을 피할 수 있음 등록이 별로 어렵지 않다(어려워 보이지만..) 마무리 오늘날 대부분 “REST API”는 사실 REST를 따르고 있지 않음. REST의 제약 조건 중 특히 self-descriptive와 HATEOAS를 잘 만족하지 못함. REST 긴 시간에 걸쳐(수십년) 진화하는 웹 애플리케이션을 위한 것. REST를 따를 것인지는 API 설계하는 이들이 스스로 판단하여 결정. REST를 따르겠다면 Self-decriptive와 HATEOAS를 만족시켜야함. Self-decriptiv는 custom media type, profile link relation으로 만족 가능. HATEOAS는 HTTP 헤더나 본문에 링크를 담아 만족 가능. REST를 따르지 않겠다면, “REST를 만족하지 않는 REST API”를 뭐라고 부를지 결정할것 HTTP API라고 부를 수도 있고 그냥 이대로 REST API라고 부를 수도 → 로이형이 싫어함(답글 달러 올수도있음! ㅋㅋㅋㅋ) 긴 글 읽느라 고생하셨습니다. 이해가 힘들경우에 이응준님의 동영상 한편을 보시는걸 강력하게 추천 드립니다!</summary></entry><entry><title type="html">[ #2 ] 운영체제 - 가상메모리</title><link href="https://shjeong92.github.io/2021/07/07/OS-02.html" rel="alternate" type="text/html" title="[ #2 ] 운영체제 - 가상메모리" /><published>2021-07-07T00:00:00+09:00</published><updated>2021-07-07T00:00:00+09:00</updated><id>https://shjeong92.github.io/2021/07/07/OS-02</id><content type="html" xml:base="https://shjeong92.github.io/2021/07/07/OS-02.html">&lt;h3 id=&quot;가상-메모리란&quot;&gt;가상 메모리란?&lt;/h3&gt;
 
 &lt;p&gt;가상 메모리는 메모리를 관리하는 방법의 하나로, 각 프로그램에 실제 메모리 주소가 아닌 가상의 메모리 주소를 주는 방식을 말합니다.
 이러한 방식은 멀티태스킹 운영체제에서 흔히 사용되며, RAM보다 큰 영역으로 제공하는 방법으로 사용된다고 합니다.&lt;/p&gt;
