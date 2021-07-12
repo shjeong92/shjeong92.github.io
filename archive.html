@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>아카이브 - Hyuk's devlog</title>
+
+<meta name="description" content="Your Site Description
+">
+<link rel="canonical" href="https://shjeong92.github.io/archive.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
+
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
+
+<meta name="theme-color" content="#ffffff">
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
+
+<!-- end custom head snippets -->
+<script>(function() {
+  window.isArray = function(val) {
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+  window.isString = function(val) {
+    return typeof val === 'string';
+  };
+
+  window.hasEvent = function(event) {
+    return 'on'.concat(event) in window.document;
+  };
+
+  window.isOverallScroller = function(node) {
+    return node === document.documentElement || node === document.body || node === window;
+  };
+
+  window.isFormElement = function(node) {
+    var tagName = node.tagName;
+    return tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA';
+  };
+
+  window.pageLoad = (function () {
+    var loaded = false, cbs = [];
+    window.addEventListener('load', function () {
+      var i;
+      loaded = true;
+      if (cbs.length > 0) {
+        for (i = 0; i < cbs.length; i++) {
+          cbs[i]();
+        }
+      }
+    });
+    return {
+      then: function(cb) {
+        cb && (loaded ? cb() : (cbs.push(cb)));
+      }
+    };
+  })();
+})();
+(function() {
+  window.throttle = function(func, wait) {
+    var args, result, thisArg, timeoutId, lastCalled = 0;
+
+    function trailingCall() {
+      lastCalled = new Date;
+      timeoutId = null;
+      result = func.apply(thisArg, args);
+    }
+    return function() {
+      var now = new Date,
+        remaining = wait - (now - lastCalled);
+
+      args = arguments;
+      thisArg = this;
+
+      if (remaining <= 0) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+        lastCalled = now;
+        result = func.apply(thisArg, args);
+      } else if (!timeoutId) {
+        timeoutId = setTimeout(trailingCall, remaining);
+      }
+      return result;
+    };
+  };
+})();
+(function() {
+  var Set = (function() {
+    var add = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (data[i] === item) {
+          return;
+        }
+      }
+      this.size ++;
+      data.push(item);
+      return data;
+    };
+
+    var Set = function(data) {
+      this.size = 0;
+      this._data = [];
+      var i;
+      if (data.length > 0) {
+        for (i = 0; i < data.length; i++) {
+          add.call(this, data[i]);
+        }
+      }
+    };
+    Set.prototype.add = add;
+    Set.prototype.get = function(index) { return this._data[index]; };
+    Set.prototype.has = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (this.get(i) === item) {
+          return true;
+        }
+      }
+      return false;
+    };
+    Set.prototype.is = function(map) {
+      if (map._data.length !== this._data.length) { return false; }
+      var i, j, flag, tData = this._data, mData = map._data;
+      for (i = 0; i < tData.length; i++) {
+        for (flag = false, j = 0; j < mData.length; j++) {
+          if (tData[i] === mData[j]) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) { return false; }
+      }
+      return true;
+    };
+    Set.prototype.values = function() {
+      return this._data;
+    };
+    return Set;
+  })();
+
+  window.Lazyload = (function(doc) {
+    var queue = {js: [], css: []}, sources = {js: {}, css: {}}, context = this;
+    var createNode = function(name, attrs) {
+      var node = doc.createElement(name), attr;
+      for (attr in attrs) {
+        if (attrs.hasOwnProperty(attr)) {
+          node.setAttribute(attr, attrs[attr]);
+        }
+      }
+      return node;
+    };
+    var end = function(type, url) {
+      var s, q, qi, cbs, i, j, cur, val, flag;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        s[url] = true;
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (cur.urls.has(url)) {
+            qi = cur, val = qi.urls.values();
+            qi && (cbs = qi.callbacks);
+            for (flag = true, j = 0; j < val.length; j++) {
+              cur = val[j];
+              if (!s[cur]) {
+                flag = false;
+              }
+            }
+            if (flag && cbs && cbs.length > 0) {
+              for (j = 0; j < cbs.length; j++) {
+                cbs[j].call(context);
+              }
+              qi.load = true;
+            }
+          }
+        }
+      }
+    };
+    var load = function(type, urls, callback) {
+      var s, q, qi, node, i, cur,
+        _urls = typeof urls === 'string' ? new Set([urls]) : new Set(urls), val, url;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (_urls.is(cur.urls)) {
+            qi = cur;
+            break;
+          }
+        }
+        val = _urls.values();
+        if (qi) {
+          callback && (qi.load || qi.callbacks.push(callback));
+          callback && (qi.load && callback());
+        } else {
+          q.push({
+            urls: _urls,
+            callbacks: callback ? [callback] : [],
+            load: false
+          });
+          for (i = 0; i < val.length; i++) {
+            node = null, url = val[i];
+            if (s[url] === undefined) {
+              (type === 'js' ) && (node = createNode('script', { src: url }));
+              (type === 'css') && (node = createNode('link', { rel: 'stylesheet', href: url }));
+              if (node) {
+                node.onload = (function(type, url) {
+                  return function() {
+                    end(type, url);
+                  };
+                })(type, url);
+                (doc.head || doc.body).appendChild(node);
+                s[url] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+    return {
+      js: function(url, callback) {
+        load('js', url, callback);
+      },
+      css: function(url, callback) {
+        load('css', url, callback);
+      }
+    };
+  })(this.document);
+})();
+</script><script>
+  (function() {
+    var TEXT_VARIABLES = {
+      version: '2.2.6',
+      sources: {
+        font_awesome: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css',
+        jquery: 'https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js',
+        leancloud_js_sdk: '//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js',
+        chart: 'https://cdn.bootcss.com/Chart.js/2.7.2/Chart.bundle.min.js',
+        gitalk: {
+          js: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.js',
+          css: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.css'
+        },
+        valine: 'https://unpkg.com/valine/dist/Valine.min.js',
+        mathjax: 'https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML',
+        mermaid: 'https://cdn.bootcss.com/mermaid/8.0.0-rc.8/mermaid.min.js'
+      },
+      site: {
+        toc: {
+          selectors: 'h1,h2,h3'
+        }
+      },
+      paths: {
+        search_js: '/assets/search.js'
+      }
+    };
+    window.TEXT_VARIABLES = TEXT_VARIABLES;
+  })();
+</script>
+</head>
+  <body>
+    <div class="root" data-is-touch="false">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport cell cell--auto">
+
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
+      <div class="header__title">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#515151;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
+</svg>
+<a title="Your Site Description
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item navigation__item--active"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
+  </header>
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
+
+              <div class="col-aside d-print-none js-col-aside"></div>
+
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
+
+<!-- end custom main top snippet -->
+<article itemscope itemtype="http://schema.org/WebPage"><div class="article__header"><header><h1>아카이브</h1></header></div>
+<meta itemprop="headline" content="아카이브">
+<meta itemprop="author" content="Sanghyuk Jeong">
+<div class="js-article-content">
+<div class="layout--archive js-all">
+<div class="site-tags js-tags">
+  <ul class="menu">
+    <li>
+      <button type="button" class="button button--secondary button--pill tag-button tag-button--all" data-encode="">
+        Show All<div class="tag-button__count">38</div>
+      </button>
+    </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="API">
+          <span>API</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="CKA">
+          <span>CKA</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="Commit">
+          <span>Commit</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-4" data-encode="Database">
+          <span>Database</span><div class="tag-button__count">7</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-3" data-encode="Deployment">
+          <span>Deployment</span><div class="tag-button__count">5</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-4" data-encode="Docker">
+          <span>Docker</span><div class="tag-button__count">10</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="Github">
+          <span>Github</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="Google">
+          <span>Google</span><div class="tag-button__count">4</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="HTTP">
+          <span>HTTP</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="HTTPS">
+          <span>HTTPS</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-4" data-encode="Kubernetes">
+          <span>Kubernetes</span><div class="tag-button__count">11</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-4" data-encode="MySQL">
+          <span>MySQL</span><div class="tag-button__count">7</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="OS">
+          <span>OS</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="RDBMS">
+          <span>RDBMS</span><div class="tag-button__count">3</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="REST">
+          <span>REST</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="RESTful">
+          <span>RESTful</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-4" data-encode="React">
+          <span>React</span><div class="tag-button__count">10</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-3" data-encode="Replicasets">
+          <span>Replicasets</span><div class="tag-button__count">5</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="RootCA">
+          <span>RootCA</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="SOAP">
+          <span>SOAP</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="SSL">
+          <span>SSL</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="SVN">
+          <span>SVN</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="Schema">
+          <span>Schema</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="Security">
+          <span>Security</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="TLS">
+          <span>TLS</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="backend">
+          <span>backend</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="certificate">
+          <span>certificate</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="cloud">
+          <span>cloud</span><div class="tag-button__count">4</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="config">
+          <span>config</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="container">
+          <span>container</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="etcd">
+          <span>etcd</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="gcloud">
+          <span>gcloud</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="history">
+          <span>history</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="key-gen">
+          <span>key-gen</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="maintenance">
+          <span>maintenance</span><div class="tag-button__count">3</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="modify">
+          <span>modify</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="network">
+          <span>network</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-3" data-encode="pod">
+          <span>pod</span><div class="tag-button__count">5</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="rolling">
+          <span>rolling</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="rsa">
+          <span>rsa</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="ssh">
+          <span>ssh</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-4" data-encode="static">
+          <span>static</span><div class="tag-button__count">7</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="strategy">
+          <span>strategy</span><div class="tag-button__count">4</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="update">
+          <span>update</span><div class="tag-button__count">4</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EA%B0%80%EC%83%81%EB%A9%94%EB%AA%A8%EB%A6%AC">
+          <span>가상메모리</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC">
+          <span>네트워크</span><div class="tag-button__count">3</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%8C%80%EC%B9%AD%ED%82%A4">
+          <span>대칭키</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="%EB%8F%84%EC%BB%A4">
+          <span>도커</span><div class="tag-button__count">4</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%A9%B4%EC%A0%91">
+          <span>면접</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%AA%85%EB%A0%B9%EC%96%B4">
+          <span>명령어</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%B3%B4%EC%95%88">
+          <span>보안</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80">
+          <span>브라우저</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">
+          <span>비대칭키</span><div class="tag-button__count">2</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C">
+          <span>운영체제</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EC%9D%B8%EC%A6%9D%EC%84%9C">
+          <span>인증서</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-1" data-encode="%EC%A7%88%EB%AC%B8">
+          <span>질문</span><div class="tag-button__count">1</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-2" data-encode="%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">
+          <span>컨테이너</span><div class="tag-button__count">4</div>
+        </button>
+      </li>
+<li>
+<button type="button" class="button button--pill tag-button tag-button-3" data-encode="%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">
+          <span>쿠버네티스</span><div class="tag-button__count">6</div>
+        </button>
+      </li>
+</ul>
+</div>
+<div class="js-result layout--archive__result d-none">
+<div class="article-list items"><section><h2 class="article-list__group-header">2021</h2>
+<ul class="items">
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="REST,RESTful,API,HTTP,SOAP">
+        <div class="item__content">
+<span class="item__meta">07월 12일</span><a itemprop="headline" class="item__header" href="/2021/07/12/REST.html">RESTful API에 관하여</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="OS,%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C,%EA%B0%80%EC%83%81%EB%A9%94%EB%AA%A8%EB%A6%AC">
+        <div class="item__content">
+<span class="item__meta">07월 07일</span><a itemprop="headline" class="item__header" href="/2021/07/07/OS-02.html">[ #2 ] 운영체제 - 가상메모리</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Database,MySQL,RDBMS">
+        <div class="item__content">
+<span class="item__meta">07월 05일</span><a itemprop="headline" class="item__header" href="/2021/07/05/OS-01.html">[ #1 ] 운영체제 - 커널 &amp; 쉘</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Database,MySQL">
+        <div class="item__content">
+<span class="item__meta">07월 04일</span><a itemprop="headline" class="item__header" href="/2021/07/04/Database-04.html">[ #4 ] MySQL - CRUD operation</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Database,MySQL,RDBMS">
+        <div class="item__content">
+<span class="item__meta">07월 04일</span><a itemprop="headline" class="item__header" href="/2021/07/04/Database-05.html">[ #5 ] MySQL - 관계형 DB의 필요성</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Database,MySQL,RDBMS">
+        <div class="item__content">
+<span class="item__meta">07월 04일</span><a itemprop="headline" class="item__header" href="/2021/07/04/Database-06.html">[ #6 ] MySQL - 인터넷과 데이터베이스</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Database,MySQL">
+        <div class="item__content">
+<span class="item__meta">07월 03일</span><a itemprop="headline" class="item__header" href="/2021/07/03/Database-01.html">[ #1 ] MySQL - 구조</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Database,MySQL,Schema">
+        <div class="item__content">
+<span class="item__meta">07월 03일</span><a itemprop="headline" class="item__header" href="/2021/07/03/Database-02.html">[ #2 ] MySQL - 스키마의 사용</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Database,MySQL">
+        <div class="item__content">
+<span class="item__meta">07월 03일</span><a itemprop="headline" class="item__header" href="/2021/07/03/Database-03.html">[ #3 ] MySQL - SQL과 테이블의 구조</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC,%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80">
+        <div class="item__content">
+<span class="item__meta">07월 03일</span><a itemprop="headline" class="item__header" href="/2021/07/03/When-you-typed-url.html">브라우저에 URL을 입력했을 때 일어나는 일들</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="backend,%EB%A9%B4%EC%A0%91,%EC%A7%88%EB%AC%B8">
+        <div class="item__content">
+<span class="item__meta">07월 01일</span><a itemprop="headline" class="item__header" href="/2021/07/01/Interview-01.html">첫 면접</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="RootCA,HTTPS,static,SSL,TLS,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,%EB%B3%B4%EC%95%88,Security,%EB%8C%80%EC%B9%AD%ED%82%A4,%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4,certificate,%EC%9D%B8%EC%A6%9D%EC%84%9C">
+        <div class="item__content">
+<span class="item__meta">06월 10일</span><a itemprop="headline" class="item__header" href="/2021/06/10/Learning-Kubernetes-12.html">[ #12 ] 클러스터 보안 - 3</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Kubernetes,HTTPS,static,SSL,TLS,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,%EB%B3%B4%EC%95%88,Security,%EB%8C%80%EC%B9%AD%ED%82%A4,%EB%B9%84%EB%8C%80%EC%B9%AD%ED%82%A4">
+        <div class="item__content">
+<span class="item__meta">06월 09일</span><a itemprop="headline" class="item__header" href="/2021/06/09/Learning-Kubernetes-11.html">[ #11 ] 클러스터 보안 - 2</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Kubernetes,maintenance,static,pod,strategy,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,update">
+        <div class="item__content">
+<span class="item__meta">06월 07일</span><a itemprop="headline" class="item__header" href="/2021/06/07/Learning-Kubernetes-10.html">[ #10 ] 클러스터 보안 - 1</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Kubernetes,maintenance,static,pod,strategy,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,update">
+        <div class="item__content">
+<span class="item__meta">06월 04일</span><a itemprop="headline" class="item__header" href="/2021/06/04/Learning-Kubernetes-09.html">[ #9 ] 클러스터 백업 &amp; 복구</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Kubernetes,maintenance,static,pod,strategy,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,update">
+        <div class="item__content">
+<span class="item__meta">06월 03일</span><a itemprop="headline" class="item__header" href="/2021/06/03/Learning-Kubernetes-08.html">[ #8 ] 클러스터 유지보수</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,static,pod,strategy,%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4,rolling,update">
+        <div class="item__content">
+<span class="item__meta">06월 02일</span><a itemprop="headline" class="item__header" href="/2021/06/02/Learning-Kubernetes-07.html">[ #7 ] 배포 전략</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="gcloud,ssh,key-gen,rsa,config">
+        <div class="item__content">
+<span class="item__meta">06월 01일</span><a itemprop="headline" class="item__header" href="/2021/06/01/Handling-ssh-config.html">ssh config 설정으로 간편하게 ssh접속하기</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
+        <div class="item__content">
+<span class="item__meta">05월 31일</span><a itemprop="headline" class="item__header" href="/2021/05/31/Learning-Kubernetes-05.html">[ #5 ] pod 스케쥴링-2 </a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,static,pod">
+        <div class="item__content">
+<span class="item__meta">05월 31일</span><a itemprop="headline" class="item__header" href="/2021/05/31/Learning-Kubernetes-06.html">[ #6 ] static pod</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
+        <div class="item__content">
+<span class="item__meta">05월 30일</span><a itemprop="headline" class="item__header" href="/2021/05/30/Learning-Kubernetes-04.html">[ #4 ] pod 스케쥴링-1 </a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,Replicasets,Deployment,Google,cloud">
+        <div class="item__content">
+<span class="item__meta">05월 28일</span><a itemprop="headline" class="item__header" href="/2021/05/28/Learning-Kubernetes-03.html">[ #3 ] Replicasets &amp; Deployment </a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,CKA,%EB%8F%84%EC%BB%A4,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88,container,etcd,Google,cloud">
+        <div class="item__content">
+<span class="item__meta">05월 27일</span><a itemprop="headline" class="item__header" href="/2021/05/27/Learning-Kubernetes-02.html">[ #2 ] Kubernetes 설치 및 환경 구성하기 </a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,Kubernetes,CKA,%EB%8F%84%EC%BB%A4,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88,container,etcd">
+        <div class="item__content">
+<span class="item__meta">05월 26일</span><a itemprop="headline" class="item__header" href="/2021/05/26/Learning-Kubernetes-01.html">[ #1 ] Kubernetes의 구조</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,network,%EB%8F%84%EC%BB%A4,%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88,%EB%AA%85%EB%A0%B9%EC%96%B4">
+        <div class="item__content">
+<span class="item__meta">05월 22일</span><a itemprop="headline" class="item__header" href="/2021/05/22/Learning-Docker-03.html">[ #3 ] Dockerfile에서 자주 쓰이는 명령어</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker,network,%EB%8F%84%EC%BB%A4,%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC,%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">
+        <div class="item__content">
+<span class="item__meta">05월 20일</span><a itemprop="headline" class="item__header" href="/2021/05/20/Learning-Docker-02.html">[ #2 ] Docker 네트워크 사용하기 </a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Docker">
+        <div class="item__content">
+<span class="item__meta">05월 19일</span><a itemprop="headline" class="item__header" href="/2021/05/19/Learning-Docker-01.html">[ #1 ] Docker 기본 익히기 </a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="Github,Commit,SVN,history,modify">
+        <div class="item__content">
+<span class="item__meta">05월 14일</span><a itemprop="headline" class="item__header" href="/2021/05/14/Github-01.html">깃헙 history를 주물러봅시다</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 29일</span><a itemprop="headline" class="item__header" href="/2021/04/29/Learning-React-09.html">[ #9 ] useEffect hook</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 29일</span><a itemprop="headline" class="item__header" href="/2021/04/29/Learning-React-10.html">[ #10 ] useContext hook</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 28일</span><a itemprop="headline" class="item__header" href="/2021/04/28/Learning-React-08.html">[ #8 ] Portal, useRef</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 27일</span><a itemprop="headline" class="item__header" href="/2021/04/27/Learning-React-07.html">[ #7 ] 3 ways to fullfill jsx's requirement</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 26일</span><a itemprop="headline" class="item__header" href="/2021/04/26/Learning-React-06.html">[ #6 ] setState &amp; conditional content</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-02.html">[ #2 ] Props.children 과 커스텀 컴포넌트(태그)</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-03.html">[ #3 ] useState 사용해보기</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-04.html">[ #4 ] useState 사용하는 방법</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 25일</span><a itemprop="headline" class="item__header" href="/2021/04/25/Learning-React-05.html">[ #5 ] state의 역행 childretn -&gt; parent</a>
+</div>
+      </li>
+<li class="item" itemscope itemtype="http://schema.org/BlogPosting" data-tags="React">
+        <div class="item__content">
+<span class="item__meta">04월 24일</span><a itemprop="headline" class="item__header" href="/2021/04/24/Learning-React-01.html">[ #1 ] Props란? </a>
+</div>
+      </li>
+</ul></section></div>
+</div>
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  function queryString() {
+    // This function is anonymous, is executed immediately and
+    // the return value is assigned to QueryString!
+    var i = 0, queryObj = {}, pair;
+    var queryStr = window.location.search.substring(1);
+    var queryArr = queryStr.split('&');
+    for (i = 0; i < queryArr.length; i++) {
+      pair = queryArr[i].split('=');
+      // If first entry with this name
+      if (typeof queryObj[pair[0]] === 'undefined') {
+        queryObj[pair[0]] = pair[1];
+        // If second entry with this name
+      } else if (typeof queryObj[pair[0]] === 'string') {
+        queryObj[pair[0]] = [queryObj[pair[0]], pair[1]];
+        // If third or later entry with this name
+      } else {
+        queryObj[pair[0]].push(pair[1]);
+      }
+    }
+    return queryObj;
+  }
+
+  var setUrlQuery = (function() {
+    var baseUrl =  window.location.href.split('?')[0];
+    return function(query) {
+      if (typeof query === 'string') {
+        window.history.replaceState(null, '', baseUrl + query);
+      } else {
+        window.history.replaceState(null, '', baseUrl);
+      }
+    };
+  })();
+
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $tags = $('.js-tags');
+    var $articleTags = $tags.find('button');
+    var $tagShowAll = $tags.find('.tag-button--all');
+    var $result = $('.js-result');
+    var $sections = $result.find('section');
+    var sectionArticles = [];
+    var $lastFocusButton = null;
+    var sectionTopArticleIndex = [];
+    var hasInit = false;
+
+    $sections.each(function() {
+      sectionArticles.push($(this).find('.item'));
+    });
+
+    function init() {
+      var i, index = 0;
+      for (i = 0; i < $sections.length; i++) {
+        sectionTopArticleIndex.push(index);
+        index += $sections.eq(i).find('.item').length;
+      }
+      sectionTopArticleIndex.push(index);
+    }
+
+    function searchButtonsByTag(_tag/*raw tag*/) {
+      if (!_tag) {
+        return $tagShowAll;
+      }
+      var _buttons = $articleTags.filter('[data-encode="' + _tag + '"]');
+      if (_buttons.length === 0) {
+        return $tagShowAll;
+      }
+      return _buttons;
+    }
+    function buttonFocus(target) {
+      if (target) {
+        target.addClass('focus');
+        $lastFocusButton && !$lastFocusButton.is(target) && $lastFocusButton.removeClass('focus');
+        $lastFocusButton = target;
+      }
+    }
+
+    function tagSelect (tag/*raw tag*/, target) {
+      var result = {}, $articles;
+      var i, j, k, _tag;
+
+      for (i = 0; i < sectionArticles.length; i++) {
+        $articles = sectionArticles[i];
+        for (j = 0; j < $articles.length; j++) {
+          if (tag === '' || tag === undefined) {
+            result[i] || (result[i] = {});
+            result[i][j] = true;
+          } else {
+            var tags = $articles.eq(j).data('tags').split(',');
+            for (k = 0; k < tags.length; k++) {
+              if (tags[k] === tag) {
+                result[i] || (result[i] = {});
+                result[i][j] = true; break;
+              }
+            }
+          }
+        }
+      }
+
+      for (i = 0; i < sectionArticles.length; i++) {
+        result[i] && $sections.eq(i).removeClass('d-none');
+        result[i] || $sections.eq(i).addClass('d-none');
+        for (j = 0; j < sectionArticles[i].length; j++) {
+          if (result[i] && result[i][j]) {
+            sectionArticles[i].eq(j).removeClass('d-none');
+          } else {
+            sectionArticles[i].eq(j).addClass('d-none');
+          }
+        }
+      }
+
+      hasInit || ($result.removeClass('d-none'), hasInit = true);
+
+
+      if (target) {
+        buttonFocus(target);
+        _tag = target.attr('data-encode');
+        if (_tag === '' || typeof _tag !== 'string') {
+          setUrlQuery();
+        } else {
+          setUrlQuery('?tag=' + _tag);
+        }
+      } else {
+        buttonFocus(searchButtonsByTag(tag));
+      }
+    }
+
+    var query = queryString(), _tag = query.tag;
+    init(); tagSelect(_tag);
+    $tags.on('click', 'button', function() {
+      tagSelect($(this).data('encode'), $(this));
+    });
+
+  });
+})();
+</script>
+
+
+</div>
+<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+
+<!-- end custom main bottom snippet -->
+</div>
+            </div></div></div>
+<div class="page__footer d-print-none">
+<footer class="footer py-4 js-page-footer">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a>
+</li></ul>
+</div>
+</div>
+    </div>
+<div class="site-info mt-2">
+      <div>© Hyuk's devlog 2021,
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+</div>
+    </div>
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $body = $('body'), $window = $(window);
+    var $pageRoot = $('.js-page-root'), $pageMain = $('.js-page-main');
+    var activeCount = 0;
+    function modal(options) {
+      var $root = this, visible, onChange, hideWhenWindowScroll = false;
+      var scrollTop;
+      function setOptions(options) {
+        var _options = options || {};
+        visible = _options.initialVisible === undefined ? false : show;
+        onChange = _options.onChange;
+        hideWhenWindowScroll = _options.hideWhenWindowScroll;
+      }
+      function init() {
+        setState(visible);
+      }
+      function setState(isShow) {
+        if (isShow === visible) {
+          return;
+        }
+        visible = isShow;
+        if (visible) {
+          activeCount++;
+          scrollTop = $(window).scrollTop() || $pageMain.scrollTop();
+          $root.addClass('modal--show');
+          $pageMain.scrollTop(scrollTop);
+          activeCount === 1 && ($pageRoot.addClass('show-modal'), $body.addClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.on('scroll', hide);
+          $window.on('keyup', handleKeyup);
+        } else {
+          activeCount > 0 && activeCount--;
+          $root.removeClass('modal--show');
+          $window.scrollTop(scrollTop);
+          activeCount === 0 && ($pageRoot.removeClass('show-modal'), $body.removeClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.off('scroll', hide);
+          $window.off('keyup', handleKeyup);
+        }
+        onChange && onChange(visible);
+      }
+      function show() {
+        setState(true);
+      }
+      function hide() {
+        setState(false);
+      }
+      function handleKeyup(e) {
+        // Char Code: 27  ESC
+        if (e.which ===  27) {
+          hide();
+        }
+      }
+      setOptions(options);
+      init();
+      return {
+        show: show,
+        hide: hide,
+        $el: $root
+      };
+    }
+    $.fn.modal = modal;
+  });
+})();
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
+(function () {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    // search panel
+    var search = (window.search || (window.search = {}));
+    var useDefaultSearchBox = window.useDefaultSearchBox === undefined ?
+      true : window.useDefaultSearchBox ;
+
+    var $searchModal = $('.js-page-search-modal');
+    var $searchToggle = $('.js-search-toggle');
+    var searchModal = $searchModal.modal({ onChange: handleModalChange, hideWhenWindowScroll: true });
+    var modalVisible = false;
+    search.searchModal = searchModal;
+
+    var $searchBox = null;
+    var $searchInput = null;
+    var $searchClear = null;
+
+    function getModalVisible() {
+      return modalVisible;
+    }
+    search.getModalVisible = getModalVisible;
+
+    function handleModalChange(visible) {
+      modalVisible = visible;
+      if (visible) {
+        search.onShow && search.onShow();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].focus();
+      } else {
+        search.onShow && search.onHide();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].blur();
+        setTimeout(function() {
+          useDefaultSearchBox && ($searchInput.val(''), $searchBox.removeClass('not-empty'));
+          search.clear && search.clear();
+          window.pageAsideAffix && window.pageAsideAffix.refresh();
+        }, 400);
+      }
+    }
+
+    $searchToggle.on('click', function() {
+      modalVisible ? searchModal.hide() : searchModal.show();
+    });
+    // Char Code: 83  S, 191 /
+    $(window).on('keyup', function(e) {
+      if (!modalVisible && !window.isFormElement(e.target || e.srcElement) && (e.which === 83 || e.which === 191)) {
+        modalVisible || searchModal.show();
+      }
+    });
+
+    if (useDefaultSearchBox) {
+      $searchBox = $('.js-search-box');
+      $searchInput = $searchBox.children('input');
+      $searchClear = $searchBox.children('.js-icon-clear');
+      search.getSearchInput = function() {
+        return $searchInput.get(0);
+      };
+      search.getVal = function() {
+        return $searchInput.val();
+      };
+      search.setVal = function(val) {
+        $searchInput.val(val);
+      };
+
+      $searchInput.on('focus', function() {
+        $(this).addClass('focus');
+      });
+      $searchInput.on('blur', function() {
+        $(this).removeClass('focus');
+      });
+      $searchInput.on('input', window.throttle(function() {
+        var val = $(this).val();
+        if (val === '' || typeof val !== 'string') {
+          search.clear && search.clear();
+        } else {
+          $searchBox.addClass('not-empty');
+          search.onInputNotEmpty && search.onInputNotEmpty(val);
+        }
+      }, 400));
+      $searchClear.on('click', function() {
+        $searchInput.val(''); $searchBox.removeClass('not-empty');
+        search.clear && search.clear();
+      });
+    }
+  });
+})();
+</script><div class="search search--dark">
+  <div class="main">
+    <div class="search__header">검색</div>
+    <div class="search-bar">
+      <div class="search-box js-search-box">
+        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
+        <input type="text">
+        <div class="search-box__icon-clear js-icon-clear">
+          <a><i class="fas fa-times"></i></a>
+        </div>
+      </div>
+      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
+        취소</button>
+    </div>
+    <div class="search-result js-search-result"></div>
+  </div>
+</div>
+<script>var SOURCES = window.TEXT_VARIABLES.sources;
+var PAHTS = window.TEXT_VARIABLES.paths;
+window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  var search = (window.search || (window.search = {}));
+  var searchData = window.TEXT_SEARCH_DATA || {};
+
+  function memorize(f) {
+    var cache = {};
+    return function () {
+      var key = Array.prototype.join.call(arguments, ',');
+      if (key in cache) return cache[key];
+      else return cache[key] = f.apply(this, arguments);
+    };
+  }
+
+  /// search
+  function searchByQuery(query) {
+    var i, j, key, keys, cur, _title, result = {};
+    keys = Object.keys(searchData);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      for (j = 0; j < searchData[key].length; j++) {
+        cur = searchData[key][j], _title = cur.title;
+        if ((result[key] === undefined || result[key] && result[key].length < 4 )
+          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+          if (result[key] === undefined) {
+            result[key] = [];
+          }
+          result[key].push(cur);
+        }
+      }
+    }
+    return result;
+  }
+
+  var renderHeader = memorize(function(header) {
+    return $('<p class="search-result__header">' + header + '</p>');
+  });
+
+  var renderItem = function(index, title, url) {
+    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  };
+
+  function render(data) {
+    if (!data) { return null; }
+    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
+    keys = Object.keys(data);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      $root.append(renderHeader(key));
+      for (j = 0; j < data[key].length; j++) {
+        cur = data[key][j];
+        $root.append(renderItem(itemIndex++, cur.title, cur.url));
+      }
+    }
+    return $root;
+  }
+
+  // search box
+  var $result = $('.js-search-result'), $resultItems;
+  var lastActiveIndex, activeIndex;
+
+  function clear() {
+    $result.html(null);
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+  }
+  function onInputNotEmpty(val) {
+    $result.html(render(searchByQuery(val)));
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+    $resultItems.eq(0).addClass('active');
+  }
+
+  search.clear = clear;
+  search.onInputNotEmpty = onInputNotEmpty;
+
+  function updateResultItems() {
+    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
+    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
+  }
+
+  function moveActiveIndex(direction) {
+    var itemsCount = $resultItems ? $resultItems.length : 0;
+    if (itemsCount > 1) {
+      lastActiveIndex = activeIndex;
+      if (direction === 'up') {
+        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
+      } else if (direction === 'down') {
+        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
+      }
+      updateResultItems();
+    }
+  }
+
+  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
+  $(window).on('keyup', function(e) {
+    var modalVisible = search.getModalVisible && search.getModalVisible();
+    if (modalVisible) {
+      if (e.which === 38) {
+        modalVisible && moveActiveIndex('up');
+      } else if (e.which === 40) {
+        modalVisible && moveActiveIndex('down');
+      } else if (e.which === 13) {
+        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
+      }
+    }
+  });
+
+  $result.on('mouseover', '.search-result__item > a', function() {
+    var itemIndex = $(this).parent().data('index');
+    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
+  });
+});
+</script>
+</div>
+</div>
+
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function scrollToAnchor(anchor, duration, callback) {
+      var $root = this;
+      $root.animate({ scrollTop: $(anchor).position().top }, duration, function() {
+        window.history.replaceState(null, '', window.location.href.split('#')[0] + anchor);
+        callback && callback();
+      });
+    }
+    $.fn.scrollToAnchor = scrollToAnchor;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function affix(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroll,
+        offsetBottom = 0, scrollTarget = window, scroll = window.document, disabled = false, isOverallScroller = true,
+        rootTop, rootLeft, rootHeight, scrollBottom, rootBottomTop,
+        hasInit = false, curState;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.offsetBottom && (offsetBottom = _options.offsetBottom);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroll && (scroll = _options.scroll);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $scrollTarget = $(scrollTarget);
+        isOverallScroller = window.isOverallScroller($scrollTarget[0]);
+        $scroll = $(scroll);
+      }
+      function preCalc() {
+        top();
+        rootHeight = $root.outerHeight();
+        rootTop = $root.offset().top + (isOverallScroller ? 0 :  $scrollTarget.scrollTop());
+        rootLeft = $root.offset().left;
+      }
+      function calc(needPreCalc) {
+        needPreCalc && preCalc();
+        scrollBottom = $scroll.outerHeight() - offsetBottom - rootHeight;
+        rootBottomTop = scrollBottom - rootTop;
+      }
+      function top() {
+        if (curState !== 'top') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: 0
+          });
+          curState = 'top';
+        }
+      }
+      function fixed() {
+        if (curState !== 'fixed') {
+          $root.addClass('fixed').css({
+            left: rootLeft + 'px',
+            top: 0
+          });
+          curState = 'fixed';
+        }
+      }
+      function bottom() {
+        if (curState !== 'bottom') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: rootBottomTop + 'px'
+          });
+          curState = 'bottom';
+        }
+      }
+      function setState() {
+        var scrollTop = $scrollTarget.scrollTop();
+        if (scrollTop >= rootTop && scrollTop <= scrollBottom) {
+          fixed();
+        } else if (scrollTop < rootTop) {
+          top();
+        } else {
+          bottom();
+        }
+      }
+      function init() {
+        if(!hasInit) {
+          var interval, timeout;
+          calc(true); setState();
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState();
+          });
+          $window.on('resize', function() {
+            disabled || (calc(true), setState());
+          });
+          hasInit = true;
+        }
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions,
+        refresh: function() {
+          calc(true, { animation: false }); setState();
+        }
+      };
+    }
+    $.fn.affix = affix;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function toc(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroller, $tocUl = $('<ul class="toc toc--ellipsis"></ul>'), $tocLi, $headings, $activeLast, $activeCur,
+        selectors = 'h1,h2,h3', container = 'body', scrollTarget = window, scroller = 'html, body', disabled = false,
+        headingsPos, scrolling = false, hasRendered = false, hasInit = false;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.selectors && (selectors = _options.selectors);
+        _options.container && (container = _options.container);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroller && (scroller = _options.scroller);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $headings = $(container).find(selectors).filter('[id]');
+        $scrollTarget = $(scrollTarget);
+        $scroller = $(scroller);
+      }
+      function calc() {
+        headingsPos = [];
+        $headings.each(function() {
+          headingsPos.push(Math.floor($(this).position().top));
+        });
+      }
+      function setState(element, disabled) {
+        var scrollTop = $scrollTarget.scrollTop(), i;
+        if (disabled || !headingsPos || headingsPos.length < 1) { return; }
+        if (element) {
+          $activeCur = element;
+        } else {
+          for (i = 0; i < headingsPos.length; i++) {
+            if (scrollTop >= headingsPos[i]) {
+              $activeCur = $tocLi.eq(i);
+            } else {
+              $activeCur || ($activeCur = $tocLi.eq(i));
+              break;
+            }
+          }
+        }
+        $activeLast && $activeLast.removeClass('active');
+        ($activeLast = $activeCur).addClass('active');
+      }
+      function render() {
+        if(!hasRendered) {
+          $root.append($tocUl);
+          $headings.each(function() {
+            var $this = $(this);
+            $tocUl.append($('<li></li>').addClass('toc-' + $this.prop('tagName').toLowerCase())
+              .append($('<a></a>').text($this.text()).attr('href', '#' + $this.prop('id'))));
+          });
+          $tocLi = $tocUl.children('li');
+          $tocUl.on('click', 'a', function(e) {
+            e.preventDefault();
+            var $this = $(this);
+            scrolling = true;
+            setState($this.parent());
+            $scroller.scrollToAnchor($this.attr('href'), 400, function() {
+              scrolling = false;
+            });
+          });
+        }
+        hasRendered = true;
+      }
+      function init() {
+        var interval, timeout;
+        if(!hasInit) {
+          render(); calc(); setState(null, scrolling);
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState(null, scrolling);
+          });
+          $window.on('resize', window.throttle(function() {
+            if (!disabled) {
+              render(); calc(); setState(null, scrolling);
+            }
+          }, 100));
+        }
+        hasInit = true;
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions
+      };
+    }
+    $.fn.toc = toc;
+  });
+})();
+/*(function () {
+
+})();*/
+</script>
+    </div>
+    <script>(function () {
+  var $root = document.getElementsByClassName('root')[0];
+  if (window.hasEvent('touchstart')) {
+    $root.dataset.isTouch = true;
+    document.addEventListener('touchstart', function(){}, false);
+  }
+})();
+</script>
+  </body>
+</html>

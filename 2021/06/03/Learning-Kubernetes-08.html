@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #8 ] 클러스터 유지보수 - Hyuk's devlog</title>
+
+<meta name="description" content="오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다.쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다.그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
+
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
+
+<meta name="theme-color" content="#ffffff">
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
+
+<!-- end custom head snippets -->
+<script>(function() {
+  window.isArray = function(val) {
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+  window.isString = function(val) {
+    return typeof val === 'string';
+  };
+
+  window.hasEvent = function(event) {
+    return 'on'.concat(event) in window.document;
+  };
+
+  window.isOverallScroller = function(node) {
+    return node === document.documentElement || node === document.body || node === window;
+  };
+
+  window.isFormElement = function(node) {
+    var tagName = node.tagName;
+    return tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA';
+  };
+
+  window.pageLoad = (function () {
+    var loaded = false, cbs = [];
+    window.addEventListener('load', function () {
+      var i;
+      loaded = true;
+      if (cbs.length > 0) {
+        for (i = 0; i < cbs.length; i++) {
+          cbs[i]();
+        }
+      }
+    });
+    return {
+      then: function(cb) {
+        cb && (loaded ? cb() : (cbs.push(cb)));
+      }
+    };
+  })();
+})();
+(function() {
+  window.throttle = function(func, wait) {
+    var args, result, thisArg, timeoutId, lastCalled = 0;
+
+    function trailingCall() {
+      lastCalled = new Date;
+      timeoutId = null;
+      result = func.apply(thisArg, args);
+    }
+    return function() {
+      var now = new Date,
+        remaining = wait - (now - lastCalled);
+
+      args = arguments;
+      thisArg = this;
+
+      if (remaining <= 0) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+        lastCalled = now;
+        result = func.apply(thisArg, args);
+      } else if (!timeoutId) {
+        timeoutId = setTimeout(trailingCall, remaining);
+      }
+      return result;
+    };
+  };
+})();
+(function() {
+  var Set = (function() {
+    var add = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (data[i] === item) {
+          return;
+        }
+      }
+      this.size ++;
+      data.push(item);
+      return data;
+    };
+
+    var Set = function(data) {
+      this.size = 0;
+      this._data = [];
+      var i;
+      if (data.length > 0) {
+        for (i = 0; i < data.length; i++) {
+          add.call(this, data[i]);
+        }
+      }
+    };
+    Set.prototype.add = add;
+    Set.prototype.get = function(index) { return this._data[index]; };
+    Set.prototype.has = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (this.get(i) === item) {
+          return true;
+        }
+      }
+      return false;
+    };
+    Set.prototype.is = function(map) {
+      if (map._data.length !== this._data.length) { return false; }
+      var i, j, flag, tData = this._data, mData = map._data;
+      for (i = 0; i < tData.length; i++) {
+        for (flag = false, j = 0; j < mData.length; j++) {
+          if (tData[i] === mData[j]) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) { return false; }
+      }
+      return true;
+    };
+    Set.prototype.values = function() {
+      return this._data;
+    };
+    return Set;
+  })();
+
+  window.Lazyload = (function(doc) {
+    var queue = {js: [], css: []}, sources = {js: {}, css: {}}, context = this;
+    var createNode = function(name, attrs) {
+      var node = doc.createElement(name), attr;
+      for (attr in attrs) {
+        if (attrs.hasOwnProperty(attr)) {
+          node.setAttribute(attr, attrs[attr]);
+        }
+      }
+      return node;
+    };
+    var end = function(type, url) {
+      var s, q, qi, cbs, i, j, cur, val, flag;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        s[url] = true;
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (cur.urls.has(url)) {
+            qi = cur, val = qi.urls.values();
+            qi && (cbs = qi.callbacks);
+            for (flag = true, j = 0; j < val.length; j++) {
+              cur = val[j];
+              if (!s[cur]) {
+                flag = false;
+              }
+            }
+            if (flag && cbs && cbs.length > 0) {
+              for (j = 0; j < cbs.length; j++) {
+                cbs[j].call(context);
+              }
+              qi.load = true;
+            }
+          }
+        }
+      }
+    };
+    var load = function(type, urls, callback) {
+      var s, q, qi, node, i, cur,
+        _urls = typeof urls === 'string' ? new Set([urls]) : new Set(urls), val, url;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (_urls.is(cur.urls)) {
+            qi = cur;
+            break;
+          }
+        }
+        val = _urls.values();
+        if (qi) {
+          callback && (qi.load || qi.callbacks.push(callback));
+          callback && (qi.load && callback());
+        } else {
+          q.push({
+            urls: _urls,
+            callbacks: callback ? [callback] : [],
+            load: false
+          });
+          for (i = 0; i < val.length; i++) {
+            node = null, url = val[i];
+            if (s[url] === undefined) {
+              (type === 'js' ) && (node = createNode('script', { src: url }));
+              (type === 'css') && (node = createNode('link', { rel: 'stylesheet', href: url }));
+              if (node) {
+                node.onload = (function(type, url) {
+                  return function() {
+                    end(type, url);
+                  };
+                })(type, url);
+                (doc.head || doc.body).appendChild(node);
+                s[url] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+    return {
+      js: function(url, callback) {
+        load('js', url, callback);
+      },
+      css: function(url, callback) {
+        load('css', url, callback);
+      }
+    };
+  })(this.document);
+})();
+</script><script>
+  (function() {
+    var TEXT_VARIABLES = {
+      version: '2.2.6',
+      sources: {
+        font_awesome: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css',
+        jquery: 'https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js',
+        leancloud_js_sdk: '//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js',
+        chart: 'https://cdn.bootcss.com/Chart.js/2.7.2/Chart.bundle.min.js',
+        gitalk: {
+          js: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.js',
+          css: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.css'
+        },
+        valine: 'https://unpkg.com/valine/dist/Valine.min.js',
+        mathjax: 'https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML',
+        mermaid: 'https://cdn.bootcss.com/mermaid/8.0.0-rc.8/mermaid.min.js'
+      },
+      site: {
+        toc: {
+          selectors: 'h1,h2,h3'
+        }
+      },
+      paths: {
+        search_js: '/assets/search.js'
+      }
+    };
+    window.TEXT_VARIABLES = TEXT_VARIABLES;
+  })();
+</script>
+</head>
+  <body>
+    <div class="root" data-is-touch="false">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
+      <div class="header__title">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#515151;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
+</svg>
+<a title="Your Site Description
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
+  </header>
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
+
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
+
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
+
+<!-- end custom main top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #8 ] 클러스터 유지보수</h1></header></div>
+<meta itemprop="headline" content="[ #8 ] 클러스터 유지보수">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=maintenance">maintenance</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=strategy">strategy</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 06월 03일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-06-03T00:00:00+09:00">
+    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody">
+<p>오늘은 클러스터의 유지보수에 관련한 포스트를 써볼까 합니다.</p>
+
+<p>쿠버네티스를 이용하여 서비스를 구축하고나서 언젠가는 시스템을 업데이트 시켜야할 일이 생길 것이며, 오류로 인하여 노드가 먹통이 되는일도 생길 것입니다.</p>
+
+<p>그렇다면 노드의 작동을 중지시키면, 또는 오류로 중지된다면 어떻게 될까요?</p>
+
+<ul>
+  <li>master node의 kube-contoller-manager에는 pod-eviction-timeout이 존재합니다</li>
+</ul>
+
+<h2 id="컨디션">컨디션</h2>
+
+<p>각 노드에는 아래와 같이 여러가지 condition이 존재합니다</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">노드 컨디션</th>
+      <th style="text-align: left">설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Ready</strong></td>
+      <td style="text-align: left">노드가 상태 양호하며 파드를 수용할 준비가 되어 있는 경우 True, 노드의 상태가 불량하여 파드를 수용하지 못할 경우 False, 그리고 노드 컨트롤러가 마지막 node-monitor-grace-period (기본값 40 기간 동안 노드로부터 응답을 받지 못한 경우) Unknown</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>DiskPressure</strong></td>
+      <td style="text-align: left">디스크 사이즈 상에 압박이 있는 경우, 즉 디스크 용량이 넉넉치 않은 경우 True, 반대의 경우 False</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>MemoryPressure</strong></td>
+      <td style="text-align: left">노드 메모리 상에 압박이 있는 경우, 즉 노드 메모리가 넉넉치 않은 경우 True, 반대의 경우 False</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>PIDPressure</strong></td>
+      <td style="text-align: left">프로세스 상에 압박이 있는 경우, 즉 노드 상에 많은 프로세스들이 존재하는 경우 True, 반대의 경우 False</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>NetworkUnavailable</strong></td>
+      <td style="text-align: left">노드에 대해 네트워크가 올바르게 구성되지 않은 경우 True, 반대의 경우 False</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>또한 노드 lifecycle controller는 컨디션을 아래와 같은 <strong><em>built-in taint</em></strong>를 자동으로 생성합니다.</p>
+
+<h3 id="built-in-taints">built-in taints</h3>
+<ul>
+  <li>node.kubernetes.io/not-ready: 노드가 준비되지 않음. 이는 NodeCondition Ready 가 “False”로 됨에 해당.</li>
+  <li>node.kubernetes.io/unreachable: 노드가 노드 컨트롤러에서 도달할 수 없음. 이는  NodeCondition Ready 가 “Unknown”로 됨에 해당.</li>
+  <li>node.kubernetes.io/memory-pressure: 노드에 메모리 할당 압박이 있음.</li>
+  <li>node.kubernetes.io/disk-pressure: 노드에 디스크 할당 압박이 있음.</li>
+  <li>node.kubernetes.io/pid-pressure: 노드에 PID 할당 압박이 있음.</li>
+  <li>node.kubernetes.io/network-unavailable: 노드의 네트워크를 사용할 수 없음.</li>
+  <li>node.kubernetes.io/unschedulable: 노드를 스케줄할 수 없음.</li>
+  <li>node.cloudprovider.kubernetes.io/uninitialized: “외부” 클라우드 공급자로 kubelet을 시작하면, 이 테인트가 노드에서 사용 불가능으로 표시되도록 설정됨.</li>
+</ul>
+
+<p>그 중에서도 <code>ready</code> 컨디션은 좀 특별한데요. 
+ready 컨디션의 상태가 pod-eviction-timeout (kube-controller-manager에 전달된 인수) 보다 더 길게 Unknown 또는 False로 유지되는 경우, 노드 상에 모든 파드는 노드 컨트롤러에 의해 삭제되도록 스케줄 됩니다.</p>
+
+<p>클라우드-컨트롤러-관리자의 컨트롤러가 이 노드를 초기화하면, kubelet이 이 테인트를 제거합니다 즉 다시 pod가 배정될 수 있는 상태가 되는것이죠. 기본 축출 타임아웃 기간은 기본 5분으로 설정되어 있습니다. 만약 노드가 다운되었다가 5분안에 복구가 되었다면 노드 내의 pod들은 그대로 존재하지만, 설정된 타임아웃 시간을 초과한다면 그안의 파드들은 모두 중단 되는것입니다.</p>
+
+<p>만약 수정하고 싶다면 마스터 노드의 kube-system 네임스페이스에 있는 kube-controller-manager-master을 edit해주면됩니다.</p>
+
+<p>그런데 말이죠 이 pod는 static pod입니다. 
+<a href="https://shjeong92.github.io/2021/05/31/Learning-Kubernetes-06.html">6번째 포스트</a>에서 설명 했었는데 static pod 를 수정하려면 
+static pod을 생성한 yaml파일 자체를 수정한다고 했었죠?</p>
+
+<p>static pod의 위치를 찾는것 부터 복습해봅시다</p>
+
+<p>우선 config.yaml파일의 위치를 찾아줍니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="se">\$</span> ps <span class="nt">-ef</span> | <span class="nb">grep </span>kubelet | <span class="nb">grep</span> <span class="se">\"\-</span><span class="nt">-config</span><span class="se">\"</span>
+
+root     10476     1  3 May28 ?        05\:09\:26 /usr/bin/kubelet <span class="nt">--bootstrap-kubeconfig</span><span class="o">=</span>/etc/kubernetes/bootstrap-kubelet.conf <span class="nt">--kubeconfig</span><span class="o">=</span>/etc/kubernetes/kubelet.conf <span class="nt">--config</span><span class="o">=</span>/var/lib/kubelet/config.yaml <span class="nt">--network-plugin</span><span class="o">=</span>cni <span class="nt">--pod-infra-container-image</span><span class="o">=</span>k8s.gcr.io/pause:3.4.1
+</code></pre></div></div>
+
+<p>config.yaml파일 내에서 staticpath를 찾아냅시다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo grep</span> <span class="nt">-i</span> static /var/lib/kubelet/config.yaml
+staticPodPath: /etc/kubernetes/manifests
+</code></pre></div></div>
+
+<p>staticPodPath로 이동후 뭐가있나 확인해봅니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> /etc/kubernetes/manifests
+
+<span class="nv">$ </span><span class="nb">ls
+</span>etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml
+</code></pre></div></div>
+
+<p>자 이제 이 yaml파일을 수정하면 됩니다.
+저는 이 기본 5분인 eviction-timeout을 60초로 바꾸어 보겠습니다.</p>
+
+<p>command에 <code>--pod-eviction-timeout=60s</code> 옵션을 추가해 줌으로써 말이죠.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">annotations</span><span class="pi">:</span>
+    <span class="s">kubernetes.io/config.hash</span><span class="pi">:</span> <span class="s">47cace34a635d6f3e305eee20e0e7b30</span>
+    <span class="s">kubernetes.io/config.mirror</span><span class="pi">:</span> <span class="s">47cace34a635d6f3e305eee20e0e7b30</span>
+    <span class="s">kubernetes.io/config.seen</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2021-05-28T03\:40\:42.961803243Z"</span>
+    <span class="s">kubernetes.io/config.source</span><span class="pi">:</span> <span class="s">file</span>
+  <span class="na">creationTimestamp</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2021-05-28T03\:40\:55Z"</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">component</span><span class="pi">:</span> <span class="s">kube-controller-manager</span>
+    <span class="na">tier</span><span class="pi">:</span> <span class="s">control-plane</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">kube-controller-manager-master</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">kube-system</span>
+  <span class="na">ownerReferences</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+    <span class="na">controller</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">kind</span><span class="pi">:</span> <span class="s">Node</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">master</span>
+    <span class="na">uid</span><span class="pi">:</span> <span class="s">69f4d243-9420-45a9-928e-672a1d3b977a</span>
+  <span class="na">resourceVersion</span><span class="pi">:</span> <span class="s2">"</span><span class="s">478"</span>
+  <span class="na">uid</span><span class="pi">:</span> <span class="s">4cfad35d-8664-42cf-9ed9-5fd5b4d771a4</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">containers</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">command</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">kube-controller-manager</span>
+    <span class="pi">-</span> <span class="s">--allocate-node-cidrs=true</span>
+    <span class="pi">-</span> <span class="s">--pod-eviction-timeout=60s</span>      <span class="c1">#&lt;----------- 해당라인을 추가하면 이제 5분이아닌 60초로 변경됩니다.</span>
+    <span class="pi">-</span> <span class="s">--authentication-kubeconfig=/etc/kubernetes/controller-manager.conf</span>
+    <span class="pi">-</span> <span class="s">--authorization-kubeconfig=/etc/kubernetes/controller-manager.conf</span>
+    <span class="pi">-</span> <span class="s">--bind-address=127.0.0.1</span>
+    <span class="pi">-</span> <span class="s">--client-ca-file=/etc/kubernetes/pki/ca.crt</span>
+    <span class="pi">-</span> <span class="s">--cluster-cidr=10.244.0.0/16</span>
+    <span class="pi">-</span> <span class="s">--cluster-name=kubernetes</span>
+    <span class="pi">-</span> <span class="s">--cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt</span>
+    <span class="pi">-</span> <span class="s">--cluster-signing-key-file=/etc/kubernetes/pki/ca.key</span>
+    <span class="pi">-</span> <span class="s">--controllers=*,bootstrapsigner,tokencleaner</span>
+    <span class="pi">-</span> <span class="s">--kubeconfig=/etc/kubernetes/controller-manager.conf</span>
+    <span class="pi">-</span> <span class="s">--leader-elect=true</span>
+    <span class="pi">-</span> <span class="s">--port=0</span>
+    <span class="pi">-</span> <span class="s">--requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt</span>
+    <span class="pi">-</span> <span class="s">--root-ca-file=/etc/kubernetes/pki/ca.crt</span>
+    <span class="pi">-</span> <span class="s">--service-account-private-key-file=/etc/kubernetes/pki/sa.key</span>
+    <span class="pi">-</span> <span class="s">--service-cluster-ip-range=10.96.0.0/12</span>
+    <span class="pi">-</span> <span class="s">--use-service-account-credentials=true</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">k8s.gcr.io/kube-controller-manager:v1.21.1</span>
+
+<span class="s">...중략</span>
+
+</code></pre></div></div>
+<p>저장해주면 멈췄다가</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kube-controller-manager-master    0/1     Running   0          3s
+</code></pre></div></div>
+<p>옵션을 적용시켜 pod시 재시동됩니다~</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kube-controller-manager-master    1/1     Running   0          3s
+</code></pre></div></div>
+
+<h2 id="eviction-timeout의-존재이유">eviction timeout의 존재이유?</h2>
+<p>위에서 eviction timeout의 값을 바꾸는 실습을 해보았는데요 이 timeout은 무엇과 연관이 있는지 두가지 케이스를 통해서 알아보겠습니다.</p>
+
+<ul>
+  <li>
+<strong>case1: node가 먹통이 되었다가 설정해놓은 eviction-timeout보다 짦은시간안에 복구된경우</strong>
+    <ul>
+      <li>노드내에 있던 pod들이 kubectl에 의해 다시 해당노드에서 재시작됩니다.</li>
+    </ul>
+  </li>
+  <li>
+<strong>case2: node가 먹통이 된후 eviction-timeout을 초과한경우</strong>
+    <ul>
+      <li>해당 노드에있는 pod들을 모두 축출한 후에 노드가 재시동됩니다.</li>
+      <li>해당 노드에있던 pod이 replicaset을 통해 생성되었다면 다시 다른노드에 잘 생성이 되겠지만, 일반 pod이라면 다시 살아나지 못할겁니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="노드관련-명령어">노드관련 명령어</h2>
+<ul>
+  <li>
+<code> kubectl drain node </code>
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl drain node
+</code></pre></div>    </div>
+    <ul>
+      <li>
+        <p>해당 노드에있는 pod들을 종료시키고, 다른노드에 재시작시킵니다 (graceful node shutdown) 또한 해당 노드를 unschedulable하게 만든다.</p>
+      </li>
+      <li>
+        <p>kubernetes의 버전 또는 리눅스 커널등의 업그레이드할 때 사용할 수 있겠습니다(kubeadm, kubelet, kubectl, …)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+<code> kubectl cordon node </code>
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl cordon node
+</code></pre></div>    </div>
+    <ul>
+      <li>해당 노드를 unschedulable하게 만듭니다</li>
+      <li><strong>실행 중인 Pod를 축출하지는 않습니다</strong></li>
+    </ul>
+  </li>
+  <li>
+<code> kubectl uncordon node </code>
+    <div class="language-sh highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl uncordon node
+</code></pre></div>    </div>
+    <ul>
+      <li>해당 노드를 schedulable하게 만든다</li>
+      <li>업그레이드를 마친 노드를 스케쥴러블하게 만듭니다 (taint를 제거)</li>
+      <li><strong>drain명령에 의해서 집나간 pod들이 다시 집을 찾아오진 않습니다.</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="쿠버네티스-버전-및-버전차이-지원">쿠버네티스 버전 및 버전차이 지원</h2>
+
+<h3 id="버전">버전</h3>
+<p>쿠버네티스 버전은 x.y.z로 표현되는데, 여기서 x는 메이저 버전, y는 마이너 버전, z는 시맨틱 버전 용어에 따른 패치 버전입니다.
+kubernetes에는 여러가지 컴포넌트가 있습니다.
+각각의 버전은 전부 동일해야할까요? 아닙니다.</p>
+
+<p>kube-apiserver의 버전이 주축이되고, 나머지 컴포넌트는 각각 다르게 한 두단계 버전이 낮거나 같아도 상관이 없습니다. 특별하게 <strong>kubectl</strong>의 경우는 kube-apiserver의 버전보다 한단계 높은경우도 지원이 됩니다.</p>
+
+<p>더 자세한 내용은 <a href="https://kubernetes.io/ko/docs/setup/release/version-skew-policy/">공식문서</a>에서 확인가능 합니다</p>
+
+<h2 id="클러스터-업그레이드">클러스터 업그레이드</h2>
+
+<p>kubernets는 latest버전부터 두단계 낮은버전까지 서비스를 지원하는데요, 만약에 현재 1.19버전을 사용하고 있는데 1.22버전이 출시 된다면 업그레이드를 해야겠죠.</p>
+
+<p>그렇다면 1.19버전에서 한번에 1.22번으로 업그레이드 시키면될까요? 추천되는 방법에 의하면
+한단계 한단계씩 차례차례로 업그레이드 해야된다고 합니다.</p>
+
+<h3 id="업그레이드-방법">업그레이드 방법</h3>
+
+<p>쿠버네티스 환경을 어떻게 구성하였는가에 따라 업그레이드 방법이 다양합니다.</p>
+
+<ul>
+  <li>
+<strong>구글의 GKE, AWS의 EKS등의 kubernete를 지원하는 cloud의 경우</strong>
+    <ul>
+      <li>간단한 클릭 몇번으로 업그레이드 가능</li>
+    </ul>
+  </li>
+  <li>
+<strong>The hard way로 설치한경우</strong>
+    <ul>
+      <li>한땀한땀 설치한 것처럼 업그레이드 또한 한땀한땀 해야합니다</li>
+    </ul>
+  </li>
+</ul>
+
+<p>저는 <strong>kubeadm</strong>을 이용하여 kubernetes환경을 구축하였고, <strong>kubeadm</strong>을 통한 업그레이드 방법에 대해 자세히 설명해 보겠습니다.</p>
+
+<p>저의 쿠버네티스 환경은 한개의 master노드, 3개의 worker노드로 구성되어있습니다. 1.20버전을 이용하고 있는데 1.21버전으로 업그레이드 해보겠습니다.</p>
+
+<h3 id="step1---마스터-노드에-kubeadm-업그레이드-시키기">STEP1 - 마스터 노드에 kubeadm 업그레이드 시키기.</h3>
+
+<p>마스터 노드에 접속합니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh gcloud
+</code></pre></div></div>
+<ul>
+  <li>
+<strong>ssh config</strong>에 설정을 해놨기에 이렇게 간단하게 접속가능합니다. <strong>ssh config 설정방법</strong>이 궁금하시면 <a href="https://shjeong92.github.io/2021/06/01/Handling-ssh-config.html">여기</a>로 이동하세요.</li>
+</ul>
+
+<p>그리고  kubernetes환경을 구축할때 hold시켜놨었던 kubeadm을 unhold시켜주고, apt-get 색인 업데이트후, kubeadm을 업데이트 한다음 다시 kubeadm을 hold시켜 줄겁니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 1.21.x-00에서 x를 최신 패치 버전으로 바꿉니다</span>
+apt-mark unhold kubeadm <span class="o">&amp;&amp;</span> <span class="se">\</span>
+apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nv">kubeadm</span><span class="o">=</span>1.21.x-00 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+apt-mark hold kubeadm
+
+<span class="c">#버전 확인해주기</span>
+<span class="nv">$ </span>kubeadm version
+kubeadm version: &amp;version.Info<span class="o">{</span>Major:<span class="s2">"1"</span>, Minor:<span class="s2">"21"</span>, GitVersion:<span class="s2">"v1.21.1"</span>, GitCommit:<span class="s2">"5e58841cce77d4bc13713ad2b91fa0d961e69192"</span>, GitTreeState:<span class="s2">"clean"</span>, BuildDate:<span class="s2">"2021-05-12T14\:17\:27Z"</span>, GoVersion:<span class="s2">"go1.16.4"</span>, Compiler:<span class="s2">"gc"</span>, Platform:<span class="s2">"linux/amd64"</span><span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>apt-mark unhold</strong>와 <strong>apt-mark hold</strong> 해주는 이유는 kubeadm을 업그레이드하면 설치시 kubelet과 같은 다른 구성 요소가 기본적으로 최신 버전 으로 자동으로 업그레이드되기 때문입니다. (kubernetes는 여러버전을 한꺼번에 업그레이드 권장하지 않기때문입니다!) 이를 해결하기 위해 보류를 사용하여 패키지를 보류 된 것으로 표시하여 패키지가 자동으로 설치, 업그레이드 또는 제거되지 않도록합니다.</p>
+
+<h3 id="step2---업그레이드-정보-확인하기">STEP2 - 업그레이드 정보 확인하기</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubeadm upgrade plan
+
+...
+
+COMPONENT            CURRENT AVAILABLE
+
+API Server           v1.20.0 v1.21.1
+
+Controller Manager   v1.20.0 v1.21.1
+
+Scheduler            v1.20.0 v1.21.1
+
+Kube Proxy           v1.20.0 v1.21.1
+
+...
+
+</code></pre></div></div>
+
+<h3 id="step3---업그레이드-적용시키기">STEP3 - 업그레이드 적용시키기</h3>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubeadm upgrade plan apply v1.21.1
+<span class="o">(</span>조금 오래걸릴 수도 있습니다<span class="o">)</span>
+
+아래와같이뜨면 성공
+<span class="o">[</span>upgrade/successful] SUCCESS! Your cluster was upgraded to <span class="s2">"v1.21.1"</span><span class="nb">.</span> Enjoy!
+
+<span class="o">[</span>upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets <span class="k">if </span>you haven<span class="s1">'t already done so.
+</span></code></pre></div></div>
+
+<h3 id="step4---node-drain후-kubelet-kubectl-업데이트후-재시작하기">STEP4 - node drain후 kubelet, kubectl 업데이트후 재시작하기</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#노드 드레인하기(모든 pod 종료후 다른노드에 새로 실행하기 및 해당노드 unschedulable하게 만듬)</span>
+<span class="nv">$ </span>kubectl drain &lt;node-to-drain&gt; <span class="nt">--ignore-daemonsets</span>
+
+<span class="nv">$ </span>apt-mark unhold kubelet kubectl <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nv">kubelet</span><span class="o">=</span>1.21.1-00 <span class="nv">kubectl</span><span class="o">=</span>1.21.1-00 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-mark hold kubelet kubectl
+
+<span class="c">#설정 수정사항 재로딩</span>
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl daemon-reload
+<span class="c">#kubelet 재시작</span>
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl restart kubelet
+
+<span class="c">#업데이트가 끝났으므로 다시 schedulable하게 만들어주기</span>
+<span class="nv">$ </span>kubectl uncordon &lt;node-to-uncordon&gt;
+
+</code></pre></div></div>
+
+<p>여기까지가 마스터노드의 업그레이드 방법이었습니다.</p>
+
+<hr>
+<h1 id="rocket-여기서부터는-워커노드들을-업그레이드-합니다">
+<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> 여기서부터는 워커노드들을 업그레이드 합니다.</h1>
+
+<h3 id="step5---워커-노드에-kubeadm-설치하기">STEP5 - 워커 노드에 kubeadm 설치하기</h3>
+
+<p>우선 3개의 워커노드중 하나인 worker-1에 접속합니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh worker-1 
+</code></pre></div></div>
+<p>그 다음, 마스터노드에 설치했던과 같은방법으로 kubeadm를 설치합니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>apt-mark unhold kubeadm <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nv">kubeadm</span><span class="o">=</span>1.21.x-00 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-mark hold kubeadm
+</code></pre></div></div>
+
+<p>아까 마스터노드에서 아래의 커맨드를 이용해 upgrade가능 버전을 확인하고 v1.21.1로 apply했었습니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubeadm upgrade plan
+<span class="nv">$ </span>kubeadm upgrade apply v1.21.1
+</code></pre></div></div>
+<p>하지만 워커노드에서는 아래의 커맨드를 이용하여 클러스터에서 kubeadm ClusterConfiguration 을 가져오며,
+이 노드의 kubelet 구성을 업그레이드 합니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubeadm upgrade node
+</code></pre></div></div>
+
+<p>그리고 마스터 노드로 이동하여 업그레이드 할 워커노드를 드레인 해줍니다. (마스터 노드에서 워커노드로 접속했었기에 접속 종료하면 마스터노드로 이동합니다.)</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">exit
+logout
+</span>Connection to 10.128.0.5 closed.
+
+<span class="nv">$ </span>kubectl drain worker-1 <span class="nt">--ignore-daemonsets</span>
+</code></pre></div></div>
+
+<h3 id="step6---워커노드의-kubelet-및-kubectl-업그레이드">STEP6 - 워커노드의 kubelet 및 kubectl 업그레이드</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 다시 워커노드로 접속하기</span>
+<span class="nv">$ </span>ssh worker-1
+ 
+
+<span class="c"># kubectl 과 kubelet 업데이트하기</span>
+<span class="nv">$ </span>apt-mark unhold kubectl kubelet <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="nv">kubectl</span><span class="o">=</span>1.21.1-00 <span class="nv">kubelet</span><span class="o">=</span>1.21.1-00 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nv">$ </span>apt-mark hold kubectl kubelet
+</code></pre></div></div>
+
+<h3 id="step7---kubelet-다시-시작하기">STEP7 - kubelet 다시 시작하기</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl restart kubelet
+</code></pre></div></div>
+
+<h3 id="step8---cordon-해재하기">STEP8 - cordon 해재하기</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#마스터노드로 이동하기</span>
+<span class="nv">$ </span><span class="nb">exit</span>
+
+<span class="nv">$ </span>kubectl uncordon worker-1
+</code></pre></div></div>
+
+<h3 id="step9---반복하기">STEP9 - 반복하기</h3>
+
+<p>업그레이드 할 워커노드에
+STEP5 ~ STEP8을 똑같이 진행해줍니다</p>
+
+<p>마지막으로 업데이트가 잘 되었는지 확인해줍니다</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get nodes
+NAME         STATUS   ROLES                  AGE    VERSION
+master       Ready    control-plane,master   6d8h   v1.21.1
+worker-1     Ready    &lt;none&gt;                 6d8h   v1.21.1
+worker-2     Ready    &lt;none&gt;                 6d8h   v1.21.1
+worker-3     Ready    &lt;none&gt;                 6d8h   v1.21.1
+</code></pre></div></div>
+
+<p>버전이 v1.21.1로 잘 업그레이드 된것을 확인할 수 있습니다.</p>
+
+</div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-06-03T00:00:00+09:00">
+<!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
+</div></footer>
+<div class="article__section-navigator clearfix">
+<div class="previous">
+<span>이전</span><a href="/2021/06/02/Learning-Kubernetes-07.html">[ #7 ] 배포 전략</a>
+</div>
+<div class="next">
+<span>다음</span><a href="/2021/06/04/Learning-Kubernetes-09.html">[ #9 ] 클러스터 백업 &amp; 복구</a>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
+</script>
+</div>
+<section class="page__comments d-print-none"><div id="disqus_thread"></div>
+  <script>
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+  var disqus_config = function () {
+    this.page.url = 'https://shjeong92.github.io/2021/06/03/Learning-Kubernetes-08.html';
+    this.page.identifier = 'anything';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://sanghyuk-devlog.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript></section></article><!-- start custom main bottom snippet -->
+
+<!-- end custom main bottom snippet -->
+</div>
+            </div></div></div>
+<div class="page__footer d-print-none">
+<footer class="footer py-4 js-page-footer">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a>
+</li></ul>
+</div>
+</div>
+    </div>
+<div class="site-info mt-2">
+      <div>© Hyuk's devlog 2021,
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+</div>
+    </div>
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $body = $('body'), $window = $(window);
+    var $pageRoot = $('.js-page-root'), $pageMain = $('.js-page-main');
+    var activeCount = 0;
+    function modal(options) {
+      var $root = this, visible, onChange, hideWhenWindowScroll = false;
+      var scrollTop;
+      function setOptions(options) {
+        var _options = options || {};
+        visible = _options.initialVisible === undefined ? false : show;
+        onChange = _options.onChange;
+        hideWhenWindowScroll = _options.hideWhenWindowScroll;
+      }
+      function init() {
+        setState(visible);
+      }
+      function setState(isShow) {
+        if (isShow === visible) {
+          return;
+        }
+        visible = isShow;
+        if (visible) {
+          activeCount++;
+          scrollTop = $(window).scrollTop() || $pageMain.scrollTop();
+          $root.addClass('modal--show');
+          $pageMain.scrollTop(scrollTop);
+          activeCount === 1 && ($pageRoot.addClass('show-modal'), $body.addClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.on('scroll', hide);
+          $window.on('keyup', handleKeyup);
+        } else {
+          activeCount > 0 && activeCount--;
+          $root.removeClass('modal--show');
+          $window.scrollTop(scrollTop);
+          activeCount === 0 && ($pageRoot.removeClass('show-modal'), $body.removeClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.off('scroll', hide);
+          $window.off('keyup', handleKeyup);
+        }
+        onChange && onChange(visible);
+      }
+      function show() {
+        setState(true);
+      }
+      function hide() {
+        setState(false);
+      }
+      function handleKeyup(e) {
+        // Char Code: 27  ESC
+        if (e.which ===  27) {
+          hide();
+        }
+      }
+      setOptions(options);
+      init();
+      return {
+        show: show,
+        hide: hide,
+        $el: $root
+      };
+    }
+    $.fn.modal = modal;
+  });
+})();
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
+(function () {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    // search panel
+    var search = (window.search || (window.search = {}));
+    var useDefaultSearchBox = window.useDefaultSearchBox === undefined ?
+      true : window.useDefaultSearchBox ;
+
+    var $searchModal = $('.js-page-search-modal');
+    var $searchToggle = $('.js-search-toggle');
+    var searchModal = $searchModal.modal({ onChange: handleModalChange, hideWhenWindowScroll: true });
+    var modalVisible = false;
+    search.searchModal = searchModal;
+
+    var $searchBox = null;
+    var $searchInput = null;
+    var $searchClear = null;
+
+    function getModalVisible() {
+      return modalVisible;
+    }
+    search.getModalVisible = getModalVisible;
+
+    function handleModalChange(visible) {
+      modalVisible = visible;
+      if (visible) {
+        search.onShow && search.onShow();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].focus();
+      } else {
+        search.onShow && search.onHide();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].blur();
+        setTimeout(function() {
+          useDefaultSearchBox && ($searchInput.val(''), $searchBox.removeClass('not-empty'));
+          search.clear && search.clear();
+          window.pageAsideAffix && window.pageAsideAffix.refresh();
+        }, 400);
+      }
+    }
+
+    $searchToggle.on('click', function() {
+      modalVisible ? searchModal.hide() : searchModal.show();
+    });
+    // Char Code: 83  S, 191 /
+    $(window).on('keyup', function(e) {
+      if (!modalVisible && !window.isFormElement(e.target || e.srcElement) && (e.which === 83 || e.which === 191)) {
+        modalVisible || searchModal.show();
+      }
+    });
+
+    if (useDefaultSearchBox) {
+      $searchBox = $('.js-search-box');
+      $searchInput = $searchBox.children('input');
+      $searchClear = $searchBox.children('.js-icon-clear');
+      search.getSearchInput = function() {
+        return $searchInput.get(0);
+      };
+      search.getVal = function() {
+        return $searchInput.val();
+      };
+      search.setVal = function(val) {
+        $searchInput.val(val);
+      };
+
+      $searchInput.on('focus', function() {
+        $(this).addClass('focus');
+      });
+      $searchInput.on('blur', function() {
+        $(this).removeClass('focus');
+      });
+      $searchInput.on('input', window.throttle(function() {
+        var val = $(this).val();
+        if (val === '' || typeof val !== 'string') {
+          search.clear && search.clear();
+        } else {
+          $searchBox.addClass('not-empty');
+          search.onInputNotEmpty && search.onInputNotEmpty(val);
+        }
+      }, 400));
+      $searchClear.on('click', function() {
+        $searchInput.val(''); $searchBox.removeClass('not-empty');
+        search.clear && search.clear();
+      });
+    }
+  });
+})();
+</script><div class="search search--dark">
+  <div class="main">
+    <div class="search__header">검색</div>
+    <div class="search-bar">
+      <div class="search-box js-search-box">
+        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
+        <input type="text">
+        <div class="search-box__icon-clear js-icon-clear">
+          <a><i class="fas fa-times"></i></a>
+        </div>
+      </div>
+      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
+        취소</button>
+    </div>
+    <div class="search-result js-search-result"></div>
+  </div>
+</div>
+<script>var SOURCES = window.TEXT_VARIABLES.sources;
+var PAHTS = window.TEXT_VARIABLES.paths;
+window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  var search = (window.search || (window.search = {}));
+  var searchData = window.TEXT_SEARCH_DATA || {};
+
+  function memorize(f) {
+    var cache = {};
+    return function () {
+      var key = Array.prototype.join.call(arguments, ',');
+      if (key in cache) return cache[key];
+      else return cache[key] = f.apply(this, arguments);
+    };
+  }
+
+  /// search
+  function searchByQuery(query) {
+    var i, j, key, keys, cur, _title, result = {};
+    keys = Object.keys(searchData);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      for (j = 0; j < searchData[key].length; j++) {
+        cur = searchData[key][j], _title = cur.title;
+        if ((result[key] === undefined || result[key] && result[key].length < 4 )
+          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+          if (result[key] === undefined) {
+            result[key] = [];
+          }
+          result[key].push(cur);
+        }
+      }
+    }
+    return result;
+  }
+
+  var renderHeader = memorize(function(header) {
+    return $('<p class="search-result__header">' + header + '</p>');
+  });
+
+  var renderItem = function(index, title, url) {
+    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  };
+
+  function render(data) {
+    if (!data) { return null; }
+    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
+    keys = Object.keys(data);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      $root.append(renderHeader(key));
+      for (j = 0; j < data[key].length; j++) {
+        cur = data[key][j];
+        $root.append(renderItem(itemIndex++, cur.title, cur.url));
+      }
+    }
+    return $root;
+  }
+
+  // search box
+  var $result = $('.js-search-result'), $resultItems;
+  var lastActiveIndex, activeIndex;
+
+  function clear() {
+    $result.html(null);
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+  }
+  function onInputNotEmpty(val) {
+    $result.html(render(searchByQuery(val)));
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+    $resultItems.eq(0).addClass('active');
+  }
+
+  search.clear = clear;
+  search.onInputNotEmpty = onInputNotEmpty;
+
+  function updateResultItems() {
+    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
+    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
+  }
+
+  function moveActiveIndex(direction) {
+    var itemsCount = $resultItems ? $resultItems.length : 0;
+    if (itemsCount > 1) {
+      lastActiveIndex = activeIndex;
+      if (direction === 'up') {
+        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
+      } else if (direction === 'down') {
+        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
+      }
+      updateResultItems();
+    }
+  }
+
+  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
+  $(window).on('keyup', function(e) {
+    var modalVisible = search.getModalVisible && search.getModalVisible();
+    if (modalVisible) {
+      if (e.which === 38) {
+        modalVisible && moveActiveIndex('up');
+      } else if (e.which === 40) {
+        modalVisible && moveActiveIndex('down');
+      } else if (e.which === 13) {
+        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
+      }
+    }
+  });
+
+  $result.on('mouseover', '.search-result__item > a', function() {
+    var itemIndex = $(this).parent().data('index');
+    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
+  });
+});
+</script>
+</div>
+</div>
+
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function scrollToAnchor(anchor, duration, callback) {
+      var $root = this;
+      $root.animate({ scrollTop: $(anchor).position().top }, duration, function() {
+        window.history.replaceState(null, '', window.location.href.split('#')[0] + anchor);
+        callback && callback();
+      });
+    }
+    $.fn.scrollToAnchor = scrollToAnchor;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function affix(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroll,
+        offsetBottom = 0, scrollTarget = window, scroll = window.document, disabled = false, isOverallScroller = true,
+        rootTop, rootLeft, rootHeight, scrollBottom, rootBottomTop,
+        hasInit = false, curState;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.offsetBottom && (offsetBottom = _options.offsetBottom);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroll && (scroll = _options.scroll);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $scrollTarget = $(scrollTarget);
+        isOverallScroller = window.isOverallScroller($scrollTarget[0]);
+        $scroll = $(scroll);
+      }
+      function preCalc() {
+        top();
+        rootHeight = $root.outerHeight();
+        rootTop = $root.offset().top + (isOverallScroller ? 0 :  $scrollTarget.scrollTop());
+        rootLeft = $root.offset().left;
+      }
+      function calc(needPreCalc) {
+        needPreCalc && preCalc();
+        scrollBottom = $scroll.outerHeight() - offsetBottom - rootHeight;
+        rootBottomTop = scrollBottom - rootTop;
+      }
+      function top() {
+        if (curState !== 'top') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: 0
+          });
+          curState = 'top';
+        }
+      }
+      function fixed() {
+        if (curState !== 'fixed') {
+          $root.addClass('fixed').css({
+            left: rootLeft + 'px',
+            top: 0
+          });
+          curState = 'fixed';
+        }
+      }
+      function bottom() {
+        if (curState !== 'bottom') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: rootBottomTop + 'px'
+          });
+          curState = 'bottom';
+        }
+      }
+      function setState() {
+        var scrollTop = $scrollTarget.scrollTop();
+        if (scrollTop >= rootTop && scrollTop <= scrollBottom) {
+          fixed();
+        } else if (scrollTop < rootTop) {
+          top();
+        } else {
+          bottom();
+        }
+      }
+      function init() {
+        if(!hasInit) {
+          var interval, timeout;
+          calc(true); setState();
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState();
+          });
+          $window.on('resize', function() {
+            disabled || (calc(true), setState());
+          });
+          hasInit = true;
+        }
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions,
+        refresh: function() {
+          calc(true, { animation: false }); setState();
+        }
+      };
+    }
+    $.fn.affix = affix;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function toc(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroller, $tocUl = $('<ul class="toc toc--ellipsis"></ul>'), $tocLi, $headings, $activeLast, $activeCur,
+        selectors = 'h1,h2,h3', container = 'body', scrollTarget = window, scroller = 'html, body', disabled = false,
+        headingsPos, scrolling = false, hasRendered = false, hasInit = false;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.selectors && (selectors = _options.selectors);
+        _options.container && (container = _options.container);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroller && (scroller = _options.scroller);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $headings = $(container).find(selectors).filter('[id]');
+        $scrollTarget = $(scrollTarget);
+        $scroller = $(scroller);
+      }
+      function calc() {
+        headingsPos = [];
+        $headings.each(function() {
+          headingsPos.push(Math.floor($(this).position().top));
+        });
+      }
+      function setState(element, disabled) {
+        var scrollTop = $scrollTarget.scrollTop(), i;
+        if (disabled || !headingsPos || headingsPos.length < 1) { return; }
+        if (element) {
+          $activeCur = element;
+        } else {
+          for (i = 0; i < headingsPos.length; i++) {
+            if (scrollTop >= headingsPos[i]) {
+              $activeCur = $tocLi.eq(i);
+            } else {
+              $activeCur || ($activeCur = $tocLi.eq(i));
+              break;
+            }
+          }
+        }
+        $activeLast && $activeLast.removeClass('active');
+        ($activeLast = $activeCur).addClass('active');
+      }
+      function render() {
+        if(!hasRendered) {
+          $root.append($tocUl);
+          $headings.each(function() {
+            var $this = $(this);
+            $tocUl.append($('<li></li>').addClass('toc-' + $this.prop('tagName').toLowerCase())
+              .append($('<a></a>').text($this.text()).attr('href', '#' + $this.prop('id'))));
+          });
+          $tocLi = $tocUl.children('li');
+          $tocUl.on('click', 'a', function(e) {
+            e.preventDefault();
+            var $this = $(this);
+            scrolling = true;
+            setState($this.parent());
+            $scroller.scrollToAnchor($this.attr('href'), 400, function() {
+              scrolling = false;
+            });
+          });
+        }
+        hasRendered = true;
+      }
+      function init() {
+        var interval, timeout;
+        if(!hasInit) {
+          render(); calc(); setState(null, scrolling);
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState(null, scrolling);
+          });
+          $window.on('resize', window.throttle(function() {
+            if (!disabled) {
+              render(); calc(); setState(null, scrolling);
+            }
+          }, 100));
+        }
+        hasInit = true;
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions
+      };
+    }
+    $.fn.toc = toc;
+  });
+})();
+/*(function () {
+
+})();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
+</script>
+    </div>
+    <script>(function () {
+  var $root = document.getElementsByClassName('root')[0];
+  if (window.hasEvent('touchstart')) {
+    $root.dataset.isTouch = true;
+    document.addEventListener('touchstart', function(){}, false);
+  }
+})();
+</script>
+  </body>
+</html>

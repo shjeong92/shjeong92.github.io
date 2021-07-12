@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>[ #9 ] 클러스터 백업 &amp; 복구 - Hyuk's devlog</title>
+
+<meta name="description" content="이번 포스트에서는 ETCD database를 이용한 클러스터 백업 및 복구 방법에 대해서 다뤄보겠습니다.etcd란etcd는 모든 클러스터 데이터에 대한 Kubernetes의 백업 저장소로 사용되는 일관되고 가용성이 높은 키 값 저장소입니다그리고 ETCD는 각 마스터노드에 존재하고,...">
+<link rel="canonical" href="https://shjeong92.github.io/2021/06/04/Learning-Kubernetes-09.html">
+<link rel="alternate" type="application/rss+xml" title="Hyuk's devlog" href="/feed.xml">
+<!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50">
+<link rel="shortcut icon" href="/assets/favicon.ico">
+
+<meta name="msapplication-TileColor" content="#ffc40d">
+<meta name="msapplication-config" content="/assets/browserconfig.xml">
+
+<meta name="theme-color" content="#ffffff">
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css">
+<!-- start custom head snippets -->
+
+<!-- end custom head snippets -->
+<script>(function() {
+  window.isArray = function(val) {
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+  window.isString = function(val) {
+    return typeof val === 'string';
+  };
+
+  window.hasEvent = function(event) {
+    return 'on'.concat(event) in window.document;
+  };
+
+  window.isOverallScroller = function(node) {
+    return node === document.documentElement || node === document.body || node === window;
+  };
+
+  window.isFormElement = function(node) {
+    var tagName = node.tagName;
+    return tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA';
+  };
+
+  window.pageLoad = (function () {
+    var loaded = false, cbs = [];
+    window.addEventListener('load', function () {
+      var i;
+      loaded = true;
+      if (cbs.length > 0) {
+        for (i = 0; i < cbs.length; i++) {
+          cbs[i]();
+        }
+      }
+    });
+    return {
+      then: function(cb) {
+        cb && (loaded ? cb() : (cbs.push(cb)));
+      }
+    };
+  })();
+})();
+(function() {
+  window.throttle = function(func, wait) {
+    var args, result, thisArg, timeoutId, lastCalled = 0;
+
+    function trailingCall() {
+      lastCalled = new Date;
+      timeoutId = null;
+      result = func.apply(thisArg, args);
+    }
+    return function() {
+      var now = new Date,
+        remaining = wait - (now - lastCalled);
+
+      args = arguments;
+      thisArg = this;
+
+      if (remaining <= 0) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+        lastCalled = now;
+        result = func.apply(thisArg, args);
+      } else if (!timeoutId) {
+        timeoutId = setTimeout(trailingCall, remaining);
+      }
+      return result;
+    };
+  };
+})();
+(function() {
+  var Set = (function() {
+    var add = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (data[i] === item) {
+          return;
+        }
+      }
+      this.size ++;
+      data.push(item);
+      return data;
+    };
+
+    var Set = function(data) {
+      this.size = 0;
+      this._data = [];
+      var i;
+      if (data.length > 0) {
+        for (i = 0; i < data.length; i++) {
+          add.call(this, data[i]);
+        }
+      }
+    };
+    Set.prototype.add = add;
+    Set.prototype.get = function(index) { return this._data[index]; };
+    Set.prototype.has = function(item) {
+      var i, data = this._data;
+      for (i = 0; i < data.length; i++) {
+        if (this.get(i) === item) {
+          return true;
+        }
+      }
+      return false;
+    };
+    Set.prototype.is = function(map) {
+      if (map._data.length !== this._data.length) { return false; }
+      var i, j, flag, tData = this._data, mData = map._data;
+      for (i = 0; i < tData.length; i++) {
+        for (flag = false, j = 0; j < mData.length; j++) {
+          if (tData[i] === mData[j]) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) { return false; }
+      }
+      return true;
+    };
+    Set.prototype.values = function() {
+      return this._data;
+    };
+    return Set;
+  })();
+
+  window.Lazyload = (function(doc) {
+    var queue = {js: [], css: []}, sources = {js: {}, css: {}}, context = this;
+    var createNode = function(name, attrs) {
+      var node = doc.createElement(name), attr;
+      for (attr in attrs) {
+        if (attrs.hasOwnProperty(attr)) {
+          node.setAttribute(attr, attrs[attr]);
+        }
+      }
+      return node;
+    };
+    var end = function(type, url) {
+      var s, q, qi, cbs, i, j, cur, val, flag;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        s[url] = true;
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (cur.urls.has(url)) {
+            qi = cur, val = qi.urls.values();
+            qi && (cbs = qi.callbacks);
+            for (flag = true, j = 0; j < val.length; j++) {
+              cur = val[j];
+              if (!s[cur]) {
+                flag = false;
+              }
+            }
+            if (flag && cbs && cbs.length > 0) {
+              for (j = 0; j < cbs.length; j++) {
+                cbs[j].call(context);
+              }
+              qi.load = true;
+            }
+          }
+        }
+      }
+    };
+    var load = function(type, urls, callback) {
+      var s, q, qi, node, i, cur,
+        _urls = typeof urls === 'string' ? new Set([urls]) : new Set(urls), val, url;
+      if (type === 'js' || type ==='css') {
+        s = sources[type], q = queue[type];
+        for (i = 0; i < q.length; i++) {
+          cur = q[i];
+          if (_urls.is(cur.urls)) {
+            qi = cur;
+            break;
+          }
+        }
+        val = _urls.values();
+        if (qi) {
+          callback && (qi.load || qi.callbacks.push(callback));
+          callback && (qi.load && callback());
+        } else {
+          q.push({
+            urls: _urls,
+            callbacks: callback ? [callback] : [],
+            load: false
+          });
+          for (i = 0; i < val.length; i++) {
+            node = null, url = val[i];
+            if (s[url] === undefined) {
+              (type === 'js' ) && (node = createNode('script', { src: url }));
+              (type === 'css') && (node = createNode('link', { rel: 'stylesheet', href: url }));
+              if (node) {
+                node.onload = (function(type, url) {
+                  return function() {
+                    end(type, url);
+                  };
+                })(type, url);
+                (doc.head || doc.body).appendChild(node);
+                s[url] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+    return {
+      js: function(url, callback) {
+        load('js', url, callback);
+      },
+      css: function(url, callback) {
+        load('css', url, callback);
+      }
+    };
+  })(this.document);
+})();
+</script><script>
+  (function() {
+    var TEXT_VARIABLES = {
+      version: '2.2.6',
+      sources: {
+        font_awesome: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.css',
+        jquery: 'https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js',
+        leancloud_js_sdk: '//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js',
+        chart: 'https://cdn.bootcss.com/Chart.js/2.7.2/Chart.bundle.min.js',
+        gitalk: {
+          js: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.js',
+          css: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.css'
+        },
+        valine: 'https://unpkg.com/valine/dist/Valine.min.js',
+        mathjax: 'https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML',
+        mermaid: 'https://cdn.bootcss.com/mermaid/8.0.0-rc.8/mermaid.min.js'
+      },
+      site: {
+        toc: {
+          selectors: 'h1,h2,h3'
+        }
+      },
+      paths: {
+        search_js: '/assets/search.js'
+      }
+    };
+    window.TEXT_VARIABLES = TEXT_VARIABLES;
+  })();
+</script>
+</head>
+  <body>
+    <div class="root" data-is-touch="false">
+      <div class="layout--page js-page-root">
+<div class="page__main js-page-main page__viewport has-aside cell cell--auto">
+
+      <div class="page__main-inner">
+<div class="page__header d-print-none">
+<header class="header"><div class="main">
+      <div class="header__title">
+        <div class="header__brand">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px" viewbox="0 0 24 24">
+<style type="text/css">
+	.st0{fill:#515151;}
+</style>
+<path class="st0" d="M1.7,22.3c5.7-5.7,11.3-5.7,17,0c3.3-3.3,3.5-5.3,0.8-6c2.7,0.7,3.5-1.1,2.3-5.6s-3.3-5.2-6.3-2.1
+	c3-3,2.3-5.2-2.1-6.3S7,1.8,7.7,4.6C7,1.8,5,2.1,1.7,5.3C7.3,11,7.3,16.7,1.7,22.3"></path>
+</svg>
+<a title="Your Site Description
+" href="/">Hyuk's devlog</a>
+</div>
+<button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
+</div>
+<nav class="navigation">
+        <ul>
+<li class="navigation__item"><a href="/archive.html">아카이브</a></li>
+<li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
+</ul>
+      </nav>
+</div>
+  </header>
+</div>
+<div class="page__content"><div class="main"><div class="grid grid--reverse">
+
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
+
+              <div class="col-main cell cell--auto">
+<!-- start custom main top snippet -->
+
+<!-- end custom main top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>[ #9 ] 클러스터 백업 &amp; 복구</h1></header></div>
+<meta itemprop="headline" content="[ #9 ] 클러스터 백업 &amp; 복구">
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=Kubernetes">Kubernetes</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=maintenance">maintenance</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=static">static</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=pod">pod</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=strategy">strategy</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4">쿠버네티스</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=update">update</a>
+            </li>
+</ul>
+<ul class="right-col menu"><li>
+<i class="far fa-calendar-alt"></i> <span>2021년 06월 04일</span>
+            </li></ul>
+</div>
+<meta itemprop="author" content="Sanghyuk Jeong">
+<meta itemprop="datePublished" content="2021-06-04T00:00:00+09:00">
+    <meta itemprop="keywords" content="Kubernetes,maintenance,static,pod,strategy,쿠버네티스,update">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody">
+<p>이번 포스트에서는 ETCD database를 이용한 클러스터 백업 및 복구 방법에 대해서 다뤄보겠습니다.</p>
+
+<h2 id="etcd란">etcd란</h2>
+
+<p>etcd는 모든 클러스터 데이터에 대한 Kubernetes의 백업 저장소로 사용되는 일관되고 가용성이 높은 키 값 저장소입니다</p>
+
+<p>그리고 ETCD는 각 마스터노드에 존재하고, key=value의 데이터는 마스터 노드의 /var/lib/etcd 에 저장됩니다.</p>
+
+<p>ETCD는 built in 스냅샷 solution을 가지고 있는데요 이를통해 현재 실행중인 모든 리소스의 정보를 백업하고, 복구할 수 있습니다.</p>
+
+<h3 id="step1---etcd가-설치되어-있지-않을경우-설치합니다">STEP1 - etcd가 설치되어 있지 않을경우 설치합니다.</h3>
+
+<p>제 쿠버네티 클러스터는 1 개의 마스터노드, 3개의 워커노드로 구성되어 있습니다. googld cloud compute engine 인스턴스를 사용하여 구성하였으며 모든 노드는 Ubuntu 18.04.5 LTS 버전입니다.</p>
+
+<p>아래 커맨드를 이용해 etcd-client를 설치해줍니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>apt update
+
+<span class="nv">$ </span><span class="nb">sudo </span>apt <span class="nb">install </span>etcd-client
+</code></pre></div></div>
+
+<h3 id="step2---복구시킬-환경-구성">STEP2 - 복구시킬 환경 구성</h3>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#depl.yaml</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">myapp-deployment</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">myapp</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">myapp-pod</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">myapp</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">nginx-container</span>
+        <span class="na">image</span><span class="pi">:</span> <span class="s">nginx:1.19</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="m">3</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">matchLabels</span><span class="pi">:</span>
+      <span class="na">type</span><span class="pi">:</span> <span class="s">front-end</span>
+</code></pre></div></div>
+
+<p>간단한 yaml파일을 통해 3개의 nginx 파드를 배포합니다</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl apply <span class="nt">-f</span> depl.yml 
+deployment.apps/myapp-deployment created
+</code></pre></div></div>
+
+<p>그리고 현재 어떤 리소스들이 돌아가고있는지 확인해주고 이 상황의 스냅샷을 생성할겁니다</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ kubectl get all
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/myapp-deployment-7f6679cc7d-5qwxx   1/1     Running   0          32s
+pod/myapp-deployment-7f6679cc7d-855lp   1/1     Running   0          32s
+pod/myapp-deployment-7f6679cc7d-bxxjx   1/1     Running   0          32s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   8d
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/myapp-deployment   3/3     3            3           32s
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/myapp-deployment-7f6679cc7d   3         3         3       32s
+shjeong920522@master:~/Pod$ 
+
+</code></pre></div></div>
+
+<h2 id="스냅샷-생성하기">스냅샷 생성하기</h2>
+
+<p>etcdctl의 스냅샷을 생성하기위해선 아래와같은 옵션이 필요합니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>etcdctl <span class="nt">--cacert</span><span class="o">=</span>옵션값 <span class="se">\</span>
+<span class="nt">--cert</span><span class="o">=</span>옵션값 <span class="se">\</span>
+<span class="nt">--key</span><span class="o">=</span>옵션값 <span class="se">\</span>
+snapshot save 백업경로 및 파일이름
+</code></pre></div></div>
+
+<p><strong>그렇다면 이 옵션값은 어디서 확인가능할까요?</strong></p>
+
+<p>ps명령어 와 grep을 를 활용하면 된답니다</p>
+
+<p>아래 명령어를 사용하여 다 찾아서 값을 가져와도되지만</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="se">\$</span> ps <span class="nt">-ef</span> | <span class="nb">grep </span>etcd
+root      2863  2764  1 05:36 ?        00\:00\:23 etcd <span class="nt">--advertise-client-urls</span><span class="o">=</span>https://10.178.0.2:2379 <span class="nt">--cert-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.crt <span class="nt">--client-cert-auth</span><span class="o">=</span><span class="nb">true</span> <span class="nt">--data-dir</span><span class="o">=</span>/var/lib/etcd <span class="nt">--initial-advertise-peer-urls</span><span class="o">=</span>https://10.178.0.2:2380 <span class="nt">--initial-cluster</span><span class="o">=</span><span class="nv">master</span><span class="o">=</span>https://10.178.0.2:2380 <span class="nt">--key-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.key <span class="nt">--listen-client-urls</span><span class="o">=</span>https://127.0.0.1:2379,https://10.178.0.2:2379 <span class="nt">--listen-metrics-urls</span><span class="o">=</span>http://127.0.0.1:2381 <span class="nt">--listen-peer-urls</span><span class="o">=</span>https://10.178.0.2:2380 <span class="nt">--name</span><span class="o">=</span>master <span class="nt">--peer-cert-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/peer.crt <span class="nt">--peer-client-cert-auth</span><span class="o">=</span><span class="nb">true</span> <span class="nt">--peer-key-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/peer.key <span class="nt">--peer-trusted-ca-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/ca.crt <span class="nt">--snapshot-count</span><span class="o">=</span>10000 <span class="nt">--trusted-ca-file</span><span class="o">=</span>/etc/kubernetes/pki/etcd/ca.crt
+</code></pre></div></div>
+
+<p>표에 들어간 커맨드로 원하는 부분을 강조시켜 찾는방법을 추천드립니다. 눈알굴려서 찾는것보다 훨씬 빠르더라구요</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">
+<center>etcdctl 명령 옵션</center>
+</th>
+      <th style="text-align: left">
+<center>etcd <br>프로세스 실행옵션</center>
+</th>
+      <th style="text-align: left">
+<center>값</center>
+</th>
+      <th>
+<center>커맨드로 빨리찾기</center>
+</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">–cacert</td>
+      <td style="text-align: left">–trusted-ca-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/ca.crt</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep trusted</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">–cert</td>
+      <td style="text-align: left">–cert-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/server.crt</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--cert"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">–key</td>
+      <td style="text-align: left">–key-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/server.key</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--key"</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>그리고 값 부분은 항상 같은것이 아닐 수도 있기에 커맨드로 직접 확인하셔야 합니다.</p>
+
+<p>자 이제 스냅샷을 생성하기위하여 우선 루트계정으로 전환해줍니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-i</span>
+</code></pre></div></div>
+
+<p>아래와 같이 환경변수를 등록해줍니다
+ETCDCTL_API 3버전을 사용하기 위함입니다.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root# <span class="nb">export </span><span class="nv">ETCDCTL_API</span><span class="o">=</span>3
+</code></pre></div></div>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root# etcdctl <span class="nt">--cacert</span><span class="o">=</span>/etc/kubernetes/pki/etcd/ca.crt <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--cert</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.crt <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--key</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.key <span class="se">\</span>
+<span class="o">&gt;</span> snapshot save /opt/backup
+Snapshot saved at /opt/backup
+</code></pre></div></div>
+
+<p>스냅샷을 생성하였으니 아까 배포하였던 deployment 를 delete하고 etcdctl 복구를하여
+정말 동작하던 deployment를 다시 배포해주는지 확인해봅시다</p>
+
+<p>우선 루트계정에서 로그아웃 해주시구요</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root# <span class="nb">exit
+logout</span>
+</code></pre></div></div>
+
+<p>deployment를 삭제시켜줍니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl delete <span class="nt">-f</span> depl.yml 
+deployment.apps <span class="s2">"myapp-deployment"</span> deleted
+</code></pre></div></div>
+
+<p>복구하기로 넘어갑니다.</p>
+
+<h2 id="스냅샷으로-복구하기">스냅샷으로 복구하기</h2>
+
+<p>복구할때는 스냅샷을 만들때 넣었던 옵션에서 네가지의 옵션이 더 추가됩니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">
+<center>etcdctl 명령 옵션</center>
+</th>
+      <th style="text-align: left">
+<center>etcd <br>프로세스 실행옵션</center>
+</th>
+      <th style="text-align: left">
+<center>값</center>
+</th>
+      <th>
+<center>커맨드로 빨리찾기</center>
+</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">–cacert</td>
+      <td style="text-align: left">–trusted-ca-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/ca.crt</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep trusted</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">–cert</td>
+      <td style="text-align: left">–cert-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/server.crt</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--cert"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">–key</td>
+      <td style="text-align: left">–key-file</td>
+      <td style="text-align: left">/etc/kubernetes/pki/etcd/server.key</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--key"</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">–initial-advertise-peer-urls</td>
+      <td style="text-align: left">–initial-advertise-peer-urls</td>
+      <td style="text-align: left">https://10.178.0.2:2380</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep initial</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">–initial-cluster=master</td>
+      <td style="text-align: left">–initial-cluster=master</td>
+      <td style="text-align: left">https://10.178.0.2:2380</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep initial</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">–data-dir</td>
+      <td style="text-align: left">–data-dir</td>
+      <td style="text-align: left">/var/lib/etcd_backup</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--data-dir" </code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">–name</td>
+      <td style="text-align: left">–name</td>
+      <td style="text-align: left">master(마스터노드이름)</td>
+      <td><code class="language-plaintext highlighter-rouge">ps -ef | grep etcd | grep "\--name"</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>자 여기까지가 restore 할때 필요한 모든 옵션입니다.</p>
+
+<p>이제 아까 찍어놨던 스냅샷으로 복구되는지 확인해봅시다.</p>
+
+<p>우선 루트 계정으로 전환하구요</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-i</span>
+</code></pre></div></div>
+
+<p>restore 명령어를 입력해주고 로그아웃해줍니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root# etcdctl <span class="nt">--cacert</span><span class="o">=</span>/etc/kubernetes/pki/etcd/ca.crt <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--cert</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.crt <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--key</span><span class="o">=</span>/etc/kubernetes/pki/etcd/server.key <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--initial-advertise-peer-urls</span><span class="o">=</span>https://10.178.0.2:2380 <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--initial-cluster</span><span class="o">=</span><span class="nv">master</span><span class="o">=</span>https://10.178.0.2:2380 <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--data-dir</span><span class="o">=</span>/var/lib/etcd_backup <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--name</span><span class="o">=</span>master <span class="se">\ </span>
+<span class="o">&gt;</span> snapshot restore /opt/backup
+
+root# <span class="nb">exit
+logout</span>
+</code></pre></div></div>
+
+<p>/opt/backup 에 생성해뒀던 스냅샷을이용해서 /var/lib 위치에 etcd_backup 파일을 생성합니다
+staticpod에서 실행되는 etcd가 이를 바라보도록 해줘야하겠지요</p>
+
+<p>staticpod의 위치인 /etc/kubernetes/manifest로 이동후 etcd.yaml을 수정해야합니다</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> /etc/kubernetes/manifest
+
+<span class="nv">$ </span><span class="nb">sudo </span>vim etcd.yaml
+
+~~~yaml
+<span class="c">#etcd.yaml</span>
+...중략
+
+volumes:
+- hostPath:
+    path: /etc/kubernetes/pki/etcd
+    <span class="nb">type</span>: DirectoryOrCreate
+  name: etcd-certs
+- hostPath:
+    path: /var/lib/etcd_backup     &lt;<span class="nt">-----------</span>  backup한 스냅샷을 바라보게 수정해줍니다
+    <span class="nb">type</span>: DirectoryOrCreate
+  name: etcd-data
+
+...
+</code></pre></div></div>
+
+<p>변경사항을 저장해주면 새로 로드될때까지 시간이 조금걸립니다</p>
+
+<p>잠시후 정말 실행 중이던 deployment가 실행중인지 확인해봅시다</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get deploy
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+myapp-deployment   3/3     3            3           20s
+</code></pre></div></div>
+
+<p>짜잔~ 잘 복구된것을 확인할 수 있었습니다</p>
+</div>
+<section class="article__sharing d-print-none"></section><div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2021-06-04T00:00:00+09:00">
+<!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">구독하기</a>
+</div>
+</div></footer>
+<div class="article__section-navigator clearfix">
+<div class="previous">
+<span>이전</span><a href="/2021/06/03/Learning-Kubernetes-08.html">[ #8 ] 클러스터 유지보수</a>
+</div>
+<div class="next">
+<span>다음</span><a href="/2021/06/07/Learning-Kubernetes-10.html">[ #10 ] 클러스터 보안 - 1</a>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
+</script>
+</div>
+<section class="page__comments d-print-none"><div id="disqus_thread"></div>
+  <script>
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+  var disqus_config = function () {
+    this.page.url = 'https://shjeong92.github.io/2021/06/04/Learning-Kubernetes-09.html';
+    this.page.identifier = 'anything';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://sanghyuk-devlog.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript></section></article><!-- start custom main bottom snippet -->
+
+<!-- end custom main bottom snippet -->
+</div>
+            </div></div></div>
+<div class="page__footer d-print-none">
+<footer class="footer py-4 js-page-footer">
+  <div class="main">
+<div itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sanghyuk Jeong">
+<meta itemprop="url" content="/">
+<div class="footer__author-links">
+<div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><li title="이메일 보내기">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:shjeong920522@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a>
+</li></ul>
+</div>
+</div>
+    </div>
+<div class="site-info mt-2">
+      <div>© Hyuk's devlog 2021,
+        Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+</div>
+    </div>
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $body = $('body'), $window = $(window);
+    var $pageRoot = $('.js-page-root'), $pageMain = $('.js-page-main');
+    var activeCount = 0;
+    function modal(options) {
+      var $root = this, visible, onChange, hideWhenWindowScroll = false;
+      var scrollTop;
+      function setOptions(options) {
+        var _options = options || {};
+        visible = _options.initialVisible === undefined ? false : show;
+        onChange = _options.onChange;
+        hideWhenWindowScroll = _options.hideWhenWindowScroll;
+      }
+      function init() {
+        setState(visible);
+      }
+      function setState(isShow) {
+        if (isShow === visible) {
+          return;
+        }
+        visible = isShow;
+        if (visible) {
+          activeCount++;
+          scrollTop = $(window).scrollTop() || $pageMain.scrollTop();
+          $root.addClass('modal--show');
+          $pageMain.scrollTop(scrollTop);
+          activeCount === 1 && ($pageRoot.addClass('show-modal'), $body.addClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.on('scroll', hide);
+          $window.on('keyup', handleKeyup);
+        } else {
+          activeCount > 0 && activeCount--;
+          $root.removeClass('modal--show');
+          $window.scrollTop(scrollTop);
+          activeCount === 0 && ($pageRoot.removeClass('show-modal'), $body.removeClass('of-hidden'));
+          hideWhenWindowScroll && window.hasEvent('touchstart') && $window.off('scroll', hide);
+          $window.off('keyup', handleKeyup);
+        }
+        onChange && onChange(visible);
+      }
+      function show() {
+        setState(true);
+      }
+      function hide() {
+        setState(false);
+      }
+      function handleKeyup(e) {
+        // Char Code: 27  ESC
+        if (e.which ===  27) {
+          hide();
+        }
+      }
+      setOptions(options);
+      init();
+      return {
+        show: show,
+        hide: hide,
+        $el: $root
+      };
+    }
+    $.fn.modal = modal;
+  });
+})();
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
+<script>
+(function () {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    // search panel
+    var search = (window.search || (window.search = {}));
+    var useDefaultSearchBox = window.useDefaultSearchBox === undefined ?
+      true : window.useDefaultSearchBox ;
+
+    var $searchModal = $('.js-page-search-modal');
+    var $searchToggle = $('.js-search-toggle');
+    var searchModal = $searchModal.modal({ onChange: handleModalChange, hideWhenWindowScroll: true });
+    var modalVisible = false;
+    search.searchModal = searchModal;
+
+    var $searchBox = null;
+    var $searchInput = null;
+    var $searchClear = null;
+
+    function getModalVisible() {
+      return modalVisible;
+    }
+    search.getModalVisible = getModalVisible;
+
+    function handleModalChange(visible) {
+      modalVisible = visible;
+      if (visible) {
+        search.onShow && search.onShow();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].focus();
+      } else {
+        search.onShow && search.onHide();
+        useDefaultSearchBox && $searchInput[0] && $searchInput[0].blur();
+        setTimeout(function() {
+          useDefaultSearchBox && ($searchInput.val(''), $searchBox.removeClass('not-empty'));
+          search.clear && search.clear();
+          window.pageAsideAffix && window.pageAsideAffix.refresh();
+        }, 400);
+      }
+    }
+
+    $searchToggle.on('click', function() {
+      modalVisible ? searchModal.hide() : searchModal.show();
+    });
+    // Char Code: 83  S, 191 /
+    $(window).on('keyup', function(e) {
+      if (!modalVisible && !window.isFormElement(e.target || e.srcElement) && (e.which === 83 || e.which === 191)) {
+        modalVisible || searchModal.show();
+      }
+    });
+
+    if (useDefaultSearchBox) {
+      $searchBox = $('.js-search-box');
+      $searchInput = $searchBox.children('input');
+      $searchClear = $searchBox.children('.js-icon-clear');
+      search.getSearchInput = function() {
+        return $searchInput.get(0);
+      };
+      search.getVal = function() {
+        return $searchInput.val();
+      };
+      search.setVal = function(val) {
+        $searchInput.val(val);
+      };
+
+      $searchInput.on('focus', function() {
+        $(this).addClass('focus');
+      });
+      $searchInput.on('blur', function() {
+        $(this).removeClass('focus');
+      });
+      $searchInput.on('input', window.throttle(function() {
+        var val = $(this).val();
+        if (val === '' || typeof val !== 'string') {
+          search.clear && search.clear();
+        } else {
+          $searchBox.addClass('not-empty');
+          search.onInputNotEmpty && search.onInputNotEmpty(val);
+        }
+      }, 400));
+      $searchClear.on('click', function() {
+        $searchInput.val(''); $searchBox.removeClass('not-empty');
+        search.clear && search.clear();
+      });
+    }
+  });
+})();
+</script><div class="search search--dark">
+  <div class="main">
+    <div class="search__header">검색</div>
+    <div class="search-bar">
+      <div class="search-box js-search-box">
+        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
+        <input type="text">
+        <div class="search-box__icon-clear js-icon-clear">
+          <a><i class="fas fa-times"></i></a>
+        </div>
+      </div>
+      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
+        취소</button>
+    </div>
+    <div class="search-result js-search-result"></div>
+  </div>
+</div>
+<script>var SOURCES = window.TEXT_VARIABLES.sources;
+var PAHTS = window.TEXT_VARIABLES.paths;
+window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  var search = (window.search || (window.search = {}));
+  var searchData = window.TEXT_SEARCH_DATA || {};
+
+  function memorize(f) {
+    var cache = {};
+    return function () {
+      var key = Array.prototype.join.call(arguments, ',');
+      if (key in cache) return cache[key];
+      else return cache[key] = f.apply(this, arguments);
+    };
+  }
+
+  /// search
+  function searchByQuery(query) {
+    var i, j, key, keys, cur, _title, result = {};
+    keys = Object.keys(searchData);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      for (j = 0; j < searchData[key].length; j++) {
+        cur = searchData[key][j], _title = cur.title;
+        if ((result[key] === undefined || result[key] && result[key].length < 4 )
+          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+          if (result[key] === undefined) {
+            result[key] = [];
+          }
+          result[key].push(cur);
+        }
+      }
+    }
+    return result;
+  }
+
+  var renderHeader = memorize(function(header) {
+    return $('<p class="search-result__header">' + header + '</p>');
+  });
+
+  var renderItem = function(index, title, url) {
+    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  };
+
+  function render(data) {
+    if (!data) { return null; }
+    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
+    keys = Object.keys(data);
+    for (i = 0; i < keys.length; i++) {
+      key = keys[i];
+      $root.append(renderHeader(key));
+      for (j = 0; j < data[key].length; j++) {
+        cur = data[key][j];
+        $root.append(renderItem(itemIndex++, cur.title, cur.url));
+      }
+    }
+    return $root;
+  }
+
+  // search box
+  var $result = $('.js-search-result'), $resultItems;
+  var lastActiveIndex, activeIndex;
+
+  function clear() {
+    $result.html(null);
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+  }
+  function onInputNotEmpty(val) {
+    $result.html(render(searchByQuery(val)));
+    $resultItems = $('.search-result__item'); activeIndex = 0;
+    $resultItems.eq(0).addClass('active');
+  }
+
+  search.clear = clear;
+  search.onInputNotEmpty = onInputNotEmpty;
+
+  function updateResultItems() {
+    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
+    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
+  }
+
+  function moveActiveIndex(direction) {
+    var itemsCount = $resultItems ? $resultItems.length : 0;
+    if (itemsCount > 1) {
+      lastActiveIndex = activeIndex;
+      if (direction === 'up') {
+        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
+      } else if (direction === 'down') {
+        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
+      }
+      updateResultItems();
+    }
+  }
+
+  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
+  $(window).on('keyup', function(e) {
+    var modalVisible = search.getModalVisible && search.getModalVisible();
+    if (modalVisible) {
+      if (e.which === 38) {
+        modalVisible && moveActiveIndex('up');
+      } else if (e.which === 40) {
+        modalVisible && moveActiveIndex('down');
+      } else if (e.which === 13) {
+        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
+      }
+    }
+  });
+
+  $result.on('mouseover', '.search-result__item > a', function() {
+    var itemIndex = $(this).parent().data('index');
+    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
+  });
+});
+</script>
+</div>
+</div>
+
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function scrollToAnchor(anchor, duration, callback) {
+      var $root = this;
+      $root.animate({ scrollTop: $(anchor).position().top }, duration, function() {
+        window.history.replaceState(null, '', window.location.href.split('#')[0] + anchor);
+        callback && callback();
+      });
+    }
+    $.fn.scrollToAnchor = scrollToAnchor;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function affix(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroll,
+        offsetBottom = 0, scrollTarget = window, scroll = window.document, disabled = false, isOverallScroller = true,
+        rootTop, rootLeft, rootHeight, scrollBottom, rootBottomTop,
+        hasInit = false, curState;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.offsetBottom && (offsetBottom = _options.offsetBottom);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroll && (scroll = _options.scroll);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $scrollTarget = $(scrollTarget);
+        isOverallScroller = window.isOverallScroller($scrollTarget[0]);
+        $scroll = $(scroll);
+      }
+      function preCalc() {
+        top();
+        rootHeight = $root.outerHeight();
+        rootTop = $root.offset().top + (isOverallScroller ? 0 :  $scrollTarget.scrollTop());
+        rootLeft = $root.offset().left;
+      }
+      function calc(needPreCalc) {
+        needPreCalc && preCalc();
+        scrollBottom = $scroll.outerHeight() - offsetBottom - rootHeight;
+        rootBottomTop = scrollBottom - rootTop;
+      }
+      function top() {
+        if (curState !== 'top') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: 0
+          });
+          curState = 'top';
+        }
+      }
+      function fixed() {
+        if (curState !== 'fixed') {
+          $root.addClass('fixed').css({
+            left: rootLeft + 'px',
+            top: 0
+          });
+          curState = 'fixed';
+        }
+      }
+      function bottom() {
+        if (curState !== 'bottom') {
+          $root.removeClass('fixed').css({
+            left: 0,
+            top: rootBottomTop + 'px'
+          });
+          curState = 'bottom';
+        }
+      }
+      function setState() {
+        var scrollTop = $scrollTarget.scrollTop();
+        if (scrollTop >= rootTop && scrollTop <= scrollBottom) {
+          fixed();
+        } else if (scrollTop < rootTop) {
+          top();
+        } else {
+          bottom();
+        }
+      }
+      function init() {
+        if(!hasInit) {
+          var interval, timeout;
+          calc(true); setState();
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState();
+          });
+          $window.on('resize', function() {
+            disabled || (calc(true), setState());
+          });
+          hasInit = true;
+        }
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions,
+        refresh: function() {
+          calc(true, { animation: false }); setState();
+        }
+      };
+    }
+    $.fn.affix = affix;
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    function toc(options) {
+      var $root = this, $window = $(window), $scrollTarget, $scroller, $tocUl = $('<ul class="toc toc--ellipsis"></ul>'), $tocLi, $headings, $activeLast, $activeCur,
+        selectors = 'h1,h2,h3', container = 'body', scrollTarget = window, scroller = 'html, body', disabled = false,
+        headingsPos, scrolling = false, hasRendered = false, hasInit = false;
+
+      function setOptions(options) {
+        var _options = options || {};
+        _options.selectors && (selectors = _options.selectors);
+        _options.container && (container = _options.container);
+        _options.scrollTarget && (scrollTarget = _options.scrollTarget);
+        _options.scroller && (scroller = _options.scroller);
+        _options.disabled !== undefined && (disabled = _options.disabled);
+        $headings = $(container).find(selectors).filter('[id]');
+        $scrollTarget = $(scrollTarget);
+        $scroller = $(scroller);
+      }
+      function calc() {
+        headingsPos = [];
+        $headings.each(function() {
+          headingsPos.push(Math.floor($(this).position().top));
+        });
+      }
+      function setState(element, disabled) {
+        var scrollTop = $scrollTarget.scrollTop(), i;
+        if (disabled || !headingsPos || headingsPos.length < 1) { return; }
+        if (element) {
+          $activeCur = element;
+        } else {
+          for (i = 0; i < headingsPos.length; i++) {
+            if (scrollTop >= headingsPos[i]) {
+              $activeCur = $tocLi.eq(i);
+            } else {
+              $activeCur || ($activeCur = $tocLi.eq(i));
+              break;
+            }
+          }
+        }
+        $activeLast && $activeLast.removeClass('active');
+        ($activeLast = $activeCur).addClass('active');
+      }
+      function render() {
+        if(!hasRendered) {
+          $root.append($tocUl);
+          $headings.each(function() {
+            var $this = $(this);
+            $tocUl.append($('<li></li>').addClass('toc-' + $this.prop('tagName').toLowerCase())
+              .append($('<a></a>').text($this.text()).attr('href', '#' + $this.prop('id'))));
+          });
+          $tocLi = $tocUl.children('li');
+          $tocUl.on('click', 'a', function(e) {
+            e.preventDefault();
+            var $this = $(this);
+            scrolling = true;
+            setState($this.parent());
+            $scroller.scrollToAnchor($this.attr('href'), 400, function() {
+              scrolling = false;
+            });
+          });
+        }
+        hasRendered = true;
+      }
+      function init() {
+        var interval, timeout;
+        if(!hasInit) {
+          render(); calc(); setState(null, scrolling);
+          // run calc every 100 millisecond
+          interval = setInterval(function() {
+            calc();
+          }, 100);
+          timeout = setTimeout(function() {
+            clearInterval(interval);
+          }, 45000);
+          window.pageLoad.then(function() {
+            setTimeout(function() {
+              clearInterval(interval);
+              clearTimeout(timeout);
+            }, 3000);
+          });
+          $scrollTarget.on('scroll', function() {
+            disabled || setState(null, scrolling);
+          });
+          $window.on('resize', window.throttle(function() {
+            if (!disabled) {
+              render(); calc(); setState(null, scrolling);
+            }
+          }, 100));
+        }
+        hasInit = true;
+      }
+
+      setOptions(options);
+      if (!disabled) {
+        init();
+      }
+      $window.on('resize', window.throttle(function() {
+        init();
+      }, 200));
+      return {
+        setOptions: setOptions
+      };
+    }
+    $.fn.toc = toc;
+  });
+})();
+/*(function () {
+
+})();*/
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
+</script>
+    </div>
+    <script>(function () {
+  var $root = document.getElementsByClassName('root')[0];
+  if (window.hasEvent('touchstart')) {
+    $root.dataset.isTouch = true;
+    document.addEventListener('touchstart', function(){}, false);
+  }
+})();
+</script>
+  </body>
+</html>
